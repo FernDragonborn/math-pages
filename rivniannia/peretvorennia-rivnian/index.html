@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Що саме не має змінитися — перетворення виразів і рівнянь</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FCFCF9;
+  --grid:#D7E3E8;
+  --grid-bg:rgba(140,180,196,.24);
+  --surface:rgba(252,252,249,.92);
+  --margin-line:#D9635A;
+  --ink:#1B2A33;
+  --ink-soft:#5A6B75;
+  --pen:#2A45A8;
+  --pen-wash:#E7ECF9;
+  --red:#B93A30;
+  --red-wash:#FBEAE8;
+  --green:#2A7355;
+  --green-wash:#E4F1EA;
+  --cell:26px;
+  --card:#fff; --card-line:#E2E7EA; --card-line-2:#EDF1F2; --ok-line:#C6E0D2; --bad-line:#F0CFCB;
+  --ask-line:#CFD9F0; --focus:#A9BCF0; --on-pen:#fff;
+  color-scheme:light;
+}
+
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#141a26; --grid:#2a3446; --line:#2a3446; --grid-bg:rgba(120,150,180,.12); --surface:rgba(27,34,50,.94);
+  --margin-line:#8a4a46; --ink:#e4e9f3; --ink-soft:#9aa6bc; --pen:#8fa8ff; --pen-wash:#1f2a4a;
+  --red:#ff8a7e; --red-wash:#3a2224; --green:#6fd3a0; --green-wash:#173328;
+  --card:#1b2232; --card-line:#2e3850; --card-line-2:#263046; --ok-line:#2c5a45; --bad-line:#5c3330;
+  --ask-line:#34406a; --focus:#5a74c8; --on-pen:#0f1530; color-scheme:dark; }}
+:root[data-theme="dark"]{
+  --paper:#141a26; --grid:#2a3446; --line:#2a3446; --grid-bg:rgba(120,150,180,.12); --surface:rgba(27,34,50,.94);
+  --margin-line:#8a4a46; --ink:#e4e9f3; --ink-soft:#9aa6bc; --pen:#8fa8ff; --pen-wash:#1f2a4a;
+  --red:#ff8a7e; --red-wash:#3a2224; --green:#6fd3a0; --green-wash:#173328;
+  --card:#1b2232; --card-line:#2e3850; --card-line-2:#263046; --ok-line:#2c5a45; --bad-line:#5c3330;
+  --ask-line:#34406a; --focus:#5a74c8; --on-pen:#0f1530; color-scheme:dark; }
+/* SVG drawn with fixed colours follows the theme */
+[fill="#5A6B75"]{fill:var(--ink-soft)} [stroke="#5A6B75"]{stroke:var(--ink-soft)}
+[fill="#E7ECF9"]{fill:var(--pen-wash)} [stroke="#E7ECF9"]{stroke:var(--pen-wash)}
+[fill="#2A45A8"]{fill:var(--pen)} [stroke="#2A45A8"]{stroke:var(--pen)}
+[fill="#1B2A33"]{fill:var(--ink)} [stroke="#1B2A33"]{stroke:var(--ink)}
+[fill="#B93A30"]{fill:var(--red)} [stroke="#B93A30"]{stroke:var(--red)}
+[fill="#E4F1EA"]{fill:var(--green-wash)} [stroke="#E4F1EA"]{stroke:var(--green-wash)}
+[fill="#2A7355"]{fill:var(--green)} [stroke="#2A7355"]{stroke:var(--green)}
+[fill="#FBEAE8"]{fill:var(--red-wash)} [stroke="#FBEAE8"]{stroke:var(--red-wash)}
+.theme-btn{position:fixed;top:max(12px,env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px));z-index:9999;
+  border:1px solid var(--card-line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 12px;
+  font:600 13.5px/1.2 "Onest",system-ui,sans-serif;cursor:pointer}
+*{box-sizing:border-box}
+
+html{ -webkit-text-size-adjust:100% }
+
+body{
+  margin:0;
+  background:
+    repeating-linear-gradient(to right, var(--grid-bg) 0 1px, transparent 1px var(--cell)),
+    repeating-linear-gradient(to bottom, var(--grid-bg) 0 1px, transparent 1px var(--cell)),
+    var(--paper);
+  color:var(--ink);
+  font-family:"Onest", "Segoe UI", system-ui, sans-serif;
+  font-size:17px;
+  line-height:1.62;
+}
+
+.sheet{
+  max-width:760px;
+  margin:0 auto;
+  padding:0 22px 90px 22px;
+  position:relative;
+}
+
+@media (min-width:820px){
+  .sheet{ padding-left:56px; border-left:1px solid var(--margin-line); }
+}
+
+h1,h2,h3{ font-family:"Unbounded", "Onest", sans-serif; font-weight:700; letter-spacing:-0.01em; line-height:1.18; }
+
+h1{ font-size:clamp(30px,6.2vw,46px); margin:0 0 18px; }
+h2{ font-size:clamp(21px,3.6vw,27px); margin:0 0 14px; }
+h3{ font-size:17px; font-weight:500; margin:0 0 8px; font-family:"Onest",sans-serif; font-weight:600; }
+
+p{ margin:0 0 16px; max-width:64ch }
+
+/* --- шапка --- */
+.hero{ padding:52px 22px 26px; margin-top:32px; background:var(--surface); border-radius:2px }
+.hero .who{
+  font-size:14px; color:var(--ink-soft); margin-bottom:26px;
+}
+.hero .lead{ font-size:19px; }
+.hero .lead b{ color:var(--pen); font-weight:600 }
+
+/* --- секції --- */
+section{ margin-top:30px; padding:28px 22px 34px; background:var(--surface); border-radius:2px }
+section > .num{
+  display:block; font-family:"JetBrains Mono",monospace; font-size:13px;
+  color:var(--ink-soft); margin-bottom:6px;
+}
+
+/* --- формули --- */
+.eq{
+  font-family:"JetBrains Mono", ui-monospace, monospace;
+  font-size:16px;
+  display:inline-block;
+  white-space:nowrap;
+}
+.big-eq{ font-size:clamp(19px,4.6vw,26px); font-weight:700 }
+
+.chain{ list-style:none; padding:0; margin:0 0 20px }
+.chain li{
+  display:grid; grid-template-columns:258px 1fr; gap:4px 16px;
+  align-items:baseline;
+  padding:11px 0; border-bottom:1px dashed var(--grid);
+}
+.chain li:last-child{ border-bottom:none }
+.chain .why{ font-size:14.5px; color:var(--ink-soft) }
+
+/* --- інтерактивний блок --- */
+.demo{
+  background:var(--card);
+  border:1px solid var(--card-line);
+  border-radius:4px;
+  padding:22px 20px 20px;
+  margin:26px 0 10px;
+  box-shadow:0 1px 0 var(--card-line-2);
+}
+.demo .stage{
+  display:flex; align-items:center; justify-content:center;
+  min-height:120px; padding:10px 0 14px;
+  border-bottom:1px solid var(--card-line-2); margin-bottom:16px;
+}
+#stage svg{ width:100%; height:auto; max-width:400px }
+
+/* --- анотовані схеми --- */
+.wk{ font-family:"JetBrains Mono", ui-monospace, monospace; font-size:19px; fill:var(--ink) }
+.wk-big{ font-size:23px; font-weight:700 }
+.wk-mid{ font-size:16px }
+.wk-new{ fill:var(--pen) }
+.wk-op{ fill:var(--red); font-weight:700 }
+.wk-lbl{ font-family:"Onest", sans-serif; font-size:12px; fill:var(--ink-soft) }
+.wk-ln{ stroke:var(--ink-soft); stroke-width:1.4; fill:none }
+.wk-ln-pen{ stroke:var(--pen); stroke-width:1.4; fill:none }
+.wk-ln-red{ stroke:var(--red); stroke-width:1.4; fill:none }
+.wk-brace{ stroke:var(--pen); stroke-width:1.4; fill:none }
+figure.wk-fig{ margin:14px 0 18px }
+figure.wk-fig svg{ width:100%; height:auto; max-width:380px; display:block }
+figure.wk-fig figcaption{ font-size:14.5px; color:var(--ink-soft); margin-top:4px }
+.demo .note{
+  font-size:15px; color:var(--ink-soft); min-height:46px; margin:0 0 16px;
+}
+.demo .note b{ color:var(--ink); font-weight:600 }
+
+.tests{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:18px }
+@media (max-width:520px){ .tests{ grid-template-columns:1fr } }
+
+.test{ border-radius:4px; padding:12px 14px; border:1px solid transparent }
+.test.pass{ background:var(--green-wash); border-color:var(--ok-line) }
+.test.fail{ background:var(--red-wash); border-color:var(--bad-line) }
+.test .who{ font-size:13px; letter-spacing:0.01em; margin-bottom:5px; font-weight:600 }
+.test.pass .who{ color:var(--green) }
+.test.fail .who{ color:var(--red) }
+.test .val{ font-family:"JetBrains Mono",monospace; font-size:14.5px; line-height:1.5 }
+.test .verdict{ font-size:14px; margin-top:6px }
+
+.controls{ display:flex; gap:10px; align-items:center; flex-wrap:wrap }
+button{
+  font-family:"Onest",sans-serif; font-size:15px; font-weight:500;
+  padding:9px 18px; border-radius:3px; cursor:pointer;
+  border:1px solid var(--pen); background:var(--pen); color:var(--on-pen);
+}
+button.ghost{ background:var(--card); color:var(--pen) }
+button:disabled{ opacity:.35; cursor:default }
+button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px }
+.progress{ font-family:"JetBrains Mono",monospace; font-size:13px; color:var(--ink-soft); margin-left:auto }
+
+/* --- картки правил --- */
+.rule{
+  border-left:3px solid var(--pen);
+  padding:2px 0 2px 18px;
+  margin:0 0 26px;
+}
+.rule.danger{ border-left-color:var(--red) }
+.eq-line{ display:block; margin:8px 0 12px; white-space:pre-wrap; max-width:100% }
+
+.swap{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin:4px 0 10px }
+.swap .arrow{ color:var(--ink-soft) }
+
+/* --- таблиця підстановки --- */
+table{ border-collapse:collapse; width:100%; table-layout:fixed; font-family:"JetBrains Mono",monospace; font-size:14.5px; margin:6px 0 18px }
+th,td{ text-align:left; padding:7px 10px; border-bottom:1px solid var(--grid) }
+th{ font-family:"Onest",sans-serif; font-weight:600; font-size:13.5px; color:var(--ink-soft) }
+td.same{ color:var(--green); font-weight:700 }
+th:first-child, td:first-child{ width:64px }
+
+/* --- терези --- */
+.scales{ display:block; margin:10px auto 4px; max-width:340px; width:100% }
+
+/* --- самоперевірка --- */
+details{
+  border-bottom:1px solid var(--grid); padding:14px 0;
+}
+details summary{
+  cursor:pointer; font-weight:500; list-style:none;
+  display:flex; gap:12px; align-items:baseline;
+}
+details summary::-webkit-details-marker{ display:none }
+details summary::before{ content:"?"; color:var(--pen); font-family:"JetBrains Mono",monospace; font-weight:700 }
+details[open] summary::before{ content:"!"; color:var(--green) }
+details summary:focus-visible{ outline:3px solid var(--focus); outline-offset:3px }
+details .answer{ padding:12px 0 0 24px; font-size:15.5px; color:var(--ink-soft) }
+details .answer .eq{ color:var(--ink) }
+
+/* --- фінал --- */
+.takeaway{
+  margin-top:30px; padding:26px 22px;
+  background:var(--pen-wash); border-radius:4px;
+}
+.takeaway h2{ margin-bottom:10px }
+.takeaway p:last-child{ margin-bottom:0 }
+
+.ask{ list-style:none; padding:0; margin:0 }
+.ask li{ padding:10px 0 10px 0; border-bottom:1px solid var(--ask-line) }
+.ask li:last-child{ border-bottom:none }
+
+@media (max-width:640px){
+  .chain li{ grid-template-columns:1fr }
+}
+
+@media (max-width:440px){
+  body{ font-size:16px }
+  .sheet{ padding-left:12px; padding-right:12px }
+  .hero{ padding:40px 15px 22px; margin-top:24px }
+  section{ margin-top:22px; padding:22px 15px 26px }
+  .demo{ padding:16px 13px 16px }
+  .eq{ font-size:15px }
+  table{ font-size:13px }
+  th,td{ padding:6px 6px }
+  .chain li{ gap:6px }
+  .takeaway{ margin-top:22px; padding:22px 15px }
+}
+
+@media (prefers-reduced-motion: no-preference){
+  .stage{ transition: opacity .18s ease }
+  .stage.fading{ opacity:0 }
+}
+</style>
+</head>
+<body>
+<main class="sheet">
+
+<header class="hero">
+  <p class="who">Алгебра, 8 клас · перетворення виразів і рівнянь</p>
+  <h1>Що саме не має змінитися</h1>
+  <p class="lead">Коли розв'язуєш рівняння, ти переписуєш його по багато разів. Виникає чесне питання: <b>а чому взагалі можна щось переписувати — хіба це вже не інше рівняння?</b></p>
+  <p>Відповідь така: переписувати можна майже як завгодно. Але є одна річ, яку ламати не можна. І весь фокус у тому, щоб зрозуміти, що це за річ.</p>
+</header>
+
+<section>
+  <span class="num">01</span>
+  <h2>Спробуй сам: слідкуй за двома числами</h2>
+  <p>Нижче — звичайне рівняння. Тисни «Далі» і дивись не на саме рівняння, а на дві кольорові картки під ним. Там ми щоразу підставляємо <span class="eq">x = 3</span> і <span class="eq">x = 1</span> у той рядок, який щойно отримали.</p>
+
+  <div class="demo">
+    <div class="stage" id="stage"></div>
+    <p class="note" id="stepNote"><b>Початок.</b> Ми ще не знаємо, який тут корінь. Але хтось із чисел уже «підходить», а хтось — ні.</p>
+
+    <div class="tests">
+      <div class="test pass" id="testA">
+        <div class="who">підставляємо x = 3</div>
+        <div class="val" id="valA">ліва: 3·3 + 5 = 14<br>права: 2·3 + 8 = 14</div>
+        <div class="verdict">14 = 14 — підходить</div>
+      </div>
+      <div class="test fail" id="testB">
+        <div class="who">підставляємо x = 1</div>
+        <div class="val" id="valB">ліва: 3·1 + 5 = 8<br>права: 2·1 + 8 = 10</div>
+        <div class="verdict">8 ≠ 10 — не підходить</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="next">Далі</button>
+      <button class="ghost" id="reset">Спочатку</button>
+      <span class="progress" id="prog">крок 1 / 4</span>
+    </div>
+  </div>
+
+  <p>Помітив? Рівняння змінювалося чотири рази. Числа в картках теж змінювалися. А от <b>вирок</b> — ні: трійка підходила в кожному рядку, одиниця не підходила в жодному.</p>
+  <p>Оце і є та сама незмінна річ. <b>Не вигляд рівняння, а список тих, кому воно пасує.</b> Ти маєш право робити з рівнянням що завгодно, доки цей список залишається той самий.</p>
+</section>
+
+<section>
+  <span class="num">02</span>
+  <h2>Насправді незмінностей дві, і їх плутають</h2>
+  <p>Це головна причина, чому тема здається заплутаною. Ти працюєш на двох різних поверхах, і на кожному «не змінюється» щось своє.</p>
+
+  <div class="rule">
+    <h3>Поверх перший: усередині одного виразу</h3>
+    <p>Тут ти перероблюєш шматок запису — наприклад, ліву частину. Незмінним має лишитися <b>значення</b>: скільки вираз дає при будь-якому <span class="eq">x</span>.</p>
+    <div class="swap">
+      <span class="eq">4x + 7 + 2x</span><span class="arrow">→</span><span class="eq">6x + 7</span>
+    </div>
+    <table>
+      <tr><th>x</th><th>4x + 7 + 2x</th><th>6x + 7</th></tr>
+      <tr><td>0</td><td>7</td><td class="same">7</td></tr>
+      <tr><td>1</td><td>13</td><td class="same">13</td></tr>
+      <tr><td>5</td><td>37</td><td class="same">37</td></tr>
+      <tr><td>−2</td><td>−5</td><td class="same">−5</td></tr>
+    </table>
+    <p>Два різні записи, одна й та сама «машинка»: що не кинь усередину — вилетить однакове. Такі перетворення звуться <b>тотожними</b>.</p>
+  </div>
+
+  <div class="rule">
+    <h3>Поверх другий: рівняння цілком</h3>
+    <p>Тут ти чіпаєш обидві частини одразу. Значення сторін якраз змінюється — і це нормально. Незмінним має лишитися <b>список коренів</b>: хто підходить, а хто ні.</p>
+    <div class="swap">
+      <span class="eq">3x + 5 = 2x + 8</span><span class="arrow">→</span><span class="eq">x = 3</span>
+    </div>
+    <p>Сторони були по 14, стали по 3. Але підходить обом рівнянням рівно одне число — трійка. Такі перетворення звуться <b>рівносильними</b>.</p>
+  </div>
+
+  <p>Коротко: у виразі бережеш <b>значення</b>, у рівнянні бережеш <b>корені</b>. Переставив доданки в лівій частині — це перший поверх. Відняв щось від обох частин — другий.</p>
+</section>
+
+<section>
+  <span class="num">03</span>
+  <h2>Перший поверх: що дозволено робити з виразом</h2>
+  <p>Усе, що тут перелічено, ти вже знаєш як «закони дій». Просто тепер видно, навіщо вони: це повний список способів переписати вираз, не зачепивши його значення.</p>
+
+  <ul class="chain">
+    <li><span class="eq">a + b = b + a</span><span class="why"><b>Перестановка.</b> Доданки можна міняти місцями, множники теж. Переставний закон.</span></li>
+    <li><span class="eq">(a + b) + c = a + (b + c)</span><span class="why"><b>Групування.</b> Дужки можна пересувати — сума не залежить від того, що з чим складати першим. Сполучний закон.</span></li>
+    <li><span class="eq">a(b + c) = ab + ac</span><span class="why"><b>Розкриття дужок.</b> Розподільний закон.</span></li>
+    <li><span class="eq">ab + ac = a(b + c)</span><span class="why"><b>Винесення спільного множника.</b> Той самий розподільний закон, прочитаний справа наліво.</span></li>
+    <li><span class="eq">3x + 5x = 8x</span><span class="why"><b>Зведення подібних.</b> Насправді це теж винесення: <span class="eq">(3 + 5)x</span>.</span></li>
+    <li><span class="eq">x² − 9 = (x−3)(x+3)</span><span class="why"><b>Розкладання на множники.</b> Формули скороченого множення.</span></li>
+  </ul>
+
+  <p>Перестановка і групування майже завжди ходять парою: спочатку ставиш поруч те, що схоже, потім обводиш дужками і виносиш спільне.</p>
+
+  <figure class="wk-fig">
+    <svg viewBox="0 0 360 88" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="У виразі ax + 3a + 2x + 6 перша пара має спільний множник a, друга — спільний множник 2">
+      <text class="wk" x="96" y="36" text-anchor="middle">ax</text>
+      <text class="wk" x="126" y="36" text-anchor="middle">+</text>
+      <text class="wk" x="156" y="36" text-anchor="middle">3a</text>
+      <text class="wk" x="186" y="36" text-anchor="middle">+</text>
+      <text class="wk" x="216" y="36" text-anchor="middle">2x</text>
+      <text class="wk" x="246" y="36" text-anchor="middle">+</text>
+      <text class="wk" x="270" y="36" text-anchor="middle">6</text>
+      <path class="wk-brace" d="M84,46 V54 H168 V46"/>
+      <path class="wk-brace" d="M204,46 V54 H276 V46"/>
+      <text class="wk-lbl" x="126" y="74" text-anchor="middle">тут спільне a</text>
+      <text class="wk-lbl" x="240" y="74" text-anchor="middle">тут спільне 2</text>
+    </svg>
+    <figcaption>Дужки ставиш не навмання: пара має сенс тільки тоді, коли в обох доданках сидить щось спільне, що можна винести.</figcaption>
+  </figure>
+  <ul class="chain">
+    <li><span class="eq">ax + 3a + 2x + 6</span><span class="why">початковий вираз</span></li>
+    <li><span class="eq">(ax + 3a) + (2x + 6)</span><span class="why">згрупували те, що має спільний множник</span></li>
+    <li><span class="eq">a(x + 3) + 2(x + 3)</span><span class="why">винесли <span class="eq">a</span> і винесли <span class="eq">2</span></span></li>
+    <li><span class="eq">(x + 3)(a + 2)</span><span class="why">винесли спільну дужку</span></li>
+  </ul>
+  <p>Перевір собі: візьми <span class="eq">x = 1</span>, <span class="eq">a = 2</span>. Перший рядок дає <span class="eq">2 + 6 + 2 + 6 = 16</span>. Останній дає <span class="eq">4 · 4 = 16</span>. Запис змінився до невпізнання — значення не зрушило.</p>
+</section>
+
+<section>
+  <span class="num">04</span>
+  <h2>Другий поверх: терези</h2>
+  <p>Рівняння зручно уявляти як терези в рівновазі. Ліва частина важить стільки ж, скільки права — але тільки для правильного <span class="eq">x</span>.</p>
+
+  <svg class="scales" viewBox="0 0 300 150" role="img" aria-label="Терези в рівновазі: на лівій шальці 3x плюс 5, на правій 2x плюс 8">
+    <line x1="150" y1="34" x2="150" y2="120" stroke="#5A6B75" stroke-width="3"/>
+    <line x1="45" y1="34" x2="255" y2="34" stroke="#5A6B75" stroke-width="3" stroke-linecap="round"/>
+    <line x1="45" y1="34" x2="45" y2="58" stroke="#5A6B75" stroke-width="1.5"/>
+    <line x1="255" y1="34" x2="255" y2="58" stroke="#5A6B75" stroke-width="1.5"/>
+    <path d="M3 58 H87 L75 82 H15 Z" fill="#E7ECF9" stroke="#2A45A8" stroke-width="1.5"/>
+    <path d="M213 58 H297 L285 82 H225 Z" fill="#E7ECF9" stroke="#2A45A8" stroke-width="1.5"/>
+    <path d="M120 120 H180 L192 134 H108 Z" fill="#5A6B75"/>
+    <circle cx="150" cy="31" r="5" fill="#5A6B75"/>
+    <text x="45" y="73" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13" fill="#1B2A33">3x + 5</text>
+    <text x="255" y="73" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="13" fill="#1B2A33">2x + 8</text>
+  </svg>
+
+  <p>Рівновага збережеться, якщо робити з обома чашами <b>абсолютно однакове</b>. Звідси рівно два дозволені прийоми.</p>
+
+  <div class="rule">
+    <h3>Прийом 1: додати або відняти однакове з обох частин</h3>
+    <figure class="wk-fig">
+      <svg viewBox="0 0 360 152" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Доданок 2x переноситься в ліву частину і змінює знак на мінус">
+        <text class="wk" x="108" y="40" text-anchor="middle">3x</text>
+        <text class="wk" x="132" y="40" text-anchor="middle">+</text>
+        <text class="wk" x="156" y="40" text-anchor="middle">5</text>
+        <text class="wk" x="180" y="40" text-anchor="middle">=</text>
+        <text class="wk" x="210" y="40" text-anchor="middle">2x</text>
+        <text class="wk" x="240" y="40" text-anchor="middle">+</text>
+        <text class="wk" x="264" y="40" text-anchor="middle">8</text>
+        <path class="wk-ln-red" d="M210,52 C210,82 150,94 110,98"/>
+        <path d="M112,92 L112,104 L100,98 Z" fill="#B93A30"/>
+        <text class="wk-lbl" x="196" y="78">переїжджає через «=»</text>
+        <text class="wk-lbl" x="196" y="94">і змінює плюс на мінус</text>
+        <text class="wk wk-new" x="180" y="136" text-anchor="middle">3x <tspan class="wk-op">− 2x</tspan> + 5 = 8</text>
+      </svg>
+      <figcaption>Далі <span class="eq">3x − 2x = x</span>, тобто <span class="eq">x + 5 = 8</span>.</figcaption>
+    </figure>
+    <p>Саме звідси береться шкільне «переносимо доданок через знак рівності і міняємо знак». Це не окреме магічне правило — це скорочений запис того, що ти відняв <span class="eq">2x</span> з обох шальок. Просто ніхто не хоче писати середній рядок.</p>
+  </div>
+
+  <div class="rule">
+    <h3>Прийом 2: помножити або поділити обидві частини на число, що не дорівнює нулю</h3>
+    <span class="eq eq-line">x/2 = 6   →   x = 12</span>
+    <span class="eq eq-line">−x = 7   →   x = −7</span>
+    <p>У першому прикладі обидві частини помножили на 2, у другому — на −1.</p>
+    <p>Чому «не нуль»? Бо множення на нуль перетворює будь-яке рівняння на <span class="eq">0 = 0</span>, і тоді підходити починають геть усі числа. Список коренів роздувся — рівновага тут ні до чого, ми загубили саму задачу.</p>
+  </div>
+
+  <p>І третій, службовий прийом: <b>будь-яку частину можна замінити тотожно рівним виразом</b>. Це місток на перший поверх — саме тому всередині рівняння дозволено спрощувати, розкривати дужки й зводити подібні.</p>
+</section>
+
+<section>
+  <span class="num">05</span>
+  <h2>А тепер — де воно ламається</h2>
+  <p>Дії, які виглядають цілком законно, але тихо міняють список коренів. Тут і живуть найприкріші помилки.</p>
+
+  <div class="rule danger">
+    <h3>Ділення на вираз зі змінною — корінь зникає</h3>
+    <span class="eq eq-line">x² = 3x</span>
+    <p>Спокуса: поділити обидві частини на <span class="eq">x</span> і отримати <span class="eq">x = 3</span>. Але перевір нуль в оригіналі: <span class="eq">0² = 3·0</span>, тобто <span class="eq">0 = 0</span> — нуль підходив! А в <span class="eq">x = 3</span> його вже немає. Список коренів схуд, значить перетворення було не рівносильне.</p>
+    <p>Причина проста: ділити можна лише на те, що точно не нуль. А <span class="eq">x</span> цілком може бути нулем — власне, тут він ним і є.</p>
+
+    <figure class="wk-fig">
+      <svg viewBox="0 0 360 118" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Було два корені, нуль і три; після ділення на x залишився тільки три">
+        <text class="wk wk-mid" x="62" y="24" text-anchor="middle">x² = 3x</text>
+        <circle cx="40" cy="60" r="19" fill="#E4F1EA" stroke="#2A7355" stroke-width="1.4"/>
+        <text class="wk wk-mid" x="40" y="66" text-anchor="middle" fill="#2A7355">0</text>
+        <circle cx="84" cy="60" r="19" fill="#E4F1EA" stroke="#2A7355" stroke-width="1.4"/>
+        <text class="wk wk-mid" x="84" y="66" text-anchor="middle" fill="#2A7355">3</text>
+        <text class="wk-lbl" x="62" y="100" text-anchor="middle">корені оригіналу</text>
+        <line class="wk-ln" x1="118" y1="60" x2="205" y2="60"/>
+        <path d="M203,54 L203,66 L214,60 Z" fill="#5A6B75"/>
+        <text class="wk-lbl" x="165" y="46" text-anchor="middle">поділили на x</text>
+        <text class="wk wk-mid" x="296" y="24" text-anchor="middle">x = 3</text>
+        <circle cx="276" cy="60" r="19" fill="#FBEAE8" stroke="#B93A30" stroke-width="1.4" stroke-dasharray="4 3"/>
+        <text class="wk wk-mid" x="276" y="66" text-anchor="middle" fill="#B93A30">0</text>
+        <line x1="262" y1="74" x2="290" y2="46" stroke="#B93A30" stroke-width="1.8"/>
+        <circle cx="320" cy="60" r="19" fill="#E4F1EA" stroke="#2A7355" stroke-width="1.4"/>
+        <text class="wk wk-mid" x="320" y="66" text-anchor="middle" fill="#2A7355">3</text>
+        <text class="wk-lbl" x="298" y="100" text-anchor="middle" fill="#B93A30">нуль зник</text>
+      </svg>
+      <figcaption>Ось так виглядає «зламана незмінність»: список коренів після кроку став іншим, ніж був.</figcaption>
+    </figure>
+    <p>Як треба: перенести все в один бік і розкласти на множники.</p>
+    <span class="eq eq-line">x² − 3x = 0</span>
+    <span class="eq eq-line">x(x − 3) = 0</span>
+    <span class="eq eq-line">x = 0  або  x = 3</span>
+  </div>
+
+  <div class="rule danger">
+    <h3>Множення на вираз зі змінною — з'являється зайвий корінь</h3>
+    <span class="eq eq-line">x/(x − 2) = 2/(x − 2)</span>
+    <p>Помножимо обидві частини на <span class="eq">(x − 2)</span> — отримаємо <span class="eq">x = 2</span>. Красиво, але підстав двійку в оригінал: у знаменнику вийде нуль, а на нуль ділити не можна. Тобто двійка ніколи не була коренем — ми її самі щойно вигадали. Такий корінь називають <b>стороннім</b>.</p>
+    <p>Звідси звичка: як тільки в рівнянні є дріб зі змінною в знаменнику — спочатку записуєш, чого <span class="eq">x</span> дорівнювати не може, а в кінці перевіряєш відповідь по цьому списку.</p>
+  </div>
+
+  <div class="rule danger">
+    <h3>Піднесення обох частин до квадрата</h3>
+    <span class="eq eq-line">x = −4</span>
+    <span class="eq eq-line">x² = 16   — це вже не те саме</span>
+    <p>Квадрат стирає знак: після нього <span class="eq">4</span> і <span class="eq">−4</span> стають нерозрізненними. Список коренів роздувся вдвічі. Тому після такого кроку перевірка підстановкою обов'язкова — не для галочки, а щоб відсіяти те, що ти сам і додав.</p>
+  </div>
+</section>
+
+<section>
+  <span class="num">06</span>
+  <h2>Перевір, чи вловив</h2>
+  <p>Відповідай подумки, потім розгортай.</p>
+
+  <details>
+    <summary>Учень переписав <span class="eq">5(x + 2) = 30</span> як <span class="eq">5x + 2 = 30</span>. Що саме зламалося?</summary>
+    <div class="answer">Він розкрив дужки лише наполовину — забув помножити двійку. Це перший поверх, і тут зламалося <b>значення виразу</b>: при <span class="eq">x = 4</span> ліва частина оригіналу дає 30, а нова — 22. Раз значення різні, це вже інший вираз, а не той самий у новому вигляді.</div>
+  </details>
+
+  <details>
+    <summary>Чи рівносильні рівняння <span class="eq">x + 1 = 5</span> і <span class="eq">2x + 2 = 10</span>?</summary>
+    <div class="answer">Так. Друге отримане з першого множенням обох частин на 2 — а двійка не нуль, отже прийом законний. Обом рівнянням підходить рівно одне число, <span class="eq">x = 4</span>. Вигляд різний, список коренів один.</div>
+  </details>
+
+  <details>
+    <summary>Чи рівносильні <span class="eq">x² = 5x</span> і <span class="eq">x = 5</span>?</summary>
+    <div class="answer">Ні. У першого корені <span class="eq">0</span> і <span class="eq">5</span>, у другого — тільки <span class="eq">5</span>. Нуль загубився під час ділення на <span class="eq">x</span>. Правильний шлях: <span class="eq">x² − 5x = 0</span>, далі <span class="eq">x(x − 5) = 0</span>.</div>
+  </details>
+
+  <details>
+    <summary>Чому «перенести доданок і змінити знак» — це не окреме правило?</summary>
+    <div class="answer">Бо це просто скорочення. Ти віднімаєш один і той самий доданок від обох частин; зліва він самознищується, справа з'являється зі знаком мінус. Пишуть одразу результат, але під ним завжди стоїть прийом «однакове з обох шальок».</div>
+  </details>
+</section>
+
+<div class="takeaway">
+  <h2>Що спитати себе перед кожним кроком</h2>
+  <ul class="ask">
+    <li>Я зараз перероблюю <b>шматок</b> чи <b>все рівняння</b>? Від цього залежить, що саме я маю вберегти.</li>
+    <li>Якщо шматок — чи дасть новий запис те саме число при будь-якому <span class="eq">x</span>? Підстав щось просте й перевір.</li>
+    <li>Якщо все рівняння — чи зробив я з обома частинами <b>однакове</b>? І чи точно те, на що я множу або ділю, не може виявитися нулем?</li>
+  </ul>
+</div>
+
+</main>
+
+<script>
+(function(){
+  var steps = [
+    {
+      svg: '<svg viewBox="0 0 360 76" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Рівняння 3x + 5 = 2x + 8">'
+         + '<text class="wk wk-big" x="180" y="48" text-anchor="middle">3x + 5 = 2x + 8</text>'
+         + '</svg>',
+      note: "<b>Початок.</b> Ми ще не знаємо, який тут корінь. Але хтось із чисел уже «підходить», а хтось — ні.",
+      a: ["ліва: 3·3 + 5 = 14", "права: 2·3 + 8 = 14"], aV: "14 = 14 — підходить",
+      b: ["ліва: 3·1 + 5 = 8", "права: 2·1 + 8 = 10"], bV: "8 ≠ 10 — не підходить"
+    },
+    {
+      svg: '<svg viewBox="0 0 360 136" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Доданки в кожній частині міняються місцями">'
+         + '<text class="wk" x="58" y="40" text-anchor="middle">3x</text>'
+         + '<text class="wk" x="86" y="40" text-anchor="middle">+</text>'
+         + '<text class="wk" x="110" y="40" text-anchor="middle">5</text>'
+         + '<text class="wk" x="180" y="40" text-anchor="middle">=</text>'
+         + '<text class="wk" x="250" y="40" text-anchor="middle">2x</text>'
+         + '<text class="wk" x="278" y="40" text-anchor="middle">+</text>'
+         + '<text class="wk" x="302" y="40" text-anchor="middle">8</text>'
+         + '<path class="wk-ln-pen" d="M58,50 C58,74 112,76 112,90"/>'
+         + '<path d="M107,84 L117,84 L112,96 Z" fill="#2A45A8"/>'
+         + '<path class="wk-ln-pen" d="M110,50 C110,80 58,70 58,90"/>'
+         + '<path d="M53,84 L63,84 L58,96 Z" fill="#2A45A8"/>'
+         + '<path class="wk-ln-pen" d="M250,50 C250,74 304,76 304,90"/>'
+         + '<path d="M299,84 L309,84 L304,96 Z" fill="#2A45A8"/>'
+         + '<path class="wk-ln-pen" d="M302,50 C302,80 250,70 250,90"/>'
+         + '<path d="M245,84 L255,84 L250,96 Z" fill="#2A45A8"/>'
+         + '<text class="wk wk-new" x="58" y="124" text-anchor="middle">5</text>'
+         + '<text class="wk wk-new" x="86" y="124" text-anchor="middle">+</text>'
+         + '<text class="wk wk-new" x="112" y="124" text-anchor="middle">3x</text>'
+         + '<text class="wk" x="180" y="124" text-anchor="middle">=</text>'
+         + '<text class="wk wk-new" x="250" y="124" text-anchor="middle">8</text>'
+         + '<text class="wk wk-new" x="278" y="124" text-anchor="middle">+</text>'
+         + '<text class="wk wk-new" x="304" y="124" text-anchor="middle">2x</text>'
+         + '</svg>',
+      note: "<b>Перестановка доданків.</b> Стрілки показують, куди поїхав кожен доданок. Знак рівності не чіпали, обидві частини лишилися тими самими за значенням — це перший поверх.",
+      a: ["ліва: 5 + 3·3 = 14", "права: 8 + 2·3 = 14"], aV: "14 = 14 — підходить",
+      b: ["ліва: 5 + 3·1 = 8", "права: 8 + 2·1 = 10"], bV: "8 ≠ 10 — не підходить"
+    },
+    {
+      svg: '<svg viewBox="0 0 360 212" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Від обох частин віднімають 2x">'
+         + '<text class="wk" x="180" y="30" text-anchor="middle">5 + 3x = 8 + 2x</text>'
+         + '<line class="wk-ln" x1="180" y1="42" x2="180" y2="56"/>'
+         + '<path d="M175,54 L185,54 L180,64 Z" fill="#5A6B75"/>'
+         + '<text class="wk-lbl" x="180" y="84" text-anchor="middle">віднімаємо 2x з обох частин</text>'
+         + '<text class="wk wk-mid" x="180" y="112" text-anchor="middle">5 + 3x <tspan class="wk-op">− 2x</tspan> = 8 + 2x <tspan class="wk-op">− 2x</tspan></text>'
+         + '<path class="wk-brace" d="M52,120 V127 H165 V120"/>'
+         + '<path class="wk-brace" d="M195,120 V127 H308 V120"/>'
+         + '<text class="wk-lbl" x="109" y="144" text-anchor="middle">3x − 2x = x</text>'
+         + '<text class="wk-lbl" x="251" y="144" text-anchor="middle">2x − 2x = 0</text>'
+         + '<line class="wk-ln" x1="180" y1="156" x2="180" y2="170"/>'
+         + '<path d="M175,168 L185,168 L180,178 Z" fill="#5A6B75"/>'
+         + '<text class="wk wk-big wk-new" x="180" y="204" text-anchor="middle">5 + x = 8</text>'
+         + '</svg>',
+      note: "<b>Відняли 2x з обох частин.</b> Це вже другий поверх: чіпаємо рівняння цілком. Середній рядок зазвичай не пишуть, але саме він пояснює, чому доданок «перестрибує» зі зміною знака. Справа 2x повністю зникає, зліва лишається один x.",
+      a: ["ліва: 5 + 3 = 8", "права: 8"], aV: "8 = 8 — підходить",
+      b: ["ліва: 5 + 1 = 6", "права: 8"], bV: "6 ≠ 8 — не підходить"
+    },
+    {
+      svg: '<svg viewBox="0 0 360 212" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Від обох частин віднімають 5">'
+         + '<text class="wk" x="180" y="30" text-anchor="middle">5 + x = 8</text>'
+         + '<line class="wk-ln" x1="180" y1="42" x2="180" y2="56"/>'
+         + '<path d="M175,54 L185,54 L180,64 Z" fill="#5A6B75"/>'
+         + '<text class="wk-lbl" x="180" y="84" text-anchor="middle">віднімаємо 5 з обох частин</text>'
+         + '<text class="wk wk-mid" x="180" y="112" text-anchor="middle">5 + x <tspan class="wk-op">− 5</tspan> = 8 <tspan class="wk-op">− 5</tspan></text>'
+         + '<path class="wk-brace" d="M93,120 V127 H185 V120"/>'
+         + '<path class="wk-brace" d="M216,120 V127 H267 V120"/>'
+         + '<text class="wk-lbl" x="139" y="144" text-anchor="middle">5 − 5 = 0</text>'
+         + '<text class="wk-lbl" x="241" y="144" text-anchor="middle">8 − 5 = 3</text>'
+         + '<line class="wk-ln" x1="180" y1="156" x2="180" y2="170"/>'
+         + '<path d="M175,168 L185,168 L180,178 Z" fill="#5A6B75"/>'
+         + '<text class="wk wk-big wk-new" x="180" y="204" text-anchor="middle">x = 3</text>'
+         + '</svg>',
+      note: "<b>Відняли 5 з обох частин.</b> Рівняння розв'язане. Трійка підходила на кожному з чотирьох рядків, одиниця — на жодному.",
+      a: ["ліва: 3", "права: 3"], aV: "3 = 3 — підходить",
+      b: ["ліва: 1", "права: 3"], bV: "1 ≠ 3 — не підходить"
+    }
+  ];
+
+  var i = 0;
+  var stage = document.getElementById("stage");
+  var note = document.getElementById("stepNote");
+  var valA = document.getElementById("valA");
+  var valB = document.getElementById("valB");
+  var testA = document.getElementById("testA");
+  var testB = document.getElementById("testB");
+  var prog = document.getElementById("prog");
+  var next = document.getElementById("next");
+  var reset = document.getElementById("reset");
+
+  function render(){
+    var s = steps[i];
+    if (!stage.innerHTML.trim()){
+      stage.innerHTML = s.svg;
+    } else {
+      stage.classList.add("fading");
+      window.setTimeout(function(){
+        stage.innerHTML = s.svg;
+        stage.classList.remove("fading");
+      }, 120);
+    }
+    note.innerHTML = s.note;
+    valA.innerHTML = s.a.join("<br>");
+    valB.innerHTML = s.b.join("<br>");
+    testA.querySelector(".verdict").textContent = s.aV;
+    testB.querySelector(".verdict").textContent = s.bV;
+    prog.textContent = "крок " + (i + 1) + " / " + steps.length;
+    next.disabled = (i === steps.length - 1);
+    next.textContent = (i === steps.length - 1) ? "Це кінець" : "Далі";
+  }
+
+  next.addEventListener("click", function(){
+    if (i < steps.length - 1){ i++; render(); }
+  });
+  reset.addEventListener("click", function(){ i = 0; render(); });
+
+  render();
+})();
+</script>
+<button class="theme-btn" id="themeBtn" type="button" aria-label="Перемкнути тему">☀ / ☾</button>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('themeBtn');
+  try{var s=localStorage.getItem('theme'); if(s) root.setAttribute('data-theme',s);}catch(e){}
+  btn.addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme');
+    if(!cur) cur=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+    var next=cur==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{localStorage.setItem('theme',next);}catch(e){}
+  });
+})();
+</script>
+<a href="/" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:9999;padding:7px 13px;border-radius:999px;background:#1d2a44;color:#fff;font:600 14px/1.2 system-ui,-apple-system,sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.25)">← Усі теми</a>
+</body>
+</html>

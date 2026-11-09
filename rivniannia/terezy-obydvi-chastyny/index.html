@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Терези: роби з обома частинами однакове</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<style>
+:root{
+  --paper:#FCFCF9;
+  --grid-bg:rgba(140,180,196,.24);
+  --surface:rgba(252,252,249,.92);
+  --ink:#1B2A33;
+  --ink-soft:#5A6B75;
+  --pen:#2A45A8;
+  --pen-wash:#E7ECF9;
+  --red:#B93A30;
+  --red-wash:#FBEAE8;
+  --green:#2A7355;
+  --green-wash:#E4F1EA;
+  --line:#D7E3E8;
+  --cell:26px;
+  --card:#fff; --card-line:#E2E7EA; --card-line-2:#EDF1F2; --ok-line:#C6E0D2; --bad-line:#F0CFCB;
+  --ask-line:#CFD9F0; --focus:#A9BCF0; --on-pen:#fff;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#141a26; --grid:#2a3446; --line:#2a3446; --grid-bg:rgba(120,150,180,.12); --surface:rgba(27,34,50,.94);
+  --margin-line:#8a4a46; --ink:#e4e9f3; --ink-soft:#9aa6bc; --pen:#8fa8ff; --pen-wash:#1f2a4a;
+  --red:#ff8a7e; --red-wash:#3a2224; --green:#6fd3a0; --green-wash:#173328;
+  --card:#1b2232; --card-line:#2e3850; --card-line-2:#263046; --ok-line:#2c5a45; --bad-line:#5c3330;
+  --ask-line:#34406a; --focus:#5a74c8; --on-pen:#0f1530; color-scheme:dark; }}
+:root[data-theme="dark"]{
+  --paper:#141a26; --grid:#2a3446; --line:#2a3446; --grid-bg:rgba(120,150,180,.12); --surface:rgba(27,34,50,.94);
+  --margin-line:#8a4a46; --ink:#e4e9f3; --ink-soft:#9aa6bc; --pen:#8fa8ff; --pen-wash:#1f2a4a;
+  --red:#ff8a7e; --red-wash:#3a2224; --green:#6fd3a0; --green-wash:#173328;
+  --card:#1b2232; --card-line:#2e3850; --card-line-2:#263046; --ok-line:#2c5a45; --bad-line:#5c3330;
+  --ask-line:#34406a; --focus:#5a74c8; --on-pen:#0f1530; color-scheme:dark; }
+/* SVG drawn with fixed colours follows the theme */
+[fill="#5A6B75"]{fill:var(--ink-soft)} [stroke="#5A6B75"]{stroke:var(--ink-soft)}
+[fill="#E7ECF9"]{fill:var(--pen-wash)} [stroke="#E7ECF9"]{stroke:var(--pen-wash)}
+[fill="#2A45A8"]{fill:var(--pen)} [stroke="#2A45A8"]{stroke:var(--pen)}
+[fill="#1B2A33"]{fill:var(--ink)} [stroke="#1B2A33"]{stroke:var(--ink)}
+[fill="#B93A30"]{fill:var(--red)} [stroke="#B93A30"]{stroke:var(--red)}
+[fill="#E4F1EA"]{fill:var(--green-wash)} [stroke="#E4F1EA"]{stroke:var(--green-wash)}
+[fill="#2A7355"]{fill:var(--green)} [stroke="#2A7355"]{stroke:var(--green)}
+[fill="#FBEAE8"]{fill:var(--red-wash)} [stroke="#FBEAE8"]{stroke:var(--red-wash)}
+.theme-btn{position:fixed;top:max(12px,env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px));z-index:9999;
+  border:1px solid var(--card-line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 12px;
+  font:600 13.5px/1.2 "Onest",system-ui,sans-serif;cursor:pointer}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:
+    repeating-linear-gradient(to right, var(--grid-bg) 0 1px, transparent 1px var(--cell)),
+    repeating-linear-gradient(to bottom, var(--grid-bg) 0 1px, transparent 1px var(--cell)),
+    var(--paper);
+  color:var(--ink);
+  font-family:"Onest","Segoe UI",system-ui,sans-serif;
+  font-size:16px; line-height:1.6;
+}
+.sheet{ max-width:520px; margin:0 auto; padding:22px 12px 60px }
+.card{ background:var(--surface); border-radius:2px; padding:22px 18px 24px }
+h1{ font-family:"Unbounded","Onest",sans-serif; font-size:clamp(21px,4.8vw,28px); line-height:1.2; margin:0 0 10px }
+p{ margin:0 0 14px }
+.sub{ color:var(--ink-soft); font-size:15px }
+
+.eqbig{
+  text-align:center; padding:12px 0 6px;
+  font-size:clamp(21px,5.6vw,28px);
+  overflow-x:auto;
+}
+.eqbig .katex{ font-size:1em }
+
+.scalewrap{ position:relative; max-width:340px; margin:0 auto 8px }
+.scalewrap svg{ display:block; width:100% }
+.pan{
+  position:absolute; top:41.5%;
+  transform:translate(-50%,-50%);
+  font-size:13.5px; color:var(--ink); white-space:nowrap;
+}
+.pan.l{ left:18.75% }
+.pan.r{ left:81.25% }
+.pan .katex{ font-size:1em }
+
+.verdict{
+  border-radius:3px; padding:11px 14px; margin:8px 0 18px;
+  font-size:15px; border:1px solid transparent; line-height:1.9;
+}
+.verdict.ok{ background:var(--green-wash); border-color:var(--ok-line) }
+.verdict.bad{ background:var(--red-wash); border-color:var(--bad-line); color:var(--red) }
+.verdict .k{ display:inline-block; vertical-align:-.3em }
+
+.hint{ font-size:12.5px; color:var(--ink-soft); margin:0 0 8px; letter-spacing:.02em }
+.pad{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px }
+@media (min-width:420px){ .pad{ grid-template-columns:repeat(6,1fr) } }
+button{
+  font-family:"JetBrains Mono",monospace; font-size:15px; font-weight:700;
+  padding:11px 2px; border-radius:3px; cursor:pointer;
+  border:1px solid var(--pen); background:var(--card); color:var(--pen);
+}
+button:active{ background:var(--pen-wash) }
+button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px }
+button.trap{ border-color:var(--red); color:var(--red) }
+button.trap:active{ background:var(--red-wash) }
+.row{ display:flex; gap:8px; margin-top:12px }
+button.plain{
+  font-family:"Onest",sans-serif; font-size:14px; font-weight:500;
+  padding:8px 14px; border-color:var(--line); color:var(--ink-soft);
+}
+
+.log{ list-style:none; padding:0; margin:18px 0 0; font-size:14.5px }
+.log li{ padding:10px 0; border-top:1px dashed var(--line); display:flex; gap:10px; align-items:center; flex-wrap:wrap }
+.log .op{ font-family:"JetBrains Mono",monospace; font-weight:700; color:var(--red); white-space:nowrap }
+.log .txt{ color:var(--ink-soft); font-size:13px }
+.log .res{ color:var(--pen) }
+.log .empty{ color:var(--ink-soft); font-size:14px }
+
+.foot{ margin-top:18px; font-size:14.5px; color:var(--ink-soft) }
+.foot b{ color:var(--ink) }
+</style>
+</head>
+<body>
+<main class="sheet">
+<div class="card">
+
+  <h1>Роби з обома частинами однакове</h1>
+  <p class="sub">Кожна кнопка діє одразу на обидві чаші. Спробуй дійти до <b>x = 4</b> і стеж за рядком під терезами: він не має змінитися жодного разу.</p>
+
+  <div class="eqbig" id="eq"></div>
+
+  <div class="scalewrap">
+    <svg viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Терези в рівновазі">
+      <line x1="160" y1="28" x2="160" y2="118" stroke="#5A6B75" stroke-width="3"/>
+      <line x1="60" y1="28" x2="260" y2="28" stroke="#5A6B75" stroke-width="3" stroke-linecap="round"/>
+      <line x1="60" y1="28" x2="60" y2="48" stroke="#5A6B75" stroke-width="1.5"/>
+      <line x1="260" y1="28" x2="260" y2="48" stroke="#5A6B75" stroke-width="1.5"/>
+      <path d="M6 48 H114 L102 84 H18 Z" fill="#E7ECF9" stroke="#2A45A8" stroke-width="1.5"/>
+      <path d="M206 48 H314 L302 84 H218 Z" fill="#E7ECF9" stroke="#2A45A8" stroke-width="1.5"/>
+      <path d="M130 118 H190 L202 132 H118 Z" fill="#5A6B75"/>
+      <circle cx="160" cy="25" r="5" fill="#5A6B75"/>
+    </svg>
+    <div class="pan l" id="panL"></div>
+    <div class="pan r" id="panR"></div>
+  </div>
+
+  <div class="verdict ok" id="verdict"></div>
+
+  <p class="hint">ДОДАТИ АБО ВІДНЯТИ ВІД ОБОХ ЧАСТИН</p>
+  <div class="pad">
+    <button data-op="add" data-n="1">+ 1</button>
+    <button data-op="add" data-n="-1">− 1</button>
+    <button data-op="add" data-n="3">+ 3</button>
+    <button data-op="add" data-n="-3">− 3</button>
+    <button data-op="addx" data-n="1">+ x</button>
+    <button data-op="addx" data-n="-1">− x</button>
+  </div>
+
+  <p class="hint">ПОМНОЖИТИ АБО ПОДІЛИТИ ОБИДВІ ЧАСТИНИ</p>
+  <div class="pad">
+    <button data-op="mul" data-n="2">× 2</button>
+    <button data-op="mul" data-n="3">× 3</button>
+    <button data-op="mul" data-n="-1">× (−1)</button>
+    <button data-op="div" data-n="2">÷ 2</button>
+    <button data-op="div" data-n="3">÷ 3</button>
+    <button class="trap" data-op="mul" data-n="0">× 0</button>
+  </div>
+
+  <ul class="log" id="log"></ul>
+
+  <div class="row">
+    <button class="plain" id="undo">Крок назад</button>
+    <button class="plain" id="reset">Спочатку</button>
+  </div>
+
+  <p class="foot">Не бійся дробів. Натисни <b>÷ 3</b> на самому початку — запис стане страшнуватим, але рядок під терезами лишиться тим самим. Незмінність витримує навіть кроки, які виглядають як помилка.</p>
+  <p class="foot">А от кнопка <b>× 0</b> червона не просто так. Вона теж робить з обома частинами однакове — і все одно все ламає. Спробуй і подивись, звідки в правилі взялося «на число, відмінне від нуля».</p>
+
+</div>
+</main>
+
+<script>
+(function(){
+  /* ---------- дроби ---------- */
+  function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ var t=a%b; a=b; b=t; } return a||1; }
+  function R(n,d){
+    d = (d === undefined) ? 1 : d;
+    if (d < 0){ n = -n; d = -d; }
+    var k = gcd(n,d);
+    return { n:n/k, d:d/k };
+  }
+  function add(p,q){ return R(p.n*q.d + q.n*p.d, p.d*q.d); }
+  function sub(p,q){ return add(p, R(-q.n, q.d)); }
+  function mul(p,q){ return R(p.n*q.n, p.d*q.d); }
+  function div(p,q){ return R(p.n*q.d, p.d*q.n); }
+  function isZero(p){ return p.n === 0; }
+  function abs(p){ return R(Math.abs(p.n), p.d); }
+  function I(k){ return R(k,1); }
+
+  /* ---------- запис ---------- */
+  var MINUS = "\u2212";
+
+  function numTex(r){
+    if (r.d === 1) return String(r.n);
+    return (r.n < 0 ? "-" : "") + "\\frac{" + Math.abs(r.n) + "}{" + r.d + "}";
+  }
+  function numPlain(r){
+    var s = (r.d === 1) ? String(Math.abs(r.n)) : Math.abs(r.n) + "/" + r.d;
+    return (r.n < 0 ? MINUS : "") + s;
+  }
+  function termTex(a){
+    if (a.d === 1 && a.n === 1) return "x";
+    if (a.d === 1 && a.n === -1) return "-x";
+    return numTex(a) + "x";
+  }
+  function termPlain(a){
+    if (a.d === 1 && a.n === 1) return "x";
+    if (a.d === 1 && a.n === -1) return MINUS + "x";
+    if (a.d === 1) return numPlain(a) + "x";
+    return "(" + numPlain(a) + ")x";
+  }
+  function sideTex(a,b){
+    if (isZero(a)) return numTex(b);
+    var t = termTex(a);
+    if (isZero(b)) return t;
+    return t + (b.n > 0 ? " + " : " - ") + numTex(abs(b));
+  }
+  function sidePlain(a,b){
+    if (isZero(a)) return numPlain(b);
+    var t = termPlain(a);
+    if (isZero(b)) return t;
+    return t + (b.n > 0 ? " + " : " " + MINUS + " ") + numPlain(abs(b));
+  }
+  function eqTex(s){ return sideTex(s.aL,s.bL) + " = " + sideTex(s.aR,s.bR); }
+  function eqPlain(s){ return sidePlain(s.aL,s.bL) + " = " + sidePlain(s.aR,s.bR); }
+
+  /* KaTeX із запасним варіантом, якщо CDN недоступний */
+  function draw(el, tex, plain){
+    if (window.katex){
+      try { katex.render(tex, el, { throwOnError:false, displayMode:false }); return; }
+      catch(e){ /* падаємо у простий запис */ }
+    }
+    el.textContent = plain;
+  }
+  function piece(tex, plain){
+    var el = document.createElement("span");
+    el.className = "k";
+    draw(el, tex, plain);
+    return el.outerHTML;
+  }
+
+  /* ---------- стан ---------- */
+  var START = { aL:I(2), bL:I(3), aR:I(0), bR:I(11) };
+  var st, past, log;
+
+  var eqEl = document.getElementById("eq");
+  var panL = document.getElementById("panL");
+  var panR = document.getElementById("panR");
+  var verdict = document.getElementById("verdict");
+  var logEl = document.getElementById("log");
+
+  function apply(op, n){
+    var s = { aL:st.aL, bL:st.bL, aR:st.aR, bR:st.bR };
+    if (op === "add"){ s.bL = add(s.bL, I(n)); s.bR = add(s.bR, I(n)); }
+    else if (op === "addx"){ s.aL = add(s.aL, I(n)); s.aR = add(s.aR, I(n)); }
+    else if (op === "mul"){
+      s.aL = mul(s.aL, I(n)); s.bL = mul(s.bL, I(n));
+      s.aR = mul(s.aR, I(n)); s.bR = mul(s.bR, I(n));
+    }
+    else if (op === "div"){
+      s.aL = div(s.aL, I(n)); s.bL = div(s.bL, I(n));
+      s.aR = div(s.aR, I(n)); s.bR = div(s.bR, I(n));
+    }
+    return s;
+  }
+
+  function render(){
+    draw(eqEl, eqTex(st), eqPlain(st));
+    draw(panL, sideTex(st.aL, st.bL), sidePlain(st.aL, st.bL));
+    draw(panR, sideTex(st.aR, st.bR), sidePlain(st.aR, st.bR));
+
+    var da = sub(st.aL, st.aR), db = sub(st.bR, st.bL);
+    if (!isZero(da)){
+      var root = div(db, da);
+      var lv = add(mul(st.aL, root), st.bL);
+      var rv = add(mul(st.aR, root), st.bR);
+      verdict.className = "verdict ok";
+      verdict.innerHTML = "Підходить лише " + piece("x = " + numTex(root), "x = " + numPlain(root))
+        + " · ліва дає " + piece(numTex(lv), numPlain(lv))
+        + ", права дає " + piece(numTex(rv), numPlain(rv));
+    } else if (isZero(db)){
+      verdict.className = "verdict bad";
+      verdict.innerHTML = "Тепер підходить <b>будь-яке</b> число. Список коренів роздувся до нескінченності — рівняння вже не про той самий x.";
+    } else {
+      verdict.className = "verdict bad";
+      verdict.innerHTML = "Тепер не підходить <b>жодне</b> число: ліва частина ніколи не дорівнює правій.";
+    }
+
+    if (!log.length){
+      logEl.innerHTML = '<li class="empty">Тут з\'являтимуться твої кроки.</li>';
+    } else {
+      logEl.innerHTML = log.slice(-8).reverse().map(function(e){
+        return '<li><span class="op">' + e.op + '</span>'
+             + '<span class="txt">з обома частинами</span>'
+             + '<span class="res">' + piece(e.tex, e.plain) + '</span></li>';
+      }).join("");
+    }
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll(".pad button"), function(btn){
+    btn.addEventListener("click", function(){
+      var op = btn.getAttribute("data-op");
+      var n = parseInt(btn.getAttribute("data-n"), 10);
+      past.push({ st:st, log:log.slice() });
+      st = apply(op, n);
+      log.push({ op: btn.textContent.trim(), tex: eqTex(st), plain: eqPlain(st) });
+      render();
+    });
+  });
+
+  document.getElementById("undo").addEventListener("click", function(){
+    var prev = past.pop();
+    if (!prev) return;
+    st = prev.st; log = prev.log;
+    render();
+  });
+  document.getElementById("reset").addEventListener("click", init);
+
+  function init(){
+    st = { aL:START.aL, bL:START.bL, aR:START.aR, bR:START.bR };
+    past = []; log = [];
+    render();
+  }
+
+  init();
+})();
+</script>
+<button class="theme-btn" id="themeBtn" type="button" aria-label="Перемкнути тему">☀ / ☾</button>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('themeBtn');
+  try{var s=localStorage.getItem('theme'); if(s) root.setAttribute('data-theme',s);}catch(e){}
+  btn.addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme');
+    if(!cur) cur=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+    var next=cur==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{localStorage.setItem('theme',next);}catch(e){}
+  });
+})();
+</script>
+<a href="/" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:9999;padding:7px 13px;border-radius:999px;background:#1d2a44;color:#fff;font:600 14px/1.2 system-ui,-apple-system,sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.25)">← Усі теми</a>
+</body>
+</html>
