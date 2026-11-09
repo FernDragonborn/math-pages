@@ -1,40 +1,27 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>Шпаргалка з трапеції</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;700&family=Rubik:wght@400;500;600&family=Caveat:wght@600;700&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/theme.js"></script>
 <style>
 /* Layout: зошит у клітинку — сітка карток, кожна картка = малюнок + правило + «чому» олівцем */
 :root{
-  --bg:#f3f6fb; --grid:#dfe6f1; --card:#ffffff; --line:#cfd8e6;
-  --ink:#1c2740; --muted:#5a6683;
-  --blue:#2356c4; --red:#d4433a;
-  --fill-a:rgba(35,86,196,.16); --fill-b:rgba(232,150,30,.22); --shape:rgba(35,86,196,.05);
-  --badge-bg:#fde9e7;
-  --display:"Unbounded","Rubik",system-ui,sans-serif;
-  --body:"Rubik",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --hand:"Caveat","Comic Sans MS","Segoe Print",cursive;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#10151f; --grid:#1b2332; --card:#161d2b; --line:#2a3447;
-  --ink:#e5eaf4; --muted:#9aa6bf;
-  --blue:#7ea4ff; --red:#ff7f72;
-  --fill-a:rgba(126,164,255,.22); --fill-b:rgba(255,184,77,.22); --shape:rgba(126,164,255,.06);
-  --badge-bg:#3a1f22; color-scheme:dark;
-}}
-:root[data-theme="dark"]{
-  --bg:#10151f; --grid:#1b2332; --card:#161d2b; --line:#2a3447;
-  --ink:#e5eaf4; --muted:#9aa6bf;
-  --blue:#7ea4ff; --red:#ff7f72;
-  --fill-a:rgba(126,164,255,.22); --fill-b:rgba(255,184,77,.22); --shape:rgba(126,164,255,.06);
-  --badge-bg:#3a1f22; color-scheme:dark;
+  --bg:var(--paper); --muted:var(--ink-soft); --blue:var(--pen);
+  --fill-a:color-mix(in srgb,var(--pen) 18%,transparent); --fill-b:color-mix(in srgb,var(--orange) 24%,transparent);
+  --shape:color-mix(in srgb,var(--pen) 6%,transparent); --badge-bg:var(--red-wash);
+  --display:var(--font-display); --body:var(--font-body); --hand:var(--font-hand);
 }
 body{
-  background-color:var(--bg); color:var(--ink); font-family:var(--body); font-size:16px; line-height:1.5;
-  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-  background-size:22px 22px;
-}
+  font-size:16px; line-height:1.5;
+  }
 .wrap{max-width:1120px;margin:0 auto;padding-block:28px 56px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
   display:flex;flex-direction:column;gap:36px}
@@ -42,14 +29,10 @@ header{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-
 h1{font-family:var(--display);font-weight:700;font-size:clamp(1.7rem,4.5vw,2.6rem);line-height:1.15;margin:0;text-wrap:balance}
 h1 span{color:var(--blue)}
 .lead{margin:8px 0 0;color:var(--muted);max-width:60ch}
-#theme{font:500 .9rem var(--body);color:var(--ink);background:var(--card);border:1.5px solid var(--line);
-  border-radius:999px;padding:8px 16px;cursor:pointer;display:flex;align-items:center;gap:8px}
-#theme:hover{border-color:var(--blue)}
-#theme:focus-visible,.card:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
-#theme svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2}
+.card:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 
 .anatomy{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px;align-items:center;
-  background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:20px}
+  background:var(--card);border:1.5px solid var(--line);border-radius:4px;padding:20px}
 .anatomy svg{width:100%;height:auto;max-width:520px}
 .legend{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 .legend li{display:flex;gap:12px;align-items:baseline}
@@ -61,7 +44,7 @@ section{display:flex;flex-direction:column;gap:16px}
 h2{font-family:var(--display);font-weight:600;font-size:1.25rem;margin:0;text-wrap:balance}
 h2 small{display:block;font:400 .95rem var(--body);color:var(--muted);margin-top:4px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
-.card{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:14px 16px 16px;
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:4px;padding:14px 16px 16px;
   display:flex;flex-direction:column;gap:8px;position:relative;min-width:0}
 .card svg{width:100%;height:auto;display:block}
 .card h3{font:600 1.02rem var(--body);margin:0;display:flex;gap:8px;align-items:baseline}
@@ -92,17 +75,18 @@ footer{color:var(--muted);font-size:.9rem}
 @media (max-width:640px){.anatomy{grid-template-columns:minmax(0,1fr)}}
 @media (prefers-reduced-motion:no-preference){.card{transition:transform .15s,border-color .15s}.card:hover{transform:translateY(-2px);border-color:var(--blue)}}
 </style>
-
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
 <div class="wrap">
 <header>
   <div>
     <h1>Трапеція: <span>усе головне</span></h1>
     <p class="lead">Шпаргалка для 8 класу. На кожному малюнку синім виділено те, про що правило, а червоним олівцем позначено рівні відрізки та кути.</p>
   </div>
-  <button id="theme" type="button" aria-label="Перемкнути тему">
-    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5"/><path d="M12 1v3M12 20v3M1 12h3M20 12h3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
-    <span id="theme-label">Темна тема</span>
-  </button>
 </header>
 
 <div class="anatomy">
@@ -425,26 +409,6 @@ footer{color:var(--muted);font-size:.9rem}
 <footer>Малюнки схематичні: трапеції на них «загальні», щоб правило було видно, а не конкретні розміри.</footer>
 </div>
 
-<script>
-(function(){
-  var root=document.documentElement, label=document.getElementById('theme-label');
-  function current(){
-    var t=root.getAttribute('data-theme');
-    if(t) return t;
-    return window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
-  }
-  function sync(){label.textContent=current()==='dark'?'Світла тема':'Темна тема';}
-  try{var saved=localStorage.getItem('trap-theme'); if(saved==='dark'||saved==='light') root.setAttribute('data-theme',saved);}catch(e){}
-  sync();
-  document.getElementById('theme').addEventListener('click',function(){
-    var next=current()==='dark'?'light':'dark';
-    root.setAttribute('data-theme',next);
-    try{localStorage.setItem('trap-theme',next);}catch(e){}
-    sync();
-  });
-  if(window.matchMedia){var mq=window.matchMedia('(prefers-color-scheme: dark)'); if(mq.addEventListener) mq.addEventListener('change',sync);}
-})();
-</script>
 
-<a href="/" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:9999;padding:7px 13px;border-radius:999px;background:#1d2a44;color:#fff;font:600 14px/1.2 system-ui,-apple-system,sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.25)">← Усі теми</a>
-</body></html>
+</body>
+</html>

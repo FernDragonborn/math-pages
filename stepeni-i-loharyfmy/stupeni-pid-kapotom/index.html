@@ -7,59 +7,55 @@
 <title>Ступені під капотом</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/theme.js"></script>
 <style>
 :root{
-  --bg:#f6f4ef; --card:#ffffff; --ink:#1d1b18; --muted:#6b665d; --line:#e2ddd2;
-  --accent:#d9480f; --accent-soft:#ffe8dc; --blue:#1c64c8; --blue-soft:#e3eefc;
-  --good:#2b8a3e; --good-soft:#e1f4e5; --warn:#b35c00;
-}
-[data-theme="dark"]{
-  --bg:#15140f; --card:#211f19; --ink:#f1ede4; --muted:#a39d90; --line:#37332a;
-  --accent:#ff8a4c; --accent-soft:#3b2418; --blue:#7fb2ff; --blue-soft:#1b2a40;
-  --good:#6fd08a; --good-soft:#1b3322; --warn:#ffb35c;
+  --bg:var(--paper); --muted:var(--ink-soft);
+  --accent:var(--red); --accent-soft:var(--red-wash); --blue:var(--pen); --blue-soft:var(--pen-wash);
+  --good:var(--green); --good-soft:var(--green-wash); --warn:var(--orange);
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink)}
-body{font-family:Manrope,system-ui,sans-serif;font-size:17px;line-height:1.5;-webkit-text-size-adjust:100%}
+html,body{margin:0;}
+body{font-family:var(--font-body);font-size:17px;line-height:1.5;-webkit-text-size-adjust:100%}
 .wrap{max-width:560px;margin:0 auto;padding:16px 14px 60px}
 header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin:8px 0 18px}
 h1{font-size:28px;line-height:1.15;margin:0 0 6px;font-weight:800;letter-spacing:-.02em}
 .sub{color:var(--muted);margin:0;font-size:15px}
-.theme{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;height:40px;min-width:40px;padding:0 12px;font-size:18px;cursor:pointer}
-section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 16px;margin:0 0 16px}
+section{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:18px 16px;margin:0 0 16px}
 h2{font-size:20px;margin:0 0 4px;font-weight:800;letter-spacing:-.01em}
-.num{display:inline-block;background:var(--accent);color:#fff;border-radius:8px;font-size:14px;padding:1px 8px;margin-right:6px;vertical-align:2px}
+.num{display:inline-block;background:var(--accent);color:var(--paper);border-radius:8px;font-size:14px;padding:1px 8px;margin-right:6px;vertical-align:2px}
 p{margin:8px 0}
 .m{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500}
 sup{font-size:.68em;line-height:0;font-family:"JetBrains Mono",monospace}
 .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
 .lbl{font-size:14px;color:var(--muted);margin-right:2px}
-.pill{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;min-width:44px;height:40px;padding:0 10px;font:600 16px "JetBrains Mono",monospace;cursor:pointer}
+.pill{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:4px;min-width:44px;height:40px;padding:0 10px;font:600 16px "JetBrains Mono",monospace;cursor:pointer}
 .pill.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:4px;overflow:hidden}
 .stepper button{width:44px;height:40px;border:0;background:transparent;color:var(--ink);font-size:22px;cursor:pointer}
 .stepper button:active{background:var(--line)}
 .stepper output{min-width:44px;text-align:center;font:700 18px "JetBrains Mono",monospace}
 .chain{display:flex;flex-wrap:wrap;align-items:center;gap:4px 2px;margin:12px 0;font-family:"JetBrains Mono",monospace}
 .val{background:var(--blue-soft);color:var(--blue);border-radius:8px;padding:4px 9px;font-weight:700}
-.val.last{background:var(--accent);color:#fff}
+.val.last{background:var(--accent);color:var(--paper)}
 .op{color:var(--muted);font-size:14px;padding:0 3px;white-space:nowrap}
 .op i{font-style:normal;color:var(--accent);font-weight:700}
 .big{font:700 26px "JetBrains Mono",monospace;margin:10px 0 4px}
 .big .eq{color:var(--accent)}
-.note{background:var(--accent-soft);border-radius:12px;padding:10px 12px;font-size:15px;margin-top:12px}
+.note{background:var(--accent-soft);border-radius:4px;padding:10px 12px;font-size:15px;margin-top:12px}
 .note b{color:var(--accent)}
 .muted{color:var(--muted);font-size:15px}
 /* ladder */
 .ladder{display:flex;flex-direction:column;margin:12px 0}
-.rung{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:12px;padding:8px 14px;font:500 18px "JetBrains Mono",monospace;cursor:pointer;text-align:left}
+.rung{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:4px;padding:8px 14px;font:500 18px "JetBrains Mono",monospace;cursor:pointer;text-align:left}
 .rung b{font-weight:700}
 .rung.zero{border-style:dashed}
-.rung.zero::after{content:"старт";font:600 12px Manrope,sans-serif;color:var(--muted);margin-left:8px}
+.rung.zero::after{content:"старт";font:600 12px var(--font-body);color:var(--muted);margin-left:8px}
 .rung.path{background:var(--blue-soft);border-color:transparent}
-.rung.sel{background:var(--accent);color:#fff;border-color:var(--accent)}
-.rung.sel::after{color:#fff}
+.rung.sel{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+.rung.sel::after{color:var(--paper)}
 .rung span{flex:1}
 .between{font-size:12px;color:var(--muted);text-align:center;line-height:1;padding:3px 0;font-family:"JetBrains Mono",monospace;opacity:.75}
 /* slider game */
@@ -70,20 +66,24 @@ input[type=range]{width:100%;height:36px;accent-color:var(--accent)}
 .target{position:absolute;top:-2px;bottom:-2px;width:3px;background:var(--ink)}
 .status{font-weight:600;min-height:1.5em}
 .status.ok{color:var(--good)}
-.btn{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;height:40px;padding:0 14px;font:600 15px Manrope,sans-serif;cursor:pointer}
+.btn{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:4px;height:40px;padding:0 14px;font:600 15px var(--font-body);cursor:pointer}
 svg text{font-family:"JetBrains Mono",monospace;fill:var(--muted)}
 details{border-top:1px solid var(--line);padding:10px 0}
 details:first-of-type{border-top:0}
 summary{cursor:pointer;font:600 18px "JetBrains Mono",monospace;list-style:none}
 summary::-webkit-details-marker{display:none}
-summary::after{content:" — натисни";font:400 13px Manrope,sans-serif;color:var(--muted)}
+summary::after{content:" — натисни";font:400 13px var(--font-body);color:var(--muted)}
 details[open] summary::after{content:""}
 .ans{margin-top:6px;font-size:15px}
-.rule{background:var(--ink);color:var(--bg);border-radius:18px;padding:18px 16px;font-size:16px}
+.rule{background:var(--ink);color:var(--bg);border-radius:4px;padding:18px 16px;font-size:16px}
 .rule b{color:var(--accent)}
 </style>
 </head>
 <body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
 <div class="wrap">
 
 <header>
@@ -91,7 +91,6 @@ details[open] summary::after{content:""}
     <h1>Ступені під капотом</h1>
     <p class="sub">Від'ємні й дробові показники — це не нові правила, а те саме правило, яке просто продовжили.</p>
   </div>
-  <button class="theme" id="theme" aria-label="Перемкнути тему">🌙</button>
 </header>
 
 <!-- 1 -->
@@ -172,10 +171,6 @@ const $=id=>document.getElementById(id);
 
 /* ---------- theme ---------- */
 const root=document.documentElement;
-function setTheme(t){root.dataset.theme=t;$('theme').textContent=t==='dark'?'☀️':'🌙';try{localStorage.setItem('pow-theme',t)}catch(e){}}
-let saved=null;try{saved=localStorage.getItem('pow-theme')}catch(e){}
-setTheme(saved||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
-$('theme').onclick=()=>setTheme(root.dataset.theme==='dark'?'light':'dark');
 
 /* ---------- helpers ---------- */
 const MINUS='−';
@@ -300,9 +295,8 @@ function drawLine(p,q){
 $('s4pm').onclick=()=>{s4.p--;r4()};$('s4pp').onclick=()=>{s4.p++;r4()};
 $('s4qm').onclick=()=>{if(s4.q>1){s4.q--;r4()}};$('s4qp').onclick=()=>{if(s4.q<4){s4.q++;r4()}};
 r4();
-$('theme').addEventListener('click',()=>drawLine(s4.p,s4.q));
+document.addEventListener('themechange',()=>drawLine(s4.p,s4.q));
 })();
 </script>
-<a href="/" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:9999;padding:7px 13px;border-radius:999px;background:#1d2a44;color:#fff;font:600 14px/1.2 system-ui,-apple-system,sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.25)">← Усі теми</a>
 </body>
 </html>

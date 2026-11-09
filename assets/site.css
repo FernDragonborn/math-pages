@@ -1,0 +1,91 @@
+/* Shared look for every page: squared exercise-book paper, blue pen, red pencil.
+   Pages keep their own component styles but take colours and fonts only from these tokens. */
+:root{
+  --paper:#FCFCF9;
+  --grid-bg:rgba(140,180,196,.24);
+  --grid:#D7E3E8;
+  --surface:rgba(252,252,249,.92);
+  --card:#FFFFFF;
+  --line:#D7E3E8;
+  --card-line:#E2E7EA;
+  --card-line-2:#EDF1F2;
+  --margin-line:#D9635A;
+  --ink:#1B2A33;
+  --ink-soft:#5A6B75;
+  --pen:#2A45A8;
+  --pen-wash:#E7ECF9;
+  --on-pen:#FFFFFF;
+  --red:#B93A30;
+  --red-wash:#FBEAE8;
+  --green:#2A7355;
+  --green-wash:#E4F1EA;
+  --violet:#7A45B8;
+  --violet-wash:#EFE4FA;
+  --orange:#B85A14;
+  --orange-wash:#FBEADC;
+  --ok-line:#C6E0D2;
+  --bad-line:#F0CFCB;
+  --ask-line:#CFD9F0;
+  --focus:#A9BCF0;
+  --cell:26px;
+
+  --font-display:"Unbounded","Onest",system-ui,sans-serif;
+  --font-body:"Onest","Segoe UI",system-ui,-apple-system,sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --font-hand:"Caveat","Segoe Print","Comic Sans MS",cursive;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#141A26; --grid-bg:rgba(120,150,180,.12); --grid:#2A3446; --surface:rgba(27,34,50,.94);
+  --card:#1B2232; --line:#2A3446; --card-line:#2E3850; --card-line-2:#263046; --margin-line:#8A4A46;
+  --ink:#E4E9F3; --ink-soft:#9AA6BC; --pen:#8FA8FF; --pen-wash:#1F2A4A; --on-pen:#0F1530;
+  --red:#FF8A7E; --red-wash:#3A2224; --green:#6FD3A0; --green-wash:#173328;
+  --violet:#C69BFF; --violet-wash:#2E2145; --orange:#FFA45C; --orange-wash:#3A2817;
+  --ok-line:#2C5A45; --bad-line:#5C3330; --ask-line:#34406A; --focus:#5A74C8;
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#141A26; --grid-bg:rgba(120,150,180,.12); --grid:#2A3446; --surface:rgba(27,34,50,.94);
+  --card:#1B2232; --line:#2A3446; --card-line:#2E3850; --card-line-2:#263046; --margin-line:#8A4A46;
+  --ink:#E4E9F3; --ink-soft:#9AA6BC; --pen:#8FA8FF; --pen-wash:#1F2A4A; --on-pen:#0F1530;
+  --red:#FF8A7E; --red-wash:#3A2224; --green:#6FD3A0; --green-wash:#173328;
+  --violet:#C69BFF; --violet-wash:#2E2145; --orange:#FFA45C; --orange-wash:#3A2817;
+  --ok-line:#2C5A45; --bad-line:#5C3330; --ask-line:#34406A; --focus:#5A74C8;
+  color-scheme:dark;
+}
+
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:
+    repeating-linear-gradient(to right, var(--grid-bg) 0 1px, transparent 1px var(--cell)),
+    repeating-linear-gradient(to bottom, var(--grid-bg) 0 1px, transparent 1px var(--cell)),
+    var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:17px;
+  line-height:1.6;
+}
+h1,h2{font-family:var(--font-display);font-weight:700;letter-spacing:-.01em;text-wrap:balance}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+/* Site bar: the same place on every page — "all topics" on the left, theme switch on the right */
+.site-bar{
+  display:flex;align-items:center;gap:12px;
+  max-width:1120px;margin:0 auto;
+  padding-top:max(12px,env(safe-area-inset-top,0px));padding-bottom:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  box-sizing:border-box;
+}
+.site-home{
+  display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;
+  border:1px solid var(--card-line);border-radius:999px;background:var(--card);color:var(--ink);
+  font:600 14px/1 var(--font-body);text-decoration:none;
+}
+.site-home:hover,.site-theme:hover{border-color:var(--pen)}
+.site-theme{
+  margin-left:auto;flex:none;width:40px;height:40px;padding:0;
+  display:grid;place-items:center;border:1px solid var(--card-line);border-radius:50%;
+  background:var(--card);color:var(--ink);cursor:pointer;
+}
+.site-theme svg{width:20px;height:20px;display:block}

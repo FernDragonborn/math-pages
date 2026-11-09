@@ -3,12 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<script>try { var t = localStorage.getItem('log11-theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}</script>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>Логарифми з нуля — посібник для 11 класу</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Golos+Text:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>
 window.MathJax = {
   loader: { load: ['[tex]/html'] },
@@ -24,50 +20,22 @@ window.MathJax = {
 };
 </script>
 <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/theme.js"></script>
 <style>
 :root {
-  --paper: #F4F7FC;
-  --sheet: #FFFFFF;
-  --grid: #E0E9F4;
-  --ink: #1B2748;
-  --ink-soft: #56648A;
-  --pen: #2A4FCF;
-  --pen-soft: #E6ECFC;
-  --on-pen: #FFFFFF;
-  --red: #C8363B;
-  --red-soft: #FBE9E9;
-  --green: #1D7F53;
-  --green-soft: #E2F3EA;
-  --line: #CAD6E6;
-  --margin: #E07A7E;
-  --hand: "Caveat", "Segoe Print", "Comic Sans MS", cursive;
-  --sans: "Golos Text", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #0F1729; --sheet: #16213A; --grid: #19243F; --ink: #E3E9F5; --ink-soft: #A2B0CF;
-    --pen: #8AA8FF; --pen-soft: #1F2D52; --on-pen: #0F1729; --red: #FF8080; --red-soft: #3A1E27;
-    --green: #5FD39D; --green-soft: #15352A; --line: #2A385A; --margin: #8A3A45; color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --paper: #0F1729; --sheet: #16213A; --grid: #19243F; --ink: #E3E9F5; --ink-soft: #A2B0CF;
-  --pen: #8AA8FF; --pen-soft: #1F2D52; --on-pen: #0F1729; --red: #FF8080; --red-soft: #3A1E27;
-  --green: #5FD39D; --green-soft: #15352A; --line: #2A385A; --margin: #8A3A45; color-scheme: dark;
+  --sheet: var(--card); --pen-soft: var(--pen-wash); --red-soft: var(--red-wash); --green-soft: var(--green-wash);
+  --margin: var(--margin-line); --hand: var(--font-hand); --sans: var(--font-body);
 }
 :root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
 *, *::before, *::after { box-sizing: inherit; }
 html { scroll-padding-top: env(safe-area-inset-top, 0px); scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
 body {
-  margin: 0; font-family: var(--sans); font-size: 17px; line-height: 1.6; color: var(--ink);
-  background-color: var(--paper);
-  background-image:
-    linear-gradient(var(--grid) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 24px 24px;
-}
+  margin: 0; font-size: 17px; line-height: 1.6; }
 main { position: relative; max-width: 680px; margin: 0 auto; padding: 0 16px 64px 34px; }
 main::before { content: ""; position: absolute; top: 0; bottom: 0; left: 20px; width: 2px; background: var(--margin); opacity: .7; }
 img, svg { max-width: 100%; }
@@ -83,15 +51,13 @@ h3 { font-size: 1.12rem; line-height: 1.3; font-weight: 650; margin: 1.6em 0 .4e
 
 header.hero { position: relative; padding: 36px 0 8px; }
 .hero h1 { padding-right: 52px; }
-.theme-btn { position: absolute; top: 14px; right: 0; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--sheet); color: var(--ink); display: grid; place-items: center; cursor: pointer; padding: 0; }
-.theme-btn svg { width: 22px; height: 22px; display: block; }
 .hero .hand { margin-top: 10px; }
 
 section { padding-top: 40px; }
 .sec-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
 .sec-num { font-family: var(--hand); font-weight: 700; font-size: 2.2rem; line-height: 1; color: var(--red); min-width: 1.6em; }
 
-.sheet { background: var(--sheet); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin: 18px 0; }
+.sheet { background: var(--sheet); border: 1px solid var(--line); border-radius:4px; padding: 16px; margin: 18px 0; }
 .sheet.flat { border-radius: 8px; }
 .rule { background: var(--pen-soft); border-left: 4px solid var(--pen); border-radius: 4px 12px 12px 4px; padding: 10px 14px; margin: 16px 0; }
 .warn { background: var(--red-soft); border-left: 4px solid var(--red); border-radius: 4px 12px 12px 4px; padding: 10px 14px; margin: 16px 0; }
@@ -120,7 +86,7 @@ button { font: inherit; color: inherit; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
 .chip { min-height: 40px; min-width: 44px; padding: 6px 14px; border-radius: 999px; border: 1.5px solid var(--pen); background: transparent; color: var(--pen); font-weight: 600; cursor: pointer; }
 .chip[aria-pressed="true"] { background: var(--pen); color: var(--on-pen); }
-.btn { min-height: 44px; padding: 8px 18px; border-radius: 10px; border: 1.5px solid var(--pen); background: var(--pen); color: var(--on-pen); font-weight: 600; cursor: pointer; }
+.btn { min-height: 44px; padding: 8px 18px; border-radius:4px; border: 1.5px solid var(--pen); background: var(--pen); color: var(--on-pen); font-weight: 600; cursor: pointer; }
 .btn.ghost { background: transparent; color: var(--pen); }
 .btn[disabled] { opacity: .45; cursor: default; }
 .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
@@ -129,12 +95,12 @@ button { font: inherit; color: inherit; }
 /* hero game */
 .game-q { font-size: 1.6rem; text-align: center; padding: 8px 0 2px; }
 .game-opts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
-.game-opts button { min-height: 52px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--paper); font-size: 1.3rem; font-weight: 700; cursor: pointer; color: var(--ink); }
+.game-opts button { min-height: 52px; border-radius:4px; border: 1.5px solid var(--line); background: var(--paper); font-size: 1.3rem; font-weight: 700; cursor: pointer; color: var(--ink); }
 .game-opts button.ok { border-color: var(--green); background: var(--green-soft); color: var(--green); }
 .game-opts button.bad { border-color: var(--red); background: var(--red-soft); color: var(--red); }
 
 /* feedback */
-.fb { margin-top: 10px; padding: 10px 12px; border-radius: 10px; display: none; }
+.fb { margin-top: 10px; padding: 10px 12px; border-radius:4px; display: none; }
 .fb.show { display: block; }
 .fb.ok { background: var(--green-soft); border: 1px solid var(--green); }
 .fb.bad { background: var(--red-soft); border: 1px solid var(--red); }
@@ -151,7 +117,7 @@ button { font: inherit; color: inherit; }
 
 /* flip cards */
 .cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.flip { min-height: 86px; border-radius: 12px; border: 1.5px dashed var(--pen); background: var(--sheet); cursor: pointer; padding: 8px; color: var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transition: transform .25s ease, background-color .25s ease; }
+.flip { min-height: 86px; border-radius:4px; border: 1.5px dashed var(--pen); background: var(--sheet); cursor: pointer; padding: 8px; color: var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transition: transform .25s ease, background-color .25s ease; }
 .flip[aria-pressed="true"] { border-style: solid; background: var(--pen-soft); transform: rotateX(360deg); }
 .flip .face-back { display: none; }
 .flip[aria-pressed="true"] .face-front { display: none; }
@@ -159,7 +125,7 @@ button { font: inherit; color: inherit; }
 .flip small { font-size: .78rem; color: var(--ink-soft); }
 
 /* details */
-details { background: var(--sheet); border: 1px solid var(--line); border-radius: 12px; margin: 10px 0; }
+details { background: var(--sheet); border: 1px solid var(--line); border-radius:4px; margin: 10px 0; }
 details > summary { cursor: pointer; padding: 12px 14px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 10px; min-height: 44px; align-items: center; }
 details > summary::-webkit-details-marker { display: none; }
 details > summary::after { content: "+"; font-size: 1.4rem; color: var(--pen); line-height: 1; }
@@ -176,7 +142,7 @@ details > div { padding: 0 14px 12px; }
 
 /* rules list */
 .rules { list-style: none; padding: 0; margin: 12px 0; }
-.rules > li { background: var(--sheet); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; margin: 10px 0; }
+.rules > li { background: var(--sheet); border: 1px solid var(--line); border-radius:4px; padding: 10px 14px; margin: 10px 0; }
 .rules .why { font-size: .95rem; color: var(--ink-soft); }
 
 /* quiz */
@@ -185,7 +151,7 @@ details > div { padding: 0 14px 12px; }
 .qq { margin: 14px 0 20px; }
 .qq .q { font-weight: 600; margin: 0 0 8px; }
 .opts { display: flex; flex-wrap: wrap; gap: 8px; }
-.opts button { min-height: 44px; padding: 6px 14px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--sheet); cursor: pointer; color: var(--ink); }
+.opts button { min-height: 44px; padding: 6px 14px; border-radius:4px; border: 1.5px solid var(--line); background: var(--sheet); cursor: pointer; color: var(--ink); }
 .opts button.ok { border-color: var(--green); background: var(--green-soft); }
 .opts button.bad { border-color: var(--red); background: var(--red-soft); text-decoration: line-through; text-decoration-color: var(--red); }
 .opts button[disabled] { cursor: default; }
@@ -211,9 +177,9 @@ details > div { padding: 0 14px 12px; }
 /* trainer */
 .task-tex { font-size: 1.25rem; min-height: 56px; display: flex; align-items: center; }
 .ans-row { display: flex; gap: 8px; align-items: stretch; margin-top: 8px; }
-.ans-row input { flex: 1; min-width: 0; min-height: 48px; font: 600 1.2rem var(--sans); padding: 6px 12px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink); }
+.ans-row input { flex: 1; min-width: 0; min-height: 48px; font: 600 1.2rem var(--sans); padding: 6px 12px; border-radius:4px; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink); }
 .ans-row input:focus { border-color: var(--pen); outline: none; }
-.key { min-width: 48px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--paper); font-size: 1.3rem; font-weight: 700; cursor: pointer; color: var(--ink); }
+.key { min-width: 48px; border-radius:4px; border: 1.5px solid var(--line); background: var(--paper); font-size: 1.3rem; font-weight: 700; cursor: pointer; color: var(--ink); }
 .sol { margin: 10px 0 0; padding-left: 1.4em; }
 .sol li { margin: 4px 0 10px; }
 .sol li .why { font-size: .95rem; color: var(--ink-soft); }
@@ -237,9 +203,12 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
 </style>
 </head>
 <body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
 <main>
 <header class="hero">
-  <button type="button" class="theme-btn" id="theme-btn"></button>
   <h1>Логарифми з нуля</h1>
   <p class="lead">Посібник для 11 класу. Потрібні тільки степені з 8 класу — їх ми теж згадаємо. Все можна натискати.</p>
 
@@ -1017,32 +986,9 @@ function initTrainer() {
   next();
 }
 
-/* ---------- theme toggle ---------- */
-function initTheme() {
-  const btn = $('#theme-btn'), root = document.documentElement;
-  const mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
-  const current = () => root.getAttribute('data-theme') || (mq && mq.matches ? 'dark' : 'light');
-  const SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>';
-  const MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>';
-  function paint() {
-    const dark = current() === 'dark';
-    btn.innerHTML = dark ? SUN : MOON;
-    btn.setAttribute('aria-label', dark ? 'Увімкнути світлу тему' : 'Увімкнути темну тему');
-    btn.title = btn.getAttribute('aria-label');
-  }
-  btn.addEventListener('click', () => {
-    const next = current() === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    try { localStorage.setItem('log11-theme', next); } catch (e) {}
-    paint();
-  });
-  if (mq) { const onSys = () => paint(); mq.addEventListener ? mq.addEventListener('change', onSys) : mq.addListener(onSys); }
-  paint();
-}
 
 /* ---------- boot ---------- */
 function boot() {
-  initTheme();
   renderToc();
   initGame();
   initLadder($('#ladder1'), { mode: 'pow', toggle: false });
@@ -1062,6 +1008,5 @@ function boot() {
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
 </script>
-<a href="/" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:9999;padding:7px 13px;border-radius:999px;background:#1d2a44;color:#fff;font:600 14px/1.2 system-ui,-apple-system,sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.25)">← Усі теми</a>
 </body>
 </html>

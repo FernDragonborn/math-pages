@@ -6,32 +6,22 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>Математика по темах</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Caveat:wght@600&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/theme.js"></script>
 <style>
 :root{
-  --paper:#f7f9fc; --grid:#dfe7f3; --ink:#1d2a44; --muted:#5b6880;
-  --sheet:#ffffff; --line:#c9d4e6; --accent:#2f6fd6; --accent-bg:#e3edfc;
-  --t1:#2f6fd6; --t2:#1f8a5b; --t3:#9a5bd0; --t4:#c2621a;
-  color-scheme:light;
+  --muted:var(--ink-soft); --sheet:var(--card); --accent:var(--pen); --accent-bg:var(--pen-wash);
+  --t1:var(--pen); --t2:var(--green); --t3:var(--violet); --t4:var(--orange);
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#141a26; --grid:#1f2737; --ink:#e4e9f3; --muted:#9aa6bc;
-  --sheet:#1b2232; --line:#2e3850; --accent:#7aa8ff; --accent-bg:#1e2d4d;
-  --t1:#7aa8ff; --t2:#5fd09a; --t3:#c69bff; --t4:#ffa45c; color-scheme:dark }}
-:root[data-theme="dark"]{
-  --paper:#141a26; --grid:#1f2737; --ink:#e4e9f3; --muted:#9aa6bc;
-  --sheet:#1b2232; --line:#2e3850; --accent:#7aa8ff; --accent-bg:#1e2d4d;
-  --t1:#7aa8ff; --t2:#5fd09a; --t3:#c69bff; --t4:#ffa45c; color-scheme:dark }
 *{box-sizing:border-box}
-body{margin:0;background-color:var(--paper);
-  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-  background-size:22px 22px;color:var(--ink);font:16px/1.55 "Manrope",system-ui,-apple-system,"Segoe UI",sans-serif}
+body{margin:0;}
 .wrap{max-width:720px;margin:0 auto;padding:28px 16px 48px;display:flex;flex-direction:column;gap:22px}
 header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 h1{margin:0;font-size:1.9rem;line-height:1.15;font-weight:800}
 .sub{margin:6px 0 0;color:var(--muted)}
 .hand{font-family:"Caveat",cursive;font-size:1.4rem;color:var(--accent)}
-.theme{flex:none;border:1px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:999px;padding:6px 12px;font:600 .85rem inherit;font-family:inherit;cursor:pointer}
 nav.topics{display:flex;flex-wrap:wrap;gap:6px}
 nav.topics a{border:1px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:8px;padding:6px 12px;font-weight:600;font-size:.9rem;text-decoration:none}
 nav.topics a:hover{border-color:var(--accent)}
@@ -39,9 +29,9 @@ section.topic{display:flex;flex-direction:column;gap:10px;scroll-margin-top:16px
 section.topic h2{margin:0;font-size:1.2rem;font-weight:800;display:flex;align-items:center;gap:10px}
 section.topic h2::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--c)}
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
-a.card{display:flex;flex-direction:column;gap:6px;background:var(--sheet);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:10px;padding:14px 16px;color:inherit;text-decoration:none;transition:transform .12s,border-color .12s}
+a.card{display:flex;flex-direction:column;gap:6px;background:var(--sheet);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:4px;padding:14px 16px;color:inherit;text-decoration:none;transition:transform .12s,border-color .12s}
 a.card:hover{transform:translateY(-2px);border-color:var(--c)}
-a.card:focus-visible,.theme:focus-visible,nav.topics a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a.card:focus-visible,nav.topics a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .card b{font-size:1.05rem}
 .card span{color:var(--muted);font-size:.92rem}
 footer{color:var(--muted);font-size:.85rem;text-align:center}
@@ -49,13 +39,15 @@ footer a{color:inherit}
 </style>
 </head>
 <body>
+<nav class="site-bar" aria-label="Налаштування">
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
 <div class="wrap">
   <header>
     <div>
       <h1>Математика по темах</h1>
       <p class="sub">Шпаргалки й пояснення, зібрані в одному місці. <span class="hand">обирай тему ↓</span></p>
     </div>
-    <button class="theme" id="themeBtn" type="button" aria-label="Перемкнути тему">☀ / ☾</button>
   </header>
 
   <nav class="topics" aria-label="Теми">
@@ -97,18 +89,5 @@ footer a{color:inherit}
 
   <footer><a href="https://github.com/FernDragonborn">@FernDragonborn</a></footer>
 </div>
-<script>
-(function(){
-  var root=document.documentElement, btn=document.getElementById('themeBtn');
-  try{var s=localStorage.getItem('theme'); if(s) root.setAttribute('data-theme',s);}catch(e){}
-  btn.addEventListener('click',function(){
-    var cur=root.getAttribute('data-theme');
-    if(!cur) cur=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
-    var next=cur==='dark'?'light':'dark';
-    root.setAttribute('data-theme',next);
-    try{localStorage.setItem('theme',next);}catch(e){}
-  });
-})();
-</script>
 </body>
 </html>

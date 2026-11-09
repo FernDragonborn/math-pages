@@ -1,38 +1,27 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>Спільний знаменник</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Caveat:wght@600&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/theme.js"></script>
 <style>
 /* Layout: one narrow column on squared exercise-book paper, phone first; each example is a worked "sheet" */
 :root{
-  --paper:#f7f9fc; --grid:#dfe7f3; --ink:#1d2a44; --muted:#5b6880;
-  --sheet:#ffffff; --line:#c9d4e6;
-  --f1:#2f6fd6; --f1bg:#e3edfc;   /* factor A */
-  --f2:#1f8a5b; --f2bg:#dff3e8;   /* factor B */
-  --f3:#9a5bd0; --f3bg:#efe4fa;   /* factor C */
-  --red:#d23a2f;                  /* teacher's red pen: missing factor */
-  --font-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --font-hand:"Caveat","Comic Sans MS",cursive;
+  --muted:var(--ink-soft); --sheet:var(--card);
+  --f1:var(--pen); --f1bg:var(--pen-wash); --f2:var(--green); --f2bg:var(--green-wash);
+  --f3:var(--violet); --f3bg:var(--violet-wash);
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#141a26; --grid:#1f2737; --ink:#e4e9f3; --muted:#9aa6bc;
-  --sheet:#1b2232; --line:#2e3850;
-  --f1:#7aa8ff; --f1bg:#1e2d4d; --f2:#5fd09a; --f2bg:#173628; --f3:#c69bff; --f3bg:#2e2145;
-  --red:#ff7a6e; color-scheme:dark }}
-:root[data-theme="dark"]{
-  --paper:#141a26; --grid:#1f2737; --ink:#e4e9f3; --muted:#9aa6bc;
-  --sheet:#1b2232; --line:#2e3850;
-  --f1:#7aa8ff; --f1bg:#1e2d4d; --f2:#5fd09a; --f2bg:#173628; --f3:#c69bff; --f3bg:#2e2145;
-  --red:#ff7a6e; color-scheme:dark }
 
 *{box-sizing:border-box}
 body{
-  background-color:var(--paper);
-  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
-  background-size:22px 22px;
-  color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.55;
+  font-size:16px; line-height:1.55;
 }
 .wrap{max-width:640px;margin:0 auto;padding-block:20px 48px;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
@@ -40,11 +29,9 @@ body{
 header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 h1{font-size:1.7rem;line-height:1.15;margin:0;font-weight:800;text-wrap:balance}
 .sub{margin:6px 0 0;color:var(--muted)}
-.theme{flex:none;border:1px solid var(--line);background:var(--sheet);color:var(--ink);
-  border-radius:999px;padding:6px 12px;font:600 .85rem var(--font-body);cursor:pointer}
-.theme:focus-visible,button:focus-visible{outline:2px solid var(--f1);outline-offset:2px}
+button:focus-visible{outline:2px solid var(--f1);outline-offset:2px}
 
-.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:4px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
 h2{font-size:1.15rem;margin:0;font-weight:800}
 .label{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
 p{margin:0}
@@ -75,14 +62,18 @@ footer{color:var(--muted);font-size:.85rem;text-align:center}
 footer a{color:inherit}
 @media (max-width:420px){.row{grid-template-columns:1fr}.row .k{margin-top:4px}}
 </style>
-
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
 <div class="wrap">
   <header>
     <div>
       <h1>Як знайти спільний знаменник</h1>
       <p class="sub">Шукаємо <b>найменший</b> знаменник, до якого можна звести обидва дроби.</p>
     </div>
-    <button class="theme" id="themeBtn" type="button" aria-label="Перемкнути тему">☀ / ☾</button>
   </header>
 
   <section class="sheet">
@@ -170,15 +161,6 @@ footer a{color:inherit}
 
 <script>
 (function(){
-  var root=document.documentElement, btn=document.getElementById('themeBtn');
-  try{var s=localStorage.getItem('theme'); if(s) root.setAttribute('data-theme',s);}catch(e){}
-  btn.addEventListener('click',function(){
-    var cur=root.getAttribute('data-theme');
-    if(!cur) cur=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
-    var next=cur==='dark'?'light':'dark';
-    root.setAttribute('data-theme',next);
-    try{localStorage.setItem('theme',next);}catch(e){}
-  });
   var tabs=document.querySelectorAll('[role=tab]');
   tabs.forEach(function(t){t.addEventListener('click',function(){
     tabs.forEach(function(o){o.setAttribute('aria-selected',o===t);document.getElementById(o.dataset.p).hidden=(o!==t);});
@@ -186,5 +168,5 @@ footer a{color:inherit}
 })();
 </script>
 
-<a href="/" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:9999;padding:7px 13px;border-radius:999px;background:#1d2a44;color:#fff;font:600 14px/1.2 system-ui,-apple-system,sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.25)">← Усі теми</a>
-</body></html>
+</body>
+</html>

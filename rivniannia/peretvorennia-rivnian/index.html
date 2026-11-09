@@ -7,41 +7,12 @@
 <title>Що саме не має змінитися — перетворення виразів і рівнянь</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/theme.js"></script>
 <style>
-:root{
-  --paper:#FCFCF9;
-  --grid:#D7E3E8;
-  --grid-bg:rgba(140,180,196,.24);
-  --surface:rgba(252,252,249,.92);
-  --margin-line:#D9635A;
-  --ink:#1B2A33;
-  --ink-soft:#5A6B75;
-  --pen:#2A45A8;
-  --pen-wash:#E7ECF9;
-  --red:#B93A30;
-  --red-wash:#FBEAE8;
-  --green:#2A7355;
-  --green-wash:#E4F1EA;
-  --cell:26px;
-  --card:#fff; --card-line:#E2E7EA; --card-line-2:#EDF1F2; --ok-line:#C6E0D2; --bad-line:#F0CFCB;
-  --ask-line:#CFD9F0; --focus:#A9BCF0; --on-pen:#fff;
-  color-scheme:light;
-}
 
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#141a26; --grid:#2a3446; --line:#2a3446; --grid-bg:rgba(120,150,180,.12); --surface:rgba(27,34,50,.94);
-  --margin-line:#8a4a46; --ink:#e4e9f3; --ink-soft:#9aa6bc; --pen:#8fa8ff; --pen-wash:#1f2a4a;
-  --red:#ff8a7e; --red-wash:#3a2224; --green:#6fd3a0; --green-wash:#173328;
-  --card:#1b2232; --card-line:#2e3850; --card-line-2:#263046; --ok-line:#2c5a45; --bad-line:#5c3330;
-  --ask-line:#34406a; --focus:#5a74c8; --on-pen:#0f1530; color-scheme:dark; }}
-:root[data-theme="dark"]{
-  --paper:#141a26; --grid:#2a3446; --line:#2a3446; --grid-bg:rgba(120,150,180,.12); --surface:rgba(27,34,50,.94);
-  --margin-line:#8a4a46; --ink:#e4e9f3; --ink-soft:#9aa6bc; --pen:#8fa8ff; --pen-wash:#1f2a4a;
-  --red:#ff8a7e; --red-wash:#3a2224; --green:#6fd3a0; --green-wash:#173328;
-  --card:#1b2232; --card-line:#2e3850; --card-line-2:#263046; --ok-line:#2c5a45; --bad-line:#5c3330;
-  --ask-line:#34406a; --focus:#5a74c8; --on-pen:#0f1530; color-scheme:dark; }
-/* SVG drawn with fixed colours follows the theme */
+
 [fill="#5A6B75"]{fill:var(--ink-soft)} [stroke="#5A6B75"]{stroke:var(--ink-soft)}
 [fill="#E7ECF9"]{fill:var(--pen-wash)} [stroke="#E7ECF9"]{stroke:var(--pen-wash)}
 [fill="#2A45A8"]{fill:var(--pen)} [stroke="#2A45A8"]{stroke:var(--pen)}
@@ -50,21 +21,12 @@
 [fill="#E4F1EA"]{fill:var(--green-wash)} [stroke="#E4F1EA"]{stroke:var(--green-wash)}
 [fill="#2A7355"]{fill:var(--green)} [stroke="#2A7355"]{stroke:var(--green)}
 [fill="#FBEAE8"]{fill:var(--red-wash)} [stroke="#FBEAE8"]{stroke:var(--red-wash)}
-.theme-btn{position:fixed;top:max(12px,env(safe-area-inset-top,0px));right:max(12px,env(safe-area-inset-right,0px));z-index:9999;
-  border:1px solid var(--card-line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 12px;
-  font:600 13.5px/1.2 "Onest",system-ui,sans-serif;cursor:pointer}
 *{box-sizing:border-box}
 
 html{ -webkit-text-size-adjust:100% }
 
 body{
   margin:0;
-  background:
-    repeating-linear-gradient(to right, var(--grid-bg) 0 1px, transparent 1px var(--cell)),
-    repeating-linear-gradient(to bottom, var(--grid-bg) 0 1px, transparent 1px var(--cell)),
-    var(--paper);
-  color:var(--ink);
-  font-family:"Onest", "Segoe UI", system-ui, sans-serif;
   font-size:17px;
   line-height:1.62;
 }
@@ -252,6 +214,10 @@ details .answer .eq{ color:var(--ink) }
 </style>
 </head>
 <body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
 <main class="sheet">
 
 <header class="hero">
@@ -631,20 +597,5 @@ details .answer .eq{ color:var(--ink) }
   render();
 })();
 </script>
-<button class="theme-btn" id="themeBtn" type="button" aria-label="Перемкнути тему">☀ / ☾</button>
-<script>
-(function(){
-  var root=document.documentElement, btn=document.getElementById('themeBtn');
-  try{var s=localStorage.getItem('theme'); if(s) root.setAttribute('data-theme',s);}catch(e){}
-  btn.addEventListener('click',function(){
-    var cur=root.getAttribute('data-theme');
-    if(!cur) cur=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
-    var next=cur==='dark'?'light':'dark';
-    root.setAttribute('data-theme',next);
-    try{localStorage.setItem('theme',next);}catch(e){}
-  });
-})();
-</script>
-<a href="/" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:9999;padding:7px 13px;border-radius:999px;background:#1d2a44;color:#fff;font:600 14px/1.2 system-ui,-apple-system,sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.25)">← Усі теми</a>
 </body>
 </html>
