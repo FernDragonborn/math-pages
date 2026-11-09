@@ -5,5 +5,5 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 KEY=${VIONITY_KEY:-W:/data/keys/vionity-fern}
-git archive --format=tar HEAD -- index.html $(git ls-tree -d --name-only HEAD) \
+git archive --format=tar HEAD -- index.html favicon.svg $(git ls-tree -d --name-only HEAD) \
   | ssh -i "$KEY" -o IdentitiesOnly=yes fern@45.145.224.180 'find /srv/math -mindepth 1 -delete && tar -x -C /srv/math --no-same-owner --no-same-permissions'
