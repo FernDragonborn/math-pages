@@ -1,0 +1,189 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Спільний знаменник</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Caveat:wght@600&display=swap">
+<style>
+/* Layout: one narrow column on squared exercise-book paper, phone first; each example is a worked "sheet" */
+:root{
+  --paper:#f7f9fc; --grid:#dfe7f3; --ink:#1d2a44; --muted:#5b6880;
+  --sheet:#ffffff; --line:#c9d4e6;
+  --f1:#2f6fd6; --f1bg:#e3edfc;   /* factor A */
+  --f2:#1f8a5b; --f2bg:#dff3e8;   /* factor B */
+  --f3:#9a5bd0; --f3bg:#efe4fa;   /* factor C */
+  --red:#d23a2f;                  /* teacher's red pen: missing factor */
+  --font-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-hand:"Caveat","Comic Sans MS",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#141a26; --grid:#1f2737; --ink:#e4e9f3; --muted:#9aa6bc;
+  --sheet:#1b2232; --line:#2e3850;
+  --f1:#7aa8ff; --f1bg:#1e2d4d; --f2:#5fd09a; --f2bg:#173628; --f3:#c69bff; --f3bg:#2e2145;
+  --red:#ff7a6e; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#141a26; --grid:#1f2737; --ink:#e4e9f3; --muted:#9aa6bc;
+  --sheet:#1b2232; --line:#2e3850;
+  --f1:#7aa8ff; --f1bg:#1e2d4d; --f2:#5fd09a; --f2bg:#173628; --f3:#c69bff; --f3bg:#2e2145;
+  --red:#ff7a6e; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{
+  background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;
+  color:var(--ink); font-family:var(--font-body); font-size:16px; line-height:1.55;
+}
+.wrap{max-width:640px;margin:0 auto;padding-block:20px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:18px}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+h1{font-size:1.7rem;line-height:1.15;margin:0;font-weight:800;text-wrap:balance}
+.sub{margin:6px 0 0;color:var(--muted)}
+.theme{flex:none;border:1px solid var(--line);background:var(--sheet);color:var(--ink);
+  border-radius:999px;padding:6px 12px;font:600 .85rem var(--font-body);cursor:pointer}
+.theme:focus-visible,button:focus-visible{outline:2px solid var(--f1);outline-offset:2px}
+
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+h2{font-size:1.15rem;margin:0;font-weight:800}
+.label{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+p{margin:0}
+ol.steps{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:10px}
+ol.steps li::marker{font-weight:800;color:var(--f1)}
+.hand{font-family:var(--font-hand);font-size:1.35rem;color:var(--red);line-height:1.2}
+
+/* math */
+.expr{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:1.15rem;font-variant-numeric:tabular-nums}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle}
+.frac>span:first-child{padding:0 4px 2px}
+.frac>span:last-child{border-top:2px solid currentColor;padding:2px 4px 0}
+.chip{display:inline-block;border-radius:6px;padding:0 6px;font-weight:600;white-space:nowrap}
+.a{color:var(--f1);background:var(--f1bg)}
+.b{color:var(--f2);background:var(--f2bg)}
+.c{color:var(--f3);background:var(--f3bg)}
+.miss{outline:2px dashed var(--red);outline-offset:1px}
+.row{display:grid;grid-template-columns:7.5em 1fr;gap:6px 10px;align-items:center}
+.row>div{min-width:0}
+.row .k{color:var(--muted);font-size:.9rem}
+.answer{border-top:1px dashed var(--line);padding-top:10px}
+.warn{border-left:3px solid var(--red);padding-left:10px}
+.examples{display:flex;flex-direction:column;gap:18px}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tabs button{border:1px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:8px;padding:6px 12px;font:600 .9rem var(--font-body);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
+footer{color:var(--muted);font-size:.85rem;text-align:center}
+footer a{color:inherit}
+@media (max-width:420px){.row{grid-template-columns:1fr}.row .k{margin-top:4px}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Як знайти спільний знаменник</h1>
+      <p class="sub">Шукаємо <b>найменший</b> знаменник, до якого можна звести обидва дроби.</p>
+    </div>
+    <button class="theme" id="themeBtn" type="button" aria-label="Перемкнути тему">☀ / ☾</button>
+  </header>
+
+  <section class="sheet">
+    <span class="label">Алгоритм</span>
+    <ol class="steps">
+      <li><b>Розклади кожен знаменник на множники.</b> Винеси спільний множник за дужки або застосуй формулу різниці квадратів <span style="white-space:nowrap">a² − b² = (a − b)(a + b)</span>.</li>
+      <li><b>Випиши всі різні множники.</b> Однакові множники в різних знаменниках — це один і той самий множник, його пишемо <b>один раз</b>.</li>
+      <li><b>Перемнож їх.</b> Це і є найменший спільний знаменник (НСЗ).</li>
+      <li><b>Знайди додатковий множник для кожного дробу:</b> чого цьому знаменнику бракує до НСЗ? На це домнож і чисельник, і знаменник.</li>
+    </ol>
+    <p class="warn">Перемножити знаменники «як є» теж можна, але якщо в них є спільний множник, вийде зайво великий вираз і більше розкривання дужок.</p>
+  </section>
+
+  <section class="examples">
+    <div class="tabs" role="tablist" aria-label="Приклади">
+      <button type="button" role="tab" id="t1" aria-selected="true" data-p="p1">Числа</button>
+      <button type="button" role="tab" id="t2" aria-selected="false" data-p="p2">Нічого спільного</button>
+      <button type="button" role="tab" id="t3" aria-selected="false" data-p="p3">Різниця квадратів</button>
+      <button type="button" role="tab" id="t4" aria-selected="false" data-p="p4">Спільний множник</button>
+    </div>
+
+    <!-- 1: numbers -->
+    <article class="sheet" id="p1" role="tabpanel" aria-labelledby="t1">
+      <h2>Розминка на числах</h2>
+      <div class="expr"><span class="frac"><span>1</span><span>6</span></span> + <span class="frac"><span>1</span><span>4</span></span></div>
+      <div class="row">
+        <div class="k">Розклад</div><div>6 = <span class="chip a">2</span>·<span class="chip b">3</span>, &nbsp; 4 = <span class="chip a">2</span>·<span class="chip a">2</span></div>
+        <div class="k">Різні множники</div><div><span class="chip a">2·2</span> (двійка двічі, бо в 4 вона двічі) і <span class="chip b">3</span></div>
+        <div class="k">НСЗ</div><div><b>12</b>, а не 6·4 = 24</div>
+        <div class="k">Додаткові</div><div>до 6 бракує <span class="chip a miss">2</span>, до 4 бракує <span class="chip b miss">3</span></div>
+      </div>
+      <div class="expr answer"><span class="frac"><span>1·2</span><span>12</span></span> + <span class="frac"><span>1·3</span><span>12</span></span> = <span class="frac"><span>5</span><span>12</span></span></div>
+    </article>
+
+    <!-- 2: no common -->
+    <article class="sheet" id="p2" role="tabpanel" aria-labelledby="t2" hidden>
+      <h2>Знаменники без спільних множників</h2>
+      <div class="expr"><span class="frac"><span>3</span><span><span class="chip a">x − 4</span></span></span> − <span class="frac"><span>2</span><span><span class="chip b">x + 4</span></span></span></div>
+      <div class="row">
+        <div class="k">Розклад</div><div>Обидва вже прості, далі не розкладаються.</div>
+        <div class="k">Різні множники</div><div><span class="chip a">x − 4</span> і <span class="chip b">x + 4</span></div>
+        <div class="k">НСЗ</div><div><span class="chip a">(x − 4)</span><span class="chip b">(x + 4)</span></div>
+        <div class="k">Додаткові</div><div>першому бракує <span class="chip b miss">x + 4</span>, другому <span class="chip a miss">x − 4</span></div>
+      </div>
+      <div class="expr answer"><span class="frac"><span>3<span class="chip b">(x + 4)</span> − 2<span class="chip a">(x − 4)</span></span><span>(x − 4)(x + 4)</span></span></div>
+      <p class="hand">−2·(x − 4) = −2x + 8, стеж за знаком!</p>
+    </article>
+
+    <!-- 3: difference of squares -->
+    <article class="sheet" id="p3" role="tabpanel" aria-labelledby="t3" hidden>
+      <h2>Один знаменник ховає інший</h2>
+      <div class="expr"><span class="frac"><span>5</span><span>x² − 9</span></span> + <span class="frac"><span>1</span><span>x + 3</span></span></div>
+      <div class="row">
+        <div class="k">Розклад</div><div>x² − 9 = <span class="chip a">(x − 3)</span><span class="chip b">(x + 3)</span>, &nbsp; другий: <span class="chip b">x + 3</span></div>
+        <div class="k">Різні множники</div><div><span class="chip a">x − 3</span> і <span class="chip b">x + 3</span>. Множник x + 3 є в обох, пишемо його один раз.</div>
+        <div class="k">НСЗ</div><div><span class="chip a">(x − 3)</span><span class="chip b">(x + 3)</span> = x² − 9</div>
+        <div class="k">Додаткові</div><div>першому нічого не бракує, другому бракує <span class="chip a miss">x − 3</span></div>
+      </div>
+      <div class="expr answer"><span class="frac"><span>5 + <span class="chip a">(x − 3)</span></span><span>(x − 3)(x + 3)</span></span> = <span class="frac"><span>x + 2</span><span>(x − 3)(x + 3)</span></span></div>
+      <p class="hand">Якби перемножили «як є», вийшло б (x² − 9)(x + 3), зайва дужка.</p>
+    </article>
+
+    <!-- 4: common factor out -->
+    <article class="sheet" id="p4" role="tabpanel" aria-labelledby="t4" hidden>
+      <h2>Винеси спільний множник</h2>
+      <div class="expr"><span class="frac"><span>2</span><span>3x + 6</span></span> − <span class="frac"><span>1</span><span>x + 2</span></span></div>
+      <div class="row">
+        <div class="k">Розклад</div><div>3x + 6 = <span class="chip c">3</span><span class="chip b">(x + 2)</span>, &nbsp; другий: <span class="chip b">x + 2</span></div>
+        <div class="k">Різні множники</div><div><span class="chip c">3</span> і <span class="chip b">x + 2</span></div>
+        <div class="k">НСЗ</div><div><span class="chip c">3</span><span class="chip b">(x + 2)</span></div>
+        <div class="k">Додаткові</div><div>першому нічого, другому бракує <span class="chip c miss">3</span></div>
+      </div>
+      <div class="expr answer"><span class="frac"><span>2 − <span class="chip c">3</span></span><span>3(x + 2)</span></span> = <span class="frac"><span>−1</span><span>3(x + 2)</span></span></div>
+    </article>
+  </section>
+
+  <section class="sheet">
+    <span class="label">Перевір себе</span>
+    <p>Перемнож НСЗ назад і подивись: <b>кожен</b> початковий знаменник має «влазити» в нього без остачі. Якщо після скорочення залишається щось спільне в чисельнику й знаменнику, НСЗ був не найменшим або можна ще скоротити.</p>
+    <p>У рівняннях не забувай про <b>ОДЗ</b>: знаменник не може дорівнювати нулю.</p>
+  </section>
+
+  <footer><a href="https://github.com/FernDragonborn">@FernDragonborn</a></footer>
+</div>
+
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('themeBtn');
+  try{var s=localStorage.getItem('theme'); if(s) root.setAttribute('data-theme',s);}catch(e){}
+  btn.addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme');
+    if(!cur) cur=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+    var next=cur==='dark'?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{localStorage.setItem('theme',next);}catch(e){}
+  });
+  var tabs=document.querySelectorAll('[role=tab]');
+  tabs.forEach(function(t){t.addEventListener('click',function(){
+    tabs.forEach(function(o){o.setAttribute('aria-selected',o===t);document.getElementById(o.dataset.p).hidden=(o!==t);});
+  });});
+})();
+</script>
+
+<a href="/" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:9999;padding:7px 13px;border-radius:999px;background:#1d2a44;color:#fff;font:600 14px/1.2 system-ui,-apple-system,sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.25)">← Усі теми</a>
+</body></html>

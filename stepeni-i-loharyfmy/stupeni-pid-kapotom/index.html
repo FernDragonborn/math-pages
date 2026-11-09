@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ступені під капотом</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f4ef; --card:#ffffff; --ink:#1d1b18; --muted:#6b665d; --line:#e2ddd2;
+  --accent:#d9480f; --accent-soft:#ffe8dc; --blue:#1c64c8; --blue-soft:#e3eefc;
+  --good:#2b8a3e; --good-soft:#e1f4e5; --warn:#b35c00;
+}
+[data-theme="dark"]{
+  --bg:#15140f; --card:#211f19; --ink:#f1ede4; --muted:#a39d90; --line:#37332a;
+  --accent:#ff8a4c; --accent-soft:#3b2418; --blue:#7fb2ff; --blue-soft:#1b2a40;
+  --good:#6fd08a; --good-soft:#1b3322; --warn:#ffb35c;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font-family:Manrope,system-ui,sans-serif;font-size:17px;line-height:1.5;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:16px 14px 60px}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin:8px 0 18px}
+h1{font-size:28px;line-height:1.15;margin:0 0 6px;font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--muted);margin:0;font-size:15px}
+.theme{flex:none;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;height:40px;min-width:40px;padding:0 12px;font-size:18px;cursor:pointer}
+section{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px 16px;margin:0 0 16px}
+h2{font-size:20px;margin:0 0 4px;font-weight:800;letter-spacing:-.01em}
+.num{display:inline-block;background:var(--accent);color:#fff;border-radius:8px;font-size:14px;padding:1px 8px;margin-right:6px;vertical-align:2px}
+p{margin:8px 0}
+.m{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500}
+sup{font-size:.68em;line-height:0;font-family:"JetBrains Mono",monospace}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.lbl{font-size:14px;color:var(--muted);margin-right:2px}
+.pill{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;min-width:44px;height:40px;padding:0 10px;font:600 16px "JetBrains Mono",monospace;cursor:pointer}
+.pill.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.stepper button{width:44px;height:40px;border:0;background:transparent;color:var(--ink);font-size:22px;cursor:pointer}
+.stepper button:active{background:var(--line)}
+.stepper output{min-width:44px;text-align:center;font:700 18px "JetBrains Mono",monospace}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:4px 2px;margin:12px 0;font-family:"JetBrains Mono",monospace}
+.val{background:var(--blue-soft);color:var(--blue);border-radius:8px;padding:4px 9px;font-weight:700}
+.val.last{background:var(--accent);color:#fff}
+.op{color:var(--muted);font-size:14px;padding:0 3px;white-space:nowrap}
+.op i{font-style:normal;color:var(--accent);font-weight:700}
+.big{font:700 26px "JetBrains Mono",monospace;margin:10px 0 4px}
+.big .eq{color:var(--accent)}
+.note{background:var(--accent-soft);border-radius:12px;padding:10px 12px;font-size:15px;margin-top:12px}
+.note b{color:var(--accent)}
+.muted{color:var(--muted);font-size:15px}
+/* ladder */
+.ladder{display:flex;flex-direction:column;margin:12px 0}
+.rung{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:12px;padding:8px 14px;font:500 18px "JetBrains Mono",monospace;cursor:pointer;text-align:left}
+.rung b{font-weight:700}
+.rung.zero{border-style:dashed}
+.rung.zero::after{content:"старт";font:600 12px Manrope,sans-serif;color:var(--muted);margin-left:8px}
+.rung.path{background:var(--blue-soft);border-color:transparent}
+.rung.sel{background:var(--accent);color:#fff;border-color:var(--accent)}
+.rung.sel::after{color:#fff}
+.rung span{flex:1}
+.between{font-size:12px;color:var(--muted);text-align:center;line-height:1;padding:3px 0;font-family:"JetBrains Mono",monospace;opacity:.75}
+/* slider game */
+input[type=range]{width:100%;height:36px;accent-color:var(--accent)}
+.track{position:relative;height:18px;background:var(--line);border-radius:9px;overflow:hidden;margin:6px 0 4px}
+.fill{position:absolute;left:0;top:0;bottom:0;background:var(--warn);border-radius:9px;transition:width .08s}
+.fill.ok{background:var(--good)}
+.target{position:absolute;top:-2px;bottom:-2px;width:3px;background:var(--ink)}
+.status{font-weight:600;min-height:1.5em}
+.status.ok{color:var(--good)}
+.btn{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:10px;height:40px;padding:0 14px;font:600 15px Manrope,sans-serif;cursor:pointer}
+svg text{font-family:"JetBrains Mono",monospace;fill:var(--muted)}
+details{border-top:1px solid var(--line);padding:10px 0}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;font:600 18px "JetBrains Mono",monospace;list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:" — натисни";font:400 13px Manrope,sans-serif;color:var(--muted)}
+details[open] summary::after{content:""}
+.ans{margin-top:6px;font-size:15px}
+.rule{background:var(--ink);color:var(--bg);border-radius:18px;padding:18px 16px;font-size:16px}
+.rule b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>Ступені під капотом</h1>
+    <p class="sub">Від'ємні й дробові показники — це не нові правила, а те саме правило, яке просто продовжили.</p>
+  </div>
+  <button class="theme" id="theme" aria-label="Перемкнути тему">🌙</button>
+</header>
+
+<!-- 1 -->
+<section>
+  <h2><span class="num">1</span>Ступінь — це лічильник кроків</h2>
+  <p>Почнімо з <b>1</b>. Показник каже, скільки разів помножити на основу.</p>
+  <div class="row"><span class="lbl">основа</span><span id="s1a"></span></div>
+  <div class="row"><span class="lbl">показник</span>
+    <span class="stepper"><button data-d="-1" id="s1m">−</button><output id="s1n"></output><button data-d="1" id="s1p">+</button></span>
+  </div>
+  <div id="s1out"></div>
+  <div class="note">Чому стартуємо з 1, а не одразу з основи? Бо тоді <b>a<sup>0</sup> = 1</b> пояснюється само собою: нуль множень — і ти досі стоїш на стартовій одиниці.</div>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2><span class="num">2</span>Сходинки вниз: від'ємний показник</h2>
+  <p>Уяви ступені як драбину. Крок угору — <b>помножити</b> на основу. Отже крок униз — зворотна дія, <b>поділити</b>. А що буде, якщо спуститися нижче за 1? Тисни на сходинки.</p>
+  <div class="row"><span class="lbl">основа</span><span id="s2a"></span></div>
+  <div class="ladder" id="ladder"></div>
+  <div id="s2out"></div>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="num">3</span>Пів сходинки: дробовий показник</h2>
+  <p>Одна сходинка — це <b>×a</b>. Розріжмо її на кілька <b>однакових</b> маленьких кроків. Кожен маленький крок — множення на якесь число <span class="m">x</span>. Усі маленькі кроки разом мають дати одну цілу сходинку.</p>
+  <p class="muted">Знайди <span class="m">x</span> повзунком.</p>
+  <div class="row"><span class="lbl">сходинка</span><span id="s3a"></span></div>
+  <div class="row"><span class="lbl">ріжемо на</span><span id="s3q"></span></div>
+  <input type="range" id="s3x" min="1" max="5" step="0.01" value="1" aria-label="x">
+  <div class="big m" id="s3eq"></div>
+  <div class="track"><div class="fill" id="s3fill"></div><div class="target" id="s3target"></div></div>
+  <div class="muted" style="font-size:13px">риска — ціль (одна сходинка ×<span id="s3t"></span>)</div>
+  <p class="status" id="s3status"></p>
+  <button class="btn" id="s3show">Показати відповідь</button>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2><span class="num">4</span>Все разом: a<sup>p/q</sup></h2>
+  <p><b>Знаменник q</b> — на скільки маленьких кроків ріжемо сходинку. <b>Чисельник p</b> — скільки таких кроків робимо (мінус — униз, тобто ділимо).</p>
+  <div class="row"><span class="lbl">основа</span><span id="s4a"></span></div>
+  <div class="row">
+    <span class="lbl">p</span>
+    <span class="stepper"><button id="s4pm">−</button><output id="s4p"></output><button id="s4pp">+</button></span>
+    <span class="lbl" style="margin-left:10px">q</span>
+    <span class="stepper"><button id="s4qm">−</button><output id="s4q"></output><button id="s4qp">+</button></span>
+  </div>
+  <svg id="s4svg" viewBox="0 0 340 96" width="100%" aria-label="Шкала показників"></svg>
+  <div id="s4out"></div>
+</section>
+
+<!-- 5 -->
+<section>
+  <h2><span class="num">5</span>Перевір себе</h2>
+  <p class="muted">Спершу порахуй сам, потім відкривай.</p>
+  <details><summary>2<sup>−3</sup></summary><div class="ans">= <b>1/8</b>. Три кроки вниз від 1: 1 → 1/2 → 1/4 → 1/8.</div></details>
+  <details><summary>7<sup>0</sup></summary><div class="ans">= <b>1</b>. Нуль кроків — стоїмо на старті.</div></details>
+  <details><summary>10<sup>−2</sup></summary><div class="ans">= <b>1/100 = 0,01</b>. Два кроки вниз: ділимо на 10 двічі.</div></details>
+  <details><summary>25<sup>1/2</sup></summary><div class="ans">= <b>5</b>. Сходинку ×25 ріжемо на 2 кроки: x·x = 25, тож x = 5. Робимо 1 такий крок.</div></details>
+  <details><summary>8<sup>2/3</sup></summary><div class="ans">= <b>4</b>. Ріжемо на 3: x·x·x = 8, тож маленький крок ×2. Робимо 2 кроки: 1 → 2 → 4.</div></details>
+  <details><summary>16<sup>−3/4</sup></summary><div class="ans">= <b>1/8</b>. Ріжемо на 4: x·x·x·x = 16, тож маленький крок — це 2. Робимо 3 кроки вниз: 1 → 1/2 → 1/4 → 1/8.</div></details>
+</section>
+
+<div class="rule">
+  <b>Одне правило на все:</b> показник — це кількість кроків від 1.<br>
+  Вгору — множимо, вниз — ділимо, дріб — маленькі однакові кроки.<br><br>
+  <span class="m">a<sup>−n</sup> = 1/a<sup>n</sup></span><br>
+  <span class="m">a<sup>1/q</sup> = <sup>q</sup>√a</span><br>
+  <span class="m">a<sup>p/q</sup> = (<sup>q</sup>√a)<sup>p</sup></span>
+</div>
+
+</div>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+
+/* ---------- theme ---------- */
+const root=document.documentElement;
+function setTheme(t){root.dataset.theme=t;$('theme').textContent=t==='dark'?'☀️':'🌙';try{localStorage.setItem('pow-theme',t)}catch(e){}}
+let saved=null;try{saved=localStorage.getItem('pow-theme')}catch(e){}
+setTheme(saved||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
+$('theme').onclick=()=>setTheme(root.dataset.theme==='dark'?'light':'dark');
+
+/* ---------- helpers ---------- */
+const MINUS='−';
+const es=n=>n<0?MINUS+(-n):String(n);
+const pw=(a,e)=>`${a}<sup>${e}</sup>`;
+const dec=v=>(Math.round(v*1000)/1000).toString().replace('.',',');
+const exact=(b,k)=>k>=0?String(b**k):'1/'+(b**(-k));
+function plural(n,one,few,many){n=Math.abs(n);const m10=n%10,m100=n%100;
+  if(m10===1&&m100!==11)return one; if(m10>=2&&m10<=4&&(m100<12||m100>14))return few; return many;}
+function rootSym(a,q){return q===1?String(a):q===2?'√'+a:q===3?'∛'+a:q===4?'∜'+a:`<sup>${q}</sup>√${a}`}
+function chain(vals,ops){let h='<div class="chain">';
+  vals.forEach((v,i)=>{if(i)h+=`<span class="op">→<i>${ops[i-1]}</i>→</span>`;h+=`<span class="val${i===vals.length-1?' last':''}">${v}</span>`});
+  return h+'</div>';}
+function pills(el,opts,cur,on){el.innerHTML=opts.map(o=>`<button class="pill${o===cur?' on':''}" data-v="${o}">${o}</button>`).join('');
+  el.querySelectorAll('button').forEach(b=>b.onclick=()=>on(+b.dataset.v));}
+const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+
+/* ---------- 1 ---------- */
+const s1={a:2,n:3};
+function r1(){
+  pills($('s1a'),[2,3,10],s1.a,v=>{s1.a=v;r1()});
+  $('s1n').textContent=s1.n;
+  const vals=['1'],ops=[];
+  for(let k=1;k<=s1.n;k++){vals.push(String(s1.a**k));ops.push('×'+s1.a)}
+  $('s1out').innerHTML=`<div class="big">${pw(s1.a,s1.n)} <span class="eq">=</span> ${s1.a**s1.n}</div>`+chain(vals,ops)+
+    `<p class="muted">${s1.n===0?'Нуль кроків — множити нічого, лишається 1.':`${s1.n} ${plural(s1.n,'крок','кроки','кроків')} угору від 1, на кожному множимо на ${s1.a}.`}</p>`;
+}
+$('s1m').onclick=()=>{if(s1.n>0){s1.n--;r1()}};
+$('s1p').onclick=()=>{if(s1.n<6){s1.n++;r1()}};
+r1();
+
+/* ---------- 2 ---------- */
+const s2={a:2,n:-3};
+function r2(){
+  const a=s2.a,n=s2.n;
+  pills($('s2a'),[2,3,10],a,v=>{s2.a=v;r2()});
+  let h='';
+  for(let k=4;k>=-4;k--){
+    const onPath=(n>0&&k>=0&&k<n)||(n<0&&k<=0&&k>n);
+    h+=`<button class="rung${k===0?' zero':''}${k===n?' sel':onPath?' path':''}" data-n="${k}"><span>${pw(a,es(k))}</span><b>${exact(a,k)}</b></button>`;
+    if(k>-4)h+=`<div class="between">↑ ×${a} &nbsp; ↓ ÷${a}</div>`;
+  }
+  $('ladder').innerHTML=h;
+  $('ladder').querySelectorAll('.rung').forEach(b=>b.onclick=()=>{s2.n=+b.dataset.n;r2()});
+  const vals=['1'],ops=[],s=Math.sign(n),k=Math.abs(n);
+  for(let i=1;i<=k;i++){vals.push(exact(a,s*i));ops.push((s>0?'×':'÷')+a)}
+  let out=`<div class="big">${pw(a,es(n))} <span class="eq">=</span> ${exact(a,n)}</div>`+chain(vals,ops);
+  if(n===0) out+=`<p>Нуль кроків — стоїш на старті. Тому ${pw(a,0)} = 1.</p>`;
+  else if(n>0) out+=`<p>${k} ${plural(k,'крок','кроки','кроків')} угору: множимо на ${a}. Це звичайний ступінь.</p>`;
+  else out+=`<p>${k} ${plural(k,'крок','кроки','кроків')} униз від 1: ділимо на ${a}, і так ${k} ${plural(k,'раз','рази','разів')} поспіль. Але ${k} ${plural(k,'раз','рази','разів')} поділити на ${a} — те саме, що один раз поділити на ${pw(a,k)} = ${a**k}.</p>
+    <div class="note">Тому <b>${pw(a,es(n))} = 1/${pw(a,k)}</b>.<br>Перевірка: піднятись на ${k} і спуститись на ${k} — повернешся на 1. Тобто ${pw(a,k)} · ${pw(a,es(n))} = ${pw(a,0)} = 1, правило «показники додаються» працює й тут.</div>`;
+  $('s2out').innerHTML=out;
+}
+r2();
+
+/* ---------- 3 ---------- */
+const s3={a:9,q:2,x:1};
+function setup3(){
+  pills($('s3a'),[4,9,8,27,16,2],s3.a,v=>{s3.a=v;s3.x=1;setup3()});
+  pills($('s3q'),[2,3,4],s3.q,v=>{s3.q=v;s3.x=1;setup3()});
+  const r=Math.pow(s3.a,1/s3.q);
+  const sl=$('s3x');sl.max=Math.max(2,Math.ceil(r*1.7));sl.value=s3.x;
+  $('s3t').textContent=s3.a;
+  r3();
+}
+function r3(){
+  const {a,q}=s3,x=+$('s3x').value; s3.x=x;
+  const prod=Math.pow(x,q), r=Math.pow(a,1/q), ri=Math.round(r), rInt=ri**q===a;
+  const xs=x.toFixed(2).replace('.',',');
+  $('s3eq').innerHTML=`${Array(q).fill(xs).join(' · ')} = ${prod.toFixed(2).replace('.',',')}`;
+  const SCALE=1.5;
+  $('s3target').style.left=(100/SCALE)+'%';
+  const ok=Math.abs(prod-a)/a<0.012;
+  const f=$('s3fill');f.style.width=Math.min(prod/a,SCALE)/SCALE*100+'%';f.classList.toggle('ok',ok);
+  const st=$('s3status');st.classList.toggle('ok',ok);
+  if(ok) st.innerHTML=`Влучив! Маленький крок = ${rootSym(a,q)} ${rInt?'= '+ri:'≈ '+dec(r)}. Разом ці ${q} ${plural(q,'крок','кроки','кроків')} дають ×${a}.<br>Тому <span class="m">${pw(a,'1/'+q)} = ${rootSym(a,q)}</span> — це «1/${q} сходинки».`;
+  else st.textContent=prod<a?'Замало — збільш x.':'Забагато — зменш x.';
+}
+$('s3x').oninput=r3;
+$('s3show').onclick=()=>{const r=Math.pow(s3.a,1/s3.q);$('s3x').value=Math.round(r*100)/100;r3()};
+setup3();
+
+/* ---------- 4 ---------- */
+const s4={a:8,p:2,q:3};
+function r4(){
+  const {a,q}=s4; s4.p=Math.max(-2*q,Math.min(2*q,s4.p)); const p=s4.p;
+  pills($('s4a'),[2,4,8,9,16,27],a,v=>{s4.a=v;r4()});
+  $('s4p').textContent=es(p);$('s4q').textContent=q;
+  const r=Math.pow(a,1/q), ri=Math.round(r), rInt=ri**q===a;
+  const sgn=Math.sign(p), k=Math.abs(p);
+  const stepName=q===1?String(a):rInt?String(ri):rootSym(a,q);
+  const vals=['1'],ops=[];
+  for(let i=1;i<=k;i++){vals.push(rInt?exact(ri,sgn*i):dec(Math.pow(r,sgn*i)));ops.push((sgn>0?'×':'÷')+stepName)}
+  const ex=q===1?es(p):`${es(p)}/${q}`;
+  const res=rInt?exact(ri,p):dec(Math.pow(a,p/q));
+  let out=`<div class="big">${pw(a,ex)} <span class="eq">${rInt?'=':'≈'}</span> ${res}</div>`;
+  out+=q===1?`<p>q = 1 — сходинка не ріжеться, це звичайний цілий ступінь.</p>`
+    :`<p><b>q = ${q}:</b> ріжемо сходинку ×${a} на ${q} однакові кроки. Маленький крок — це число, яке, помножене саме на себе ${q} ${plural(q,'раз','рази','разів')}, дає ${a}: <span class="m">${rootSym(a,q)} ${rInt?'= '+ri:'≈ '+dec(r)}</span>${rInt?` (бо ${Array(q).fill(ri).join('·')} = ${a})`:''}.</p>`;
+  out+=p===0?`<p><b>p = 0:</b> кроків нуль — лишаємось на 1.</p>`
+    :`<p><b>p = ${es(p)}:</b> робимо ${k} ${plural(k,'такий крок','таких кроки','таких кроків')} ${p>0?'вгору (множимо)':'вниз (ділимо)'}.</p>`;
+  out+=chain(vals,ops);
+  const g=gcd(p,q);
+  if(p!==0&&g>1&&q>1) out+=`<div class="note">Зверни увагу: ${es(p)}/${q} = ${es(p/g)}${q/g===1?'':'/'+(q/g)} — точка на шкалі та сама, тож і відповідь та сама.</div>`;
+  if(!rInt&&q>1) out+=`<p class="muted">Тут маленький крок — некругле число, тому відповідь наближена. Але механіка та сама.</p>`;
+  $('s4out').innerHTML=out;
+  drawLine(p,q);
+}
+function drawLine(p,q){
+  const x0=20,x1=320,Y=58,X=e=>x0+(e+2)/4*(x1-x0);
+  const css=getComputedStyle(root),ink=css.getPropertyValue('--ink'),mut=css.getPropertyValue('--muted'),acc=css.getPropertyValue('--accent');
+  let s=`<line x1="${x0}" y1="${Y}" x2="${x1}" y2="${Y}" stroke="${mut}" stroke-width="1.5"/>`;
+  for(let i=-2*q;i<=2*q;i++){const e=i/q,big=i%q===0,x=X(e);
+    s+=`<line x1="${x}" y1="${Y-(big?8:4)}" x2="${x}" y2="${Y+(big?8:4)}" stroke="${big?ink:mut}" stroke-width="${big?2:1}"/>`;
+    if(big)s+=`<text x="${x}" y="${Y+26}" text-anchor="middle" font-size="13">${es(e)}</text>`;}
+  const sg=Math.sign(p);
+  for(let i=0;i<Math.abs(p);i++){const a=X(sg*i/q),b=X(sg*(i+1)/q),m=(a+b)/2,h=Math.min(28,8+Math.abs(b-a)*0.4);
+    s+=`<path d="M${a} ${Y} Q${m} ${Y-Math.abs(h)*1.6} ${b} ${Y}" fill="none" stroke="${acc}" stroke-width="2.5"/>`;}
+  s+=`<circle cx="${X(0)}" cy="${Y}" r="5" fill="${ink}"/>`;
+  if(p)s+=`<circle cx="${X(p/q)}" cy="${Y}" r="6.5" fill="${acc}"/>`;
+  $('s4svg').innerHTML=s;
+}
+$('s4pm').onclick=()=>{s4.p--;r4()};$('s4pp').onclick=()=>{s4.p++;r4()};
+$('s4qm').onclick=()=>{if(s4.q>1){s4.q--;r4()}};$('s4qp').onclick=()=>{if(s4.q<4){s4.q++;r4()}};
+r4();
+$('theme').addEventListener('click',()=>drawLine(s4.p,s4.q));
+})();
+</script>
+<a href="/" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:9999;padding:7px 13px;border-radius:999px;background:#1d2a44;color:#fff;font:600 14px/1.2 system-ui,-apple-system,sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.25)">← Усі теми</a>
+</body>
+</html>

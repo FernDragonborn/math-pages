@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>try { var t = localStorage.getItem('log11-theme'); if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t); } catch (e) {}</script>
+<title>Логарифми з нуля — посібник для 11 класу</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Golos+Text:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script>
+window.MathJax = {
+  loader: { load: ['[tex]/html'] },
+  tex: { packages: { '[+]': ['html'] }, inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' },
+  options: { enableMenu: false },
+  startup: {
+    ready() {
+      MathJax.startup.defaultReady();
+      MathJax.startup.promise.then(() => { if (window.__mjFlush) window.__mjFlush(); });
+    }
+  }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js"></script>
+<style>
+:root {
+  --paper: #F4F7FC;
+  --sheet: #FFFFFF;
+  --grid: #E0E9F4;
+  --ink: #1B2748;
+  --ink-soft: #56648A;
+  --pen: #2A4FCF;
+  --pen-soft: #E6ECFC;
+  --on-pen: #FFFFFF;
+  --red: #C8363B;
+  --red-soft: #FBE9E9;
+  --green: #1D7F53;
+  --green-soft: #E2F3EA;
+  --line: #CAD6E6;
+  --margin: #E07A7E;
+  --hand: "Caveat", "Segoe Print", "Comic Sans MS", cursive;
+  --sans: "Golos Text", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0F1729; --sheet: #16213A; --grid: #19243F; --ink: #E3E9F5; --ink-soft: #A2B0CF;
+    --pen: #8AA8FF; --pen-soft: #1F2D52; --on-pen: #0F1729; --red: #FF8080; --red-soft: #3A1E27;
+    --green: #5FD39D; --green-soft: #15352A; --line: #2A385A; --margin: #8A3A45; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0F1729; --sheet: #16213A; --grid: #19243F; --ink: #E3E9F5; --ink-soft: #A2B0CF;
+  --pen: #8AA8FF; --pen-soft: #1F2D52; --on-pen: #0F1729; --red: #FF8080; --red-soft: #3A1E27;
+  --green: #5FD39D; --green-soft: #15352A; --line: #2A385A; --margin: #8A3A45; color-scheme: dark;
+}
+:root { box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+*, *::before, *::after { box-sizing: inherit; }
+html { scroll-padding-top: env(safe-area-inset-top, 0px); scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+body {
+  margin: 0; font-family: var(--sans); font-size: 17px; line-height: 1.6; color: var(--ink);
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+main { position: relative; max-width: 680px; margin: 0 auto; padding: 0 16px 64px 34px; }
+main::before { content: ""; position: absolute; top: 0; bottom: 0; left: 20px; width: 2px; background: var(--margin); opacity: .7; }
+img, svg { max-width: 100%; }
+a { color: var(--pen); }
+p { margin: .7em 0; }
+h1 { font-size: clamp(2.4rem, 11vw, 3.6rem); line-height: 1.02; letter-spacing: -.02em; font-weight: 800; margin: 0; }
+h2 { font-size: 1.55rem; line-height: 1.2; font-weight: 700; margin: 0; letter-spacing: -.01em; }
+h3 { font-size: 1.12rem; line-height: 1.3; font-weight: 650; margin: 1.6em 0 .4em; }
+.lead { font-size: 1.1rem; color: var(--ink-soft); max-width: 34em; }
+.hand { font-family: var(--hand); font-size: 1.45rem; line-height: 1.15; color: var(--pen); font-weight: 500; }
+.soft { color: var(--ink-soft); }
+:focus-visible { outline: 3px solid var(--pen); outline-offset: 2px; border-radius: 6px; }
+
+header.hero { position: relative; padding: 36px 0 8px; }
+.hero h1 { padding-right: 52px; }
+.theme-btn { position: absolute; top: 14px; right: 0; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: var(--sheet); color: var(--ink); display: grid; place-items: center; cursor: pointer; padding: 0; }
+.theme-btn svg { width: 22px; height: 22px; display: block; }
+.hero .hand { margin-top: 10px; }
+
+section { padding-top: 40px; }
+.sec-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+.sec-num { font-family: var(--hand); font-weight: 700; font-size: 2.2rem; line-height: 1; color: var(--red); min-width: 1.6em; }
+
+.sheet { background: var(--sheet); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin: 18px 0; }
+.sheet.flat { border-radius: 8px; }
+.rule { background: var(--pen-soft); border-left: 4px solid var(--pen); border-radius: 4px 12px 12px 4px; padding: 10px 14px; margin: 16px 0; }
+.warn { background: var(--red-soft); border-left: 4px solid var(--red); border-radius: 4px 12px 12px 4px; padding: 10px 14px; margin: 16px 0; }
+.warn strong { color: var(--red); }
+.math-block { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
+mjx-container[display="true"] { margin: .5em 0 !important; }
+mjx-container { max-width: 100%; }
+.ka, .ka * { color: var(--pen); fill: var(--pen); stroke: var(--pen); }
+.kb, .kb * { color: var(--green); fill: var(--green); stroke: var(--green); }
+.kc, .kc * { color: var(--red); fill: var(--red); stroke: var(--red); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .95rem; }
+.legend b { font-weight: 700; }
+.legend .a { color: var(--pen); } .legend .b { color: var(--green); } .legend .c { color: var(--red); }
+
+/* toc */
+nav.toc { margin: 24px 0 0; }
+nav.toc ol { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+nav.toc a { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--sheet); color: var(--ink); text-decoration: none; font-size: .92rem; }
+nav.toc a .n { font-family: var(--hand); font-weight: 700; color: var(--red); font-size: 1.15rem; line-height: 1; }
+nav.toc a.done { border-color: var(--green); }
+nav.toc a.done::after { content: "✓"; color: var(--green); font-weight: 700; }
+.progress { margin-top: 10px; font-size: .92rem; color: var(--ink-soft); }
+
+/* controls */
+button { font: inherit; color: inherit; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.chip { min-height: 40px; min-width: 44px; padding: 6px 14px; border-radius: 999px; border: 1.5px solid var(--pen); background: transparent; color: var(--pen); font-weight: 600; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--pen); color: var(--on-pen); }
+.btn { min-height: 44px; padding: 8px 18px; border-radius: 10px; border: 1.5px solid var(--pen); background: var(--pen); color: var(--on-pen); font-weight: 600; cursor: pointer; }
+.btn.ghost { background: transparent; color: var(--pen); }
+.btn[disabled] { opacity: .45; cursor: default; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+.label { font-size: .9rem; color: var(--ink-soft); margin: 10px 0 0; }
+
+/* hero game */
+.game-q { font-size: 1.6rem; text-align: center; padding: 8px 0 2px; }
+.game-opts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 10px; }
+.game-opts button { min-height: 52px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--paper); font-size: 1.3rem; font-weight: 700; cursor: pointer; color: var(--ink); }
+.game-opts button.ok { border-color: var(--green); background: var(--green-soft); color: var(--green); }
+.game-opts button.bad { border-color: var(--red); background: var(--red-soft); color: var(--red); }
+
+/* feedback */
+.fb { margin-top: 10px; padding: 10px 12px; border-radius: 10px; display: none; }
+.fb.show { display: block; }
+.fb.ok { background: var(--green-soft); border: 1px solid var(--green); }
+.fb.bad { background: var(--red-soft); border: 1px solid var(--red); }
+.fb .tag { font-weight: 700; }
+.fb.ok .tag { color: var(--green); } .fb.bad .tag { color: var(--red); }
+
+/* ladder */
+.ladder { margin-top: 8px; }
+.rung { display: grid; grid-template-columns: 1fr auto; align-items: center; min-height: 44px; padding: 2px 10px; border-bottom: 1px dashed var(--line); }
+.rung:last-child { border-bottom: 0; }
+.rung.zero { background: var(--pen-soft); border-radius: 8px; }
+.rung .step { font-family: var(--hand); font-size: 1.3rem; color: var(--pen); white-space: nowrap; }
+.rung .note { grid-column: 1 / -1; font-family: var(--hand); font-size: 1.25rem; color: var(--pen); line-height: 1.1; padding-bottom: 6px; }
+
+/* flip cards */
+.cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.flip { min-height: 86px; border-radius: 12px; border: 1.5px dashed var(--pen); background: var(--sheet); cursor: pointer; padding: 8px; color: var(--ink); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transition: transform .25s ease, background-color .25s ease; }
+.flip[aria-pressed="true"] { border-style: solid; background: var(--pen-soft); transform: rotateX(360deg); }
+.flip .face-back { display: none; }
+.flip[aria-pressed="true"] .face-front { display: none; }
+.flip[aria-pressed="true"] .face-back { display: block; }
+.flip small { font-size: .78rem; color: var(--ink-soft); }
+
+/* details */
+details { background: var(--sheet); border: 1px solid var(--line); border-radius: 12px; margin: 10px 0; }
+details > summary { cursor: pointer; padding: 12px 14px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 10px; min-height: 44px; align-items: center; }
+details > summary::-webkit-details-marker { display: none; }
+details > summary::after { content: "+"; font-size: 1.4rem; color: var(--pen); line-height: 1; }
+details[open] > summary::after { content: "−"; }
+details > div { padding: 0 14px 12px; }
+
+/* steps */
+.steps ol { margin: 8px 0 0; padding-left: 1.4em; }
+.steps li { margin: 6px 0 12px; padding-left: 4px; }
+.steps li[hidden] { display: none; }
+.steps li .why { font-size: .95rem; color: var(--ink-soft); }
+.steps li::marker { font-family: var(--hand); font-weight: 700; color: var(--red); font-size: 1.3rem; }
+.task-title { font-weight: 600; margin: 0; }
+
+/* rules list */
+.rules { list-style: none; padding: 0; margin: 12px 0; }
+.rules > li { background: var(--sheet); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; margin: 10px 0; }
+.rules .why { font-size: .95rem; color: var(--ink-soft); }
+
+/* quiz */
+.quiz { margin-top: 20px; border-top: 2px solid var(--pen); padding-top: 4px; }
+.quiz > h3 { margin-top: 12px; }
+.qq { margin: 14px 0 20px; }
+.qq .q { font-weight: 600; margin: 0 0 8px; }
+.opts { display: flex; flex-wrap: wrap; gap: 8px; }
+.opts button { min-height: 44px; padding: 6px 14px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--sheet); cursor: pointer; color: var(--ink); }
+.opts button.ok { border-color: var(--green); background: var(--green-soft); }
+.opts button.bad { border-color: var(--red); background: var(--red-soft); text-decoration: line-through; text-decoration-color: var(--red); }
+.opts button[disabled] { cursor: default; }
+.quiz-done { display: none; font-family: var(--hand); font-size: 1.5rem; color: var(--green); }
+.quiz-done.show { display: block; }
+
+/* graph */
+.graph .g-svg svg { display: block; width: 100%; height: auto; touch-action: pan-y; }
+.g-cap { min-height: 2.4em; }
+.graph .gl { stroke: var(--grid); stroke-width: 1; }
+.graph .ax { stroke: var(--ink-soft); stroke-width: 1.5; }
+.graph .tick { fill: var(--ink-soft); font: 11px var(--sans); }
+.graph .lg { fill: none; stroke: var(--pen); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.graph .ex { fill: none; stroke: var(--red); stroke-width: 2.2; stroke-linecap: round; opacity: .85; }
+.graph .yx { stroke: var(--ink-soft); stroke-width: 1.2; stroke-dasharray: 5 5; }
+.graph .pt { fill: var(--sheet); stroke: var(--pen); stroke-width: 2.5; }
+.graph .pte { fill: var(--sheet); stroke: var(--red); stroke-width: 2.2; }
+.graph .pl { fill: var(--pen); font: 600 13px var(--sans); }
+.graph .ple { fill: var(--red); font: 600 13px var(--sans); }
+.toggle { display: flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; margin-top: 8px; }
+.toggle input { flex: none; width: 22px; height: 22px; accent-color: var(--red); }
+
+/* trainer */
+.task-tex { font-size: 1.25rem; min-height: 56px; display: flex; align-items: center; }
+.ans-row { display: flex; gap: 8px; align-items: stretch; margin-top: 8px; }
+.ans-row input { flex: 1; min-width: 0; min-height: 48px; font: 600 1.2rem var(--sans); padding: 6px 12px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--paper); color: var(--ink); }
+.ans-row input:focus { border-color: var(--pen); outline: none; }
+.key { min-width: 48px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--paper); font-size: 1.3rem; font-weight: 700; cursor: pointer; color: var(--ink); }
+.sol { margin: 10px 0 0; padding-left: 1.4em; }
+.sol li { margin: 4px 0 10px; }
+.sol li .why { font-size: .95rem; color: var(--ink-soft); }
+.hint { display: none; margin-top: 10px; font-family: var(--hand); font-size: 1.35rem; line-height: 1.2; color: var(--pen); }
+.hint.show { display: block; }
+.score { font-size: .95rem; color: var(--ink-soft); }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--pen); text-decoration: underline; cursor: pointer; font-size: .95rem; }
+
+/* cheat sheet */
+.cheat { columns: 1; }
+.cheat > div { overflow-x: auto; break-inside: avoid; padding: 8px 0; border-bottom: 1px dashed var(--line); }
+.cheat > div:last-child { border-bottom: 0; }
+.cheat .soft { font-size: .92rem; }
+footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
+@media (min-width: 560px) {
+  main { padding-left: 64px; padding-right: 24px; }
+  main::before { left: 44px; }
+  .sec-num { margin-left: -64px; margin-right: 24px; text-align: right; min-width: 40px; }
+  .sec-head { gap: 0; }
+}
+</style>
+</head>
+<body>
+<main>
+<header class="hero">
+  <button type="button" class="theme-btn" id="theme-btn"></button>
+  <h1>Логарифми з нуля</h1>
+  <p class="lead">Посібник для 11 класу. Потрібні тільки степені з 8 класу — їх ми теж згадаємо. Все можна натискати.</p>
+
+  <div class="sheet" id="game">
+    <p class="game-text" style="margin:0;text-align:center"></p>
+    <div class="game-q math-block"></div>
+    <div class="game-opts" role="group" aria-label="Варіанти показника"></div>
+    <div class="fb" aria-live="polite"></div>
+    <div class="row" style="justify-content:center"><button class="btn ghost" id="game-next" hidden>Інше питання</button></div>
+  </div>
+  <p class="hand">Відповідь на питання «у який степінь?» — це і є логарифм. Решта посібника — про те, як цю відповідь знаходити.</p>
+
+  <nav class="toc" aria-label="Зміст"><ol></ol></nav>
+  <p class="progress" id="progress"></p>
+</header>
+
+<!-- §1 -->
+<section id="s1">
+  <div class="sec-head"><span class="sec-num">§1</span><h2>Степені: коротко згадуємо</h2></div>
+  <p>Степінь — це скорочений запис множення однакових чисел:</p>
+  <div class="math-block">\[a^n = \underbrace{a\cdot a\cdot \ldots \cdot a}_{n}\]</div>
+  <p>Тут \(a\) — <b>основа</b> (що множимо), \(n\) — <b>показник</b> (скільки разів). Наприклад, \(2^3 = 2\cdot2\cdot2 = 8\).</p>
+  <p>Подивись на «драбину» степенів. Обери основу:</p>
+  <div class="sheet" id="ladder1"></div>
+  <p>Кожен крок униз — показник меншає на 1, а число ділиться на основу. Дійшли до \(a^1 = a\), поділили ще раз — отримали \(a^0 = 1\). Ще раз — \(a^{-1} = \frac1a\). Тож \(a^0 = 1\) (для \(a \ne 0\), бо на нуль ділити не можна) і від'ємні показники — не правила «з повітря», а просто продовження драбини.</p>
+
+  <h3>Три правила, які знадобляться в §5</h3>
+  <ul class="rules">
+    <li>\(a^m \cdot a^n = a^{m+n}\)<div class="why">Чому: спочатку \(m\) множників, потім ще \(n\) — разом \(m+n\). Приклад: \(2^2\cdot 2^3 = (2\cdot2)(2\cdot2\cdot2) = 2^5\).</div></li>
+    <li>\(\dfrac{a^m}{a^n} = a^{m-n}\)<div class="why">Чому: \(n\) множників у дробі скорочуються. \(\frac{2^5}{2^2} = 2^3\).</div></li>
+    <li>\(\left(a^m\right)^n = a^{m\cdot n}\)<div class="why">Чому: \(n\) разів беремо по \(m\) множників. \(\left(2^2\right)^3 = 2^2\cdot2^2\cdot2^2 = 2^6\).</div></li>
+  </ul>
+  <p>В 11 класі показник може бути й дробом: \(4^{\frac12} = \sqrt4 = 2\), бо \(\left(4^{\frac12}\right)^2 = 4^1\) — за третім правилом. Поки що досить знати, що таке буває.</p>
+  <div class="quiz" data-quiz="s1"></div>
+</section>
+
+<!-- §2 -->
+<section id="s2">
+  <div class="sec-head"><span class="sec-num">§2</span><h2>Що таке логарифм</h2></div>
+  <p>Логарифм відповідає на питання: <b>у який степінь треба піднести основу, щоб отримати число?</b></p>
+  <div class="rule">
+    <div class="math-block">\[\log_{\class{ka}{a}} \class{kb}{b} = \class{kc}{c} \quad\Longleftrightarrow\quad \class{ka}{a}^{\class{kc}{c}} = \class{kb}{b}\]</div>
+    <div class="legend"><span class="a"><b>a</b> — основа</span><span class="b"><b>b</b> — число, з якого беремо логарифм</span><span class="c"><b>c</b> — логарифм, тобто показник</span></div>
+  </div>
+  <p>Читається <span style="white-space:nowrap">«логарифм \(b\)</span> за <span style="white-space:nowrap">основою \(a\)».</span> Головне: <b>логарифм — це показник степеня.</b> Ось та сама драбина, прочитана справа наліво:</p>
+  <div class="sheet" id="ladder2"></div>
+
+  <h3>Переклади з мови степенів на мову логарифмів</h3>
+  <p class="soft">Спробуй сам, потім натисни на картку, щоб перевірити.</p>
+  <div class="cards" id="cards"></div>
+
+  <h3>Що корисно знати напам'ять</h3>
+  <ul class="rules">
+    <li>\(\log_a 1 = 0\)<div class="why">Бо \(a^0 = 1\) для будь-якої допустимої основи.</div></li>
+    <li>\(\log_a a = 1\)<div class="why">Бо \(a^1 = a\).</div></li>
+    <li>\(\log_a a^k = k\)<div class="why">Це головний інструмент для обчислень (див. §4): якщо число вже записане як степінь основи, логарифм — це просто показник.</div></li>
+    <li>\(a^{\log_a b} = b\) — основна логарифмічна тотожність<div class="why">\(\log_a b\) — це саме той показник, у який треба піднести \(a\), щоб вийшло \(b\). Підносимо — отримуємо \(b\). Наприклад, \(2^{\log_2 7} = 7\).</div></li>
+  </ul>
+  <p>Дві основи мають власні позначення: \(\lg b = \log_{10} b\) (десятковий логарифм) і \(\ln b = \log_e b\) (натуральний, \(e \approx 2{,}718\) — це спеціальне число, пізніше побачиш, звідки воно). На калькуляторі зазвичай є саме кнопки <b>lg</b> (або log) і <b>ln</b>.</p>
+  <div class="quiz" data-quiz="s2"></div>
+</section>
+
+<!-- §3 -->
+<section id="s3">
+  <div class="sec-head"><span class="sec-num">§3</span><h2>Коли логарифм існує</h2></div>
+  <div class="rule"><p style="margin:0">\(\log_a b\) має сенс, тільки якщо</p><div class="math-block">\[a \gt 0,\qquad a \ne 1,\qquad b \gt 0\]</div></div>
+  <p>Ці умови не треба зубрити — кожна має просту причину. Відкрий і подивись:</p>
+  <details><summary>А що, якщо основа \(a = 1\)?</summary><div>
+    <p>\(1^c = 1\) при будь-якому \(c\). На питання «у який степінь піднести 1, щоб вийшло 5?» відповіді немає взагалі, а на «…щоб вийшло 1?» — безліч відповідей. Тому з основою 1 логарифм не визначають.</p>
+  </div></details>
+  <details><summary>А що, якщо основа від'ємна або нуль?</summary><div>
+    <p>\((-2)^2 = 4\), \((-2)^3 = -8\) — знак скаче, а \((-2)^{\frac12} = \sqrt{-2}\) серед дійсних чисел не існує. З нулем теж погано: \(0^c = 0\) для будь-якого додатного \(c\). Тому основа — тільки додатна.</p>
+  </div></details>
+  <details><summary>А що, якщо число \(b \le 0\)?</summary><div>
+    <p>Додатна основа в будь-якому степені дає додатне число: навіть \(2^{-10} = \frac{1}{1024}\) — маленьке, але більше за нуль. Отже, \(2^c\) ніколи не дорівнює \(-8\) чи \(0\), і \(\log_2(-8)\), \(\log_2 0\) не існують.</p>
+  </div></details>
+  <p class="hand">Звідси береться ОДЗ у рівняннях: все, що стоїть під логарифмом, має бути більше за нуль. Повернемося до цього в §7.</p>
+  <div class="quiz" data-quiz="s3"></div>
+</section>
+
+<!-- §4 -->
+<section id="s4">
+  <div class="sec-head"><span class="sec-num">§4</span><h2>Як обчислити логарифм без калькулятора</h2></div>
+  <div class="rule">
+    <ol style="margin:0;padding-left:1.2em">
+      <li>Запиши число як степінь основи. Якщо не виходить — запиши і основу, і число як степені одного й того самого числа.</li>
+      <li>Користуйся тим, що \(\log_a a^k = k\), або прирівняй показники.</li>
+    </ol>
+    <p style="margin:.5em 0 0">Так рахуються «гарні» логарифми, які дають цілу відповідь або простий дріб. Наприклад, \(\log_2 7\) так не порахуєш: 7 не є зручним степенем двійки. Для таких є калькулятор (§5).</p>
+  </div>
+  <p class="soft">Розв'язки відкриваються по кроку. Спробуй вгадати наступний крок, перш ніж натиснути.</p>
+
+  <div class="sheet steps">
+    <p class="task-title">Приклад 1. \(\log_3 81\)</p>
+    <ol>
+      <li>\(81 = 3\cdot3\cdot3\cdot3 = 3^4\)<div class="why">Ділимо 81 на 3, поки не вийде 1: 81 → 27 → 9 → 3 → 1. Чотири ділення.</div></li>
+      <li>\(\log_3 81 = \log_3 3^4 = 4\)<div class="why">Логарифм степеня основи — це показник.</div></li>
+    </ol>
+  </div>
+
+  <div class="sheet steps">
+    <p class="task-title">Приклад 2. \(\log_2 \frac{1}{16}\)</p>
+    <ol>
+      <li>\(\frac{1}{16} = \frac{1}{2^4} = 2^{-4}\)<div class="why">Від'ємний показник: \(a^{-n} = \frac{1}{a^n}\) (§1, низ драбини).</div></li>
+      <li>\(\log_2 2^{-4} = -4\)<div class="why">Відповідь від'ємна — і це нормально. Від'ємним не може бути число під логарифмом, а сам логарифм — може.</div></li>
+    </ol>
+  </div>
+
+  <div class="sheet steps">
+    <p class="task-title">Приклад 3. \(\log_4 8\)</p>
+    <ol>
+      <li>\(4 = 2^2,\quad 8 = 2^3\)<div class="why">8 не є цілим степенем 4, зате обидва числа — степені двійки.</div></li>
+      <li>Нехай \(\log_4 8 = c\). Тоді \(4^c = 8\), тобто \(\left(2^2\right)^c = 2^3\).<div class="why">Означення логарифма (§2).</div></li>
+      <li>\(2^{2c} = 2^3\)<div class="why">Степінь степеня: показники множимо.</div></li>
+      <li>\(2c = 3 \;\Rightarrow\; c = \frac32\)<div class="why">Основи однакові — значить, рівні й показники.</div></li>
+    </ol>
+  </div>
+
+  <div class="sheet steps">
+    <p class="task-title">Приклад 4. \(\log_{\frac12} 8\)</p>
+    <ol>
+      <li>\(\frac12 = 2^{-1},\quad 8 = 2^3\)<div class="why">Знову все через двійку.</div></li>
+      <li>\(\left(2^{-1}\right)^c = 2^3 \;\Rightarrow\; 2^{-c} = 2^3\)<div class="why">Степінь степеня.</div></li>
+      <li>\(-c = 3 \;\Rightarrow\; c = -3\)<div class="why">Перевірка: \(\left(\frac12\right)^{-3} = 2^3 = 8\). ✓</div></li>
+    </ol>
+  </div>
+  <div class="quiz" data-quiz="s4"></div>
+</section>
+
+<!-- §5 -->
+<section id="s5">
+  <div class="sec-head"><span class="sec-num">§5</span><h2>Властивості логарифмів</h2></div>
+  <p>Головна ідея: <b>логарифм перетворює множення на додавання.</b> Це прямо випливає з правила \(a^m\cdot a^n = a^{m+n}\) з §1. Перевір сам — обери два числа:</p>
+  <div class="sheet" id="product"></div>
+
+  <h3>Правила</h3>
+  <p class="soft">Працюють, коли \(x \gt 0\) і \(y \gt 0\). У третьому правилі додатним має бути саме \(x\): наприклад, \(\log_2 (-4)^2\) існує (це \(\log_2 16 = 4\)), а \(2\log_2(-4)\) — ні.</p>
+  <ul class="rules">
+    <li>\(\log_a(xy) = \log_a x + \log_a y\)
+      <details><summary>Чому так</summary><div>Будь-яке додатне число можна записати як степінь основи: \(x = a^m\), \(y = a^n\), де \(m = \log_a x\), \(n = \log_a y\) (за основною тотожністю). Тоді \(xy = a^m\cdot a^n = a^{m+n}\), отже \(\log_a(xy) = m + n\).</div></details></li>
+    <li>\(\log_a \dfrac{x}{y} = \log_a x - \log_a y\)
+      <details><summary>Чому так</summary><div>Так само: \(\frac{x}{y} = \frac{a^m}{a^n} = a^{m-n}\), отже логарифм частки дорівнює \(m - n\).</div></details></li>
+    <li>\(\log_a x^k = k\cdot\log_a x\)
+      <details><summary>Чому так</summary><div>\(x^k = \left(a^m\right)^k = a^{mk}\), отже \(\log_a x^k = mk = k\log_a x\).</div></details></li>
+    <li>\(\log_a b = \dfrac{\log_c b}{\log_c a}\) — перехід до іншої основи
+      <details><summary>Чому так і навіщо</summary><div>Нехай \(\log_a b = t\), тобто \(a^t = b\). Візьмемо логарифм за будь-якою допустимою основою \(c\) (\(c \gt 0,\ c \ne 1\)) від обох частин: \(\log_c a^t = \log_c b\), за третім правилом \(t\log_c a = \log_c b\), звідки \(t = \frac{\log_c b}{\log_c a}\).<br>Навіщо: на калькуляторі є лише lg і ln, тому \(\log_2 7 = \frac{\lg 7}{\lg 2} \approx 2{,}807\).</div></details></li>
+  </ul>
+
+  <div class="warn">
+    <p style="margin-top:0"><strong>Типові пастки</strong></p>
+    <p>\(\log_a(x + y) \ne \log_a x + \log_a y\). Перевір: \(\log_2(4 + 4) = \log_2 8 = 3\), а \(\log_2 4 + \log_2 4 = 4\).</p>
+    <p>\(\dfrac{\log_a x}{\log_a y} \ne \log_a \dfrac{x}{y}\). Ліворуч — перехід до основи \(y\): це \(\log_y x\).</p>
+    <p style="margin-bottom:0">\(\left(\log_a x\right)^2 \ne 2\log_a x\). Правило про показник працює лише тоді, коли в степінь піднесене число під логарифмом, а не сам логарифм.</p>
+  </div>
+
+  <div class="sheet steps">
+    <p class="task-title">Приклад 1. \(\log_6 4 + \log_6 9\)</p>
+    <ol>
+      <li>\(\log_6 4 + \log_6 9 = \log_6 (4\cdot 9) = \log_6 36\)<div class="why">Сума логарифмів з однаковою основою — логарифм добутку. Окремо \(\log_6 4\) цілим числом не порахуєш, а разом — легко.</div></li>
+      <li>\(\log_6 36 = \log_6 6^2 = 2\)</li>
+    </ol>
+  </div>
+  <div class="sheet steps">
+    <p class="task-title">Приклад 2. \(2\log_3 6 - \log_3 4\)</p>
+    <ol>
+      <li>\(2\log_3 6 = \log_3 6^2 = \log_3 36\)<div class="why">Множник перед логарифмом «заходить» у показник (третє правило навпаки).</div></li>
+      <li>\(\log_3 36 - \log_3 4 = \log_3 \frac{36}{4} = \log_3 9\)<div class="why">Різниця логарифмів — логарифм частки.</div></li>
+      <li>\(\log_3 9 = \log_3 3^2 = 2\)</li>
+    </ol>
+  </div>
+  <div class="quiz" data-quiz="s5"></div>
+</section>
+
+<!-- §6 -->
+<section id="s6">
+  <div class="sec-head"><span class="sec-num">§6</span><h2>Графік \(y = \log_a x\)</h2></div>
+  <p>Обери основу і подивись, як змінюється графік:</p>
+  <div class="sheet graph" id="graph">
+    <div class="chips" role="group" aria-label="Основа логарифма"></div>
+    <div class="g-cap math-block" aria-live="polite"></div>
+    <div class="g-svg"></div>
+    <label class="toggle"><input type="checkbox" id="show-exp"><span>Показати \(y = a^x\) і пряму \(y = x\)</span></label>
+  </div>
+  <ul class="rules">
+    <li><b>Існує лише при \(x \gt 0\).</b><div class="why">Графік весь праворуч від осі \(Oy\) і ніколи її не торкається — це умова \(b \gt 0\) з §3.</div></li>
+    <li><b>Завжди проходить через точки \((1;\,0)\) і \((a;\,1)\).</b><div class="why">Бо \(\log_a 1 = 0\) і \(\log_a a = 1\) (§2).</div></li>
+    <li><b>Якщо \(a \gt 1\) — функція зростає, якщо \(0 \lt a \lt 1\) — спадає.</b><div class="why">Це знадобиться для нерівностей у §7.</div></li>
+    <li><b>Це дзеркальне відображення графіка \(y = a^x\) відносно прямої \(y = x\).</b><div class="why">Бо логарифм «скасовує» піднесення в степінь: точка \((2;\,4)\) на графіку \(y = 2^x\) перетворюється на \((4;\,2)\) на графіку \(y = \log_2 x\). Увімкни галочку вище — побачиш.</div></li>
+  </ul>
+  <div class="quiz" data-quiz="s6"></div>
+</section>
+
+<!-- §7 -->
+<section id="s7">
+  <div class="sec-head"><span class="sec-num">§7</span><h2>Рівняння і нерівності</h2></div>
+  <p>Майже всі шкільні логарифмічні рівняння розв'язуються за одним планом:</p>
+  <div class="rule">
+    <ol style="margin:0;padding-left:1.2em">
+      <li><b>ОДЗ:</b> усе, що стоїть під логарифмами, має бути \(\gt 0\) (§3).</li>
+      <li>Зведи кожну частину до <b>одного</b> логарифма (властивості з §5).</li>
+      <li>Прибери логарифм: \(\log_a f(x) = c \Rightarrow f(x) = a^c\) (означення, §2) або \(\log_a f(x) = \log_a g(x) \Rightarrow f(x) = g(x)\).</li>
+      <li>Розв'яжи звичайне лінійне чи квадратне рівняння — це 8 клас.</li>
+      <li><b>Перевір корені за ОДЗ</b> і викинь зайві.</li>
+    </ol>
+  </div>
+
+  <div class="sheet steps">
+    <p class="task-title">Приклад 1. \(\log_3(x - 1) = 2\)</p>
+    <ol>
+      <li>ОДЗ: \(x - 1 \gt 0 \Rightarrow x \gt 1\)</li>
+      <li>\(x - 1 = 3^2 = 9\)<div class="why">За означенням: логарифм дорівнює 2, отже \(3^2\) дає те, що під логарифмом.</div></li>
+      <li>\(x = 10\). Перевірка: \(10 \gt 1\) ✓<div class="why">Відповідь: \(x = 10\).</div></li>
+    </ol>
+  </div>
+
+  <div class="sheet steps">
+    <p class="task-title">Приклад 2. \(\log_2 x + \log_2 (x - 2) = 3\)</p>
+    <ol>
+      <li>ОДЗ: \(x \gt 0\) і \(x - 2 \gt 0\), тобто \(x \gt 2\)</li>
+      <li>\(\log_2\big(x(x - 2)\big) = 3\)<div class="why">Сума логарифмів — логарифм добутку (§5).</div></li>
+      <li>\(x(x - 2) = 2^3 = 8 \;\Rightarrow\; x^2 - 2x - 8 = 0\)</li>
+      <li>\(x_1 = 4,\; x_2 = -2\)<div class="why">За теоремою Вієта: \(x_1 + x_2 = 2\), \(x_1 x_2 = -8\). Можна й через дискримінант: \(D = 4 + 32 = 36\).</div></li>
+      <li>\(-2\) не підходить: \(-2 \gt 2\) неправда.<div class="why">Відповідь: \(x = 4\). Якби ми пропустили ОДЗ, записали б зайвий корінь — це найчастіша помилка.</div></li>
+    </ol>
+  </div>
+
+  <div class="sheet steps">
+    <p class="task-title">Приклад 3. \(\log_5(2x + 1) = \log_5(x + 4)\)</p>
+    <ol>
+      <li>ОДЗ: \(2x + 1 \gt 0\) і \(x + 4 \gt 0\), тобто \(x \gt -\frac12\)</li>
+      <li>\(2x + 1 = x + 4\)<div class="why">Основи однакові, логарифми рівні — значить, рівні й числа під ними (функція монотонна, §6).</div></li>
+      <li>\(x = 3\). Перевірка: \(3 \gt -\frac12\) ✓</li>
+    </ol>
+  </div>
+
+  <h3>Нерівності</h3>
+  <p>Тут усе вирішує графік з §6:</p>
+  <div class="rule">
+    <p style="margin:0">Якщо \(a \gt 1\) — знак нерівності <b>зберігається</b>.<br>Якщо \(0 \lt a \lt 1\) — знак <b>змінюється на протилежний</b>.<br>І не забувай ОДЗ.</p>
+  </div>
+  <div class="sheet steps">
+    <p class="task-title">Приклад 4. \(\log_2 x \gt 3\)</p>
+    <ol>
+      <li>\(3 = \log_2 8\), тож \(\log_2 x \gt \log_2 8\)<div class="why">Записуємо праву частину як логарифм з тією самою основою.</div></li>
+      <li>\(x \gt 8\)<div class="why">\(2 \gt 1\), функція зростає — знак зберігається. ОДЗ \(x \gt 0\) виконується автоматично.</div></li>
+    </ol>
+  </div>
+  <div class="sheet steps">
+    <p class="task-title">Приклад 5. \(\log_{\frac12} x \gt 3\)</p>
+    <ol>
+      <li>\(3 = \log_{\frac12} \frac18\), тож \(\log_{\frac12} x \gt \log_{\frac12} \frac18\)<div class="why">Бо \(\left(\frac12\right)^3 = \frac18\).</div></li>
+      <li>\(x \lt \frac18\)<div class="why">\(\frac12 \lt 1\), функція спадає — знак змінюється.</div></li>
+      <li>З урахуванням ОДЗ: \(0 \lt x \lt \frac18\)</li>
+    </ol>
+  </div>
+  <div class="quiz" data-quiz="s7"></div>
+</section>
+
+<!-- §8 -->
+<section id="s8">
+  <div class="sec-head"><span class="sec-num">§8</span><h2>Тренажер</h2></div>
+  <p>Завдання генеруються випадково, тож їх не закінчиться. Дроби пиши через «/», наприклад <b>3/2</b> або <b>-1/2</b>. Застряг — бери підказку, це не соромно.</p>
+  <div class="sheet" id="trainer">
+    <div class="chips" role="group" aria-label="Тип завдань"></div>
+    <p class="task-q label"></p>
+    <div class="task-tex math-block"></div>
+    <div class="ans-row">
+      <input id="ans" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Твоя відповідь" placeholder="Відповідь">
+      <button class="key" data-k="-" aria-label="Мінус">−</button>
+      <button class="key" data-k="/" aria-label="Дріб">/</button>
+    </div>
+    <div class="row">
+      <button class="btn" id="t-check">Перевірити</button>
+      <button class="btn ghost" id="t-hint">Підказка</button>
+      <button class="btn ghost" id="t-sol">Розв'язок</button>
+    </div>
+    <div class="fb" id="t-fb" aria-live="polite"></div>
+    <div class="hint" id="t-hint-box"></div>
+    <ol class="sol" id="t-sol-box" hidden></ol>
+    <div class="row"><button class="btn" id="t-next">Наступне завдання</button></div>
+  </div>
+  <p class="score" id="t-score"></p>
+</section>
+
+<!-- cheat -->
+<section id="cheat">
+  <div class="sec-head"><span class="sec-num">✎</span><h2>Шпаргалка</h2></div>
+  <div class="sheet cheat">
+    <div>\(\log_a b = c \iff a^c = b\)<div class="soft">Логарифм — це показник степеня.</div></div>
+    <div>\(a \gt 0,\; a \ne 1,\; b \gt 0\)<div class="soft">Коли логарифм існує. Звідси ОДЗ.</div></div>
+    <div>\(\log_a 1 = 0,\quad \log_a a = 1\)<br>\(\log_a a^k = k,\quad a^{\log_a b} = b\)</div>
+    <div>\(\log_a(xy) = \log_a x + \log_a y\)<br>\(\log_a \frac{x}{y} = \log_a x - \log_a y\)<br>\(\log_a x^k = k\log_a x\)</div>
+    <div>\(\log_a b = \dfrac{\log_c b}{\log_c a}\)<div class="soft">Перехід до іншої основи. \(\lg = \log_{10}\), \(\ln = \log_e\).</div></div>
+    <div>\(y = \log_a x\): через \((1;\,0)\); \(a \gt 1\) — зростає, \(0 \lt a \lt 1\) — спадає</div>
+    <div>Рівняння: ОДЗ → один логарифм → прибрати логарифм → розв'язати → перевірити за ОДЗ</div>
+    <div>Нерівності: \(a \gt 1\) — знак той самий, \(0 \lt a \lt 1\) — знак міняється</div>
+  </div>
+</section>
+<footer>Прогрес у тестах і тренажері зберігається на цьому пристрої. <button class="linkbtn" id="reset-all">Скинути весь прогрес</button></footer>
+</main>
+<script>
+(() => {
+'use strict';
+const T = String.raw;
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('log11:' + k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem('log11:' + k, JSON.stringify(v)); } catch (e) {} },
+  clear() { try { Object.keys(localStorage).filter(k => k.startsWith('log11:')).forEach(k => localStorage.removeItem(k)); } catch (e) {} }
+};
+
+/* ---------- MathJax helpers ---------- */
+let mjQueue = Promise.resolve();
+const mjPending = new Set();
+const mjReady = () => !!(window.MathJax && window.MathJax.typesetPromise);
+function typeset(el) {
+  if (!mjReady()) { mjPending.add(el); return; }
+  mjQueue = mjQueue.then(() => MathJax.typesetPromise([el])).catch(e => console.warn(e));
+}
+function setTex(el, html) {
+  if (mjReady() && MathJax.typesetClear) { try { MathJax.typesetClear([el]); } catch (e) {} }
+  el.innerHTML = html;
+  typeset(el);
+}
+window.__mjFlush = () => { mjPending.forEach(el => typeset(el)); mjPending.clear(); };
+
+/* ---------- number helpers ---------- */
+const gcd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a || 1; };
+function fracTex(p, q) {
+  if (q < 0) { p = -p; q = -q; }
+  const g = gcd(p, q); p /= g; q /= g;
+  if (q === 1) return String(p);
+  return (p < 0 ? '-' : '') + T`\frac{${Math.abs(p)}}{${q}}`;
+}
+const powTex = (a, k) => k >= 0 ? String(a ** k) : T`\frac{1}{${a ** (-k)}}`;
+const logT = (a, arg, full = false) => (!full && (a === 10 || a === '10')) ? T`\lg ${arg}` : T`\log_{${a}} ${arg}`;
+const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
+const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+function parseAns(s) {
+  s = String(s).replace(/\s+/g, '').replace(/[−–]/g, '-').replace(/,/g, '.');
+  if (!s) return NaN;
+  const m = s.match(/^(-?\d*\.?\d+)\/(-?\d*\.?\d+)$/);
+  if (m) return parseFloat(m[1]) / parseFloat(m[2]);
+  if (/^-?\d*\.?\d+$/.test(s)) return parseFloat(s);
+  return NaN;
+}
+
+/* ---------- TOC & progress ---------- */
+const SECS = [['s1', 'Степені'], ['s2', 'Що таке логарифм'], ['s3', 'Коли існує'], ['s4', 'Обчислення'], ['s5', 'Властивості'], ['s6', 'Графік'], ['s7', 'Рівняння'], ['s8', 'Тренажер']];
+function renderToc() {
+  const ol = $('nav.toc ol');
+  ol.innerHTML = SECS.map(([id, name], i) =>
+    `<li><a href="#${id}" class="${store.get('done:' + id, false) ? 'done' : ''}"><span class="n">§${i + 1}</span>${name}</a></li>`).join('');
+  const done = SECS.filter(([id]) => store.get('done:' + id, false)).length;
+  $('#progress').textContent = done === 0
+    ? 'Розділ зараховується, коли правильно відповідаєш на всі питання в кінці. Тренажер — після 10 правильних відповідей з першої спроби.'
+    : `Пройдено розділів: ${done} з ${SECS.length}.`;
+}
+function markDone(id) { if (!store.get('done:' + id, false)) { store.set('done:' + id, true); renderToc(); } }
+
+/* ---------- hero game ---------- */
+function initGame() {
+  const root = $('#game');
+  const QS = [[2, 8, 3], [3, 9, 2], [10, 1000, 3], [2, 32, 5], [5, 25, 2], [4, 64, 3], [3, 81, 4], [7, 1, 0]];
+  let i = 0;
+  const text = $('.game-text', root), q = $('.game-q', root), opts = $('.game-opts', root), fb = $('.fb', root), next = $('#game-next');
+  function show() {
+    const [a, b] = QS[i];
+    text.innerHTML = `У який степінь треба піднести <b>${a}</b>, щоб вийшло <b>${b}</b>?`;
+    setTex(q, T`\(${a}^{\boxed{\,?\,}} = ${b}\)`);
+    opts.innerHTML = [0, 1, 2, 3, 4, 5, 6, 7].map(n => `<button type="button" data-n="${n}">${n}</button>`).join('');
+    fb.className = 'fb'; fb.innerHTML = ''; next.hidden = true;
+  }
+  opts.addEventListener('click', e => {
+    const btn = e.target.closest('button'); if (!btn || btn.disabled) return;
+    const [a, b, c] = QS[i]; const n = +btn.dataset.n;
+    if (n === c) {
+      btn.classList.add('ok'); $$('button', opts).forEach(x => x.disabled = true);
+      setTex(q, T`\(${a}^{${c}} = ${b}\)`);
+      fb.className = 'fb ok show';
+      const extra = c === 0 ? ' Так, нуль теж може бути відповіддю: будь-яке число (крім 0) в нульовому степені дає 1.' : '';
+      setTex(fb, T`<span class="tag">Так!</span> \(${a}^{${c}} = ${b}\). Ось це число ${c} і називається логарифмом: \(${logT(a, b, true)} = ${c}\).` + extra);
+      next.hidden = false;
+    } else {
+      btn.classList.add('bad'); btn.disabled = true;
+      const v = a ** n;
+      fb.className = 'fb bad show';
+      setTex(fb, T`<span class="tag">Ні:</span> \(${a}^{${n}} = ${v}\), а треба ${b}. ` + (v < b ? 'Треба більший показник.' : 'Треба менший показник.'));
+    }
+  });
+  next.addEventListener('click', () => { i = (i + 1) % QS.length; show(); });
+  show();
+}
+
+/* ---------- ladder ---------- */
+function initLadder(root, { mode, toggle }) {
+  let base = 2;
+  const BASES = [2, 3, 5, 10];
+  root.innerHTML = `<div class="chips" role="group" aria-label="Основа"></div>${toggle ? '<div class="row" style="margin-top:0"><button type="button" class="btn ghost" data-t>Показати як степені</button></div>' : ''}<div class="ladder math-block"></div>`;
+  const chips = $('.chips', root), lad = $('.ladder', root), tbtn = $('[data-t]', root);
+  chips.innerHTML = BASES.map(b => `<button type="button" class="chip" data-b="${b}">основа ${b}</button>`).join('');
+  function render() {
+    $$('.chip', chips).forEach(c => c.setAttribute('aria-pressed', +c.dataset.b === base));
+    const rows = [];
+    for (let n = 5; n >= -2; n--) {
+      const v = powTex(base, n);
+      const main = mode === 'pow' ? T`\(${base}^{${n}} = ${v}\)` : T`\(${logT(base, v, true)} = ${n}\)`;
+      const step = n > -2 ? T`\(:\,${base}\ \downarrow\)` : '';
+      let note = '';
+      if (mode === 'pow') {
+        if (n === 0) note = T`\(${base} : ${base} = 1\)`;
+        if (n === -1) note = T`\(1 : ${base} = \frac{1}{${base}}\)`;
+      } else {
+        if (n === 0) note = T`\(${logT('a', 1)} = 0\) для будь-якої допустимої основи`;
+        if (n === 1) note = T`\(${logT('a', 'a')} = 1\)`;
+        if (n === -1) note = T`числа між 0 і 1 при основі \(\gt 1\) мають від'ємні логарифми`;
+      }
+      rows.push(`<div class="rung${n === 0 ? ' zero' : ''}"><span>${main}</span><span class="step">${step}</span>${note ? `<span class="note">${note}</span>` : ''}</div>`);
+    }
+    setTex(lad, rows.join(''));
+    if (tbtn) tbtn.textContent = mode === 'pow' ? 'Показати як логарифми' : 'Показати як степені';
+  }
+  chips.addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c) return; base = +c.dataset.b; render(); });
+  if (tbtn) tbtn.addEventListener('click', () => { mode = mode === 'pow' ? 'log' : 'pow'; render(); });
+  render();
+}
+
+/* ---------- flip cards ---------- */
+function initCards() {
+  const CARDS = [[3, 4, '81'], [10, 3, '1000'], [2, -3, T`\frac18`], [5, 0, '1'], [7, 2, '49'], [2, 6, '64']];
+  const root = $('#cards');
+  root.innerHTML = CARDS.map(([a, k, v]) =>
+    `<button type="button" class="flip" aria-pressed="false"><span class="face-front">\\(${a}^{${k}} = ${v}\\)<br><small>натисни, щоб перекласти</small></span><span class="face-back">\\(${logT(a, v, true)} = ${k}\\)<br><small>основа ${a}, показник ${k}</small></span></button>`).join('');
+  typeset(root);
+  root.addEventListener('click', e => { const b = e.target.closest('.flip'); if (!b) return; b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true'); });
+}
+
+/* ---------- step reveal ---------- */
+function initSteps() {
+  $$('.steps').forEach(box => {
+    const items = $$('li', box); let shown = 0;
+    const row = document.createElement('div'); row.className = 'row';
+    const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'btn';
+    row.appendChild(btn); box.appendChild(row);
+    function update() {
+      items.forEach((li, i) => li.hidden = i >= shown);
+      if (shown === 0) btn.textContent = 'Показати перший крок';
+      else if (shown < items.length) btn.textContent = 'Наступний крок';
+      else btn.textContent = 'Сховати розв\'язок';
+    }
+    btn.addEventListener('click', () => { shown = shown < items.length ? shown + 1 : 0; update(); });
+    update();
+  });
+}
+
+/* ---------- product widget ---------- */
+function initProduct() {
+  const root = $('#product');
+  const V = [[T`\frac12`, -1], ['1', 0], ['2', 1], ['4', 2], ['8', 3], ['16', 4], ['32', 5]];
+  let x = 3, y = 4;
+  root.innerHTML = `<p class="label">Перше число</p><div class="chips" data-g="x"></div><p class="label">Друге число</p><div class="chips" data-g="y"></div><div class="out math-block" aria-live="polite"></div><p class="hand" style="margin:6px 0 0">Числа перемножили — а логарифми просто додалися.</p>`;
+  $$('.chips', root).forEach(g => {
+    g.innerHTML = V.map(([t], i) => `<button type="button" class="chip" data-i="${i}">\\(${t}\\)</button>`).join('');
+    typeset(g);
+  });
+  const out = $('.out', root);
+  function render() {
+    $$('[data-g="x"] .chip', root).forEach(c => c.setAttribute('aria-pressed', +c.dataset.i === x));
+    $$('[data-g="y"] .chip', root).forEach(c => c.setAttribute('aria-pressed', +c.dataset.i === y));
+    const [xt, xe] = V[x], [yt, ye] = V[y], s = xe + ye, pt = powTex(2, s);
+    setTex(out, T`\[${xt}\cdot ${yt} = ${pt}\]
+      \[\log_2 ${xt} + \log_2 ${yt} = ${xe} + ${ye < 0 ? '(' + ye + ')' : ye} = ${s}\]
+      \[\log_2 \left(${xt}\cdot ${yt}\right) = \log_2 ${pt} = ${s}\]`);
+  }
+  root.addEventListener('click', e => {
+    const c = e.target.closest('.chip'); if (!c) return;
+    if (c.parentElement.dataset.g === 'x') x = +c.dataset.i; else y = +c.dataset.i;
+    render();
+  });
+  render();
+}
+
+/* ---------- graph ---------- */
+function initGraph() {
+  const root = $('#graph');
+  const BASES = [[1 / 3, T`\frac13`, '1/3'], [0.5, T`\frac12`, '1/2'], [2, '2', '2'], [3, '3', '3'], [5, '5', '5']];
+  let bi = 2;
+  const U = 30, XMIN = -2, XMAX = 9, YMIN = -5, YMAX = 5;
+  const W = (XMAX - XMIN) * U, H = (YMAX - YMIN) * U;
+  const X = x => (x - XMIN) * U, Y = y => (YMAX - y) * U;
+  const chips = $('.chips', root), cap = $('.g-cap', root), svgBox = $('.g-svg', root), cb = $('#show-exp');
+  chips.innerHTML = BASES.map(([, t], i) => `<button type="button" class="chip" data-i="${i}">\\(a = ${t}\\)</button>`).join('');
+  typeset(chips);
+  function pathFrom(pts) {
+    let d = '', pen = false;
+    for (const [x, y] of pts) {
+      if (!isFinite(y) || y < YMIN - 1 || y > YMAX + 1) { pen = false; continue; }
+      d += (pen ? 'L' : 'M') + X(x).toFixed(1) + ' ' + Y(y).toFixed(1) + ' ';
+      pen = true;
+    }
+    return d;
+  }
+  function render() {
+    $$('.chip', chips).forEach(c => c.setAttribute('aria-pressed', +c.dataset.i === bi));
+    const [a, at, al] = BASES[bi];
+    const showExp = cb.checked;
+    let g = '';
+    for (let x = XMIN; x <= XMAX; x++) g += `<line class="gl" x1="${X(x)}" y1="0" x2="${X(x)}" y2="${H}"/>`;
+    for (let y = YMIN; y <= YMAX; y++) g += `<line class="gl" x1="0" y1="${Y(y)}" x2="${W}" y2="${Y(y)}"/>`;
+    g += `<line class="ax" x1="0" y1="${Y(0)}" x2="${W}" y2="${Y(0)}"/><line class="ax" x1="${X(0)}" y1="0" x2="${X(0)}" y2="${H}"/>`;
+    for (let x = 1; x < XMAX; x++) g += `<text class="tick" x="${X(x)}" y="${Y(0) + 14}" text-anchor="middle">${x}</text>`;
+    for (let y = YMIN + 1; y < YMAX; y++) if (y !== 0 && !(showExp && y === 1)) g += `<text class="tick" x="${X(0) - 6}" y="${Y(y) + 4}" text-anchor="end">${y}</text>`;
+    g += `<text class="tick" x="${W - 6}" y="${Y(0) - 6}" text-anchor="end">x</text><text class="tick" x="${X(0) + 6}" y="12">y</text>`;
+    if (showExp) {
+      g += `<line class="yx" x1="${X(-2)}" y1="${Y(-2)}" x2="${X(5)}" y2="${Y(5)}"/>`;
+      const ep = []; for (let x = XMIN; x <= XMAX; x += 0.02) ep.push([x, Math.pow(a, x)]);
+      g += `<path class="ex" d="${pathFrom(ep)}"/>`;
+      g += `<circle class="pte" cx="${X(0)}" cy="${Y(1)}" r="5"/><text class="ple" x="${X(0) - 8}" y="${Y(1) - 8}" text-anchor="end">(0; 1)</text>`;
+    }
+    const lp = []; for (let t = -12; t <= Math.log(XMAX); t += 0.01) { const x = Math.exp(t); lp.push([x, Math.log(x) / Math.log(a)]); }
+    g += `<path class="lg" d="${pathFrom(lp)}"/>`;
+    g += `<circle class="pt" cx="${X(1)}" cy="${Y(0)}" r="5.5"/><text class="pl" x="${X(1) + 6}" y="${Y(0) + (a > 1 ? 18 : -10)}">(1; 0)</text>`;
+    g += `<circle class="pt" cx="${X(a)}" cy="${Y(1)}" r="5.5"/><text class="pl" x="${X(a) + 8}" y="${Y(1) + (a > 1 ? -8 : -10)}">(${al}; 1)</text>`;
+    svgBox.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Графік логарифма за основою ${al}"><defs><clipPath id="gclip"><rect x="0" y="0" width="${W}" height="${H}"/></clipPath></defs><g clip-path="url(#gclip)">${g}</g></svg>`;
+    setTex(cap, T`\(y = \log_{${at}} x\)<br>` + (a > 1 ? T`Основа \(${at} \gt 1\), тому функція <b>зростає</b>.` : T`Основа \(${at} \lt 1\), тому функція <b>спадає</b>.`));
+  }
+  chips.addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c) return; bi = +c.dataset.i; render(); });
+  cb.addEventListener('change', render);
+  render();
+}
+
+/* ---------- quizzes ---------- */
+const QUIZ = {
+  s1: [
+    { q: T`Скільки буде \(2^5\)?`, o: ['10', '25', '32', '7'], a: 2, why: T`\(2^5 = 2\cdot2\cdot2\cdot2\cdot2 = 32\). Не плутай з \(2\cdot5 = 10\).` },
+    { q: T`Скільки буде \(10^{-2}\)?`, o: ['-100', '-20', '0,01', '0,2'], a: 2, why: T`Від'ємний показник — не від'ємне число, а дріб: \(10^{-2} = \frac{1}{10^2} = \frac{1}{100} = 0{,}01\).` },
+    { q: T`Скільки буде \(7^0\)?`, o: ['0', '1', '7'], a: 1, why: T`Крок униз по драбині — ділення на основу: \(7^0 = \frac{7^1}{7} = 1\).` }
+  ],
+  s2: [
+    { q: T`\(\log_3 81 = ?\)`, o: ['4', '27', '3', '243'], a: 0, why: T`Питання: 3 у якому степені дає 81? \(3^4 = 81\), отже 4.` },
+    { q: T`Як записати \(10^3 = 1000\) через логарифм?`, o: [T`\(\lg 3 = 1000\)`, T`\(\lg 1000 = 3\)`, T`\(\log_3 1000 = 10\)`], a: 1, why: T`Основа 10 (а \(\log_{10}\) пишуть як \(\lg\)), число 1000, логарифм — це показник 3.` },
+    { q: T`\(\log_5 1 = ?\)`, o: ['5', '1', '0', 'не існує'], a: 2, why: T`\(5^0 = 1\), тож \(\log_5 1 = 0\). Так для будь-якої допустимої основи.` }
+  ],
+  s3: [
+    { q: 'Який запис не має сенсу?', o: [T`\(\log_2(-8)\)`, T`\(\log_2 \frac18\)`, T`\(\lg 0{,}001\)`], a: 0, why: T`Під логарифмом має бути додатне число. А \(\log_2\frac18 = -3\) і \(\lg 0{,}001 = -3\) — цілком нормальні.` },
+    { q: 'Яке число може бути основою логарифма?', o: ['1', '-2', '0,5', '0'], a: 2, why: T`Основа має бути додатною і не дорівнювати 1. \(0{,}5\) підходить.` }
+  ],
+  s4: [
+    { q: T`\(\log_2 \frac18 = ?\)`, o: ['-3', '3', T`\(\frac13\)`, T`\(-\frac13\)`], a: 0, why: T`\(\frac18 = \frac{1}{2^3} = 2^{-3}\), отже відповідь \(-3\).` },
+    { q: T`\(\log_9 3 = ?\)`, o: ['3', T`\(\frac12\)`, '2', T`\(\frac13\)`], a: 1, why: T`\(9 = 3^2\), тож \(9^c = 3\) означає \(3^{2c} = 3^1\), \(2c = 1\), \(c = \frac12\). Інакше: \(\sqrt9 = 3\).` },
+    { q: T`\(\lg 10\,000 = ?\)`, o: ['4', '1000', '5', '10'], a: 0, why: T`\(10\,000 = 10^4\). У десятковому логарифмі степеня десятки відповідь — кількість нулів.` }
+  ],
+  s5: [
+    { q: T`\(\lg 2 + \lg 50 = ?\)`, o: [T`\(\lg 52\)`, '2', '100', '1'], a: 1, why: T`Сума логарифмів — логарифм добутку: \(\lg(2\cdot50) = \lg 100 = 2\). \(\lg 52\) — пастка: числа треба множити, не додавати.` },
+    { q: 'Яка рівність правильна?', o: [T`\(\log_2(x+y) = \log_2 x + \log_2 y\)`, T`\(\log_2(xy) = \log_2 x + \log_2 y\)`, T`\(\log_2 x \cdot \log_2 y = \log_2(xy)\)`], a: 1, why: T`Логарифм перетворює <b>множення</b> на <b>додавання</b>, і тільки так.` },
+    { q: T`\(\log_3 9^{10} = ?\)`, o: ['20', '90', '10', '29'], a: 0, why: T`\(\log_3 9^{10} = 10\cdot\log_3 9 = 10\cdot2 = 20\).` }
+  ],
+  s6: [
+    { q: T`Через яку точку проходить графік будь-якої функції \(y = \log_a x\)?`, o: [T`\((0;\,1)\)`, T`\((1;\,0)\)`, T`\((0;\,0)\)`], a: 1, why: T`\(\log_a 1 = 0\) для будь-якої допустимої основи. А \((0;\,1)\) — це точка графіка \(y = a^x\).` },
+    { q: T`Функція \(y = \log_{0{,}3} x\)…`, o: ['зростає', 'спадає', 'то зростає, то спадає'], a: 1, why: T`Основа \(0{,}3\) менша за 1 — функція спадає.` }
+  ],
+  s7: [
+    { q: T`Розв'яжи: \(\log_5 x = 2\)`, o: ['10', '25', '32', T`\(\frac52\)`], a: 1, why: T`За означенням \(x = 5^2 = 25\).` },
+    { q: T`Розв'язуючи \(\log_2 x + \log_2(x-2) = 3\), отримали \(x = 4\) і \(x = -2\). Що у відповіді?`, o: ['4 і −2', 'тільки 4', 'тільки −2'], a: 1, why: T`ОДЗ: \(x \gt 2\). Корінь \(-2\) не підходить — при ньому під логарифмом від'ємне число.` },
+    { q: T`Розв'яжи нерівність \(\log_{\frac13} x \lt 2\)`, o: [T`\(x \lt \frac19\)`, T`\(x \gt \frac19\)`, T`\(0 \lt x \lt 9\)`], a: 1, why: T`\(2 = \log_{\frac13}\frac19\). Основа менша за 1 — знак змінюється: \(x \gt \frac19\). ОДЗ \(x \gt 0\) тут виконується автоматично.` }
+  ]
+};
+function initQuizzes() {
+  $$('.quiz').forEach(box => {
+    const id = box.dataset.quiz, items = QUIZ[id]; if (!items) return;
+    const solved = new Set();
+    box.innerHTML = `<h3>Перевір себе</h3>` + items.map((it, qi) =>
+      `<div class="qq" data-qi="${qi}"><p class="q">${qi + 1}. ${it.q}</p><div class="opts">${it.o.map((o, oi) => `<button type="button" data-oi="${oi}">${o}</button>`).join('')}</div><div class="fb" aria-live="polite"></div></div>`).join('') +
+      `<p class="quiz-done${store.get('done:' + id, false) ? ' show' : ''}">Розділ пройдено ✓</p>`;
+    typeset(box);
+    box.addEventListener('click', e => {
+      const btn = e.target.closest('.opts button'); if (!btn || btn.disabled) return;
+      const qq = btn.closest('.qq'), qi = +qq.dataset.qi, it = items[qi], fb = $('.fb', qq);
+      if (+btn.dataset.oi === it.a) {
+        btn.classList.add('ok'); $$('.opts button', qq).forEach(b => b.disabled = true);
+        fb.className = 'fb ok show'; setTex(fb, `<span class="tag">Правильно.</span> ${it.why}`);
+        solved.add(qi);
+        if (solved.size === items.length) { markDone(id); $('.quiz-done', box).classList.add('show'); }
+      } else {
+        btn.classList.add('bad'); btn.disabled = true;
+        fb.className = 'fb bad show'; fb.innerHTML = '<span class="tag">Не зовсім.</span> Спробуй ще раз — неправильний варіант закреслено.';
+      }
+    });
+  });
+}
+
+/* ---------- trainer: generators ---------- */
+const S = (m, n = '') => ({ m, n });
+const SO = (m, n = '') => ({ m, n, p: 'ОДЗ:' });
+function genCompute() {
+  if (Math.random() < 0.65) {
+    const cfg = { 2: [-3, 6], 3: [-2, 4], 4: [-2, 3], 5: [-2, 3], 7: [-1, 3], 10: [-3, 4] };
+    const a = pick([2, 3, 4, 5, 7, 10]); const [lo, hi] = cfg[a]; const k = rnd(lo, hi);
+    const b = powTex(a, k);
+    const steps = [];
+    if (k > 1) steps.push(S(T`${b} = ${a}^{${k}}`, T`Ділимо ${a ** k} на ${a}, поки не вийде 1: це ${k} ділень.`));
+    if (k === 1) steps.push(S(T`${b} = ${a}^{1}`, 'Число дорівнює основі.'));
+    if (k === 0) steps.push(S(T`1 = ${a}^{0}`, T`Будь-яка основа в нульовому степені дає 1.`));
+    if (k < 0) steps.push(S(T`${b} = \frac{1}{${a}^{${-k}}} = ${a}^{${k}}`, T`Від'ємний показник: \(a^{-n} = \frac{1}{a^n}\).`));
+    steps.push(S(T`${logT(a, b)} = ${logT(a, a + '^{' + k + '}')} = ${k}`, T`\(\log_a a^k = k\).`));
+    return { q: 'Обчисли', tex: T`${logT(a, b)}`, ans: k, ansTex: String(k), hint: T`Питання: \(${a}\) у якому степені дає \(${b}\)?`, steps };
+  }
+  const FR = [
+    ['4', '8', 2, 2, 3], ['8', '4', 2, 3, 2], ['9', '27', 3, 2, 3], ['27', '9', 3, 3, 2], ['4', '2', 2, 2, 1], ['8', '2', 2, 3, 1],
+    ['25', '125', 5, 2, 3], ['16', '8', 2, 4, 3], [T`\frac12`, '8', 2, -1, 3], [T`\frac13`, '9', 3, -1, 2],
+    [T`\frac12`, T`\frac14`, 2, -1, -2], ['4', T`\frac12`, 2, 2, -1], ['9', T`\frac13`, 3, 2, -1], ['27', '3', 3, 3, 1]
+  ];
+  const [a, b, B, ea, eb] = pick(FR);
+  const ans = eb / ea, ansTex = fracTex(eb, ea);
+  const ec = ea === 1 ? 'c' : ea === -1 ? '-c' : ea + 'c';
+  return {
+    q: 'Обчисли', tex: logT(a, b), ans, ansTex,
+    hint: T`Запиши і \(${a}\), і \(${b}\) як степені числа \(${B}\).`,
+    steps: [
+      S(T`${a} = ${B}^{${ea}},\quad ${b} = ${B}^{${eb}}`, T`Обидва числа — степені ${B}.`),
+      S(T`${a}^{c} = ${b} \;\Rightarrow\; \left(${B}^{${ea}}\right)^{c} = ${B}^{${eb}}`, T`Позначили \(${logT(a, b)} = c\) і скористалися означенням.`),
+      S(T`${B}^{${ec}} = ${B}^{${eb}}`, 'Степінь степеня: показники множимо.'),
+      S(T`${ec} = ${eb} \;\Rightarrow\; c = ${ansTex}`, 'Основи однакові — прирівнюємо показники.')
+    ]
+  };
+}
+const PROPS = [
+  [T`\log_6 4 + \log_6 9`, 2, T`Сума логарифмів — логарифм добутку.`, [T`\log_6(4\cdot 9) = \log_6 36`, T`\log_6 36 = \log_6 6^2 = 2`]],
+  [T`\lg 4 + \lg 25`, 2, T`Сума — логарифм добутку.`, [T`\lg(4\cdot25) = \lg 100`, T`\lg 100 = \lg 10^2 = 2`]],
+  [T`\lg 8 + \lg 125`, 3, T`Сума — логарифм добутку.`, [T`\lg(8\cdot125) = \lg 1000`, T`\lg 1000 = 3`]],
+  [T`\log_{12} 16 + \log_{12} 9`, 2, T`Сума — логарифм добутку.`, [T`\log_{12}(16\cdot 9) = \log_{12} 144`, T`\log_{12} 144 = \log_{12} 12^2 = 2`]],
+  [T`\log_{15} 9 + \log_{15} 25`, 2, T`Сума — логарифм добутку.`, [T`\log_{15}(9\cdot 25) = \log_{15} 225`, T`\log_{15} 225 = \log_{15} 15^2 = 2`]],
+  [T`\log_2 40 - \log_2 5`, 3, T`Різниця — логарифм частки.`, [T`\log_2 \frac{40}{5} = \log_2 8`, T`\log_2 8 = \log_2 2^3 = 3`]],
+  [T`\log_3 54 - \log_3 2`, 3, T`Різниця — логарифм частки.`, [T`\log_3 \frac{54}{2} = \log_3 27`, T`\log_3 27 = \log_3 3^3 = 3`]],
+  [T`\log_5 75 - \log_5 3`, 2, T`Різниця — логарифм частки.`, [T`\log_5 \frac{75}{3} = \log_5 25`, T`\log_5 25 = 2`]],
+  [T`\lg 500 - \lg 5`, 2, T`Різниця — логарифм частки.`, [T`\lg\frac{500}{5} = \lg 100`, T`\lg 100 = 2`]],
+  [T`\log_2 96 - \log_2 3`, 5, T`Різниця — логарифм частки.`, [T`\log_2 \frac{96}{3} = \log_2 32`, T`\log_2 32 = \log_2 2^5 = 5`]],
+  [T`\log_3 36 - \log_3 4`, 2, T`Різниця — логарифм частки.`, [T`\log_3 \frac{36}{4} = \log_3 9`, T`\log_3 9 = 2`]],
+  [T`\log_2 8^5`, 15, T`Показник виноситься вперед: \(\log_a x^k = k\log_a x\).`, [T`\log_2 8^5 = 5\log_2 8`, T`5\cdot 3 = 15`]],
+  [T`\log_3 9^4`, 8, T`Показник виноситься вперед.`, [T`\log_3 9^4 = 4\log_3 9`, T`4\cdot 2 = 8`]],
+  [T`2\log_6 3 + \log_6 4`, 2, T`Спочатку множник 2 занеси в показник.`, [T`2\log_6 3 = \log_6 3^2 = \log_6 9`, T`\log_6 9 + \log_6 4 = \log_6 36`, T`\log_6 36 = 2`]],
+  [T`3\lg 2 + 3\lg 5`, 3, T`Винеси 3 за дужки.`, [T`3(\lg 2 + \lg 5) = 3\lg(2\cdot 5)`, T`3\lg 10 = 3\cdot 1 = 3`]],
+  [T`5^{\log_5 7}`, 7, T`Основна логарифмічна тотожність: \(a^{\log_a b} = b\).`, [T`5^{\log_5 7} = 7`]],
+  [T`3^{\log_3 4 + 1}`, 12, T`Розбий показник: \(a^{m+n} = a^m\cdot a^n\).`, [T`3^{\log_3 4 + 1} = 3^{\log_3 4}\cdot 3^1`, T`= 4\cdot 3 = 12`]],
+  [T`\dfrac{\log_2 27}{\log_2 3}`, 3, T`Дріб логарифмів з однаковою основою — це перехід до іншої основи.`, [T`\frac{\log_2 27}{\log_2 3} = \log_3 27`, T`\log_3 27 = 3`]],
+  [T`\log_3 5 \cdot \log_5 9`, 2, T`Перейди до однієї основи, наприклад 3.`, [T`\log_5 9 = \frac{\log_3 9}{\log_3 5}`, T`\log_3 5 \cdot \frac{\log_3 9}{\log_3 5} = \log_3 9`, T`\log_3 9 = 2`]]
+];
+function genProps() {
+  const [tex, ans, hint, st] = pick(PROPS);
+  return { q: 'Обчисли, використовуючи властивості', tex, ans, ansTex: String(ans), hint, steps: st.map((m, i) => S(m, i === 0 ? hint : '')) };
+}
+function genEq() {
+  const r = Math.random();
+  if (r < 0.3) {
+    const a = pick([2, 3, 5, 10]); const range = { 2: [-2, 6], 3: [-1, 4], 5: [-1, 3], 10: [-2, 3] }[a];
+    let c = rnd(range[0], range[1]); if (c === 0) c = 1;
+    const x = a ** c, xt = powTex(a, c);
+    return { q: 'Розв\'яжи рівняння', tex: T`${logT(a, 'x')} = ${c}`, ans: x, ansTex: xt,
+      hint: T`За означенням: \(x = ${a}^{${c}}\).`,
+      steps: [SO(T`x \gt 0`), S(T`x = ${a}^{${c}} = ${xt}`, 'Означення логарифма.'), S(T`${xt} \gt 0`, 'Корінь підходить за ОДЗ.')] };
+  }
+  if (r < 0.6) {
+    const a = pick([2, 3, 5]); const c = { 2: rnd(1, 5), 3: rnd(1, 3), 5: rnd(1, 2) }[a];
+    const k = pick([1, 1, 2, 3]); const x = rnd(-3, 9); const p = a ** c; const m = k * x - p;
+    if (m === 0) return genEq();
+    const kx = k === 1 ? 'x' : k + 'x';
+    const f = `${kx} ${m > 0 ? '-' : '+'} ${Math.abs(m)}`;
+    const odz = fracTex(m, k);
+    return { q: 'Розв\'яжи рівняння', tex: T`${logT(a, '(' + f + ')')} = ${c}`, ans: x, ansTex: String(x),
+      hint: T`Вираз у дужках дорівнює \(${a}^{${c}}\).`,
+      steps: [
+        SO(T`${f} \gt 0 \;\Rightarrow\; x \gt ${odz}`, 'Під логарифмом — лише додатне.'),
+        S(T`${f} = ${a}^{${c}} = ${p}`, 'Означення логарифма.'),
+        S(T`${kx} = ${p} ${m > 0 ? '+' : '-'} ${Math.abs(m)} = ${k * x}` + (k > 1 ? T` \;\Rightarrow\; x = ${x}` : ''), 'Звичайне лінійне рівняння.'),
+        S(T`${x} \gt ${odz}`, 'Корінь підходить за ОДЗ.')
+      ] };
+  }
+  const EQ = [
+    [2, 'x - 2', 3, 'x^2 - 2x - 8 = 0', 4, -2, 'x \\gt 2', 'x(x - 2) = 8'],
+    [2, 'x - 6', 4, 'x^2 - 6x - 16 = 0', 8, -2, 'x \\gt 6', 'x(x - 6) = 16'],
+    [2, 'x - 3', 2, 'x^2 - 3x - 4 = 0', 4, -1, 'x \\gt 3', 'x(x - 3) = 4'],
+    [3, 'x - 8', 2, 'x^2 - 8x - 9 = 0', 9, -1, 'x \\gt 8', 'x(x - 8) = 9'],
+    [2, 'x + 2', 3, 'x^2 + 2x - 8 = 0', 2, -4, 'x \\gt 0', 'x(x + 2) = 8']
+  ];
+  if (r < 0.85) {
+    const [a, g, c, quad, good, bad, odz, prod] = pick(EQ);
+    return { q: 'Розв\'яжи рівняння', tex: T`${logT(a, 'x')} + ${logT(a, '(' + g + ')')} = ${c}`, ans: good, ansTex: String(good),
+      hint: T`Сума логарифмів — логарифм добутку. І не забудь ОДЗ!`,
+      steps: [
+        SO(T`x \gt 0,\; ${g} \gt 0 \;\Rightarrow\; ${odz}`),
+        S(T`${logT(a, '\\big(x(' + g + ')\\big)')} = ${c}`, 'Логарифм добутку.'),
+        S(T`${prod} \;\Rightarrow\; ${quad}`, T`Означення: число під логарифмом дорівнює \(${a}^{${c}}\).`),
+        S(T`x_1 = ${good},\quad x_2 = ${bad}`, 'Теорема Вієта або дискримінант.'),
+        S(T`x = ${good}`, T`Корінь \(${bad}\) не входить в ОДЗ — викидаємо.`)
+      ] };
+  }
+  const EQ2 = [
+    [T`\log_2(3x - 1) = \log_2(x + 5)`, 3, [SO(T`3x - 1 \gt 0,\; x + 5 \gt 0 \;\Rightarrow\; x \gt \tfrac13`), S(T`3x - 1 = x + 5`, 'Основи однакові — прирівнюємо вирази під логарифмами.'), S(T`2x = 6 \;\Rightarrow\; x = 3`), S(T`3 \gt \tfrac13`, 'Підходить.')]],
+    [T`\log_3(x^2 - 4) = \log_3(3x)`, 4, [SO(T`x^2 - 4 \gt 0,\; 3x \gt 0`), S(T`x^2 - 4 = 3x \;\Rightarrow\; x^2 - 3x - 4 = 0`, 'Прирівнюємо вирази під логарифмами.'), S(T`x_1 = 4,\quad x_2 = -1`, 'Вієта: сума 3, добуток −4.'), S(T`x = 4`, T`При \(x = -1\): \(3x = -3 \lt 0\) — не підходить. При \(x = 4\): \(12 \gt 0\) і \(12 \gt 0\) ✓`)]],
+    [T`\lg(x + 7) = \lg(2x + 3)`, 4, [SO(T`x + 7 \gt 0,\; 2x + 3 \gt 0 \;\Rightarrow\; x \gt -\tfrac32`), S(T`x + 7 = 2x + 3`), S(T`x = 4`), S(T`4 \gt -\tfrac32`, 'Підходить.')]]
+  ];
+  const [tex, ans, steps] = pick(EQ2);
+  return { q: 'Розв\'яжи рівняння', tex, ans, ansTex: String(ans), hint: 'Логарифми з однаковою основою рівні — значить, рівні й вирази під ними. Потім перевір ОДЗ.', steps };
+}
+
+/* ---------- trainer: UI ---------- */
+function initTrainer() {
+  const root = $('#trainer');
+  const LV = [['c', 'Обчислення'], ['p', 'Властивості'], ['e', 'Рівняння'], ['m', 'Усе впереміш']];
+  let lvl = store.get('lvl', 'c'), cur = null, checked = false, solvedNow = false;
+  const chips = $('.chips', root), q = $('.task-q', root), tex = $('.task-tex', root), inp = $('#ans'),
+    fb = $('#t-fb'), hintBox = $('#t-hint-box'), solBox = $('#t-sol-box'), score = $('#t-score');
+  chips.innerHTML = LV.map(([k, n]) => `<button type="button" class="chip" data-l="${k}">${n}</button>`).join('');
+  function renderScore() {
+    const s = store.get('score', { ok: 0, total: 0 });
+    score.innerHTML = s.total ? `Правильно з першої спроби: <b>${s.ok}</b> з ${s.total}. <button class="linkbtn" id="t-reset">Почати рахунок заново</button>` : 'Рахунок почнеться після першої перевірки.';
+    const rb = $('#t-reset'); if (rb) rb.addEventListener('click', () => { store.set('score', { ok: 0, total: 0 }); renderScore(); });
+    if (s.ok >= 10) markDone('s8');
+  }
+  function gen() {
+    const l = lvl === 'm' ? pick(['c', 'p', 'e']) : lvl;
+    return l === 'c' ? genCompute() : l === 'p' ? genProps() : genEq();
+  }
+  function next() {
+    $$('.chip', chips).forEach(c => c.setAttribute('aria-pressed', c.dataset.l === lvl));
+    let t, guard = 0; do { t = gen(); } while (cur && t.tex === cur.tex && guard++ < 10);
+    cur = t; checked = false; solvedNow = false;
+    q.textContent = cur.q + ':';
+    setTex(tex, T`\(\displaystyle ${cur.tex}\)`);
+    inp.value = ''; fb.className = 'fb'; fb.innerHTML = '';
+    hintBox.className = 'hint'; hintBox.innerHTML = '';
+    solBox.hidden = true; solBox.innerHTML = '';
+  }
+  function check() {
+    if (!cur) return;
+    const v = parseAns(inp.value);
+    if (isNaN(v)) {
+      fb.className = 'fb bad show';
+      fb.innerHTML = '<span class="tag">Не вдалося прочитати відповідь.</span> Пиши ціле число, дріб через «/» (наприклад 3/2) або десятковий дріб (0,5).';
+      return;
+    }
+    const ok = Math.abs(v - cur.ans) < 1e-9;
+    if (!checked) {
+      checked = true;
+      const s = store.get('score', { ok: 0, total: 0 });
+      s.total++; if (ok) s.ok++; store.set('score', s); renderScore();
+    }
+    if (ok) {
+      solvedNow = true;
+      fb.className = 'fb ok show';
+      setTex(fb, T`<span class="tag">Правильно!</span> Відповідь: \(${cur.ansTex}\).`);
+    } else {
+      fb.className = 'fb bad show';
+      fb.innerHTML = '<span class="tag">Поки ні.</span> Спробуй ще раз або візьми підказку.';
+    }
+  }
+  function showSol() {
+    solBox.hidden = false;
+    setTex(solBox, cur.steps.map(s => `<li>${s.p ? s.p + ' ' : ''}\\(\\displaystyle ${s.m}\\)${s.n ? `<div class="why">${s.n}</div>` : ''}</li>`).join('') +
+      `<li><b>Відповідь:</b> \\(${cur.ansTex}\\)</li>`);
+  }
+  chips.addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c) return; lvl = c.dataset.l; store.set('lvl', lvl); next(); });
+  $('#t-check').addEventListener('click', check);
+  inp.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); solvedNow ? next() : check(); } });
+  $('#t-hint').addEventListener('click', () => { hintBox.className = 'hint show'; setTex(hintBox, cur.hint); });
+  $('#t-sol').addEventListener('click', showSol);
+  $('#t-next').addEventListener('click', () => { next(); });
+  $$('.key', root).forEach(k => k.addEventListener('click', () => {
+    const s = inp.selectionStart ?? inp.value.length, e2 = inp.selectionEnd ?? inp.value.length;
+    inp.value = inp.value.slice(0, s) + k.dataset.k + inp.value.slice(e2);
+    inp.focus(); try { inp.setSelectionRange(s + 1, s + 1); } catch (e) {}
+  }));
+  renderScore();
+  next();
+}
+
+/* ---------- theme toggle ---------- */
+function initTheme() {
+  const btn = $('#theme-btn'), root = document.documentElement;
+  const mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+  const current = () => root.getAttribute('data-theme') || (mq && mq.matches ? 'dark' : 'light');
+  const SUN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>';
+  const MOON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5a8.5 8.5 0 1 0 11 11z"/></svg>';
+  function paint() {
+    const dark = current() === 'dark';
+    btn.innerHTML = dark ? SUN : MOON;
+    btn.setAttribute('aria-label', dark ? 'Увімкнути світлу тему' : 'Увімкнути темну тему');
+    btn.title = btn.getAttribute('aria-label');
+  }
+  btn.addEventListener('click', () => {
+    const next = current() === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('log11-theme', next); } catch (e) {}
+    paint();
+  });
+  if (mq) { const onSys = () => paint(); mq.addEventListener ? mq.addEventListener('change', onSys) : mq.addListener(onSys); }
+  paint();
+}
+
+/* ---------- boot ---------- */
+function boot() {
+  initTheme();
+  renderToc();
+  initGame();
+  initLadder($('#ladder1'), { mode: 'pow', toggle: false });
+  initLadder($('#ladder2'), { mode: 'log', toggle: true });
+  initCards();
+  initSteps();
+  initProduct();
+  initGraph();
+  initQuizzes();
+  initTrainer();
+  const ra = $('#reset-all'); let armed = false;
+  ra.addEventListener('click', () => {
+    if (!armed) { armed = true; ra.textContent = 'Точно скинути? Натисни ще раз'; setTimeout(() => { armed = false; ra.textContent = 'Скинути весь прогрес'; }, 4000); return; }
+    store.clear(); location.reload();
+  });
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+</script>
+<a href="/" style="position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:9999;padding:7px 13px;border-radius:999px;background:#1d2a44;color:#fff;font:600 14px/1.2 system-ui,-apple-system,sans-serif;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.25)">← Усі теми</a>
+</body>
+</html>
