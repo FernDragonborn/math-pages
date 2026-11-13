@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Мокапи меню</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/theme.js"></script>
+<style>
+/* Ten menu mockups built from the cards of the live home page. Temporary: removed once one is chosen. */
+:root{--page-width:720px;--t1:var(--pen);--t2:var(--green);--t3:var(--violet);--t4:var(--orange)}
+*{box-sizing:border-box}
+.wrap{max-width:720px;margin:0 auto;padding:12px 16px 48px;display:flex;flex-direction:column;gap:12px}
+h1{margin:0;font-size:1.6rem;line-height:1.15}
+.sub{margin:4px 0 0;color:var(--ink-soft);font-size:15px}
+.pickers{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--ink-soft)}
+.pickers div{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.pickers a{border:1px solid var(--card-line);border-radius:999px;padding:3px 10px;color:var(--ink);text-decoration:none;font-weight:600;font-size:13px}
+.pickers a[aria-current="page"]{background:var(--pen);border-color:var(--pen);color:var(--on-pen)}
+.note{font-size:13px;color:var(--ink-soft);background:var(--card);border:1px dashed var(--card-line);border-radius:4px;padding:8px 10px;margin:0}
+.search{width:100%;height:44px;border:1px solid var(--card-line);border-radius:10px;background:var(--card);color:var(--ink);padding:0 14px;font:500 16px var(--font-body)}
+.search:focus{outline:none;border-color:var(--pen)}
+.grades{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.grades::-webkit-scrollbar{display:none}
+.grades button{flex:none;height:32px;padding:0 11px;border-radius:999px;border:1px solid var(--card-line);background:var(--card);color:var(--ink);font:600 13px var(--font-body);cursor:pointer}
+.grades button[aria-pressed="true"]{background:var(--pen);border-color:var(--pen);color:var(--on-pen)}
+.empty{color:var(--ink-soft);text-align:center}
+a{color:inherit}
+/* tags, shared by every mockup */
+.tags{display:flex;flex-wrap:wrap;gap:4px}
+.tags i{font-style:normal;font-size:11.5px;font-weight:600;border-radius:999px;padding:1px 8px;background:color-mix(in srgb,var(--ink) 8%,transparent);color:var(--ink-soft)}
+.tags i.g{background:var(--pen-wash);color:var(--pen)}
+.tags i.x{background:color-mix(in srgb,var(--orange) 16%,transparent);color:var(--orange)}
+.desc{color:var(--ink-soft);font-size:14px;line-height:1.45}
+.ttl{font-weight:700;font-size:15.5px;line-height:1.3}
+
+/* 1 */
+.v1 h2{font:700 16px var(--font-display);margin:14px 0 8px;display:flex;align-items:center;gap:8px;position:sticky;top:0;background:var(--paper);padding:6px 0;z-index:1}
+.v1 h2::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--c)}
+.v1 a{display:flex;flex-direction:column;gap:5px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:4px;padding:11px 13px;margin-bottom:8px;text-decoration:none}
+/* 2 */
+.v2 details{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:4px;margin-bottom:8px}
+.v2 summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:12px 14px;font:700 16px var(--font-display)}
+.v2 summary::-webkit-details-marker{display:none}
+.v2 summary .n{margin-left:auto;font:600 13px var(--font-body);color:var(--ink-soft)}
+.v2 summary::after{content:"▾";color:var(--ink-soft)}
+.v2 details[open] summary::after{content:"▴"}
+.v2 a{display:flex;flex-direction:column;gap:4px;padding:10px 14px;border-top:1px solid var(--card-line-2);text-decoration:none}
+.v2 .sumdesc{font:500 12.5px var(--font-body);color:var(--ink-soft);padding:0 14px 10px;margin-top:-6px}
+/* 3 */
+.v3 .tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:10px}
+.v3 .tabs button{flex:none;border:0;background:none;color:var(--ink-soft);font:700 14px var(--font-body);padding:6px 10px;border-bottom:3px solid transparent;cursor:pointer}
+.v3 .tabs button[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--c)}
+.v3 a{display:flex;flex-direction:column;gap:5px;padding:12px 2px;border-bottom:1px solid var(--line);text-decoration:none}
+/* 4 */
+.v4 .grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.v4 a{display:flex;flex-direction:column;gap:5px;background:var(--card);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:6px;padding:10px;text-decoration:none;min-height:150px}
+.v4 .ttl{font-size:14px}
+.v4 .desc{font-size:12.5px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.v4 .tags{margin-top:auto}
+.v4 h2{grid-column:1/-1;font:700 15px var(--font-display);margin:10px 0 0}
+/* 5 */
+.v5 .item{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:4px;margin-bottom:6px}
+.v5 .item>button{width:100%;display:flex;align-items:center;gap:8px;border:0;background:none;color:var(--ink);text-align:left;padding:11px 12px;cursor:pointer;font:inherit}
+.v5 .item>button .ttl{flex:1}
+.v5 .item>button::after{content:"＋";color:var(--ink-soft)}
+.v5 .item.open>button::after{content:"－"}
+.v5 .more{display:none;padding:0 12px 12px;flex-direction:column;gap:8px}
+.v5 .item.open .more{display:flex}
+.v5 .go{align-self:flex-start;background:var(--pen);color:var(--on-pen);border-radius:6px;padding:7px 14px;font-weight:700;text-decoration:none}
+.v5 h2{font:700 14px var(--font-body);color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;margin:14px 0 6px}
+/* 6 metro */
+.v6 .line{position:relative;margin:6px 0 18px;padding-left:28px}
+.v6 .line::before{content:"";position:absolute;left:10px;top:30px;bottom:12px;width:5px;border-radius:3px;background:var(--c)}
+.v6 .line h2{font:700 16px var(--font-display);margin:0 0 8px;margin-left:-28px;display:flex;gap:8px;align-items:center}
+.v6 .line h2::before{content:"";width:26px;height:26px;border-radius:50%;background:var(--c);flex:none}
+.v6 .st{position:relative;padding:6px 0 10px}
+.v6 .st::before{content:"";position:absolute;left:-23px;top:10px;width:13px;height:13px;border-radius:50%;background:var(--paper);border:3px solid var(--c)}
+.v6 .st a{text-decoration:none;display:flex;flex-direction:column;gap:3px}
+.v6 .st .g{font:700 11px var(--font-body);color:var(--ink-soft)}
+/* 7 grade strip */
+.v7 .gtabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.v7 .gtabs a{flex:none;text-decoration:none;border:1px solid var(--card-line);border-radius:999px;padding:4px 12px;font-weight:700;font-size:14px}
+.v7 .strip{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin:8px -16px 0;padding:0 16px 8px}
+.v7 .panel{flex:none;width:calc(100% - 8px);max-width:520px;scroll-snap-align:start;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:12px}
+.v7 .panel h2{font:700 22px var(--font-display);margin:0 0 4px}
+.v7 .panel h2 small{font:500 13px var(--font-body);color:var(--ink-soft);margin-left:6px}
+.v7 .panel a{display:flex;flex-direction:column;gap:4px;padding:10px 0 10px 10px;border-left:4px solid var(--c);margin:8px 0;text-decoration:none}
+/* 8 questions */
+.v8 a{display:flex;flex-direction:column;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:14px 14px 14px 4px;padding:12px 14px;margin-bottom:10px;text-decoration:none}
+.v8 .q{font:700 17px/1.3 var(--font-body)}
+.v8 .q::before{content:"? ";color:var(--c);font-weight:800}
+.v8 .ans{font-size:13px;color:var(--ink-soft)}
+.v8 .ans b{color:var(--ink)}
+/* 9 formula wall */
+.v9 .wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px}
+.v9 button.f{aspect-ratio:1;border:1px solid var(--line);border-bottom:4px solid var(--c);background:var(--card);border-radius:8px;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:6px}
+.v9 button.f span{font:700 21px var(--font-mono)}
+.v9 button.f small{font:600 10.5px/1.2 var(--font-body);color:var(--ink-soft);text-align:center}
+.v9 button.f[aria-pressed="true"]{background:var(--pen-wash);border-color:var(--pen)}
+.v9 .detail{grid-column:1/-1;background:var(--card);border:1px solid var(--pen);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:6px}
+.v9 .detail a.go{align-self:flex-start;background:var(--pen);color:var(--on-pen);border-radius:6px;padding:7px 14px;font-weight:700;text-decoration:none}
+/* 10 prerequisite tree */
+.v10 .lvl{margin:4px 0 14px}
+.v10 .lvl h2{font:700 13px var(--font-body);color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;margin:0 0 6px}
+.v10 a{display:flex;flex-direction:column;gap:4px;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:4px;padding:10px 12px;margin-bottom:6px;text-decoration:none;position:relative}
+.v10 .on{font-size:12.5px;color:var(--ink-soft)}
+.v10 .on b{color:var(--pen);font-weight:600}
+.v10 .lvl+.lvl h2::before{content:"↓ ";color:var(--pen)}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Чинне меню</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+  <header>
+    <h1>Математика по темах</h1>
+    <p class="sub">Шпаргалки й пояснення, зібрані в одному місці.</p>
+  </header>
+  <nav class="pickers" aria-label="Мокап">
+    <div>звичайні: <a href="?v=1">1 картки</a><a href="?v=2">2 зміст з описами</a><a href="?v=3">3 вкладки</a><a href="?v=4">4 сітка</a><a href="?v=5">5 рядки ＋</a></div>
+    <div>незвичні: <a href="?v=6">6 метро</a><a href="?v=7">7 класи</a><a href="?v=8">8 питання</a><a href="?v=9">9 формули</a><a href="?v=10">10 дерево</a></div>
+  </nav>
+  <p class="note" id="note"></p>
+  <input class="search" id="q" type="search" placeholder="Пошук: ступінь, дріб, корінь…" autocomplete="off" aria-label="Пошук статті">
+  <div class="grades" id="grades" role="group" aria-label="Клас"></div>
+  <div id="out"></div>
+  <p class="empty" id="empty" hidden>Нічого не знайшлося.</p>
+</div>
+<script>
+(async function(){
+const v=String(new URLSearchParams(location.search).get('v')||'1');
+document.querySelectorAll('.pickers a').forEach(a=>{if(a.getAttribute('href')==='?v='+v)a.setAttribute('aria-current','page');});
+const NOTES={
+ 1:'Картки, як були, але одним стовпцем: назва, опис, теги. Заголовок теми прилипає зверху, поки гортаєш її.',
+ 2:'Зміст, як зараз, але під кожною назвою — опис і теги; під темою — підказка, що в ній є.',
+ 3:'Вкладки тем угорі: на екрані тільки одна тема, зате з описами й тегами.',
+ 4:'Сітка міні-карток у два стовпці навіть на телефоні: назва, три рядки опису, теги.',
+ 5:'Короткі рядки з тегами; торкаєшся — під рядком опис і кнопка «Відкрити».',
+ 6:'Метро: тема — лінія, статті — станції за класами, по порядку проходження.',
+ 7:'Класи: гортаєш убік від 5-го до 11-го, на кожному «екрані» — що вчать у цьому класі.',
+ 8:'Питання: кожна стаття — питання, на яке вона відповідає. Шукаєш своє питання, а не назву теми.',
+ 9:'Стіна формул: плитка — головна формула статті; торкаєшся — під плитками назва, опис, теги.',
+ 10:'Дерево: статті рівнями за тим, на чому вони стоять (блок «треба знати»): зверху основи, нижче — те, що з них виростає.'};
+document.getElementById('note').textContent=NOTES[v]||'';
+
+const html=await (await fetch('/',{cache:'no-store'})).text();
+const doc=new DOMParser().parseFromString(html,'text/html');
+const topics=[...doc.querySelectorAll('#list section.topic')].map(s=>({id:s.id,title:s.querySelector('h2').textContent.trim(),c:s.style.getPropertyValue('--c'),
+  cards:[...s.querySelectorAll('a.card')].map(a=>({href:new URL(a.getAttribute('href'),location.origin+'/').href,path:a.getAttribute('href'),title:a.querySelector('b').textContent.replace('↗','').trim(),
+    desc:(a.querySelector(':scope > span')||{}).textContent||'',cls:a.dataset.class.split(' '),area:a.dataset.area,kind:a.dataset.kind.split(','),ext:a.classList.contains('ext'),c:s.style.getPropertyValue('--c'),topic:s.querySelector('h2').textContent.trim()}))}));
+const all=topics.flatMap(t=>t.cards);
+const grades=[...new Set(all.flatMap(c=>c.cls))].sort((a,b)=>a-b);
+const key=c=>c.ext?c.path:c.path.replace(/^\//,'');
+// the question each article answers, and its signature formula (mockups 8 and 9 only)
+const Q={'stupeni-i-loharyfmy/shcho-take-stupin/':'Що означає маленьке число зверху?','stupeni-i-loharyfmy/vlastyvosti-stupenia/':'Чому при множенні ступенів показники додаються?',
+ 'stupeni-i-loharyfmy/nulovyi-i-vidiemnyi-pokaznyk/':'Чому будь-що в нульовому ступені — одиниця?','stupeni-i-loharyfmy/standartnyi-vyhliad-chysla/':'Як коротко записати дуже велике чи дуже мале число?',
+ 'stupeni-i-loharyfmy/korin-n-stupenia/':'Яке число в кубі дає мінус вісім?','stupeni-i-loharyfmy/drobovyi-pokaznyk/':'Що таке ступінь з дробом у показнику?',
+ 'stupeni-i-loharyfmy/shpargalka/':'Де всі правила ступенів і коренів разом?','stupeni-i-loharyfmy/loharyfmy-z-nulia/':'У який ступінь піднести 2, щоб вийшло 8?',
+ 'https://quickmaths.answerinprogress.com':'Як швидко я рахую в голові?','droby/osnovna-vlastyvist-drobu/':'Чому дві третіх — це те саме, що чотири шостих?',
+ 'droby/mnozhennia-i-dilennia-drobiv/':'Як множити й ділити дроби з x?','droby/spilnyi-znamennyk/':'Як знайти спільний знаменник?',
+ 'rivniannia/totozhni-peretvorennia/':'Як переписати вираз і не зіпсувати його?','rivniannia/terezy-obydvi-chastyny/':'Чому з обома частинами рівняння роблять однакове?',
+ 'rivniannia/peretvorennia-rivnian/':'Звідки в рівнянні беруться зайві корені?','heometriia/trapetsiia/':'Що треба памʼятати про трапецію?',
+ 'https://acegikmo.com/trianglesolver':'Як розвʼязати будь-який трикутник?'};
+const F={'stupeni-i-loharyfmy/shcho-take-stupin/':'aⁿ','stupeni-i-loharyfmy/vlastyvosti-stupenia/':'aᵐ·aⁿ','stupeni-i-loharyfmy/nulovyi-i-vidiemnyi-pokaznyk/':'a⁻ⁿ',
+ 'stupeni-i-loharyfmy/standartnyi-vyhliad-chysla/':'a·10ⁿ','stupeni-i-loharyfmy/korin-n-stupenia/':'ⁿ√a','stupeni-i-loharyfmy/drobovyi-pokaznyk/':'a^p/q',
+ 'stupeni-i-loharyfmy/shpargalka/':'aⁿ √ ·','stupeni-i-loharyfmy/loharyfmy-z-nulia/':'logₐb','https://quickmaths.answerinprogress.com':'7×8',
+ 'droby/osnovna-vlastyvist-drobu/':'2/3=4/6','droby/mnozhennia-i-dilennia-drobiv/':'a/b·c/d','droby/spilnyi-znamennyk/':'a/b+c/d',
+ 'rivniannia/totozhni-peretvorennia/':'a(b+c)','rivniannia/terezy-obydvi-chastyny/':'⚖','rivniannia/peretvorennia-rivnian/':'x²=3x',
+ 'heometriia/trapetsiia/':'(a+b)/2','https://acegikmo.com/trianglesolver':'△'};
+
+let sel=[], q='';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pass=c=>(!sel.length||c.cls.some(g=>sel.includes(g)))&&(!q||(c.title+' '+c.desc+' '+(Q[key(c)]||'')).toLowerCase().includes(q));
+const gl=c=>{const g=c.cls.map(Number);return g.length>1&&g[g.length-1]-g[0]===g.length-1?g[0]+'–'+g[g.length-1]+' кл.':c.cls.join(', ')+' кл.';};
+const tags=c=>`<span class="tags"><i class="g">${gl(c)}</i>${c.kind.map(k=>`<i class="${k==='зовнішній сайт'?'x':''}">${k==='зовнішній сайт'?'↗ зовнішній сайт':k}</i>`).join('')}<i>${c.area}</i></span>`;
+const A=(c,inner,cls='')=>`<a href="${c.href}"${c.ext?' target="_blank" rel="noopener noreferrer"':''}${cls?` class="${cls}"`:''} style="--c:${c.c}">${inner}</a>`;
+let tab=null, open=new Set(), pickF=null, needsCache=null;
+
+async function needsMap(){ // mockup 10: read each article's «треба знати» links
+  if(needsCache) return needsCache;
+  needsCache={};
+  await Promise.all(all.filter(c=>!c.ext).map(async c=>{try{const t=await (await fetch(c.href)).text();const d=new DOMParser().parseFromString(t,'text/html');
+    needsCache[c.href]=[...d.querySelectorAll('.needs a')].map(a=>new URL(a.getAttribute('href'),c.href).href);}catch(e){needsCache[c.href]=[];}}));
+  return needsCache;
+}
+
+async function render(){
+  const g=document.getElementById('grades');
+  g.innerHTML=grades.map(x=>`<button type="button" data-g="${x}" aria-pressed="${sel.includes(x)}">${x} клас</button>`).join('');
+  g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const x=b.dataset.g;sel=sel.includes(x)?sel.filter(y=>y!==x):[...sel,x];render();});
+  const vis=topics.map(t=>({...t,cards:t.cards.filter(pass)})).filter(t=>t.cards.length);
+  const cards=vis.flatMap(t=>t.cards), filtering=sel.length||q;
+  let h='';
+  if(v==='1'){
+    h='<div class="v1">'+vis.map(t=>`<h2 style="--c:${t.c}">${esc(t.title)}</h2>`+t.cards.map(c=>A(c,`<span class="ttl">${esc(c.title)}${c.ext?' ↗':''}</span><span class="desc">${esc(c.desc)}</span>${tags(c)}`)).join('')).join('')+'</div>';
+  } else if(v==='2'){
+    h='<div class="v2">'+vis.map(t=>`<details style="--c:${t.c}"${filtering?' open':''}><summary><span>${esc(t.title)}</span><span class="n">${t.cards.length}</span></summary>`+
+      (filtering?'':`<div class="sumdesc">${t.cards.slice(0,3).map(c=>esc(c.title)).join(' · ')}${t.cards.length>3?' …':''}</div>`)+
+      t.cards.map(c=>A(c,`<span class="ttl">${esc(c.title)}${c.ext?' ↗':''}</span><span class="desc">${esc(c.desc)}</span>${tags(c)}`)).join('')+'</details>').join('')+'</div>';
+  } else if(v==='3'){
+    if(!vis.some(t=>t.id===tab)) tab=vis[0]&&vis[0].id;
+    const t=vis.find(x=>x.id===tab);
+    h='<div class="v3"><div class="tabs">'+vis.map(x=>`<button type="button" data-t="${x.id}" style="--c:${x.c}" aria-pressed="${x.id===tab}">${esc(x.title)} <small>${x.cards.length}</small></button>`).join('')+'</div>'+
+      (t?t.cards.map(c=>A(c,`<span class="ttl">${esc(c.title)}${c.ext?' ↗':''}</span><span class="desc">${esc(c.desc)}</span>${tags(c)}`)).join(''):'')+'</div>';
+  } else if(v==='4'){
+    h='<div class="v4"><div class="grid">'+vis.map(t=>`<h2>${esc(t.title)}</h2>`+t.cards.map(c=>A(c,`<span class="ttl">${esc(c.title)}${c.ext?' ↗':''}</span><span class="desc">${esc(c.desc)}</span>${tags(c)}`)).join('')).join('')+'</div></div>';
+  } else if(v==='5'){
+    h='<div class="v5">'+vis.map(t=>`<h2>${esc(t.title)}</h2>`+t.cards.map(c=>`<div class="item${open.has(c.href)?' open':''}" style="--c:${c.c}"><button type="button" data-h="${c.href}"><span class="ttl">${esc(c.title)}${c.ext?' ↗':''}</span>${tags(c)}</button><div class="more"><span class="desc">${esc(c.desc)}</span>${A(c,'Відкрити →','go')}</div></div>`).join('')).join('')+'</div>';
+  } else if(v==='6'){
+    h='<div class="v6">'+vis.map(t=>`<div class="line" style="--c:${t.c}"><h2>${esc(t.title)}</h2>`+
+      [...t.cards].sort((a,b)=>a.cls[0]-b.cls[0]).map(c=>`<div class="st">${A(c,`<span class="g">${gl(c)}</span><span class="ttl">${esc(c.title)}${c.ext?' ↗':''}</span><span class="desc">${esc(c.desc)}</span>${tags(c)}`)}</div>`).join('')+'</div>').join('')+'</div>';
+  } else if(v==='7'){
+    const gs=grades.filter(x=>cards.some(c=>c.cls.includes(x)));
+    h='<div class="v7"><div class="gtabs">'+gs.map(x=>`<a href="#g${x}">${x}</a>`).join('')+'</div><div class="strip">'+
+      gs.map(x=>{const cs=cards.filter(c=>c.cls.includes(x));return `<section class="panel" id="g${x}"><h2>${x} клас<small>${cs.length} ${cs.length===1?'стаття':cs.length<5?'статті':'статей'}</small></h2>`+
+        cs.map(c=>A(c,`<span class="ttl">${esc(c.title)}${c.ext?' ↗':''}</span><span class="desc">${esc(c.desc)}</span>${tags(c)}`)).join('')+'</section>';}).join('')+'</div></div>';
+  } else if(v==='8'){
+    h='<div class="v8">'+cards.map(c=>A(c,`<span class="q">${esc(Q[key(c)]||c.title)}</span><span class="ans">відповідає стаття <b>${esc(c.title)}</b>${c.ext?' ↗':''} · ${esc(c.topic)}</span>${tags(c)}`)).join('')+'</div>';
+  } else if(v==='9'){
+    if(pickF&&!cards.some(c=>c.href===pickF)) pickF=null;
+    const cols=Math.max(1,Math.floor((Math.min(document.querySelector('.wrap').clientWidth,720)-32+8)/108));
+    let tiles=cards.map(c=>`<button type="button" class="f" data-h="${c.href}" style="--c:${c.c}" aria-pressed="${c.href===pickF}"><span>${esc(F[key(c)]||'·')}</span><small>${esc(c.title)}</small></button>`);
+    const i=cards.findIndex(c=>c.href===pickF);
+    if(i>=0){const c=cards[i],at=Math.min(tiles.length,(Math.floor(i/cols)+1)*cols);
+      tiles.splice(at,0,`<div class="detail"><span class="ttl">${esc(c.title)}${c.ext?' ↗':''}</span><span class="desc">${esc(c.desc)}</span>${tags(c)}${A(c,'Відкрити →','go')}</div>`);}
+    h='<div class="v9"><div class="wall">'+tiles.join('')+'</div></div>';
+  } else if(v==='10'){
+    const nm=await needsMap(), level={};
+    const lv=href=>{if(href in level)return level[href];level[href]=0;const ns=(nm[href]||[]).filter(n=>all.some(c=>c.href===n));level[href]=ns.length?1+Math.max(...ns.map(lv)):0;return level[href];};
+    all.forEach(c=>lv(c.href));
+    const max=Math.max(...cards.map(c=>level[c.href]||0));
+    const names=['Основи — з цього починати','Спирається на основи','Ще крок далі','Ще далі','Найглибше'];
+    for(let L=0;L<=max;L++){const cs=cards.filter(c=>(level[c.href]||0)===L);if(!cs.length)continue;
+      h+=`<div class="lvl"><h2>${names[Math.min(L,names.length-1)]}</h2>`+cs.map(c=>{const ns=(nm[c.href]||[]).map(n=>all.find(x=>x.href===n)).filter(Boolean);
+        return A(c,`<span class="ttl">${esc(c.title)}${c.ext?' ↗':''}</span><span class="desc">${esc(c.desc)}</span>${tags(c)}${ns.length?`<span class="on">спирається на: ${ns.map(n=>`<b>${esc(n.title)}</b>`).join(', ')}</span>`:''}`);}).join('')+'</div>';}
+    h='<div class="v10">'+h+'</div>';
+  }
+  const out=document.getElementById('out'); out.innerHTML=h;
+  document.getElementById('empty').hidden=cards.length>0;
+  out.querySelectorAll('.v3 .tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});
+  out.querySelectorAll('.v5 .item>button').forEach(b=>b.onclick=()=>{const k=b.dataset.h;open.has(k)?open.delete(k):open.add(k);render();});
+  out.querySelectorAll('.v9 button.f').forEach(b=>b.onclick=()=>{pickF=pickF===b.dataset.h?null:b.dataset.h;render();});
+}
+document.getElementById('q').addEventListener('input',e=>{q=e.target.value.trim().toLowerCase();render();});
+render();
+})();
+</script>
+</body>
+</html>
