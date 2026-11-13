@@ -163,8 +163,8 @@ function stagesFor(){
   const {rule,m,n}=st;
   if(rule==='mul') return [
     {lines:[pow(a,m)+DOT+pow(a,n,'g2')], text:`Два ступені з однаковою основою множаться. Що вийде?`},
-    {lines:[`(${copies(a,m)})${DOT}(${copies(a,n,'g2')})`], text:`Розклади кожен: ${P(a,m)} — це ${m} ${plural(m,'копія','копії','копій')} a, ${P(a,n)} — ще ${n}.`},
-    {lines:[copies(a,m)+DOT+copies(a,n,'g2')], text:`Дужки між множниками нічого не значать — усі копії стають в один ряд: ${m} + ${n} = ${m+n}.`},
+    {lines:[L.group(copies(a,m),`${m} ${plural(m,'копія','копії','копій')}`)+DOT+L.group(copies(a,n,'g2'),`ще ${n}`,'g2')], text:`Розклади кожен: ${P(a,m)} — це ${m} ${plural(m,'копія','копії','копій')} a (синя група), ${P(a,n)} — ще ${n} (помаранчева).`},
+    {lines:[L.group(copies(a,m)+DOT+copies(a,n,'g2'),`${m+n} ${plural(m+n,'копія','копії','копій')}`,'all')], text:`Між групами — те саме множення, тож копії просто стають в один ряд: ${m} + ${n} = ${m+n}.`},
     {lines:[`<span class="res">${P(a,m+n)}</span>`], text:`<b>Показники додаються:</b> a<sup>m</sup>·a<sup>n</sup> = a<sup>m+n</sup>.<br>Перевірка при a = 2: ${P(2,m)}·${P(2,n)} = ${num(2**m)}·${num(2**n)} = ${num(2**(m+n))} = ${P(2,m+n)}.`},
   ];
   if(rule==='div'){
@@ -183,7 +183,7 @@ function stagesFor(){
     ];
   }
   if(rule==='pow'){
-    const groups=Array.from({length:n},(_,i)=>`(${copies(a,m,i%2?'g2':'')})`).join(DOT);
+    const groups=Array.from({length:n},(_,i)=>L.group(copies(a,m,i%2?'g2':''),`${m} ${plural(m,'копія','копії','копій')}`,i%2?'g2':'')).join(DOT);
     return [
       {lines:[`(${pow(a,m)})${L.E(n)}`], text:`Ступінь, піднесений ще раз до ступеня.`},
       {lines:[Array.from({length:n},(_,i)=>pow(a,m,i%2?'g2':'')).join(DOT)], text:`Зовнішній показник ${n}: основа тут — уся дужка ${P(a,m)}, і вона повторюється ${n} ${plural(n,'раз','рази','разів')}.`},

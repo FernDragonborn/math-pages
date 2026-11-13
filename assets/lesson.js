@@ -25,6 +25,8 @@ window.L = (function () {
   const DOT = '<span class="dot">·</span>';
   const frac = (t, d) => `<span class="fr"><span>${t}</span><span>${d}</span></span>`;
   const gcd = (a, b) => (b ? gcd(b, a % b) : Math.abs(a));
+  // a group of copies marked by colour and a caption underneath — no brackets, so nothing reads as "expand me"
+  const group = (items, caption, cls = '') => `<span class="grp${cls ? ' ' + cls : ''}"><span class="grp-items">${items}</span><span class="grp-cap">${caption}</span></span>`;
 
   /* ---------- controls ---------- */
   // option chips: opts = [{v, label, sub?}] or plain values; small chips when no sub-label is given
@@ -101,5 +103,5 @@ window.L = (function () {
     return `<aside class="beyond"><b>Поза шкільною програмою.</b> ${text} <a href="${url}"${lang ? ` hreflang="${lang}"` : ''} target="_blank" rel="noopener noreferrer">${label} ↗</a></aside>`;
   }
 
-  return { MINUS, signed, fmt, factor, plural, esc, B, E, pow, SUP, DOT, frac, gcd, chips, stepper, contrast, derivation, beyond };
+  return { MINUS, signed, fmt, factor, plural, esc, B, E, pow, SUP, DOT, frac, gcd, group, chips, stepper, contrast, derivation, beyond };
 })();

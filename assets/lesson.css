@@ -100,3 +100,9 @@ summary::-webkit-details-marker{display:none}
 .grid-cells{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
 .grid-cells span{min-width:30px;text-align:center;border:1px solid var(--card-line);border-radius:4px;padding:2px 4px;font:600 15px var(--font-mono)}
 .grid-cells span.on{background:var(--mark-3-wash);border-color:var(--mark-3);color:var(--mark-3)}
+/* a group of copies: coloured underline and a caption instead of brackets */
+.grp{display:inline-flex;flex-direction:column;align-items:center;vertical-align:top;margin:0 2px;color:var(--mark-1)}
+.grp.g2{color:var(--mark-4)}
+.grp.all{color:var(--mark-2)}
+.grp-items{border-bottom:2px solid currentColor;padding-bottom:4px;color:var(--ink)}
+.grp-cap{font:600 12px/1.6 var(--font-body);white-space:nowrap}
