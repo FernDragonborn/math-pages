@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Тотожні перетворення</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/lesson.css">
+<script src="/assets/theme.js"></script>
+<style>
+.law{width:100%;border-collapse:collapse;margin:10px 0;font-size:15px}
+.law td{padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:top}
+.law td:first-child{font:600 16px var(--font-mono);white-space:nowrap}
+.law td:last-child{color:var(--ink-soft)}
+.val{color:var(--mark-3);font-weight:700}
+@media (max-width:520px){.law td{display:block;border-bottom:0;padding:2px 6px}.law tr{display:block;border-bottom:1px solid var(--line);padding:6px 0}.law td:first-child{white-space:normal}}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+
+<header>
+  <h1>Тотожні перетворення</h1>
+  <p class="sub">Вираз можна переписувати як завгодно, доки не змінюється одне: його <b>значення</b> за будь-якого x. Такі переписування називають тотожними.</p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <i>закони додавання й множення, 5 клас</i> <i>дії з відʼємними числами, 6 клас</i> <a href="/stupeni-i-loharyfmy/shcho-take-stupin/">Що таке ступінь</a></p>
+</header>
+
+<!-- 1 -->
+<section>
+  <h2><span class="num">1</span>Запис змінюється — значення ні</h2>
+  <p>Обери вираз і x. На кожному кроці під рядком рахуємо значення при цьому x — воно не має змінитися жодного разу.</p>
+  <div id="pick"></div>
+  <div class="row"><span class="lbl">x =</span>
+    <span class="stepper" id="stX"><button type="button" aria-label="Менше">−</button><output></output><button type="button" aria-label="Більше">+</button></span>
+    <span class="muted" id="aNote"></span>
+  </div>
+  <div class="deriv" id="deriv" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next"></button>
+    <button class="btn" type="button" id="reset">Згорнути назад</button>
+  </div>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2><span class="num">2</span>Що дозволено робити з виразом</h2>
+  <p>Ці закони ти знаєш з молодших класів. Тепер видно, навіщо вони: це повний список способів переписати вираз, не змінивши його значення.</p>
+  <table class="law">
+    <tr><td>a + b = b + a<br>ab = ba</td><td><b>Перестановка.</b> Доданки й множники можна міняти місцями.</td></tr>
+    <tr><td>(a + b) + c = a + (b + c)</td><td><b>Групування.</b> Дужки в сумі можна пересувати; так само в добутку.</td></tr>
+    <tr><td>a(b + c) = ab + ac</td><td><b>Розкриття дужок.</b> Множник іде на кожен доданок.</td></tr>
+    <tr><td>ab + ac = a(b + c)</td><td><b>Винесення спільного множника</b> — той самий закон справа наліво.</td></tr>
+    <tr><td>−(a − b) = −a + b</td><td><b>Мінус перед дужкою</b> міняє знак кожного доданка в ній.</td></tr>
+    <tr><td>3x + 5x = 8x</td><td><b>Зведення подібних</b> — теж винесення: (3 + 5)x.</td></tr>
+  </table>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="num">3</span>Пастки</h2>
+  <div id="pit1"></div><div id="pit2"></div><div id="pit3"></div>
+  <div class="warn"><b>Звідси:</b> після кожного кроку можна перевірити себе на числі. Якщо значення змінилося — помилка на цьому кроці.</div>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2><span class="num">4</span>Перевір себе</h2>
+  <p class="muted">Спершу перетвори сам, потім відкривай.</p>
+  <details><summary>2(x − 3) + x</summary><div class="ans">= 2x − 6 + x = <b>3x − 6</b>.</div></details>
+  <details><summary>7a − (2a + 1)</summary><div class="ans">= 7a − 2a − 1 = <b>5a − 1</b>: мінус перед дужкою змінив знак обох доданків.</div></details>
+  <details><summary>xy + 2x + 3y + 6</summary><div class="ans">= x(y + 2) + 3(y + 2) = <b>(x + 3)(y + 2)</b>.</div></details>
+  <details><summary>(a − 1)<sup>2</sup></summary><div class="ans">= (a − 1)(a − 1) = a² − a − a + 1 = <b>a² − 2a + 1</b>.</div></details>
+  <details><summary>Учень переписав 5(x + 2) як 5x + 2. Що зламалося?</summary><div class="ans">Дужки розкрито наполовину: двійку не помножили на 5. Перевірка при x = 1: 5·3 = 15, а 5 + 2 = 7. Правильно — <b>5x + 10</b>.</div></details>
+</section>
+
+<div class="rule">
+  <b>Тотожно рівні вирази</b> мають однакові значення за будь-яких значень змінних. Переписувати вираз можна лише так, щоб лишитися в цьому класі: переставляти, групувати, розкривати дужки, виносити спільний множник, зводити подібні.<br><br>
+  У рівнянні бережуть не значення частин, а <b>корені</b> — це інший поверх: <a href="../terezy-obydvi-chastyny/">«Терези»</a>, <a href="../peretvorennia-rivnian/">«Що саме не має змінитися»</a>.
+</div>
+
+</div>
+<script src="/assets/lesson.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const {fmt,signed}=L;
+// every line carries its own value function, so the page itself checks that nothing changed
+const EX=[
+  {label:'4x + 7 + 2x', lines:[
+    {t:'4x + 7 + 2x', f:x=>4*x+7+2*x, why:'Схожі доданки стоять нарізно.'},
+    {t:'4x + 2x + 7', f:x=>4*x+2*x+7, why:'<b>Перестановка:</b> поставили 2x поруч із 4x.'},
+    {t:'(4 + 2)x + 7', f:x=>(4+2)*x+7, why:'<b>Винесли x</b> з двох доданків — це і є зведення подібних.'},
+    {t:'6x + 7', f:x=>6*x+7, why:'Порахували 4 + 2.'}]},
+  {label:'ax + 3a + 2x + 6', a:2, lines:[
+    {t:'ax + 3a + 2x + 6', f:(x,a)=>a*x+3*a+2*x+6, why:'Чотири доданки, спільного множника для всіх немає.'},
+    {t:'(ax + 3a) + (2x + 6)', f:(x,a)=>(a*x+3*a)+(2*x+6), why:'<b>Групування:</b> у першій парі спільне a, у другій — 2.'},
+    {t:'a(x + 3) + 2(x + 3)', f:(x,a)=>a*(x+3)+2*(x+3), why:'<b>Винесли</b> a з першої пари і 2 з другої. Тепер спільна вся дужка (x + 3).'},
+    {t:'(x + 3)(a + 2)', f:(x,a)=>(x+3)*(a+2), why:'<b>Винесли спільну дужку</b> — вираз розклався на множники.'}]},
+  {label:'3(x − 2) − (x − 4)', lines:[
+    {t:'3(x − 2) − (x − 4)', f:x=>3*(x-2)-(x-4), why:'Дві дужки, перед другою — мінус.'},
+    {t:'3x − 6 − x + 4', f:x=>3*x-6-x+4, why:'<b>Розкрили дужки:</b> 3 на кожен доданок; мінус перед дужкою змінив знак і x, і −4.'},
+    {t:'3x − x − 6 + 4', f:x=>3*x-x-6+4, why:'<b>Перестановка:</b> x до x, числа до чисел.'},
+    {t:'2x − 2', f:x=>2*x-2, why:'Звели подібні.'}]},
+  {label:'(x + 1)² − 1', lines:[
+    {t:'(x + 1)<sup>2</sup> − 1', f:x=>(x+1)**2-1, why:'Квадрат дужки.'},
+    {t:'(x + 1)(x + 1) − 1', f:x=>(x+1)*(x+1)-1, why:'Розклали ступінь на дві копії основи.'},
+    {t:'x² + x + x + 1 − 1', f:x=>x*x+x+x+1-1, why:'<b>Розкрили дужки:</b> кожен доданок першої на кожен доданок другої.'},
+    {t:'x² + 2x', f:x=>x*x+2*x, why:'Звели подібні: x + x = 2x, а 1 − 1 = 0.'},
+    {t:'x(x + 2)', f:x=>x*(x+2), why:'<b>Винесли x.</b>'}]},
+];
+const s={e:0,x:2};
+function stages(){
+  const e=EX[s.e], a=e.a;
+  return e.lines.map((ln,i)=>({lines:[ln.t], text:`${ln.why}<br>При x = ${signed(s.x)}${a?`, a = ${a}`:''}: <span class="val">${fmt(ln.f(s.x,a))}</span>${i?' — те саме.':'.'}`}));
+}
+const D=L.derivation({box:$('deriv'),next:$('next'),reset:$('reset'),stages,first:'Перший крок →'});
+function draw(){
+  L.chips($('pick'),EX.map((e,i)=>({v:i,label:e.label.replace('²','<sup>2</sup>')})),s.e,v=>{s.e=v;draw();D.toStart();});
+  $('aNote').textContent=EX[s.e].a?`a = ${EX[s.e].a}`:'';
+}
+L.stepper($('stX'),{min:-5,max:5,get:()=>s.x,set:v=>{s.x=v;D.render(false);}});
+draw(); D.render(false);
+
+L.contrast($('pit1'),{labelA:'наполовину',labelB:'повністю',
+  a:{expr:'5(x + 2)', steps:'→ 5x + 2; при x = 1: 15, а стало 7', why:'Двійку не помножили на 5 — значення змінилось.'},
+  b:{expr:'5(x + 2)', steps:'→ <span class="res">5x + 10</span>; при x = 1: 15 = 15', why:'Множник іде на <b>кожен</b> доданок.'}});
+L.contrast($('pit2'),{labelA:'знак лише першого',labelB:'знак кожного',
+  a:{expr:'−(a − b)', steps:'→ −a − b; при a = 5, b = 2: −3, а стало −7', why:'Мінус змінив знак тільки першого доданка.'},
+  b:{expr:'−(a − b)', steps:'→ <span class="res">−a + b</span>; при a = 5, b = 2: −3 = −3', why:'Мінус перед дужкою міняє знак <b>кожного</b> доданка.'}});
+L.contrast($('pit3'),{labelA:'квадрат «по доданках»',labelB:'квадрат як добуток',
+  a:{expr:'(a + b)<sup>2</sup>', steps:'→ a² + b²; при a = 2, b = 3: 25, а стало 13', why:'Ступінь не розходиться по доданках.'},
+  b:{expr:'(a + b)<sup>2</sup>', steps:'→ (a + b)(a + b) → <span class="res">a² + 2ab + b²</span>; 25 = 25', why:'Розклади ступінь на копії й розкрий дужки.'}});
+})();
+</script>
+</body>
+</html>

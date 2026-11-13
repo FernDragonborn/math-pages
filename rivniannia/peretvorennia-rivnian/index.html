@@ -213,6 +213,7 @@ details .answer .eq{ color:var(--ink) }
   .stage{ transition: opacity .18s ease }
   .stage.fading{ opacity:0 }
 }
+summary .eq{ white-space:normal }  /* a long question must wrap on a phone */
 </style>
 </head>
 <body>
@@ -225,7 +226,7 @@ details .answer .eq{ color:var(--ink) }
 <header class="hero">
   <p class="who">Алгебра, 8 клас · перетворення виразів і рівнянь</p>
   <h1>Що саме не має змінитися</h1>
-  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <a href="/rivniannia/terezy-obydvi-chastyny/">Терези: роби з обома частинами однакове</a> <i>розкладання на множники, 7 клас</i> <a href="/droby/spilnyi-znamennyk/">дроби зі змінною, 8 клас</a></p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <a href="/rivniannia/terezy-obydvi-chastyny/">Терези</a> <a href="/rivniannia/totozhni-peretvorennia/">Тотожні перетворення</a> <i>розкладання на множники, 7 клас</i> <a href="/droby/spilnyi-znamennyk/">дроби зі змінною, 8 клас</a></p>
   <p class="lead">Коли розв'язуєш рівняння, ти переписуєш його по багато разів. Виникає чесне питання: <b>а чому взагалі можна щось переписувати — хіба це вже не інше рівняння?</b></p>
   <p>Відповідь така: переписувати можна майже як завгодно. Але є одна річ, яку ламати не можна. І весь фокус у тому, щоб зрозуміти, що це за річ.</p>
 </header>
@@ -270,10 +271,8 @@ details .answer .eq{ color:var(--ink) }
 
   <div class="rule">
     <h3>Поверх перший: усередині одного виразу</h3>
-    <p>Тут ти перероблюєш шматок запису — наприклад, ліву частину. Незмінним має лишитися <b>значення</b>: скільки вираз дає при будь-якому <span class="eq">x</span>.</p>
-    <div class="swap">
-      <span class="eq">4x + 7 + 2x</span><span class="arrow">→</span><span class="eq">6x + 7</span>
-    </div>
+    <p>Тут ти перероблюєш шматок запису — наприклад, ліву частину. Незмінним має лишитися <b>значення</b>: 4x + 7 + 2x і 6x + 7 дають те саме число за будь-якого x. Такі перетворення звуться <b>тотожними</b>, і всі дозволені дії з виразом розкладено в статті <a href="../totozhni-peretvorennia/">«Тотожні перетворення»</a>.</p>
+  </div>
     <table>
       <tr><th>x</th><th>4x + 7 + 2x</th><th>6x + 7</th></tr>
       <tr><td>0</td><td>7</td><td class="same">7</td></tr>
@@ -298,47 +297,6 @@ details .answer .eq{ color:var(--ink) }
 
 <section>
   <span class="num">03</span>
-  <h2>Перший поверх: що дозволено робити з виразом</h2>
-  <p>Усе, що тут перелічено, ти вже знаєш як «закони дій». Просто тепер видно, навіщо вони: це повний список способів переписати вираз, не зачепивши його значення.</p>
-
-  <ul class="chain">
-    <li><span class="eq">a + b = b + a</span><span class="why"><b>Перестановка.</b> Доданки можна міняти місцями, множники теж. Переставний закон.</span></li>
-    <li><span class="eq">(a + b) + c = a + (b + c)</span><span class="why"><b>Групування.</b> Дужки можна пересувати — сума не залежить від того, що з чим складати першим. Сполучний закон.</span></li>
-    <li><span class="eq">a(b + c) = ab + ac</span><span class="why"><b>Розкриття дужок.</b> Розподільний закон.</span></li>
-    <li><span class="eq">ab + ac = a(b + c)</span><span class="why"><b>Винесення спільного множника.</b> Той самий розподільний закон, прочитаний справа наліво.</span></li>
-    <li><span class="eq">3x + 5x = 8x</span><span class="why"><b>Зведення подібних.</b> Насправді це теж винесення: <span class="eq">(3 + 5)x</span>.</span></li>
-    <li><span class="eq">x² − 9 = (x−3)(x+3)</span><span class="why"><b>Розкладання на множники.</b> Формули скороченого множення.</span></li>
-  </ul>
-
-  <p>Перестановка і групування майже завжди ходять парою: спочатку ставиш поруч те, що схоже, потім обводиш дужками і виносиш спільне.</p>
-
-  <figure class="wk-fig">
-    <svg viewBox="0 0 360 88" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="У виразі ax + 3a + 2x + 6 перша пара має спільний множник a, друга — спільний множник 2">
-      <text class="wk" x="96" y="36" text-anchor="middle">ax</text>
-      <text class="wk" x="126" y="36" text-anchor="middle">+</text>
-      <text class="wk" x="156" y="36" text-anchor="middle">3a</text>
-      <text class="wk" x="186" y="36" text-anchor="middle">+</text>
-      <text class="wk" x="216" y="36" text-anchor="middle">2x</text>
-      <text class="wk" x="246" y="36" text-anchor="middle">+</text>
-      <text class="wk" x="270" y="36" text-anchor="middle">6</text>
-      <path class="wk-brace" d="M84,46 V54 H168 V46"/>
-      <path class="wk-brace" d="M204,46 V54 H276 V46"/>
-      <text class="wk-lbl" x="126" y="74" text-anchor="middle">тут спільне a</text>
-      <text class="wk-lbl" x="240" y="74" text-anchor="middle">тут спільне 2</text>
-    </svg>
-    <figcaption>Дужки ставиш не навмання: пара має сенс тільки тоді, коли в обох доданках сидить щось спільне, що можна винести.</figcaption>
-  </figure>
-  <ul class="chain">
-    <li><span class="eq">ax + 3a + 2x + 6</span><span class="why">початковий вираз</span></li>
-    <li><span class="eq">(ax + 3a) + (2x + 6)</span><span class="why">згрупували те, що має спільний множник</span></li>
-    <li><span class="eq">a(x + 3) + 2(x + 3)</span><span class="why">винесли <span class="eq">a</span> і винесли <span class="eq">2</span></span></li>
-    <li><span class="eq">(x + 3)(a + 2)</span><span class="why">винесли спільну дужку</span></li>
-  </ul>
-  <p>Перевір собі: візьми <span class="eq">x = 1</span>, <span class="eq">a = 2</span>. Перший рядок дає <span class="eq">2 + 6 + 2 + 6 = 16</span>. Останній дає <span class="eq">4 · 4 = 16</span>. Запис змінився до невпізнання — значення не зрушило.</p>
-</section>
-
-<section>
-  <span class="num">04</span>
   <h2>Другий поверх: терези</h2>
   <p>Рівняння зручно уявляти як терези в рівновазі. Ліва частина важить стільки ж, скільки права — але тільки для правильного <span class="eq">x</span>.</p>
 
@@ -391,7 +349,7 @@ details .answer .eq{ color:var(--ink) }
 </section>
 
 <section>
-  <span class="num">05</span>
+  <span class="num">04</span>
   <h2>А тепер — де воно ламається</h2>
   <p>Дії, які виглядають цілком законно, але тихо міняють список коренів. Тут і живуть найприкріші помилки.</p>
 
@@ -445,7 +403,7 @@ details .answer .eq{ color:var(--ink) }
 </section>
 
 <section>
-  <span class="num">06</span>
+  <span class="num">05</span>
   <h2>Перевір, чи вловив</h2>
   <p>Відповідай подумки, потім розгортай.</p>
 
