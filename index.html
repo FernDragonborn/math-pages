@@ -77,6 +77,11 @@ body.mapmode #station .scard{max-width:720px;margin:0 auto}
 .legend span{display:inline-flex;align-items:center;gap:5px}
 .legend b{display:inline-block;width:18px;height:6px;border-radius:3px;background:var(--c)}
 .legend .hubdot{display:inline-block;width:12px;height:12px;border-radius:50%;border:3px solid var(--ink);background:var(--paper)}
+.legend .exitdot{display:inline-block;width:20px;height:12px;border-radius:6px;border:2px dashed var(--orange);background:var(--sheet)}
+.exit rect{fill:var(--sheet);stroke:var(--orange);stroke-width:2;stroke-dasharray:5 3}
+.exit text{font:700 12px var(--font-body);fill:var(--orange);paint-order:normal;stroke:none}
+.exit.sel rect{fill:color-mix(in srgb,var(--orange) 18%,var(--sheet))}
+.xl{fill:none;stroke:var(--orange);stroke-width:2;stroke-dasharray:2 4}
 .gl{stroke:var(--line);stroke-width:1;stroke-dasharray:4 6}
 .gt{font:700 13px var(--font-body);fill:var(--muted)}
 .lt{font:800 13px var(--font-display)}
@@ -130,7 +135,7 @@ footer a{color:inherit}
   </div>
   <div id="cardsView"></div>
   <div id="mapView" hidden>
-    <p class="maphint">Тягни мапу пальцем або мишею, масштаб — щипком, коліщатком або кнопками. Торкнись станції — побачиш маршрут до неї. Корисні сторонні сайти — у вигляді «Картки».</p>
+    <p class="maphint">Тягни мапу пальцем або мишею, масштаб — щипком, коліщатком або кнопками. Торкнись станції — побачиш маршрут до неї. Таблички ↗ — корисні сторонні сайти.</p>
     <div class="legend" id="legend"></div>
     <div class="mapbox" id="mapbox"><svg id="map" aria-label="Мапа тем: лінії, станції й пересадки"><g id="cam"></g></svg>
       <div class="zoom"><button type="button" id="zin" aria-label="Збільшити">+</button><button type="button" id="zout" aria-label="Зменшити">−</button><button type="button" class="fit" id="zfit" aria-label="Показати всю мапу">усе</button></div>
@@ -201,7 +206,8 @@ footer a{color:inherit}
       c:sec.style.getPropertyValue('--c'),topic:sec.querySelector('h2').textContent.trim()}))}));
   const all=topics.flatMap(t=>t.cards);
   // a section marked data-map="off" (useful outside sites) is a card group, not a metro line
-  const mtopics=topics.filter(t=>!t.offMap), mall=mtopics.flatMap(t=>t.cards);
+  const mtopics=topics.filter(t=>!t.offMap), mall=mtopics.flatMap(t=>t.cards).filter(c=>!c.ext), exits=all.filter(c=>c.ext);
+  // an outside site is drawn like a metro «exit to the city»: a sign tied to the nearest station of its topic
   const grades=[...new Set(all.flatMap(c=>c.cls))].sort((a,b)=>a-b);
   const KINDS=['урок','шпаргалка','тренажер','зовнішній сайт'];
 
@@ -253,19 +259,19 @@ footer a{color:inherit}
     const byAbs=Object.fromEntries(mall.map(c=>[c.abs,c]));
     // a line runs through its own stations in the authored order; a station of another topic that one of them
     // stands on («треба знати») joins the line just before it — that shared station is the interchange
-    const lines=mtopics.map(t=>{const seq=[];t.cards.forEach(c=>{(needs[c.abs]||[]).forEach(n=>{const o=byAbs[n];if(o&&o.topic!==t.title&&!seq.includes(n))seq.push(n);});if(!seq.includes(c.abs))seq.push(c.abs);});
+    const lines=mtopics.map(t=>{const seq=[];t.cards.filter(c=>!c.ext).forEach(c=>{(needs[c.abs]||[]).forEach(n=>{const o=byAbs[n];if(o&&o.topic!==t.title&&!seq.includes(n))seq.push(n);});if(!seq.includes(c.abs))seq.push(c.abs);});
       // along a line the grade only grows: no branch going back up
       const at=Object.fromEntries(seq.map((h,i)=>[h,i]));seq.sort((u,v)=>gOf(byAbs[u])-gOf(byAbs[v])||at[u]-at[v]);return {t,seq};});
     const onLines={}; lines.forEach((l,i)=>l.seq.forEach(h=>(onLines[h]=onLines[h]||[]).push(i)));
     const rows=[...new Set(mall.map(gOf))].sort((x,y)=>x-y), STACK=56, GAP=50;
     const rowOf=c=>rows.indexOf(gOf(c));
     // stations of one topic and one grade stack down the line, so lines run downwards and labels sit to the right
-    const kIn=c=>mtopics.find(t=>t.title===c.topic).cards.filter(x=>gOf(x)===gOf(c)).indexOf(c);
-    const depthRow=rows.map(g=>Math.max(...mtopics.map(t=>t.cards.filter(c=>gOf(c)===g).length),1));
+    const kIn=c=>mtopics.find(t=>t.title===c.topic).cards.filter(x=>!x.ext&&gOf(x)===gOf(c)).indexOf(c);
+    const depthRow=rows.map(g=>Math.max(...mtopics.map(t=>t.cards.filter(c=>!c.ext&&gOf(c)===g).length),1));
     const rowTop=rows.map((g,i)=>depthRow.slice(0,i).reduce((a,b)=>a+b*STACK+GAP,0));
     const targetY=c=>rowTop[rowOf(c)]+kIn(c)*STACK;
     // start from topic column × grade row, then: springs along every line, push between stations, pull back to the grade row
-    const P={}; mall.forEach(c=>{const ti=mtopics.findIndex(t=>t.title===c.topic),k=mtopics[ti].cards.indexOf(c);P[c.abs]={x:ti*220+k*6,y:targetY(c)};});
+    const P={}; mall.forEach(c=>{const ti=mtopics.findIndex(t=>t.title===c.topic),k=mtopics[ti].cards.filter(x=>!x.ext).indexOf(c);P[c.abs]={x:ti*220+k*6,y:targetY(c)};});
     const H=Object.keys(P);
     for(let it=0;it<500;it++){
       const F={}; H.forEach(h=>F[h]={x:0,y:0});
@@ -275,24 +281,31 @@ footer a{color:inherit}
       for(let i=0;i<H.length;i++)for(let j=i+1;j<H.length;j++){const A=P[H[i]],B=P[H[j]],dx=B.x-A.x,dy=B.y-A.y,d=Math.hypot(dx/3.2,dy)||0.1;
         if(d<66){const f=(66-d)*0.12;F[H[i]].x-=f*dx/d;F[H[i]].y-=f*dy/d*0.3;F[H[j]].x+=f*dx/d;F[H[j]].y+=f*dy/d*0.3;}}
       mall.forEach(c=>{F[c.abs].y+=(targetY(c)-P[c.abs].y)*0.3;});
+      const cx=H.reduce((a,h)=>a+P[h].x,0)/H.length; H.forEach(h=>{F[h].x+=(cx-P[h].x)*0.012;});
       H.forEach(h=>{P[h].x+=F[h].x;P[h].y+=F[h].y;});
     }
     // metro grid: snap, and never two stations in one cell
     const G=40, used=new Set();
     [...H].sort((u,v)=>P[u].y-P[v].y||P[u].x-P[v].x).forEach(h=>{let gx=Math.round(P[h].x/G),gy=Math.round(P[h].y/G);
       for(let r=0;used.has(gx+','+gy);r++){gx+=(r%2?-1:1)*(r+1);} used.add(gx+','+gy);P[h]={x:gx*G,y:gy*G};});
-    const minX=Math.min(...H.map(h=>P[h].x)),minY=Math.min(...H.map(h=>P[h].y)),X0=70,Y0=40;
-    H.forEach(h=>{P[h].x+=X0-minX;P[h].y+=Y0-minY;});
+    const EX={}, pillW=c=>Math.round(('↗ '+c.title).length*6.9+22);
+    const topY0=Math.min(...H.map(h=>P[h].y)), left0=Math.min(...H.map(h=>P[h].x));
+    exits.forEach((c,i)=>{const own=mall.filter(x=>x.topic===c.topic);
+      const anchor=own.length?own.slice().sort((a,b)=>Math.abs(gOf(a)-gOf(c))-Math.abs(gOf(b)-gOf(c))||gOf(b)-gOf(a))[0]:null;
+      EX[c.abs]=anchor?{x:P[anchor.abs].x-16,y:P[anchor.abs].y+G*2,anchor:anchor.abs,w:pillW(c)}:{x:left0,y:topY0-G*2-i*G,anchor:null,w:pillW(c)};});
+    const allX=[...H.map(h=>P[h].x),...Object.values(EX).map(e=>e.x)], allY=[...H.map(h=>P[h].y),...Object.values(EX).map(e=>e.y)];
+    const minX=Math.min(...allX),minY=Math.min(...allY),X0=70,Y0=40;
+    H.forEach(h=>{P[h].x+=X0-minX;P[h].y+=Y0-minY;}); Object.values(EX).forEach(e=>{e.x+=X0-minX;e.y+=Y0-minY;});
     const W=Math.max(...H.map(h=>P[h].x))+220, Hgt=Math.max(...H.map(h=>P[h].y))+50;
     const rowY=rows.map((g,ri)=>{const ys=mall.filter(c=>rowOf(c)===ri).map(c=>P[c.abs].y);return ys.length?Math.min(...ys):null;});
-    return {pos:P,lines,onLines,rows,rowY,W,H:Hgt};
+    return {pos:P,lines,onLines,rows,rowY,W,H:Hgt,EX};
   }
   const anc=h=>{const out=new Set(),stack=[h];while(stack.length){const x=stack.pop();(needs[x]||[]).forEach(n=>{if(built.pos[n]&&!out.has(n)){out.add(n);stack.push(n);}});}return out;};
   const wrapT=(t,n)=>{const w=t.split(' '),L=[];let cur='';w.forEach(x=>{if((cur+' '+x).trim().length>n&&cur){L.push(cur);cur=x;}else cur=(cur+' '+x).trim();});if(cur)L.push(cur);return L.slice(0,3);};
   // a metro segment: diagonal first, then straight — only 0°, 45° and 90°
   const seg=(A,B)=>{const dx=B.x-A.x,dy=B.y-A.y,m=Math.min(Math.abs(dx),Math.abs(dy));return `L${A.x+Math.sign(dx)*m} ${A.y+Math.sign(dy)*m} L${B.x} ${B.y}`;};
   function drawMap(){
-    const {pos,lines,onLines,rows,rowY,W,H}=built;
+    const {pos,lines,onLines,rows,rowY,W,H,EX}=built;
     const route=pick?new Set([pick,...anc(pick)]):null, match=new Set(mall.filter(pass).map(c=>c.abs)), filtering=st.sel.length||query;
     const lit=h=>route?route.has(h):(filtering?match.has(h):true);
     let g='';
@@ -302,20 +315,24 @@ footer a{color:inherit}
       const o=(li-(lines.length-1)/2)*3;
       const d=pts.length>1?`M${pts[0].x+o} ${pts[0].y}`+pts.slice(1).map((p,i)=>seg({x:pts[i].x+o,y:pts[i].y},{x:p.x+o,y:p.y})).join(''):`M${pts[0].x} ${pts[0].y-24} L${pts[0].x} ${pts[0].y+24}`;
       g+=`<path class="ln${on?'':' dim'}" stroke="${l.t.c}" d="${d}"/>`;});
+    exits.forEach(c=>{const e=EX[c.abs];if(!e)return;const a=e.anchor&&pos[e.anchor],on=lit(c.abs);
+      if(a)g+=`<path class="xl${on?'':' dim'}" d="M${a.x} ${a.y+12} L${a.x} ${e.y-14}"/>`;
+      g+=`<g class="stn exit${c.abs===pick?' sel':''}${on?'':' dim'}" data-h="${c.abs}" tabindex="0" role="button" aria-label="${esc(c.title)} — сторонній сайт">`+
+        `<rect x="${e.x}" y="${e.y-14}" width="${e.w}" height="28" rx="14"/><text x="${e.x+e.w/2}" y="${e.y+4}" text-anchor="middle">↗ ${esc(c.title)}</text></g>`;});
     mall.forEach(c=>{const p=pos[c.abs],L=wrapT(c.title,20),hub=(onLines[c.abs]||[]).length>1;
       g+=`<g class="stn${hub?' hub':''}${c.ext?' ext':''}${c.abs===pick?' sel':''}${lit(c.abs)?'':' dim'}" data-h="${c.abs}" tabindex="0" role="button" aria-label="${esc(c.title)}">`+
         `<circle cx="${p.x}" cy="${p.y}" r="${hub?13:9}" stroke="${hub?'var(--ink)':c.c}"/>`+
         `<text x="${p.x+19}" y="${p.y+4-(L.length-1)*7}">${L.map((l,k)=>`<tspan x="${p.x+19}" dy="${k?14:0}">${esc(l)}${c.ext&&k===L.length-1?' ↗':''}</tspan>`).join('')}</text></g>`;});
     $('cam').innerHTML=g;
-    $('legend').innerHTML=lines.map(l=>`<span style="--c:${l.t.c}"><b></b>${esc(l.t.title)}</span>`).join('')+'<span><i class="hubdot"></i>пересадка</span>';
+    $('legend').innerHTML=lines.map(l=>`<span style="--c:${l.t.c}"><b></b>${esc(l.t.title)}</span>`).join('')+'<span><i class="hubdot"></i>пересадка</span>'+(exits.length?'<span><i class="exitdot"></i>корисний сайт ↗</span>':'');
     $('cam').querySelectorAll('.stn').forEach(s=>s.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(s.dataset.h);}});
     let card='';
     if(pick){const c=all.find(x=>x.abs===pick);const depth={};const dp=h=>{if(h in depth)return depth[h];depth[h]=0;const ns=(needs[h]||[]).filter(n=>pos[n]);depth[h]=ns.length?1+Math.max(...ns.map(dp)):0;return depth[h];};
       const before=[...anc(pick)].map(h=>all.find(x=>x.abs===h)).sort((a,b)=>dp(a.abs)-dp(b.abs)||gOf(a)-gOf(b));
-      const via=(onLines[pick]||[]).map(i=>lines[i].t.title);
+      const via=c.ext?[]:(onLines[pick]||[]).map(i=>lines[i].t.title);
       card=`<div class="scard" style="--c:${c.c}"><button type="button" class="close" aria-label="Закрити">×</button><b>${esc(c.title)}${c.ext?' ↗':''}</b><span class="desc">${esc(c.desc)}</span>${tags(c)}`+
         (via.length>1?`<span class="route">Пересадка: ${via.map(esc).join(' · ')}</span>`:'')+
-        `<span class="route">${before.length?'Маршрут: '+before.map(b=>`<a href="${esc(b.href)}">${esc(b.title)}</a>`).join(' → ')+' → <b>сюди</b>':'Кінцева: тут нічого не треба знати наперед — звідси можна починати.'}</span>`+
+        `<span class="route">${c.ext?'Корисний сторонній сайт — відкриється в новій вкладці.':before.length?'Маршрут: '+before.map(b=>`<a href="${esc(b.href)}">${esc(b.title)}</a>`).join(' → ')+' → <b>сюди</b>':'Кінцева: тут нічого не треба знати наперед — звідси можна починати.'}</span>`+
         link(c,'Відкрити →','go')+'</div>';}
     $('station').innerHTML=card;
     const x=$('station').querySelector('.close'); if(x) x.onclick=()=>{pick=null;drawMap();};
