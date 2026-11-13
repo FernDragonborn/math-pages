@@ -210,7 +210,7 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
 <main>
 <header class="hero">
   <h1>Логарифми з нуля</h1>
-  <p class="lead">Посібник для 11 класу. Потрібні тільки ступені з 8 класу — їх ми теж згадаємо. Все можна натискати.</p>
+  <p class="lead">Посібник для 11 класу. Потрібні тільки ступені з 8 класу — їх ми теж згадаємо.</p>
 
   <div class="sheet" id="game">
     <p class="game-text" style="margin:0;text-align:center"></p>
@@ -257,7 +257,7 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
   <div class="sheet" id="ladder2"></div>
 
   <h3>Переклади з мови ступенів на мову логарифмів</h3>
-  <p class="soft">Спробуй сам, потім натисни на картку, щоб перевірити.</p>
+  <p class="soft">Спробуй перекласти сам, потім перевір на картці.</p>
   <div class="cards" id="cards"></div>
 
   <h3>Що корисно знати напам'ять</h3>
@@ -642,7 +642,7 @@ function initCards() {
   const CARDS = [[3, 4, '81'], [10, 3, '1000'], [2, -3, T`\frac18`], [5, 0, '1'], [7, 2, '49'], [2, 6, '64']];
   const root = $('#cards');
   root.innerHTML = CARDS.map(([a, k, v]) =>
-    `<button type="button" class="flip" aria-pressed="false"><span class="face-front">\\(${a}^{${k}} = ${v}\\)<br><small>натисни, щоб перекласти</small></span><span class="face-back">\\(${logT(a, v, true)} = ${k}\\)<br><small>основа ${a}, показник ${k}</small></span></button>`).join('');
+    `<button type="button" class="flip" aria-pressed="false"><span class="face-front">\\(${a}^{${k}} = ${v}\\)</span><span class="face-back">\\(${logT(a, v, true)} = ${k}\\)<br><small>основа ${a}, показник ${k}</small></span></button>`).join('');
   typeset(root);
   root.addEventListener('click', e => { const b = e.target.closest('.flip'); if (!b) return; b.setAttribute('aria-pressed', b.getAttribute('aria-pressed') !== 'true'); });
 }

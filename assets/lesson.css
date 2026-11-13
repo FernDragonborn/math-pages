@@ -1,0 +1,88 @@
+/* Components of a lesson page, taken from «Що таке ступінь» (the model page, see README).
+   Load after site.css. Page-specific pieces stay in the page. */
+*{box-sizing:border-box}
+.wrap{max-width:640px;margin:0 auto;padding:16px 16px 60px}
+header{margin:8px 0 18px}
+h1{font-size:28px;line-height:1.15;margin:0 0 6px;font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--ink-soft);margin:0;font-size:15px}
+.hand{font-family:var(--font-hand);font-size:1.35rem;color:var(--pen)}
+section{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:18px 16px;margin:0 0 16px}
+h2{font-size:20px;margin:0 0 4px;font-weight:800;letter-spacing:-.01em}
+.num{display:inline-block;background:var(--pen);color:var(--on-pen);border-radius:8px;font-size:14px;padding:1px 8px;margin-right:6px;vertical-align:2px}
+p{margin:8px 0}
+.muted{color:var(--ink-soft);font-size:15px}
+.m{font-family:var(--font-mono);font-weight:500;white-space:nowrap}
+
+/* base and exponent: the marks of «основа» and «показник» (README: кольори-позначки) */
+.b{color:var(--mark-1);background:var(--mark-1-wash);border:1.5px solid color-mix(in srgb,var(--mark-1) 45%,transparent);border-radius:6px;padding:0 .14em;font-weight:700;white-space:nowrap}
+.b.g2{color:var(--mark-4);background:var(--mark-4-wash);border-color:color-mix(in srgb,var(--mark-4) 45%,transparent)}
+.e{color:var(--mark-2);font-weight:700;font-size:.6em;vertical-align:.85em;line-height:0;margin-left:.06em;font-family:var(--font-mono)}
+.b sup,.fr sup{font-size:.6em;line-height:0}
+.key-b{color:var(--mark-1);font-weight:700}
+.key-e{color:var(--mark-2);font-weight:700}
+
+/* option buttons: .chip with a small label, .chip.sm for a bare value */
+.palette{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:8px;margin:12px 0}
+.chip{display:flex;flex-direction:column;align-items:flex-start;gap:2px;border:1px solid var(--card-line);background:transparent;color:var(--ink);border-radius:6px;padding:8px 10px;cursor:pointer;text-align:left;font:inherit}
+.chip small{font:500 12px var(--font-body);color:var(--ink-soft)}
+.chip span{font:700 18px var(--font-mono)}
+.chip:hover{border-color:var(--pen)}
+.chip[aria-pressed="true"]{border-color:var(--pen);background:var(--pen-wash)}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.chip.sm{flex-direction:row;align-items:center;justify-content:center;min-width:44px;height:40px;padding:0 12px;font:700 16px var(--font-mono)}
+.custom{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:4px 0 6px}
+.custom input{flex:1;min-width:150px;height:40px;border:1px solid var(--card-line);border-radius:6px;background:var(--paper);color:var(--ink);padding:0 10px;font:600 17px var(--font-mono)}
+.custom input:focus{outline:none;border-color:var(--pen)}
+.custom label{font-size:14px;color:var(--ink-soft)}
+.hint{font-size:13px;color:var(--ink-soft);min-height:1.2em}
+
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0}
+.lbl{font-size:14px;color:var(--ink-soft)}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--card-line);border-radius:6px;overflow:hidden}
+.stepper button{width:44px;height:40px;border:0;background:transparent;color:var(--ink);font-size:22px;cursor:pointer}
+.stepper button:disabled{opacity:.35;cursor:default}
+.stepper output{min-width:40px;text-align:center;font:700 18px var(--font-mono);color:var(--mark-2)}
+.btn{border:1px solid var(--card-line);background:transparent;color:var(--ink);border-radius:6px;height:40px;padding:0 14px;font:600 15px var(--font-body);cursor:pointer}
+.btn.main{background:var(--pen);border-color:var(--pen);color:var(--on-pen)}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* derivation */
+.deriv{border-top:1px dashed var(--line);margin-top:14px;padding-top:8px}
+.ln{display:flex;align-items:flex-start;gap:10px;font:500 22px/1.5 var(--font-mono);padding:10px 0;overflow-x:auto}
+.ln .eqs{color:var(--ink-soft);flex:none;width:18px}
+.ln .body{display:flex;flex-wrap:wrap;align-items:center;gap:6px 4px;min-width:0}
+.ln.enter{animation:rise .35s ease both}
+.dot{color:var(--ink-soft);padding:0 2px}
+.hl{background:var(--mark-3-wash);color:var(--mark-3);border-radius:6px;padding:0 .14em;font-weight:700}
+.res{color:var(--mark-3);font-weight:700}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.2}
+.fr > span:first-child{border-bottom:2px solid currentColor;padding:0 4px 2px}
+.fr > span:last-child{padding:2px 4px 0}
+.explain{background:var(--pen-wash);border-radius:4px;padding:10px 12px;font-size:15px;margin-top:6px}
+.read{font-size:15px;color:var(--ink-soft);margin:-4px 0 4px}
+.warn{background:var(--alert-wash);border-left:3px solid var(--alert);border-radius:4px;padding:10px 12px;font-size:15px;margin-top:10px}
+.warn b{color:var(--alert)}
+@keyframes pop{from{opacity:0;transform:translateX(-18px) scale(.7)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.ln.enter,.pop{animation:none}}
+
+/* side-by-side contrast: a card whose switch flips the reading in place */
+.pit{border:1px solid var(--card-line);border-radius:6px;padding:12px;margin:12px 0}
+.pit-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.pit .expr{font:700 30px var(--font-mono)}
+.pit .steps{font:500 18px/1.5 var(--font-mono);margin:6px 0 2px;overflow-x:auto;white-space:nowrap}
+.pit .why{font-size:15px;margin:4px 0 0}
+.switch{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--card-line);border-radius:999px;background:transparent;color:var(--ink);height:38px;padding:0 14px 0 6px;font:600 14px var(--font-body);cursor:pointer}
+.switch::before{content:"";width:34px;height:20px;border-radius:999px;background:var(--line);box-shadow:inset 0 0 0 2px var(--card-line);transition:background .15s}
+.switch[aria-pressed="true"]::before{background:var(--pen);box-shadow:inset -14px 0 0 2px var(--pen),inset -14px 0 0 6px var(--card)}
+.switch[aria-pressed="false"]::before{box-shadow:inset 14px 0 0 2px var(--line),inset 14px 0 0 6px var(--card)}
+
+details{border-top:1px solid var(--line);padding:10px 0}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;font:600 20px var(--font-mono);list-style:none}
+summary::-webkit-details-marker{display:none}
+.ans{margin-top:6px;font-size:15px}
+.ans .m{font-size:17px;white-space:normal}
+.explain .m,.rule .m{white-space:normal}
+.rule{background:var(--ink);color:var(--paper);border-radius:4px;padding:18px 16px;font-size:16px}
+.rule a{color:inherit}
