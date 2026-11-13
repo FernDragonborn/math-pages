@@ -23,15 +23,23 @@ h1{margin:0;font-size:1.9rem;line-height:1.15;font-weight:800}
 .hand{font-family:var(--font-hand);font-size:1.4rem;color:var(--accent)}
 
 /* controls shared by both views */
-.views{display:inline-flex;border:1px solid var(--card-line);border-radius:999px;overflow:hidden;align-self:flex-start}
-.views button{border:0;background:var(--sheet);color:var(--ink);height:38px;padding:0 18px;font:700 15px var(--font-body);cursor:pointer}
-.views button[aria-pressed="true"]{background:var(--accent);color:var(--on-pen)}
-.search{width:100%;height:46px;border:1px solid var(--card-line);border-radius:10px;background:var(--sheet);color:var(--ink);padding:0 14px;font:500 16px var(--font-body)}
+/* two rows: view + search, then filters; the search stays short, so it does not outweigh the buttons */
+#controls{display:flex;flex-direction:column;gap:12px}
+.ctl-row{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px}
+.ctl-row:first-child{flex-wrap:nowrap;gap:10px}
+.views,.seg{display:inline-flex;flex:none;border:1px solid var(--card-line);border-radius:999px;overflow:hidden}
+.views button,.seg button{border:0;background:var(--sheet);color:var(--ink);height:38px;padding:0 16px;font:700 15px var(--font-body);cursor:pointer}
+.views button+button,.seg button+button{border-left:1px solid var(--card-line)}
+.views button[aria-pressed="true"],.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-pen)}
+.search{flex:1 1 auto;min-width:0;max-width:340px;height:40px;border:1px solid var(--card-line);border-radius:999px;background:var(--sheet);color:var(--ink);padding:0 16px;font:500 15px var(--font-body)}
 .search:focus{outline:none;border-color:var(--accent)}
 .chips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
-.chips .lbl{font-size:13px;color:var(--muted);margin-right:2px}
-.chips button{height:32px;padding:0 11px;border-radius:999px;border:1px solid var(--card-line);background:var(--sheet);color:var(--ink);font:600 13.5px var(--font-body);cursor:pointer}
-.chips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-pen)}
+.chips .lbl{font-size:13px;color:var(--muted);margin-right:4px}
+/* grades are a multi-select: separate round chips; grouping is one choice: a joined segment like «Картки | Мапа» */
+#grades button{min-width:34px;height:34px;padding:0 8px;border-radius:999px;border:1px solid var(--card-line);background:var(--sheet);color:var(--ink);font:600 13.5px var(--font-body);cursor:pointer}
+#grades button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-pen)}
+.seg button{height:34px;padding:0 13px;font:600 13.5px var(--font-body)}
+@media (max-width:420px){.views button{padding:0 13px}}
 button:focus-visible,.search:focus-visible,a:focus-visible,.stn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .empty{color:var(--muted);text-align:center;margin:0}
 .empty[hidden],[hidden]{display:none!important}
@@ -63,7 +71,6 @@ button:focus-visible,.search:focus-visible,a:focus-visible,.stn:focus-visible{ou
 body.mapmode{overflow:hidden}
 body.mapmode .site-bar,body.mapmode header,body.mapmode footer,body.mapmode .maphint{display:none}
 body.mapmode #controls{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;flex-direction:column;gap:8px;padding:10px 12px;background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
-body.mapmode #controls .search{height:38px;font-size:15px}
 body.mapmode #grades{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
 body.mapmode #mapView{position:fixed;inset:0;z-index:5;background:var(--paper)}
 body.mapmode .mapbox{height:100%;border:0;border-radius:0}
@@ -126,12 +133,14 @@ footer a{color:inherit}
   <!-- Two views over the same cards: «Картки» grouped by topic, grade or format, and «Мапа» — topics as metro
        lines down the grades, with transfers where an article of one topic stands on another (its «треба знати»). -->
   <div id="controls">
-  <div id="ui" hidden>
-    <div class="views" role="group" aria-label="Вигляд"><button type="button" data-view="cards">Картки</button><button type="button" data-view="map">Мапа</button></div>
+  <div class="ctl-row">
+    <div class="views" id="ui" role="group" aria-label="Вигляд" hidden><button type="button" data-view="cards">Картки</button><button type="button" data-view="map">Мапа</button></div>
+    <input class="search" id="q" type="search" placeholder="Пошук статті" autocomplete="off" aria-label="Пошук статті" hidden>
   </div>
-  <input class="search" id="q" type="search" placeholder="Пошук: ступінь, дріб, корінь…" autocomplete="off" aria-label="Пошук статті" hidden>
-  <div class="chips" id="grades" role="group" aria-label="Клас" hidden></div>
-  <div class="chips" id="groups" role="group" aria-label="Групувати" hidden></div>
+  <div class="ctl-row">
+    <div class="chips" id="grades" role="group" aria-label="Клас" hidden></div>
+    <div class="chips" id="groups" role="group" aria-label="Групувати" hidden></div>
+  </div>
   </div>
   <div id="cardsView"></div>
   <div id="mapView" hidden>
@@ -228,7 +237,7 @@ footer a{color:inherit}
     $('grades').innerHTML='<span class="lbl">клас</span>'+grades.map(g=>`<button type="button" data-g="${g}" aria-pressed="${st.sel.includes(g)}">${g}</button>`).join('');
     $('grades').querySelectorAll('button').forEach(b=>b.onclick=()=>{const g=b.dataset.g;st.sel=st.sel.includes(g)?st.sel.filter(x=>x!==g):[...st.sel,g];save();draw();});
     $('groups').hidden=st.view!=='cards';
-    $('groups').innerHTML='<span class="lbl">групувати</span>'+[['topic','за темою'],['class','за класом'],['kind','за форматом']].map(([k,l])=>`<button type="button" data-k="${k}" aria-pressed="${st.group===k}">${l}</button>`).join('');
+    $('groups').innerHTML='<span class="lbl">групувати</span><span class="seg">'+[['topic','тема'],['class','клас'],['kind','формат']].map(([k,l])=>`<button type="button" data-k="${k}" aria-pressed="${st.group===k}">${l}</button>`).join('')+'</span>';
     $('groups').querySelectorAll('button').forEach(b=>b.onclick=()=>{st.group=b.dataset.k;save();draw();});
   }
 
