@@ -83,7 +83,7 @@ h1,h2{font-family:var(--font-display);font-weight:700;letter-spacing:-.01em;text
 /* Site bar: the same place on every page — "all topics" on the left, theme switch on the right */
 .site-bar{
   display:flex;align-items:center;gap:12px;
-  max-width:1120px;margin:0 auto;
+  max-width:var(--page-width,640px);margin:0 auto;   /* as wide as the page column, so both buttons sit over the text edges */
   padding-top:max(12px,env(safe-area-inset-top,0px));padding-bottom:0;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
   box-sizing:border-box;
