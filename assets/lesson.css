@@ -86,3 +86,7 @@ summary::-webkit-details-marker{display:none}
 .explain .m,.rule .m{white-space:normal}
 .rule{background:var(--ink);color:var(--paper);border-radius:4px;padding:18px 16px;font-size:16px}
 .rule a{color:inherit}
+/* "outside the school course": a door further, not a ban — neutral, never red (docs/internals/lesson-page.md) */
+.beyond{border:1px dashed var(--card-line);border-radius:4px;padding:8px 12px;font-size:14px;color:var(--ink-soft);margin-top:10px}
+.beyond b{color:var(--ink)}
+.beyond a{color:var(--pen);white-space:nowrap}
