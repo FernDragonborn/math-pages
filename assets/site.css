@@ -107,6 +107,7 @@ h1,h2{font-family:var(--font-display);font-weight:700;letter-spacing:-.01em;text
 .beyond a{color:var(--pen);white-space:nowrap}
 /* "what you need to know first": links back to the articles this one stands on */
 .needs{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;font-size:14px;color:var(--ink-soft);margin:10px 0 0}
-.needs a{color:var(--pen);border:1px solid var(--card-line);border-radius:999px;padding:1px 10px;text-decoration:none;background:var(--card)}
+/* filled pills: a link is a pen-wash chip, a topic without an article yet is a grey chip */
+.needs a{color:var(--pen);background:var(--pen-wash);border:1px solid color-mix(in srgb,var(--pen) 30%,transparent);border-radius:999px;padding:2px 11px;text-decoration:none;font-weight:600}
 .needs a:hover{border-color:var(--pen)}
-.needs i{font-style:normal;border:1px dashed var(--card-line);border-radius:999px;padding:1px 10px}
+.needs i{font-style:normal;color:var(--ink);background:color-mix(in srgb,var(--ink) 8%,transparent);border-radius:999px;padding:2px 11px}

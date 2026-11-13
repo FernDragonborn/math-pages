@@ -54,7 +54,8 @@
 
 ### Caddy
 
-Конфіг — `/etc/caddy/Caddyfile`, належить root; змінює його людина з `sudo`. Блок сайту:
+Конфіг — `/etc/caddy/Caddyfile`, належить root, змінюється через `sudo`; на сервері Caddy 2.6, тож
+`handle_errors` пишеться з матчером `expression`, а не скороченим `handle_errors 404` (з 2.8). Блок сайту:
 
 ```
 math.45-145-224-180.sslip.io {
