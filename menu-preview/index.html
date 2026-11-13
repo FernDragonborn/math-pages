@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Варіанти меню</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/theme.js"></script>
+<style>
+/* A preview of three menu layouts, built from the cards of the live home page. Temporary: removed once one is chosen. */
+:root{--page-width:720px;--t1:var(--pen);--t2:var(--green);--t3:var(--violet);--t4:var(--orange)}
+*{box-sizing:border-box}
+.wrap{max-width:720px;margin:0 auto;padding:12px 16px 48px;display:flex;flex-direction:column;gap:14px}
+h1{margin:0;font-size:1.6rem;line-height:1.15}
+.sub{margin:4px 0 0;color:var(--ink-soft);font-size:15px}
+.variant{display:flex;gap:6px;flex-wrap:wrap;font-size:13px;color:var(--ink-soft);align-items:center}
+.variant a{border:1px solid var(--card-line);border-radius:999px;padding:4px 12px;color:var(--ink);text-decoration:none;font-weight:600}
+.variant a[aria-current="page"]{background:var(--pen);border-color:var(--pen);color:var(--on-pen)}
+.note{font-size:13px;color:var(--ink-soft);background:var(--card);border:1px dashed var(--card-line);border-radius:4px;padding:8px 10px}
+/* shared: search and grade chips */
+.search{width:100%;height:44px;border:1px solid var(--card-line);border-radius:10px;background:var(--card);color:var(--ink);padding:0 14px;font:500 16px var(--font-body)}
+.search:focus{outline:none;border-color:var(--pen)}
+.grades{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.grades::-webkit-scrollbar{display:none}
+.grades button{flex:none;height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--card-line);background:var(--card);color:var(--ink);font:600 14px var(--font-body);cursor:pointer}
+.grades button[aria-pressed="true"]{background:var(--pen);border-color:var(--pen);color:var(--on-pen)}
+.empty{color:var(--ink-soft);text-align:center}
+.ext{color:var(--ink-soft)}
+.cls{font:600 12px var(--font-body);color:var(--ink-soft);white-space:nowrap}
+
+/* A: table of contents */
+.toc details{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:4px;margin-bottom:8px}
+.toc summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:12px 14px;font:700 16px var(--font-display)}
+.toc summary::-webkit-details-marker{display:none}
+.toc summary .n{font:600 13px var(--font-body);color:var(--ink-soft);margin-left:auto}
+.toc summary::after{content:"▾";color:var(--ink-soft);margin-left:8px}
+.toc details[open] summary::after{content:"▴"}
+.toc ul{list-style:none;margin:0;padding:0 6px 6px}
+.toc li a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 8px;border-top:1px solid var(--card-line-2);color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;min-height:44px}
+.toc li a:hover{background:var(--pen-wash)}
+
+/* B: topic tiles that open a list */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.tile{display:flex;flex-direction:column;gap:4px;text-align:left;border:1px solid var(--line);border-top:5px solid var(--c);border-radius:6px;background:var(--card);color:var(--ink);padding:12px;cursor:pointer;font:inherit;min-height:84px}
+.tile b{font:700 15px/1.25 var(--font-display)}
+.tile span{font-size:13px;color:var(--ink-soft)}
+.tile[aria-pressed="true"]{background:var(--pen-wash);border-color:var(--pen);border-top-color:var(--c)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:4px 12px}
+.panel a{display:block;padding:10px 0;border-bottom:1px solid var(--card-line-2);color:var(--ink);text-decoration:none}
+.panel a:last-child{border-bottom:0}
+.panel a b{display:block;font-size:15px}
+.panel a span{font-size:13px;color:var(--ink-soft)}
+
+/* C: one swipeable row per topic */
+.rowtopic h2{margin:6px 0 6px;font-size:1.05rem;display:flex;align-items:center;gap:8px}
+.rowtopic h2::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--c)}
+.strip{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:6px;margin:0 -16px;padding-left:16px;padding-right:16px}
+.strip a{flex:none;width:210px;scroll-snap-align:start;background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:4px;padding:10px 12px;color:var(--ink);text-decoration:none;display:flex;flex-direction:column;gap:4px}
+.strip a b{font-size:15px;line-height:1.25}
+.strip a span{font-size:13px;color:var(--ink-soft);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Чинне меню</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+  <header>
+    <h1>Математика по темах</h1>
+    <p class="sub">Шпаргалки й пояснення, зібрані в одному місці.</p>
+  </header>
+  <nav class="variant" aria-label="Варіант меню">варіант:
+    <a href="?v=a" data-v="a">А · зміст</a><a href="?v=b" data-v="b">Б · плитки тем</a><a href="?v=c" data-v="c">В · стрічки</a>
+  </nav>
+  <p class="note" id="note"></p>
+  <input class="search" id="q" type="search" placeholder="Пошук: ступінь, дріб, корінь…" autocomplete="off" aria-label="Пошук статті">
+  <div class="grades" id="grades" role="group" aria-label="Клас"></div>
+  <div id="out"></div>
+  <p class="empty" id="empty" hidden>Нічого не знайшлося.</p>
+</div>
+<script>
+(async function(){
+const v=(new URLSearchParams(location.search).get('v')||'a').toLowerCase();
+document.querySelectorAll('.variant a').forEach(a=>{if(a.dataset.v===v)a.setAttribute('aria-current','page');});
+const NOTES={a:'Зміст: теми згорнуті в рядки, всередині — по рядку на статтю. На телефоні весь сайт — кілька екранів.',
+  b:'Плитки тем: спершу обираєш тему (два стовпці), під нею відкривається її список. Решта не займає місця.',
+  c:'Стрічки: кожна тема — один рядок карток, який гортається вбік пальцем. Висота сторінки = кількість тем.'};
+document.getElementById('note').textContent=NOTES[v]+' Пошук і класи працюють однаково в усіх варіантах.';
+
+// the live home page is the single source of the cards
+const html=await (await fetch('/',{cache:'no-store'})).text();
+const doc=new DOMParser().parseFromString(html,'text/html');
+const topics=[...doc.querySelectorAll('section.topic')].map(s=>({id:s.id,title:s.querySelector('h2').textContent.trim(),c:(s.getAttribute('style')||'').replace('--c:','').replace(';',''),
+  cards:[...s.querySelectorAll('a.card')].map(a=>({href:new URL(a.getAttribute('href'),location.origin+'/').href,title:a.querySelector('b').textContent.replace('↗','').trim(),desc:(a.querySelector(':scope > span')||{}).textContent||'',
+    cls:a.dataset.class.split(' '),ext:a.classList.contains('ext')}))}));
+const grades=[...new Set(topics.flatMap(t=>t.cards.flatMap(c=>c.cls)))].sort((a,b)=>a-b);
+let sel=[], q='';
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pass=c=>(!sel.length||c.cls.some(g=>sel.includes(g)))&&(!q||(c.title+' '+c.desc).toLowerCase().includes(q));
+const clsLabel=c=>c.cls.join('–')+' кл.';
+const extAttr=c=>c.ext?' target="_blank" rel="noopener noreferrer"':'';
+const extMark=c=>c.ext?' <span class="ext">↗</span>':'';
+let openTopic=null;
+
+function render(){
+  const g=document.getElementById('grades');
+  g.innerHTML=grades.map(x=>`<button type="button" data-g="${x}" aria-pressed="${sel.includes(x)}">${x} клас</button>`).join('');
+  g.querySelectorAll('button').forEach(b=>b.onclick=()=>{const x=b.dataset.g;sel=sel.includes(x)?sel.filter(y=>y!==x):[...sel,x];render();});
+  const vis=topics.map(t=>({...t,cards:t.cards.filter(pass)})).filter(t=>t.cards.length);
+  const filtering=sel.length||q;
+  let h='';
+  if(v==='a'){
+    h='<div class="toc">'+vis.map(t=>`<details style="--c:${t.c}"${filtering?' open':''}><summary><span>${esc(t.title)}</span><span class="n">${t.cards.length}</span></summary><ul>`+
+      t.cards.map(c=>`<li><a href="${c.href}"${extAttr(c)}><span>${esc(c.title)}${extMark(c)}</span><span class="cls">${clsLabel(c)}</span></a></li>`).join('')+'</ul></details>').join('')+'</div>';
+  } else if(v==='b'){
+    if(!vis.some(t=>t.id===openTopic)) openTopic=filtering&&vis.length?vis[0].id:null;
+    h='<div class="tiles">'+vis.map(t=>{const gs=[...new Set(t.cards.flatMap(c=>c.cls))].sort((a,b)=>a-b);
+      return `<button type="button" class="tile" style="--c:${t.c}" data-t="${t.id}" aria-pressed="${t.id===openTopic}"><b>${esc(t.title)}</b><span>${t.cards.length} · ${gs[0]}${gs.length>1?'–'+gs[gs.length-1]:''} кл.</span></button>`;}).join('')+'</div>';
+    const t=vis.find(x=>x.id===openTopic);
+    if(t) h+=`<div class="panel">`+t.cards.map(c=>`<a href="${c.href}"${extAttr(c)}><b>${esc(c.title)}${extMark(c)}</b><span>${clsLabel(c)} · ${esc(c.desc)}</span></a>`).join('')+'</div>';
+  } else {
+    h=vis.map(t=>`<div class="rowtopic" style="--c:${t.c}"><h2>${esc(t.title)}</h2><div class="strip">`+
+      t.cards.map(c=>`<a href="${c.href}"${extAttr(c)}><b>${esc(c.title)}${extMark(c)}</b><span>${esc(c.desc)}</span><span class="cls">${clsLabel(c)}</span></a>`).join('')+'</div></div>').join('');
+  }
+  document.getElementById('out').innerHTML=h;
+  document.getElementById('empty').hidden=vis.length>0;
+  document.querySelectorAll('.tile').forEach(b=>b.onclick=()=>{openTopic=openTopic===b.dataset.t?null:b.dataset.t;render();});
+}
+document.getElementById('q').addEventListener('input',e=>{q=e.target.value.trim().toLowerCase();render();});
+render();
+})();
+</script>
+</body>
+</html>
