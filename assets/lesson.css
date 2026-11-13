@@ -90,3 +90,7 @@ summary::-webkit-details-marker{display:none}
 .beyond{border:1px dashed var(--card-line);border-radius:4px;padding:8px 12px;font-size:14px;color:var(--ink-soft);margin-top:10px}
 .beyond b{color:var(--ink)}
 .beyond a{color:var(--pen);white-space:nowrap}
+/* "what you need to know first": links back to the articles this one stands on */
+.needs{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;font-size:14px;color:var(--ink-soft);margin:10px 0 0}
+.needs a{color:var(--pen);border:1px solid var(--card-line);border-radius:999px;padding:1px 10px;text-decoration:none;background:var(--card)}
+.needs a:hover{border-color:var(--pen)}
