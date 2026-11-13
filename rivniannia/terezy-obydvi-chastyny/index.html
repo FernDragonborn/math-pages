@@ -11,9 +11,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
 <link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/lesson.css">
 <script src="/assets/theme.js"></script>
 <style>
-:root{--page-width:520px}  /* the column width; the top bar follows it */
 
 [fill="#5A6B75"]{fill:var(--ink-soft)} [stroke="#5A6B75"]{stroke:var(--ink-soft)}
 [fill="#E7ECF9"]{fill:var(--pen-wash)} [stroke="#E7ECF9"]{stroke:var(--pen-wash)}
@@ -23,16 +23,6 @@
 [fill="#E4F1EA"]{fill:var(--green-wash)} [stroke="#E4F1EA"]{stroke:var(--green-wash)}
 [fill="#2A7355"]{fill:var(--green)} [stroke="#2A7355"]{stroke:var(--green)}
 [fill="#FBEAE8"]{fill:var(--red-wash)} [stroke="#FBEAE8"]{stroke:var(--red-wash)}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-size:16px; line-height:1.6;
-}
-.sheet{ max-width:520px; margin:0 auto; padding:22px 12px 60px }
-.card{ background:var(--surface); border-radius:2px; padding:22px 18px 24px }
-h1{ font-family:"Unbounded","Onest",sans-serif; font-size:clamp(21px,4.8vw,28px); line-height:1.2; margin:0 0 10px }
-p{ margin:0 0 14px }
-.sub{ color:var(--ink-soft); font-size:15px }
 
 .eqbig{
   text-align:center; padding:12px 0 6px;
@@ -60,20 +50,20 @@ p{ margin:0 0 14px }
 .verdict.bad{ background:var(--red-wash); border-color:var(--bad-line); color:var(--red) }
 .verdict .k{ display:inline-block; vertical-align:-.3em }
 
-.hint{ font-size:12.5px; color:var(--ink-soft); margin:0 0 8px; letter-spacing:.02em }
+.sandbox .hint{ font-size:12.5px; color:var(--ink-soft); margin:0 0 8px; letter-spacing:.02em }
 .pad{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px }
 @media (min-width:420px){ .pad{ grid-template-columns:repeat(6,1fr) } }
-button{
+.sandbox button{
   font-family:"JetBrains Mono",monospace; font-size:15px; font-weight:700;
   padding:11px 2px; border-radius:3px; cursor:pointer;
   border:1px solid var(--pen); background:var(--card); color:var(--pen);
 }
-button:active{ background:var(--pen-wash) }
-button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px }
-button.trap{ border-color:var(--red); color:var(--red) }
-button.trap:active{ background:var(--red-wash) }
-.row{ display:flex; gap:8px; margin-top:12px }
-button.plain{
+.sandbox button:active{ background:var(--pen-wash) }
+.sandbox button:focus-visible{ outline:3px solid var(--focus); outline-offset:2px }
+.sandbox button.trap{ border-color:var(--red); color:var(--red) }
+.sandbox button.trap:active{ background:var(--red-wash) }
+.sandbox .row{ display:flex; gap:8px; margin-top:12px }
+.sandbox button.plain{
   font-family:"Onest",sans-serif; font-size:14px; font-weight:500;
   padding:8px 14px; border-color:var(--line); color:var(--ink-soft);
 }
@@ -87,6 +77,10 @@ button.plain{
 
 .foot{ margin-top:18px; font-size:14.5px; color:var(--ink-soft) }
 .foot b{ color:var(--ink) }
+.act{color:var(--mark-2);font-weight:700}
+.rootchk{font:500 15px var(--font-mono);color:var(--ink-soft)}
+.rootchk b{color:var(--mark-3)}
+.sandbox .eqbig{margin-top:4px}
 </style>
 </head>
 <body>
@@ -94,13 +88,30 @@ button.plain{
   <a class="site-home" href="/">← Усі теми</a>
   <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
 </nav>
-<main class="sheet">
-<div class="card">
+<div class="wrap">
 
+<header>
   <h1>Роби з обома частинами однакове</h1>
-  <p class="sub">Кожна кнопка діє одразу на обидві чаші. Спробуй дійти до <b>x = 4</b> і стеж за рядком під терезами: він не має змінитися жодного разу.</p>
+  <p class="sub">Рівняння — це терези в рівновазі. Що б ти не робив, роби це з <b>обома</b> чашами — і корінь лишиться той самий.</p>
   <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <i>що таке рівняння і його корінь, 6 клас</i> <i>дії з відʼємними числами, 6 клас</i></p>
+</header>
 
+<!-- 1 -->
+<section>
+  <h2><span class="num">1</span>Розвʼязок крок за кроком</h2>
+  <p>Кожен крок — одна <span class="act">дія над обома частинами</span>. Під кроком — перевірка: підставляємо корінь у новий рядок, і обидві частини досі рівні.</p>
+  <div id="eqs"></div>
+  <div class="deriv" id="deriv" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="stepNext"></button>
+    <button class="btn" type="button" id="stepReset">Згорнути назад</button>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="sandbox">
+  <h2><span class="num">2</span>Терези: спробуй сам</h2>
+  <p class="muted">Кожна кнопка діє одразу на обидві чаші. Спробуй дійти до <b>x = 4</b> і стеж за рядком під терезами: він не має змінитися жодного разу.</p>
   <div class="eqbig" id="eq"></div>
 
   <div class="scalewrap">
@@ -149,9 +160,35 @@ button.plain{
 
   <p class="foot">Не бійся дробів. Натисни <b>÷ 3</b> на самому початку — запис стане страшнуватим, але рядок під терезами лишиться тим самим. Незмінність витримує навіть кроки, які виглядають як помилка.</p>
   <p class="foot">А от кнопка <b>× 0</b> червона не просто так. Вона теж робить з обома частинами однакове — і все одно все ламає. Спробуй і подивись, звідки в правилі взялося «на число, відмінне від нуля».</p>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="num">3</span>Пастки</h2>
+  <div id="pit1"></div><div id="pit2"></div><div id="pit3"></div>
+  <div class="warn"><b>Звідси:</b> дія — завжди над <b>обома</b> частинами; «перенести з протилежним знаком» — це додати те саме до обох, а не окреме правило; множити й ділити можна тільки на число, що не дорівнює нулю.</div>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2><span class="num">4</span>Перевір себе</h2>
+  <p class="muted">Спершу розвʼяжи сам, потім відкривай.</p>
+  <details><summary>4x − 5 = 11</summary><div class="ans">+5 до обох: 4x = 16; ÷4: <b>x = 4</b>.</div></details>
+  <details><summary>7 − x = 2</summary><div class="ans">+x до обох: 7 = 2 + x; −2 з обох: <b>x = 5</b>.</div></details>
+  <details><summary>2(x + 1) = x + 6</summary><div class="ans">Розкрили дужки: 2x + 2 = x + 6; −x: x + 2 = 6; −2: <b>x = 4</b>.</div></details>
+  <details><summary>x/3 = 5</summary><div class="ans">×3 обидві: <b>x = 15</b>.</div></details>
+  <details><summary>3x + 1 = 3x + 4</summary><div class="ans">−3x з обох: 1 = 4 — неправда за будь-якого x. <b>Коренів немає.</b></div></details>
+  <details><summary>2x + 2 = 2(x + 1)</summary><div class="ans">Розкрили дужки: 2x + 2 = 2x + 2 — правда завжди. <b>Корінь — будь-яке число.</b></div></details>
+</section>
+
+<div class="rule">
+  <b>Корені не змінюються, якщо:</b><br>
+  до обох частин додати або від обох відняти те саме число чи вираз;<br>
+  обидві частини помножити або поділити на те саме число, що не дорівнює нулю.<br><br>
+  Чому множити на нуль і на вираз зі змінною — ризиковано — <a href="../peretvorennia-rivnian/">«Що саме не має змінитися»</a>.
+</div>
 
 </div>
-</main>
 
 <script>
 (function(){
@@ -307,6 +344,53 @@ button.plain{
   }
 
   init();
+})();
+</script>
+
+<script src="/assets/lesson.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const A=t=>`<span class="act">${t}</span>`;
+// each step: the action on both sides, the result, and the root put back in to show nothing changed
+const EQ=[
+  {label:'2x + 3 = 11', root:'4', st:[
+    {from:`2x + 3 ${A('− 3')} = 11 ${A('− 3')}`, to:'2x = 8', why:'Відняли 3 від обох частин — зліва зникло «+ 3».', chk:'2·4 = 8'},
+    {from:`2x ${A(': 2')} = 8 ${A(': 2')}`, to:'x = 4', why:'Поділили обидві частини на 2 (не нуль — можна).', chk:'4 = 4'}]},
+  {label:'5x − 7 = 3x + 1', root:'4', st:[
+    {from:`5x − 7 ${A('− 3x')} = 3x + 1 ${A('− 3x')}`, to:'2x − 7 = 1', why:'Відняли 3x від обох частин: x тепер тільки зліва.', chk:'2·4 − 7 = 1'},
+    {from:`2x − 7 ${A('+ 7')} = 1 ${A('+ 7')}`, to:'2x = 8', why:'Додали 7 до обох частин.', chk:'2·4 = 8'},
+    {from:`2x ${A(': 2')} = 8 ${A(': 2')}`, to:'x = 4', why:'Поділили обидві частини на 2.', chk:'4 = 4'}]},
+  {label:'3(x − 2) = x + 4', root:'5', st:[
+    {from:null, to:'3x − 6 = x + 4', why:'Розкрили дужки в лівій частині — це не дія над рівнянням, а переписування виразу: його значення те саме.', chk:'3·5 − 6 = 9, 5 + 4 = 9'},
+    {from:`3x − 6 ${A('− x')} = x + 4 ${A('− x')}`, to:'2x − 6 = 4', why:'Відняли x від обох частин.', chk:'2·5 − 6 = 4'},
+    {from:`2x − 6 ${A('+ 6')} = 4 ${A('+ 6')}`, to:'2x = 10', why:'Додали 6 до обох частин.', chk:'2·5 = 10'},
+    {from:`2x ${A(': 2')} = 10 ${A(': 2')}`, to:'x = 5', why:'Поділили обидві на 2.', chk:'5 = 5'}]},
+  {label:'x/2 + 1 = 4', root:'6', st:[
+    {from:`x/2 + 1 ${A('− 1')} = 4 ${A('− 1')}`, to:'x/2 = 3', why:'Відняли 1 від обох частин.', chk:'6/2 = 3'},
+    {from:`x/2 ${A('· 2')} = 3 ${A('· 2')}`, to:'x = 6', why:'Помножили обидві частини на 2 — дріб зник.', chk:'6 = 6'}]},
+];
+let eq=0;
+function stages(){
+  const e=EQ[eq];
+  const S=[{lines:[e.label], text:`Розвʼяжемо, а заразом стежитимемо за коренем x = ${e.root}: він має підходити в кожен новий рядок.`}];
+  e.st.forEach(st=>S.push({lines:[...(st.from?[st.from]:[]), `<span class="${st.to.startsWith('x =')?'res':''}">${st.to}</span>`],
+    text:`${st.why}<br><span class="rootchk">x = ${e.root}: ${st.chk} — <b>рівність є</b>.</span>`}));
+  return S;
+}
+const D=L.derivation({box:$('deriv'),next:$('stepNext'),reset:$('stepReset'),stages,first:'Перший крок →',mark:'⇔'});
+function draw(){L.chips($('eqs'),EQ.map((e,i)=>({v:i,label:e.label})),eq,v=>{eq=v;draw();D.toStart();});}
+draw(); D.render(false);
+
+L.contrast($('pit1'),{labelA:'з обома частинами',labelB:'лише з лівою',
+  a:{expr:'2x + 3 = 11', steps:`2x + 3 ${A('− 3')} = 11 ${A('− 3')} → 2x = 8 → <span class="res">x = 4</span>`, why:'Перевірка: 2·4 + 3 = 11. Корінь той самий.'},
+  b:{expr:'2x + 3 = 11', steps:`2x + 3 ${A('− 3')} = 11 → 2x = 11 → x = 5,5`, why:'Перевірка: 2·5,5 + 3 = 14 ≠ 11. Терези перекосило — корінь став іншим.'}});
+L.contrast($('pit2'),{labelA:'«перенесли»',labelB:'додали до обох',
+  a:{expr:'5x = 3x + 8', steps:'5x − 3x = 8 → 2x = 8 → <span class="res">x = 4</span>', why:'«Перенесли 3x з протилежним знаком».'},
+  b:{expr:'5x = 3x + 8', steps:`5x ${A('− 3x')} = 3x + 8 ${A('− 3x')} → 2x = 8 → <span class="res">x = 4</span>`, why:'Те саме, тільки чесно: відняли 3x від обох частин, і праворуч 3x знищився. «Перенесення» — скорочений запис цієї дії.'}});
+L.contrast($('pit3'),{labelA:'· 2',labelB:'· 0',
+  a:{expr:'2x + 3 = 11', steps:`(2x + 3) ${A('· 2')} = 11 ${A('· 2')} → 4x + 6 = 22 → <span class="res">x = 4</span>`, why:'Корінь той самий: множити на ненульове число можна.'},
+  b:{expr:'2x + 3 = 11', steps:`(2x + 3) ${A('· 0')} = 11 ${A('· 0')} → 0 = 0`, why:'Рівність правдива за <b>будь-якого</b> x: множення на нуль стерло рівняння, і коренів стало безліч. Тому множать лише на число, що не дорівнює нулю.'}});
 })();
 </script>
 </body>

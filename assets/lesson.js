@@ -65,7 +65,8 @@ window.L = (function () {
   /* ---------- the step-by-step derivation ----------
      stages() returns [{lines:[html], text, warn?, beyond?, read?}]. Each press of "next" shows one more stage;
      its lines are appended under the previous ones, so the whole chain stays on screen. */
-  function derivation({ box, next, reset, stages, first = 'Розклади →', more = 'Далі →' }) {
+  function derivation({ box, next, reset, stages, first = 'Розклади →', more = 'Далі →', mark = '=' }) {
+    // mark: '=' chains equal values; an equation solved step by step uses '⇔' (each line is equivalent to the last)
     let stage = 1, shown = 0;
     function render(animate = true) {
       const S = stages();
@@ -74,7 +75,7 @@ window.L = (function () {
       for (let i = 0; i < stage; i++) {
         S[i].lines.forEach((l, j) => {
           const isNew = animate && count >= shown;
-          h += `<div class="ln${isNew ? ' enter' : ''}"><span class="eqs">${i === 0 && j === 0 ? '' : '='}</span><span class="body">${l}</span></div>`;
+          h += `<div class="ln${isNew ? ' enter' : ''}"><span class="eqs">${i === 0 && j === 0 ? '' : mark}</span><span class="body">${l}</span></div>`;
           count++;
         });
       }
