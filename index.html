@@ -22,20 +22,43 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:12p
 h1{margin:0;font-size:1.9rem;line-height:1.15;font-weight:800}
 .sub{margin:6px 0 0;color:var(--muted)}
 .hand{font-family:"Caveat",cursive;font-size:1.4rem;color:var(--accent)}
-nav.topics{display:flex;flex-wrap:wrap;gap:6px}
-nav.topics a{border:1px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:8px;padding:6px 12px;font-weight:600;font-size:.9rem;text-decoration:none}
-nav.topics a:hover{border-color:var(--accent)}
+
+/* filter bar: tag chips + grouping */
+.filters{display:flex;flex-direction:column;gap:10px;background:var(--sheet);border:1px solid var(--line);border-radius:4px;padding:12px 14px}
+.filters[hidden]{display:none}
+.frow{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.flbl{font-size:.8rem;color:var(--muted);min-width:4.6em}
+.tagbtn{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;height:32px;padding:0 12px;font:600 .88rem var(--font-body);cursor:pointer}
+.tagbtn:hover{border-color:var(--accent)}
+.tagbtn[aria-pressed="true"]{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{border:0;background:transparent;color:var(--ink);height:32px;padding:0 12px;font:600 .88rem var(--font-body);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-pen)}
+.reset{border:0;background:none;color:var(--accent);font:600 .85rem var(--font-body);cursor:pointer;padding:0 4px;text-decoration:underline}
+.reset[hidden]{display:none}
+.empty{color:var(--muted);text-align:center;padding:12px 0;margin:0}
+.empty[hidden]{display:none}
+
+#list{display:flex;flex-direction:column;gap:22px}
 section.topic{display:flex;flex-direction:column;gap:10px;scroll-margin-top:16px}
+section.topic[hidden]{display:none}
 section.topic h2{margin:0;font-size:1.2rem;font-weight:800;display:flex;align-items:center;gap:10px}
-section.topic h2::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--c)}
+section.topic h2::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--c,var(--muted))}
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
 a.card{display:flex;flex-direction:column;gap:6px;background:var(--sheet);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:4px;padding:14px 16px;color:inherit;text-decoration:none;transition:transform .12s,border-color .12s}
+a.card[hidden]{display:none}
 a.card:hover{transform:translateY(-2px);border-color:var(--c)}
-a.card:focus-visible,nav.topics a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a.card:focus-visible,.tagbtn:focus-visible,.seg button:focus-visible,.reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .card b{font-size:1.05rem}
-.card span{color:var(--muted);font-size:.92rem}
+.card > span{color:var(--muted);font-size:.92rem}
+/* a link to someone else's site: dashed edge, arrow, and where it leads */
+a.card.ext{border-style:dashed;border-left-style:solid}
+.card .src{font-size:.8rem;color:var(--muted);font-style:italic}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:4px}
+.tags i{font-style:normal;font-size:.75rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:0 8px}
 footer{color:var(--muted);font-size:.85rem;text-align:center}
 footer a{color:inherit}
+@media (prefers-reduced-motion:reduce){a.card{transition:none}}
 </style>
 </head>
 <body>
@@ -50,45 +73,110 @@ footer a{color:inherit}
     </div>
   </header>
 
-  <nav class="topics" aria-label="Теми">
-    <a href="#stepeni-i-loharyfmy">Ступені й логарифми</a>
-    <a href="#droby">Дроби</a>
-    <a href="#rivniannia">Рівняння</a>
-    <a href="#heometriia">Геометрія</a>
-  </nav>
+  <!-- Tags live on each card: data-class (grades, space-separated), data-area, data-kind (comma-separated).
+       The filter bar and the "by grade" grouping are built from them. -->
+  <div class="filters" id="filters" hidden></div>
 
+  <div id="list">
   <section class="topic" id="stepeni-i-loharyfmy" style="--c:var(--t1)">
     <h2>Ступені й логарифми</h2>
     <div class="cards">
-      <a class="card" href="stepeni-i-loharyfmy/shcho-take-stupin/"><b>Що таке ступінь</b><span>Основа й показник: що множимо і скільки разів. Основою може бути будь-що, і видно, як запис розкладається.</span></a>
-      <a class="card" href="stepeni-i-loharyfmy/stupeni-pid-kapotom/"><b>Ступені під капотом</b><span>Відʼємні й дробові показники: те саме правило, тільки продовжене.</span></a>
-      <a class="card" href="stepeni-i-loharyfmy/loharyfmy-z-nulia/"><b>Логарифми з нуля</b><span>Посібник для 11 класу: від «у який ступінь?» до рівнянь.</span></a>
+      <a class="card" style="--c:var(--t1)" data-class="7" data-area="алгебра" data-kind="урок" href="stepeni-i-loharyfmy/shcho-take-stupin/"><b>Що таке ступінь</b><span>Основа й показник: що множимо і скільки разів. Основою може бути будь-що, і видно, як запис розкладається.</span></a>
+      <a class="card" style="--c:var(--t1)" data-class="8 11" data-area="алгебра" data-kind="урок" href="stepeni-i-loharyfmy/stupeni-pid-kapotom/"><b>Ступені під капотом</b><span>Відʼємні й дробові показники: те саме правило, тільки продовжене.</span></a>
+      <a class="card" style="--c:var(--t1)" data-class="11" data-area="алгебра" data-kind="урок,тренажер" href="stepeni-i-loharyfmy/loharyfmy-z-nulia/"><b>Логарифми з нуля</b><span>Від «у який ступінь?» до рівнянь, з тренажером наприкінці.</span></a>
     </div>
   </section>
 
   <section class="topic" id="droby" style="--c:var(--t2)">
     <h2>Дроби</h2>
     <div class="cards">
-      <a class="card" href="droby/spilnyi-znamennyk/"><b>Спільний знаменник</b><span>Як знайти найменший спільний знаменник: на числах і на виразах.</span></a>
+      <a class="card" style="--c:var(--t2)" data-class="8" data-area="алгебра" data-kind="шпаргалка" href="droby/spilnyi-znamennyk/"><b>Спільний знаменник</b><span>Як знайти найменший спільний знаменник: на числах і на виразах.</span></a>
     </div>
   </section>
 
   <section class="topic" id="rivniannia" style="--c:var(--t4)">
     <h2>Рівняння</h2>
     <div class="cards">
-      <a class="card" href="rivniannia/peretvorennia-rivnian/"><b>Що саме не має змінитися</b><span>Тотожні й рівносильні перетворення і де губляться або зʼявляються зайві корені. 8 клас.</span></a>
-      <a class="card" href="rivniannia/terezy-obydvi-chastyny/"><b>Терези: роби з обома частинами однакове</b><span>Інтерактив: кожна дія йде на обидві чаші, корінь лишається той самий.</span></a>
+      <a class="card" style="--c:var(--t4)" data-class="8" data-area="алгебра" data-kind="урок" href="rivniannia/peretvorennia-rivnian/"><b>Що саме не має змінитися</b><span>Тотожні й рівносильні перетворення і де губляться або зʼявляються зайві корені.</span></a>
+      <a class="card" style="--c:var(--t4)" data-class="7" data-area="алгебра" data-kind="урок" href="rivniannia/terezy-obydvi-chastyny/"><b>Терези: роби з обома частинами однакове</b><span>Кожна дія йде на обидві чаші, корінь лишається той самий.</span></a>
     </div>
   </section>
 
   <section class="topic" id="heometriia" style="--c:var(--t3)">
     <h2>Геометрія</h2>
     <div class="cards">
-      <a class="card" href="heometriia/trapetsiia/"><b>Шпаргалка з трапеції</b><span>Усе головне для 8 класу, з малюнками до кожного правила.</span></a>
+      <a class="card" style="--c:var(--t3)" data-class="8" data-area="геометрія" data-kind="шпаргалка" href="heometriia/trapetsiia/"><b>Шпаргалка з трапеції</b><span>Усе головне, з малюнками до кожного правила.</span></a>
+      <a class="card ext" style="--c:var(--t3)" data-class="8 9" data-area="геометрія" data-kind="зовнішній сайт" href="https://acegikmo.com/trianglesolver" hreflang="en" target="_blank" rel="noopener noreferrer"><b>Розвʼязування трикутників ↗</b><span>Позначаєш, які сторони й кути відомі, і бачиш, чи розвʼязується трикутник і якими формулами: прямокутний трикутник, теореми синусів і косинусів.</span><small class="src">зовнішній сайт: acegikmo.com, англійською</small></a>
     </div>
   </section>
+  </div>
+  <p class="empty" id="empty" hidden>Під ці теги поки нічого немає.</p>
 
   <footer><a href="https://github.com/FernDragonborn">@FernDragonborn</a></footer>
 </div>
+<script>
+(function(){
+  const list=document.getElementById('list'), bar=document.getElementById('filters'), empty=document.getElementById('empty');
+  const topicSections=[...list.querySelectorAll('section.topic')];
+  const cards=[...list.querySelectorAll('a.card')];
+  const tagsOf=c=>({class:c.dataset.class.split(' '),area:[c.dataset.area],kind:c.dataset.kind.split(',')});
+  const GROUPS=[['class','Клас',v=>v+' клас'],['area','Розділ',v=>v],['kind','Формат',v=>v]];
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+  // visible tag labels on every card
+  cards.forEach(c=>{const t=tagsOf(c),el=document.createElement('span');el.className='tags';
+    el.innerHTML=GROUPS.flatMap(([g,,lab])=>t[g].map(v=>`<i>${esc(lab(v))}</i>`)).join('');c.appendChild(el);});
+
+  // every value that occurs, sorted (grades as numbers)
+  const values={};
+  GROUPS.forEach(([g])=>{const set=new Set();cards.forEach(c=>tagsOf(c)[g].forEach(v=>set.add(v)));
+    values[g]=[...set].sort((a,b)=>g==='class'?a-b:a.localeCompare(b,'uk'));});
+
+  let state={sel:{class:[],area:[],kind:[]},group:'topic'};
+  try{const s=JSON.parse(localStorage.getItem('menu-view')||'null');if(s&&s.sel&&(s.group==='topic'||s.group==='class'))state=s;}catch(e){}
+  GROUPS.forEach(([g])=>{state.sel[g]=(Array.isArray(state.sel[g])?state.sel[g]:[]).filter(v=>values[g].includes(v));});
+
+  function save(){try{localStorage.setItem('menu-view',JSON.stringify(state))}catch(e){}}
+  // a card passes when, in every group with a selection, it has at least one of the selected tags
+  const passes=c=>{const t=tagsOf(c);return GROUPS.every(([g])=>!state.sel[g].length||t[g].some(v=>state.sel[g].includes(v)));};
+
+  function renderBar(){
+    const any=GROUPS.some(([g])=>state.sel[g].length);
+    bar.innerHTML=GROUPS.map(([g,name,lab])=>`<div class="frow"><span class="flbl">${name}</span>`+
+      values[g].map(v=>`<button type="button" class="tagbtn" data-g="${g}" data-v="${esc(v)}" aria-pressed="${state.sel[g].includes(v)}">${esc(lab(v))}</button>`).join('')+'</div>').join('')+
+      `<div class="frow"><span class="flbl">Групувати</span><span class="seg" role="group" aria-label="Групувати">`+
+      [['topic','за темою'],['class','за класом']].map(([k,l])=>`<button type="button" data-group="${k}" aria-pressed="${state.group===k}">${l}</button>`).join('')+
+      `</span><button type="button" class="reset" id="reset"${any?'':' hidden'}>скинути теги</button></div>`;
+    bar.querySelectorAll('.tagbtn').forEach(b=>b.onclick=()=>{const a=state.sel[b.dataset.g],v=b.dataset.v,i=a.indexOf(v);
+      if(i<0)a.push(v);else a.splice(i,1);update();});
+    bar.querySelectorAll('[data-group]').forEach(b=>b.onclick=()=>{state.group=b.dataset.group;update();});
+    bar.querySelector('#reset').onclick=()=>{GROUPS.forEach(([g])=>state.sel[g]=[]);update();};
+  }
+
+  let gradeSections=[];
+  function layout(){
+    gradeSections.forEach(s=>s.remove());gradeSections=[];
+    if(state.group==='class'){
+      topicSections.forEach(s=>s.hidden=true);
+      // a card for several grades is listed under each of them
+      (state.sel.class.length?values.class.filter(v=>state.sel.class.includes(v)):values.class).forEach(v=>{
+        const mine=cards.filter(c=>tagsOf(c).class.includes(v)&&passes(c));
+        if(!mine.length)return;
+        const s=document.createElement('section');s.className='topic';
+        s.innerHTML=`<h2>${esc(v)} клас</h2><div class="cards"></div>`;
+        mine.forEach(c=>{const k=c.cloneNode(true);k.hidden=false;s.lastChild.appendChild(k);});
+        list.appendChild(s);gradeSections.push(s);
+      });
+      empty.hidden=gradeSections.length>0;
+    }else{
+      let shown=0;
+      topicSections.forEach(s=>{let n=0;s.querySelectorAll('a.card').forEach(c=>{const ok=passes(c);c.hidden=!ok;if(ok)n++;});s.hidden=!n;shown+=n;});
+      empty.hidden=shown>0;
+    }
+  }
+  function update(){save();renderBar();layout();}
+  bar.hidden=false;update();
+})();
+</script>
 </body>
 </html>
