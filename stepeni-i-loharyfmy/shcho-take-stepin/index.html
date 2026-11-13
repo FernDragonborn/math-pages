@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Що таке степінь</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/theme.js"></script>
+<style>
+*{box-sizing:border-box}
+.wrap{max-width:640px;margin:0 auto;padding:16px 16px 60px}
+header{margin:8px 0 18px}
+h1{font-size:28px;line-height:1.15;margin:0 0 6px;font-weight:800;letter-spacing:-.02em}
+.sub{color:var(--ink-soft);margin:0;font-size:15px}
+.hand{font-family:var(--font-hand);font-size:1.35rem;color:var(--pen)}
+section{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:18px 16px;margin:0 0 16px}
+h2{font-size:20px;margin:0 0 4px;font-weight:800;letter-spacing:-.01em}
+.num{display:inline-block;background:var(--pen);color:var(--on-pen);border-radius:8px;font-size:14px;padding:1px 8px;margin-right:6px;vertical-align:2px}
+p{margin:8px 0}
+.muted{color:var(--ink-soft);font-size:15px}
+.m{font-family:var(--font-mono);font-weight:500;white-space:nowrap}
+
+/* the two roles, same colours everywhere on the page */
+.b{color:var(--pen);background:var(--pen-wash);border:1.5px solid color-mix(in srgb,var(--pen) 45%,transparent);border-radius:6px;padding:0 .14em;font-weight:700;white-space:nowrap}
+.b.g2{color:var(--violet);background:var(--violet-wash);border-color:color-mix(in srgb,var(--violet) 45%,transparent)}
+.e{color:var(--red);font-weight:700;font-size:.6em;vertical-align:.85em;line-height:0;margin-left:.06em;font-family:var(--font-mono)}
+.b sup,.fr sup{font-size:.6em;line-height:0}
+.key-b{color:var(--pen);font-weight:700}
+.key-e{color:var(--red);font-weight:700}
+
+/* base palette */
+.palette{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:8px;margin:12px 0}
+.chip{display:flex;flex-direction:column;align-items:flex-start;gap:2px;border:1px solid var(--card-line);background:transparent;color:var(--ink);border-radius:6px;padding:8px 10px;cursor:pointer;text-align:left;font:inherit}
+.chip small{font:500 12px var(--font-body);color:var(--ink-soft)}
+.chip span{font:700 18px var(--font-mono)}
+.chip:hover{border-color:var(--pen)}
+.chip[aria-pressed="true"]{border-color:var(--pen);background:var(--pen-wash)}
+.custom{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:4px 0 6px}
+.custom input{flex:1;min-width:150px;height:40px;border:1px solid var(--card-line);border-radius:6px;background:var(--paper);color:var(--ink);padding:0 10px;font:600 17px var(--font-mono)}
+.custom input:focus{outline:none;border-color:var(--pen)}
+.custom label{font-size:14px;color:var(--ink-soft)}
+.hint{font-size:13px;color:var(--ink-soft);min-height:1.2em}
+
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0}
+.lbl{font-size:14px;color:var(--ink-soft)}
+.stepper{display:inline-flex;align-items:center;border:1px solid var(--card-line);border-radius:6px;overflow:hidden}
+.stepper button{width:44px;height:40px;border:0;background:transparent;color:var(--ink);font-size:22px;cursor:pointer}
+.stepper button:disabled{opacity:.35;cursor:default}
+.stepper output{min-width:40px;text-align:center;font:700 18px var(--font-mono);color:var(--red)}
+.btn{border:1px solid var(--card-line);background:transparent;color:var(--ink);border-radius:6px;height:40px;padding:0 14px;font:600 15px var(--font-body);cursor:pointer}
+.btn.main{background:var(--pen);border-color:var(--pen);color:var(--on-pen)}
+.btn:disabled{opacity:.4;cursor:default}
+
+/* derivation */
+.deriv{border-top:1px dashed var(--line);margin-top:14px;padding-top:8px}
+.ln{display:flex;align-items:flex-start;gap:10px;font:500 22px/1.5 var(--font-mono);padding:10px 0;overflow-x:auto}
+.ln .eqs{color:var(--ink-soft);flex:none;width:18px}
+.ln .body{display:flex;flex-wrap:wrap;align-items:center;gap:6px 4px;min-width:0}
+.ln.enter{animation:rise .35s ease both}
+.dot{color:var(--ink-soft);padding:0 2px}
+.anat{display:inline-flex;align-items:flex-start;font:700 46px/1 var(--font-mono);padding:34px 4px 36px 0}
+.anat .b{position:relative;padding:.04em .16em}
+.anat .b::after{content:"основа";position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);font:600 13px/1 var(--font-body);color:var(--pen);white-space:nowrap}
+.anat .e{position:relative;font-size:.55em;vertical-align:0;line-height:1;margin-top:-.42em}
+.anat .e::before{content:"показник";position:absolute;bottom:calc(100% + 6px);left:0;font:600 13px/1 var(--font-body);color:var(--red);white-space:nowrap}
+.copies{display:inline-flex;flex-wrap:wrap;align-items:center;gap:22px 4px;border-bottom:2px solid var(--red);padding-bottom:18px;position:relative}
+.copies .cp{position:relative;animation:pop .4s ease both}
+.copies .cp i{position:absolute;top:calc(100% + 3px);left:50%;transform:translateX(-50%);font:700 11px/1 var(--font-body);color:var(--red);font-style:normal}
+.copies + .cap{font:600 13px var(--font-body);color:var(--red);align-self:flex-end;white-space:nowrap}
+.hl{background:var(--green-wash);color:var(--green);border-radius:6px;padding:0 .14em;font-weight:700}
+.res{color:var(--green);font-weight:700}
+.fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.2}
+.fr > span:first-child{border-bottom:2px solid currentColor;padding:0 4px 2px}
+.fr > span:last-child{padding:2px 4px 0}
+.explain{background:var(--pen-wash);border-radius:4px;padding:10px 12px;font-size:15px;margin-top:6px}
+.read{font-size:15px;color:var(--ink-soft);margin:-4px 0 4px}
+.warn{background:var(--red-wash);border-radius:4px;padding:10px 12px;font-size:15px;margin-top:10px}
+.warn b{color:var(--red)}
+@keyframes pop{from{opacity:0;transform:translateX(-18px) scale(.7)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.copies .cp,.ln.enter{animation:none}}
+
+/* pitfalls */
+.pit{border:1px solid var(--card-line);border-radius:6px;padding:12px;margin:12px 0}
+.pit-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.pit .expr{font:700 30px var(--font-mono)}
+.pit .steps{font:500 18px/1.5 var(--font-mono);margin:6px 0 2px;overflow-x:auto;white-space:nowrap}
+.pit .why{font-size:15px;margin:4px 0 0}
+.switch{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--card-line);border-radius:999px;background:transparent;color:var(--ink);height:38px;padding:0 14px 0 6px;font:600 14px var(--font-body);cursor:pointer}
+.switch::before{content:"";width:34px;height:20px;border-radius:999px;background:var(--line);box-shadow:inset 0 0 0 2px var(--card-line);transition:background .15s}
+.switch[aria-pressed="true"]::before{background:var(--pen);box-shadow:inset -14px 0 0 2px var(--pen),inset -14px 0 0 6px var(--card)}
+.switch[aria-pressed="false"]::before{box-shadow:inset 14px 0 0 2px var(--line),inset 14px 0 0 6px var(--card)}
+
+details{border-top:1px solid var(--line);padding:10px 0}
+details:first-of-type{border-top:0}
+summary{cursor:pointer;font:600 20px var(--font-mono);list-style:none}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"  — де основа?";font:400 13px var(--font-body);color:var(--ink-soft)}
+details[open] summary::after{content:""}
+.ans{margin-top:6px;font-size:15px}
+.ans .m{font-size:17px;white-space:normal}
+.explain .m,.rule .m{white-space:normal}
+.rule{background:var(--ink);color:var(--paper);border-radius:4px;padding:18px 16px;font-size:16px}
+.rule .k1{color:var(--pen-wash);font-weight:700}
+.rule a{color:inherit}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+
+<header>
+  <h1>Що таке степінь</h1>
+  <p class="sub">Звичайний степінь — це коротший запис множення однакових множників. Тут видно, що саме множиться, скільки разів, і як запис розгортається. <span class="hand">тисни все ↓</span></p>
+</header>
+
+<!-- 1 -->
+<section>
+  <h2><span class="num">1</span>Дві частини запису</h2>
+  <p>У записі степеня є рівно дві ролі:</p>
+  <p><span class="key-b">Основа</span> — <b>що</b> множимо. Це одна «цеглинка», яку копіюють.<br>
+     <span class="key-e">Показник</span> — <b>скільки разів</b> ця цеглинка стоїть у добутку. Пишеться маленьким, справа зверху.</p>
+  <p class="muted">Синя рамка на цій сторінці завжди означає основу, червоне — показник.</p>
+
+  <p style="margin-top:16px"><b>Основою може бути що завгодно</b> — не тільки число чи буква. Обери:</p>
+  <div class="palette" id="palette"></div>
+  <div class="custom">
+    <label for="own">або впиши своє:</label>
+    <input id="own" type="text" maxlength="16" autocomplete="off" spellcheck="false" placeholder="напр. a−b, 0,5, 3y, −4">
+  </div>
+  <div class="hint" id="ownHint"></div>
+
+  <div class="row">
+    <span class="lbl">показник</span>
+    <span class="stepper"><button type="button" id="nm" aria-label="Зменшити показник">−</button><output id="nOut" aria-live="polite"></output><button type="button" id="np" aria-label="Збільшити показник">+</button></span>
+  </div>
+
+  <div class="deriv" id="deriv" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next">Розкласти →</button>
+    <button class="btn" type="button" id="reset">Згорнути назад</button>
+  </div>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2><span class="num">2</span>Куди дотягується показник</h2>
+  <p>Показник чіпляється тільки до того, що стоїть <b>впритул зліва</b>: до одного числа, однієї букви або <b>однієї дужки цілком</b>. Тому дужки вирішують, що саме буде основою. Перемикай і дивись, як міняється розклад.</p>
+  <div id="pits"></div>
+  <div class="warn"><b>Звідси правило:</b> хочеш, щоб у степінь пішло щось більше за одне число чи букву (мінус, добуток, сума, дріб) — бери це в дужки. Без дужок основа — тільки останній символ перед показником.</div>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="num">3</span>Навіщо розкладати</h2>
+  <p>Коли не памʼятаєш правило — розклади на копії й порахуй. Наприклад, множення двох степенів з однаковою основою:</p>
+  <div class="row">
+    <span class="lbl">перший показник</span>
+    <span class="stepper"><button type="button" id="mm" aria-label="Менше">−</button><output id="mOut"></output><button type="button" id="mp" aria-label="Більше">+</button></span>
+    <span class="lbl">другий</span>
+    <span class="stepper"><button type="button" id="km" aria-label="Менше">−</button><output id="kOut"></output><button type="button" id="kp" aria-label="Більше">+</button></span>
+  </div>
+  <div id="mul"></div>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2><span class="num">4</span>Перевір себе</h2>
+  <p class="muted">Спершу скажи сам: що тут основа, що показник і як це розкласти. Потім відкривай.</p>
+  <details><summary>(x−3)<sup>5</sup></summary><div class="ans">Основа — <span class="m"><span class="b">(x−3)</span></span>, вся дужка; показник <span class="key-e">5</span>.<br><span class="m">= (x−3)·(x−3)·(x−3)·(x−3)·(x−3)</span></div></details>
+  <details><summary>−5<sup>2</sup></summary><div class="ans">Основа — тільки <span class="m"><span class="b">5</span></span>, мінус стоїть зовні.<br><span class="m">= −(5·5) = −25</span></div></details>
+  <details><summary>(−5)<sup>2</sup></summary><div class="ans">Основа — <span class="m"><span class="b">(−5)</span></span>, разом з мінусом.<br><span class="m">= (−5)·(−5) = 25</span></div></details>
+  <details><summary>2x<sup>3</sup></summary><div class="ans">Основа — тільки <span class="m"><span class="b">x</span></span>; двійка просто множник попереду.<br><span class="m">= 2·x·x·x</span></div></details>
+  <details><summary>(3y)<sup>2</sup></summary><div class="ans">Основа — <span class="m"><span class="b">(3y)</span></span>.<br><span class="m">= 3y·3y = 3·3·y·y = 9y<sup>2</sup></span></div></details>
+  <details><summary>(1/2)<sup>3</sup></summary><div class="ans">Основа — дріб <span class="m"><span class="b">(1/2)</span></span>.<br><span class="m">= 1/2 · 1/2 · 1/2 = (1·1·1)/(2·2·2) = 1/8</span></div></details>
+  <details><summary>(a<sup>3</sup>)<sup>2</sup></summary><div class="ans">Основа — <span class="m"><span class="b">(a<sup>3</sup>)</span></span>, сама є степенем.<br><span class="m">= a<sup>3</sup>·a<sup>3</sup> = a·a·a · a·a·a = a<sup>6</sup></span></div></details>
+</section>
+
+<div class="rule">
+  <b>Коротко:</b><br>
+  <span class="m">основа<sup>n</sup> = основа · основа · … · основа</span> — рівно n копій.<br><br>
+  Основа — одна «цеглинка»: число, буква або <b>вся дужка</b>.<br>
+  Показник — скільки цеглинок у добутку.<br>
+  Показник 1 — одна копія, тобто сама основа. Показник 0 дає 1, а чому так і що з відʼємними й дробовими показниками — на сторінці <a href="../stupeni-pid-kapotom/">«Ступені під капотом»</a>.
+</div>
+
+</div>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const MINUS='−';
+const B=(x,cls='')=>`<span class="b${cls?' '+cls:''}">${x}</span>`;
+const E=n=>`<span class="e">${n}</span>`;
+const SUP=n=>`<sup>${n}</sup>`;
+const DOT='<span class="dot">·</span>';
+const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function plural(n,one,few,many){n=Math.abs(n);const a=n%10,b=n%100;
+  if(a===1&&b!==11)return one; if(a>=2&&a<=4&&(b<12||b>14))return few; return many;}
+function fmt(v){
+  v=Math.round(v*1e9)/1e9;
+  return v.toLocaleString('uk-UA',{maximumFractionDigits:6}).replace('-',MINUS);
+}
+const fac=v=>v<0?`(${fmt(v)})`:fmt(v);
+const READ=['у нульовому степені','у першому степені','у квадраті','у кубі','у четвертому степені','у пʼятому степені','у шостому степені'];
+const plain=h=>h.replace(/<sup>(\d)<\/sup>/g,(_,d)=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).replace(/<[^>]+>/g,'');
+
+/* ---------- bases ---------- */
+const BASES=[
+  {cat:'число',lab:'3',num:3},
+  {cat:'буква',lab:'x',sym:'x'},
+  {cat:'відʼємне число',lab:'(−2)',num:-2},
+  {cat:'дріб',lab:'(2/3)',frac:[2,3]},
+  {cat:'добуток',lab:'(2a)',prod:[2,'a']},
+  {cat:'сума',lab:'(x+1)',sum:true},
+  {cat:'інший степінь',lab:'(a'+SUP(2)+')',pow:['a',2]},
+];
+const st={base:BASES[0],n:3,stage:1};
+
+/* "own" input: decide whether brackets are needed and whether it is a number */
+function isWrapped(s){
+  if(s[0]!=='('||s[s.length-1]!==')')return false;
+  let d=0;for(let i=0;i<s.length;i++){if(s[i]==='(')d++;else if(s[i]===')'){d--;if(d===0&&i<s.length-1)return false;}if(d<0)return false;}
+  return d===0;
+}
+function parseOwn(raw){
+  let s=raw.trim().replace(/\s+/g,'').replace(/-/g,MINUS).replace(/\*/g,'·').replace(/\./g,',');
+  if(!s)return null;
+  const inner=isWrapped(s)?s.slice(1,-1):s;
+  const simple=/^\d+(,\d+)?$/.test(inner)||/^[a-zа-яіїєґ]$/i.test(inner);
+  const wrapped=isWrapped(s), needs=!simple;
+  const lab=needs?(wrapped?esc(s):'('+esc(s)+')'):esc(inner);
+  let hint='';
+  if(needs&&!wrapped) hint=`Узяли в дужки: без них показник учепився б тільки в останній символ «${esc(s.slice(-1))}», а не в усе «${esc(s)}».`;
+  else if(simple&&wrapped) hint='Тут дужки не обовʼязкові: основа й так одна цеглинка.';
+  const b={cat:'своє',lab,own:true};
+  const n=inner.replace(MINUS,'-').replace(',','.');
+  const fm=inner.match(/^(−?\d+)\/(\d+)$/);
+  if(/^-?\d+(\.\d+)?$/.test(n)) b.num=parseFloat(n);
+  else if(fm&&+fm[2]!==0) b.frac=[parseInt(fm[1].replace(MINUS,'-')),+fm[2]];
+  return {b,hint};
+}
+
+function renderPalette(){
+  $('palette').innerHTML=BASES.map((b,i)=>`<button type="button" class="chip" data-i="${i}" aria-pressed="${st.base===b}"><small>${b.cat}</small><span>${b.lab}</span></button>`).join('');
+  $('palette').querySelectorAll('.chip').forEach(c=>c.onclick=()=>{st.base=BASES[+c.dataset.i];$('own').value='';$('ownHint').textContent='';renderPalette();render(false)});
+}
+$('own').addEventListener('input',()=>{
+  const r=parseOwn($('own').value);
+  if(!r){st.base=BASES[0];$('ownHint').textContent='';}
+  else{st.base=r.b;$('ownHint').innerHTML=r.hint;}
+  renderPalette();render(false);
+});
+
+/* ---------- derivation: list of stages, each adds lines + an explanation ---------- */
+function copies(lab,n,cls=''){
+  let h='<span class="copies">';
+  for(let i=0;i<n;i++){if(i)h+=DOT;h+=`<span class="cp" style="animation-delay:${i*70}ms">${B(lab,cls)}<i>${i+1}</i></span>`;}
+  return h+`</span><span class="cap">${n} ${plural(n,'копія','копії','копій')}</span>`;
+}
+function numChain(v,n){ // 3·3·3 → 9·3 → 27, the freshly multiplied number highlighted
+  let f=Array(n).fill(v),lines=[];
+  while(f.length>1){const p=Math.round(f[0]*f[1]*1e9)/1e9;f=[p,...f.slice(2)];
+    lines.push(f.length===1?`<span class="res">${fmt(p)}</span>`:`<span class="hl">${fac(p)}</span>`+f.slice(1).map(x=>DOT+fac(x)).join(''));}
+  return lines;
+}
+const frac=(t,d)=>`<span class="fr"><span>${t}</span><span>${d}</span></span>`;
+function binom(n){const c=[1];for(let k=1;k<=n;k++)c[k]=c[k-1]*(n-k+1)/k;
+  return c.map((k,i)=>{const p=n-i;const x=p===0?'':p===1?'x':'x'+SUP(p);const coef=(k===1&&x)?'':k;return coef+x;}).join(' + ');}
+
+function stages(){
+  const b=st.base,n=st.n,lab=b.lab,P=plain(lab);
+  const S=[];
+  // stage 1: the short record
+  S.push({lines:[`<span class="anat">${B(lab)}${E(n)}</span>`],
+    text:`Основа — <span class="m">${B(lab)}</span>, показник — <span class="key-e">${n}</span>. Запис означає: візьми основу і постав її в добуток ${n} ${plural(n,'раз','рази','разів')}.`,
+    read:n<READ.length?`Читається: «${P} ${READ[n]}».`:''});
+  // stage 2: unfold into copies
+  if(n===0){
+    S.push({lines:['<span class="res">1</span>'],text:`Нуль копій — множити нічого, лишається 1. Чому саме 1, а не 0 — дивись <a href="../stupeni-pid-kapotom/">«Ступені під капотом»</a>.`+(b.num===0?' (Для основи 0 запис 0⁰ у школі не визначають.)':'')});
+    return S;
+  }
+  if(n===1){
+    const bare=lab.replace(/^\((.*)\)$/,'$1');
+    S.push({lines:[copies(lab,1),`<span class="res">${bare}</span>`],text:'Одна копія — це просто сама основа. Тому показник 1 зазвичай не пишуть.'});
+    return S;
+  }
+  S.push({lines:[copies(lab,n)],text:`Розгорнули: основа <span class="m">${B(lab)}</span> стоїть у добутку ${n} ${plural(n,'раз','рази','разів')} — рівно стільки, скільки каже показник. Дужки лишились: кожна копія — це вся основа цілком.`});
+  // stage 3: what to do with the copies depends on the base
+  if(b.num!==undefined){
+    const neg=b.num<0;
+    S.push({lines:numChain(b.num,n),text:`Тепер просто множимо по черзі: дві перші копії → <span class="hl">одне число</span>, і так поки не лишиться одне.`+
+      (neg?` Мінусів було ${n}: ${n%2?'непарна кількість, тож один лишається без пари — результат відʼємний':'вони знищуються попарно — результат додатний'}.`:'')});
+  }else if(b.frac){
+    const [t,d]=b.frac;
+    const top=Array(n).fill(fac(t)).join('·'),bot=Array(n).fill(d).join('·');
+    const T=Math.pow(t,n),D=Math.pow(d,n);
+    S.push({lines:[frac(top,bot),`<span class="res">${frac(fmt(T),fmt(D))}</span>`],
+      text:`Дроби множаться так: чисельник на чисельник, знаменник на знаменник. Тому в степінь іде і верх, і низ: ${n} ${plural(n,'копія','копії','копій')} ${t} нагорі й ${n} ${plural(n,'копія','копії','копій')} ${d} внизу.`});
+  }else if(b.prod){
+    const [k,v]=b.prod;
+    const l1=Array(n).fill(`${k}${DOT}${v}`).join(DOT);
+    const l2=`<span class="hl">${Array(n).fill(k).join('·')}</span>${DOT}${Array(n).fill(v).join('·')}`;
+    S.push({lines:[l1,l2,`<span class="res">${Math.pow(k,n)}${v}${SUP(n)}</span>`],
+      text:`Усередині дужки тільки множення, тож дужки можна зняти й переставити множники: усі ${k} разом, усі ${v} разом. У степінь пішла <b>і двійка, і буква</b> — бо обидві були в основі.`});
+  }else if(b.pow){
+    const [v,k]=b.pow;
+    const l1=Array(n).fill(Array(k).fill(v).join('·')).join(' · ');
+    S.push({lines:[Array(n).fill(`${v}${SUP(k)}`).join(DOT),l1,`<span class="res">${v}${SUP(k*n)}</span>`],
+      text:`Кожна копія сама є степенем і розкладається на ${k} множники ${v}. Разом: ${n} ${plural(n,'копія','копії','копій')} по ${k} = ${k*n} множників ${v}.`});
+  }else if(b.sum){
+    const lines=[];
+    if(n===2) lines.push('x·x + x·1 + 1·x + 1·1');
+    lines.push(`<span class="res">${binom(n)}</span>`);
+    S.push({lines,text:`Сума в дужках множиться за правилом «кожен доданок на кожен». ${n===2?'':'Тут це довго, тому одразу відповідь. '}Перевірка на числі: при x = 2 маємо (2+1)${SUP(n)} = 3${SUP(n)} = ${Math.pow(3,n)}, а x${SUP(n)}+1 = ${Math.pow(2,n)+1}.`,
+      warn:`<b>(x+1)${SUP(n)} ≠ x${SUP(n)} + 1.</b> Показник стоїть на всій дужці, а не на кожному доданку окремо.`});
+  }else if(b.sym){
+    S.push({lines:[],text:`Тут множити далі нема чого: <span class="m">${Array(n).fill(b.sym).join('·')}</span> коротко і є <span class="m">${b.sym}${SUP(n)}</span>. А якщо ${b.sym} = 2, то це ${Array(n).fill(2).join('·')} = ${Math.pow(2,n)}.`});
+  }else{
+    S.push({lines:[],text:`Основа тут не число, тож рахувати нема чого — далі розкриваєш за звичайними правилами множення. Головне вже видно: <span class="m">${B(lab)}</span> повторюється ${n} ${plural(n,'раз','рази','разів')}.`});
+  }
+  return S;
+}
+
+let shown=0; // how many lines were on screen, so only new ones animate
+function render(animate=true){
+  $('nOut').textContent=st.n;
+  $('nm').disabled=st.n<=0;$('np').disabled=st.n>=6;
+  const S=stages();
+  st.stage=Math.min(st.stage,S.length);
+  let h='',count=0;
+  for(let i=0;i<st.stage;i++){
+    S[i].lines.forEach((l,j)=>{
+      const isNew=animate&&count>=shown;
+      h+=`<div class="ln${isNew?' enter':''}"><span class="eqs">${i===0&&j===0?'':'='}</span><span class="body">${l}</span></div>`;
+      count++;
+    });
+  }
+  shown=count;
+  const cur=S[st.stage-1];
+  if(cur.read)h+=`<p class="read">${cur.read}</p>`;
+  h+=`<div class="explain">${cur.text}</div>`;
+  if(cur.warn)h+=`<div class="warn">${cur.warn}</div>`;
+  $('deriv').innerHTML=h;
+  if(!animate)$('deriv').querySelectorAll('.cp').forEach(c=>c.style.animation='none');
+  const nx=$('next');
+  nx.disabled=st.stage>=S.length;
+  nx.textContent=st.stage===1?'Розкласти →':st.stage>=S.length?'Готово':'Спростити →';
+  $('reset').disabled=st.stage===1;
+}
+$('next').onclick=()=>{st.stage++;render()};
+$('reset').onclick=()=>{st.stage=1;shown=0;render()};
+$('nm').onclick=()=>{if(st.n>0){st.n--;shown=0;render()}};
+$('np').onclick=()=>{if(st.n<6){st.n++;shown=0;render()}};
+renderPalette();render(false);
+
+/* ---------- pitfalls ---------- */
+const PITS=[
+  {off:{expr:`${MINUS}${B('2')}${E(4)}`,steps:`= ${MINUS}(2·2·2·2) = <span class="res">${MINUS}16</span>`,why:'Основа — тільки 2. Мінус стоїть зовні й чекає, поки порахують степінь.'},
+   on:{expr:`${B('('+MINUS+'2)')}${E(4)}`,steps:`= (${MINUS}2)·(${MINUS}2)·(${MINUS}2)·(${MINUS}2) = <span class="res">16</span>`,why:'Основа — вся дужка разом з мінусом. Чотири мінуси знищуються попарно.'}},
+  {off:{expr:`2${B('a')}${E(3)}`,steps:`= 2·a·a·a`,why:'Основа — тільки a. Двійка — окремий множник, у степінь не йде.'},
+   on:{expr:`${B('(2a)')}${E(3)}`,steps:`= 2a·2a·2a = 2·2·2·a·a·a = <span class="res">8a${SUP(3)}</span>`,why:'Основа — (2a). Кожна копія несе свою двійку, тому двійок теж три.'}},
+  {off:{expr:`x + ${B('1')}${E(2)}`,steps:`= x + 1·1 = <span class="res">x + 1</span>`,why:'Основа — тільки 1. До x показник не дотягується.'},
+   on:{expr:`${B('(x+1)')}${E(2)}`,steps:`= (x+1)·(x+1) = <span class="res">x${SUP(2)} + 2x + 1</span>`,why:'Основа — вся сума. Множимо дужку на дужку: кожен доданок на кожен.'}},
+  {off:{expr:`3·${B('5')}${E(2)}`,steps:`= 3·5·5 = <span class="res">75</span>`,why:'Основа — тільки 5. Спершу степінь, потім множення на 3.'},
+   on:{expr:`${B('(3·5)')}${E(2)}`,steps:`= (3·5)·(3·5) = 15·15 = <span class="res">225</span>`,why:'Основа — весь добуток, тож і трійка повторюється двічі.'}},
+];
+$('pits').innerHTML=PITS.map((p,i)=>`<div class="pit" id="pit${i}"><div class="pit-head"><span class="expr"></span><button type="button" class="switch" aria-pressed="false">дужки</button></div><div class="steps"></div><p class="why"></p></div>`).join('');
+PITS.forEach((p,i)=>{
+  const el=$('pit'+i),sw=el.querySelector('.switch');
+  const draw=()=>{const v=sw.getAttribute('aria-pressed')==='true'?p.on:p.off;
+    el.querySelector('.expr').innerHTML=v.expr;el.querySelector('.steps').innerHTML=v.steps;el.querySelector('.why').textContent=v.why;
+    sw.textContent=sw.getAttribute('aria-pressed')==='true'?'з дужками':'без дужок';};
+  sw.onclick=()=>{sw.setAttribute('aria-pressed',sw.getAttribute('aria-pressed')==='true'?'false':'true');draw()};
+  draw();
+});
+
+/* ---------- a^m · a^k ---------- */
+const mk={m:2,k:3};
+function rMul(){
+  const {m,k}=mk;
+  $('mOut').textContent=m;$('kOut').textContent=k;
+  $('mm').disabled=m<=1;$('mp').disabled=m>=4;$('km').disabled=k<=1;$('kp').disabled=k>=4;
+  const g1=Array(m).fill(B('a')).join(DOT),g2=Array(k).fill(B('a','g2')).join(DOT);
+  $('mul').innerHTML=
+    `<div class="ln"><span class="eqs"></span><span class="body">${B('a')}${E(m)}${DOT}${B('a','g2')}${E(k)}</span></div>`+
+    `<div class="ln"><span class="eqs">=</span><span class="body">(${g1})${DOT}(${g2})</span></div>`+
+    `<div class="ln"><span class="eqs">=</span><span class="body">${g1}${DOT}${g2}</span></div>`+
+    `<div class="ln"><span class="eqs">=</span><span class="body"><span class="res">a<span class="e">${m+k}</span></span></span></div>`+
+    `<div class="explain">${m} ${plural(m,'копія','копії','копій')} плюс ${k} ${plural(k,'копія','копії','копій')} стають в один ряд — разом ${m+k}. Звідси правило <span class="m">a${SUP('m')}·a${SUP('n')} = a${SUP('m+n')}</span>: його не треба зубрити, воно видно з розкладу.</div>`;
+}
+$('mm').onclick=()=>{mk.m--;rMul()};$('mp').onclick=()=>{mk.m++;rMul()};
+$('km').onclick=()=>{mk.k--;rMul()};$('kp').onclick=()=>{mk.k++;rMul()};
+rMul();
+})();
+</script>
+</body>
+</html>
