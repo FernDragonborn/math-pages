@@ -37,6 +37,7 @@ details[open] summary::after{content:""}
 <header>
   <h1>Що таке ступінь</h1>
   <p class="sub">Звичайний ступінь — це коротший запис множення однакових множників. Тут видно, що саме множиться, скільки разів, і як запис розгортається.</p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <i>множення відʼємних чисел, 6 клас</i> <i>множення дробів, 6 клас</i></p>
 </header>
 
 <!-- 1 -->
@@ -126,6 +127,7 @@ function fmt(v){
   return v.toLocaleString('uk-UA',{maximumFractionDigits:6}).replace('-',MINUS);
 }
 const fac=v=>v<0?`(${fmt(v)})`:fmt(v);
+const ZERO0='<aside class="beyond"><b>Поза шкільною програмою.</b> Часто домовляються, що 0⁰ = 1: так працюють формули комбінаторики й многочленів. А в границях 0⁰ лишають невизначеністю, бо там може вийти що завгодно. <a href="https://en.wikipedia.org/wiki/Zero_to_the_power_of_zero" hreflang="en" target="_blank" rel="noopener noreferrer">Zero to the power of zero, англійською ↗</a></aside>';
 const READ=['у нульовому ступені','у першому ступені','у квадраті','у кубі','у четвертому ступені','у пʼятому ступені','у шостому ступені'];
 const plain=h=>h.replace(/<sup>(\d)<\/sup>/g,(_,d)=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).replace(/<[^>]+>/g,'');
 
@@ -201,7 +203,7 @@ function stages(){
     read:n<READ.length?`Читається: «${P} ${READ[n]}».`:''});
   // stage 2: unfold into copies
   if(n===0){
-    S.push({lines:['<span class="res">1</span>'],text:`Нуль копій — множити нічого, лишається 1. Чому саме 1, а не 0 — дивись <a href="../stupeni-pid-kapotom/">«Ступені під капотом»</a>.`+(b.num===0?' (Для основи 0 запис 0⁰ у школі не визначають.)':'')});
+    S.push({lines:[b.num===0?'?':'<span class="res">1</span>'],text:`Нуль копій — множити нічого, лишається 1. Чому саме 1, а не 0 — дивись <a href="../stupeni-pid-kapotom/">«Ступені під капотом»</a>.`+(b.num===0?' Для основи 0 чесної відповіді тут немає: нуль копій дає 1, а нуль у будь-якому додатному ступені — 0. Тому в школі 0⁰ не визначають.':''),beyond:b.num===0?ZERO0:''});
     return S;
   }
   if(n===1){
@@ -214,7 +216,7 @@ function stages(){
   if(b.num!==undefined){
     const neg=b.num<0;
     S.push({lines:numChain(b.num,n),text:`Тепер просто множимо по черзі: дві перші копії → <span class="hl">одне число</span>, і так поки не лишиться одне.`+
-      (neg?` Мінусів було ${n}: ${n%2?'непарна кількість, тож один лишається без пари — результат відʼємний':'вони знищуються попарно — результат додатний'}.`:'')});
+      (neg?` Мінусів було ${n}: ${n%2?'непарна кількість, тож один лишається без пари — результат відʼємний':'вони знищуються попарно — результат додатний'}. Звідси правило: відʼємне число в парному ступені дає плюс, у непарному — мінус.`:'')});
   }else if(b.frac){
     const [t,d]=b.frac;
     const top=Array(n).fill(fac(t)).join('·'),bot=Array(n).fill(d).join('·');
@@ -265,6 +267,7 @@ function render(animate=true){
   if(cur.read)h+=`<p class="read">${cur.read}</p>`;
   h+=`<div class="explain">${cur.text}</div>`;
   if(cur.warn)h+=`<div class="warn">${cur.warn}</div>`;
+  if(cur.beyond)h+=cur.beyond;
   $('deriv').innerHTML=h;
   if(!animate)$('deriv').querySelectorAll('.cp').forEach(c=>c.style.animation='none');
   const nx=$('next');

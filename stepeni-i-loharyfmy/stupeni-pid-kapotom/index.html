@@ -55,6 +55,7 @@ svg text{font-family:var(--font-mono);fill:var(--ink-soft)}
 <header>
   <h1>Ступені під капотом</h1>
   <p class="sub">Відʼємні й дробові показники — це не нові правила, а те саме правило, яке просто продовжили.</p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <a href="/stepeni-i-loharyfmy/shcho-take-stupin/">Що таке ступінь</a> <i>ділення дробів, 6 клас</i> <i>квадратний корінь, 8 клас</i></p>
 </header>
 
 <!-- 1 -->
@@ -140,16 +141,18 @@ const MINUS='−';
 const es=n=>n<0?MINUS+(-n):String(n);
 const pw=(a,e)=>`<span class="b">${a}</span><span class="e">${e}</span>`;
 const dec=v=>(Math.round(v*1000)/1000).toString().replace('.',',');
-const exact=(b,k)=>k>=0?String(b**k):'1/'+(b**(-k));
+const exact=(b,k)=>{if(k>=0)return es(b**k);const d=b**(-k);return (d<0?MINUS:'')+'1/'+Math.abs(d);};
+const baseLabel=a=>a<0?`(${es(a)})`:String(a);
 function plural(n,one,few,many){n=Math.abs(n);const m10=n%10,m100=n%100;
   if(m10===1&&m100!==11)return one; if(m10>=2&&m10<=4&&(m100<12||m100>14))return few; return many;}
 function rootSym(a,q){return q===1?String(a):q===2?'√'+a:q===3?'∛'+a:q===4?'∜'+a:`<sup>${q}</sup>√${a}`}
 function chain(vals,ops){let h='<div class="chain">';
   vals.forEach((v,i)=>{if(i)h+=`<span class="op">→<i>${ops[i-1]}</i>→</span>`;h+=`<span class="val${i===vals.length-1?' last':''}">${v}</span>`});
   return h+'</div>';}
-function pills(el,opts,cur,on){el.innerHTML=opts.map(o=>`<button type="button" class="chip sm" aria-pressed="${o===cur}" data-v="${o}">${o}</button>`).join('');
+function pills(el,opts,cur,on){el.innerHTML=opts.map(o=>`<button type="button" class="chip sm" aria-pressed="${o===cur}" data-v="${o}">${es(o)}</button>`).join('');
   el.querySelectorAll('button').forEach(b=>b.onclick=()=>on(+b.dataset.v));}
 const gcd=(a,b)=>b?gcd(b,a%b):Math.abs(a);
+const NEG_BEYOND='<aside class="beyond"><b>Поза шкільною програмою.</b> Серед комплексних чисел у −8 три кубічні корені: −2 і ще два, 1 ± i√3. Тому (−8)<sup>1/3</sup> там має кілька значень, і домовленість про «той самий» корінь доводиться робити окремо. <a href="https://en.wikipedia.org/wiki/Exponentiation#Rational_exponents" hreflang="en" target="_blank" rel="noopener noreferrer">Exponentiation: rational exponents, англійською ↗</a></aside>';
 
 /* ---------- 1 ---------- */
 const s1={a:2,n:3};
@@ -221,17 +224,18 @@ setup3();
 const s4={a:8,p:2,q:3};
 function r4(){
   const {a,q}=s4; s4.p=Math.max(-2*q,Math.min(2*q,s4.p)); const p=s4.p;
-  pills($('s4a'),[2,4,8,9,16,27],a,v=>{s4.a=v;r4()});
+  pills($('s4a'),[2,4,8,9,16,27,-8],a,v=>{s4.a=v;r4()});
   $('s4p').textContent=es(p);$('s4q').textContent=q;
   $('s4qm').disabled=q<=1;$('s4qp').disabled=q>=4;
-  const r=Math.pow(a,1/q), ri=Math.round(r), rInt=ri**q===a;
+  if(a<0&&q>1){r4negative(p,q);return;}
+  const r=a<0?a:Math.pow(a,1/q), ri=Math.round(r), rInt=ri**q===a;
   const sgn=Math.sign(p), k=Math.abs(p);
-  const stepName=q===1?String(a):rInt?String(ri):rootSym(a,q);
+  const stepName=q===1?baseLabel(a):rInt?String(ri):rootSym(a,q);
   const vals=['1'],ops=[];
   for(let i=1;i<=k;i++){vals.push(rInt?exact(ri,sgn*i):dec(Math.pow(r,sgn*i)));ops.push((sgn>0?'×':'÷')+stepName)}
   const ex=q===1?es(p):`${es(p)}/${q}`;
   const res=rInt?exact(ri,p):dec(Math.pow(a,p/q));
-  let out=`<div class="big">${pw(a,ex)} <span class="eq">${rInt?'=':'≈'}</span> <span class="res">${res}</span></div>`;
+  let out=`<div class="big">${pw(baseLabel(a),ex)} <span class="eq">${rInt?'=':'≈'}</span> <span class="res">${res}</span></div>`;
   out+=q===1?`<p>q = 1 — сходинка не ріжеться, це звичайний цілий ступінь.</p>`
     :`<p><b>q = ${q}:</b> ріжемо сходинку ×${a} на ${q} однакові кроки. Маленький крок — це число, яке, помножене саме на себе ${q} ${plural(q,'раз','рази','разів')}, дає ${a}: <span class="m">${rootSym(a,q)} ${rInt?'= '+ri:'≈ '+dec(r)}</span>${rInt?` (бо ${Array(q).fill(ri).join('·')} = ${a})`:''}.</p>`;
   out+=p===0?`<p><b>p = 0:</b> кроків нуль — лишаємось на 1.</p>`
@@ -241,6 +245,17 @@ function r4(){
   if(p!==0&&g>1&&q>1) out+=`<div class="explain">Зверни увагу: ${es(p)}/${q} = ${es(p/g)}${q/g===1?'':'/'+(q/g)} — точка на шкалі та сама, тож і відповідь та сама.</div>`;
   if(!rInt&&q>1) out+=`<p class="muted">Тут маленький крок — некругле число, тому відповідь наближена. Але механіка та сама.</p>`;
   $('s4out').innerHTML=out;
+  drawLine(p,q);
+}
+/* a negative base: the same exponent written two ways gives two answers */
+function r4negative(p,q){
+  const B=baseLabel(s4.a);
+  $('s4out').innerHTML=`<div class="big">${pw(B,'1/3')} <span class="eq">=</span> ?</div>`+
+   `<p>Спробуймо найпростіше: кубічний корінь з −8 існує, бо (−2)·(−2)·(−2) = −8. Тож хочеться сказати <b>${pw(B,'1/3')} = −2</b>.</p>`+
+   `<p>Але 1/3 = 2/6 — це той самий показник, точка на шкалі та сама. Порахуємо через 2/6: спершу квадрат, потім корінь шостого степеня:</p>`+
+   `<div class="big">${pw(B,'2/6')} <span class="eq">=</span> <sup>6</sup>√((−8)²) <span class="eq">=</span> <sup>6</sup>√64 <span class="eq">=</span> <span class="res">2</span></div>`+
+   `<div class="warn"><b>Один показник — дві різні відповіді: −2 і 2.</b> Щоб правила ступенів не суперечили самі собі, у школі дробовий показник означають тільки для додатної основи (Мерзляк, 10 клас). Для основи 0 — тільки з додатним показником: 0<sup>m/n</sup> = 0.</div>`+
+   `<p class="muted">З цілим показником (q = 1) відʼємна основа працює як завжди — постав q = 1 і подивись.</p>`+NEG_BEYOND;
   drawLine(p,q);
 }
 function drawLine(p,q){
