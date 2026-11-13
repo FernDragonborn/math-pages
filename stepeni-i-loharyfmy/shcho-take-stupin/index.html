@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<title>Що таке степінь</title>
+<title>Що таке ступінь</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
@@ -117,14 +117,14 @@ details[open] summary::after{content:""}
 <div class="wrap">
 
 <header>
-  <h1>Що таке степінь</h1>
-  <p class="sub">Звичайний степінь — це коротший запис множення однакових множників. Тут видно, що саме множиться, скільки разів, і як запис розгортається. <span class="hand">тисни все ↓</span></p>
+  <h1>Що таке ступінь</h1>
+  <p class="sub">Звичайний ступінь — це коротший запис множення однакових множників. Тут видно, що саме множиться, скільки разів, і як запис розгортається. <span class="hand">тисни все ↓</span></p>
 </header>
 
 <!-- 1 -->
 <section>
   <h2><span class="num">1</span>Дві частини запису</h2>
-  <p>У записі степеня є рівно дві ролі:</p>
+  <p>У записі ступеня є рівно дві ролі:</p>
   <p><span class="key-b">Основа</span> — <b>що</b> множимо. Це одна «цеглинка», яку копіюють.<br>
      <span class="key-e">Показник</span> — <b>скільки разів</b> ця цеглинка стоїть у добутку. Пишеться маленьким, справа зверху.</p>
   <p class="muted">Синя рамка на цій сторінці завжди означає основу, червоне — показник.</p>
@@ -154,13 +154,13 @@ details[open] summary::after{content:""}
   <h2><span class="num">2</span>Куди дотягується показник</h2>
   <p>Показник чіпляється тільки до того, що стоїть <b>впритул зліва</b>: до одного числа, однієї букви або <b>однієї дужки цілком</b>. Тому дужки вирішують, що саме буде основою. Перемикай і дивись, як міняється розклад.</p>
   <div id="pits"></div>
-  <div class="warn"><b>Звідси правило:</b> хочеш, щоб у степінь пішло щось більше за одне число чи букву (мінус, добуток, сума, дріб) — бери це в дужки. Без дужок основа — тільки останній символ перед показником.</div>
+  <div class="warn"><b>Звідси правило:</b> хочеш, щоб у ступінь пішло щось більше за одне число чи букву (мінус, добуток, сума, дріб) — бери це в дужки. Без дужок основа — тільки останній символ перед показником.</div>
 </section>
 
 <!-- 3 -->
 <section>
   <h2><span class="num">3</span>Навіщо розкладати</h2>
-  <p>Коли не памʼятаєш правило — розклади на копії й порахуй. Наприклад, множення двох степенів з однаковою основою:</p>
+  <p>Коли не памʼятаєш правило — розклади на копії й порахуй. Наприклад, множення двох ступенів з однаковою основою:</p>
   <div class="row">
     <span class="lbl">перший показник</span>
     <span class="stepper"><button type="button" id="mm" aria-label="Менше">−</button><output id="mOut"></output><button type="button" id="mp" aria-label="Більше">+</button></span>
@@ -180,7 +180,7 @@ details[open] summary::after{content:""}
   <details><summary>2x<sup>3</sup></summary><div class="ans">Основа — тільки <span class="m"><span class="b">x</span></span>; двійка просто множник попереду.<br><span class="m">= 2·x·x·x</span></div></details>
   <details><summary>(3y)<sup>2</sup></summary><div class="ans">Основа — <span class="m"><span class="b">(3y)</span></span>.<br><span class="m">= 3y·3y = 3·3·y·y = 9y<sup>2</sup></span></div></details>
   <details><summary>(1/2)<sup>3</sup></summary><div class="ans">Основа — дріб <span class="m"><span class="b">(1/2)</span></span>.<br><span class="m">= 1/2 · 1/2 · 1/2 = (1·1·1)/(2·2·2) = 1/8</span></div></details>
-  <details><summary>(a<sup>3</sup>)<sup>2</sup></summary><div class="ans">Основа — <span class="m"><span class="b">(a<sup>3</sup>)</span></span>, сама є степенем.<br><span class="m">= a<sup>3</sup>·a<sup>3</sup> = a·a·a · a·a·a = a<sup>6</sup></span></div></details>
+  <details><summary>(a<sup>3</sup>)<sup>2</sup></summary><div class="ans">Основа — <span class="m"><span class="b">(a<sup>3</sup>)</span></span>, сама є ступенем.<br><span class="m">= a<sup>3</sup>·a<sup>3</sup> = a·a·a · a·a·a = a<sup>6</sup></span></div></details>
 </section>
 
 <div class="rule">
@@ -208,7 +208,7 @@ function fmt(v){
   return v.toLocaleString('uk-UA',{maximumFractionDigits:6}).replace('-',MINUS);
 }
 const fac=v=>v<0?`(${fmt(v)})`:fmt(v);
-const READ=['у нульовому степені','у першому степені','у квадраті','у кубі','у четвертому степені','у пʼятому степені','у шостому степені'];
+const READ=['у нульовому ступені','у першому ступені','у квадраті','у кубі','у четвертому ступені','у пʼятому ступені','у шостому ступені'];
 const plain=h=>h.replace(/<sup>(\d)<\/sup>/g,(_,d)=>'⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).replace(/<[^>]+>/g,'');
 
 /* ---------- bases ---------- */
@@ -219,7 +219,7 @@ const BASES=[
   {cat:'дріб',lab:'(2/3)',frac:[2,3]},
   {cat:'добуток',lab:'(2a)',prod:[2,'a']},
   {cat:'сума',lab:'(x+1)',sum:true},
-  {cat:'інший степінь',lab:'(a'+SUP(2)+')',pow:['a',2]},
+  {cat:'інший ступінь',lab:'(a'+SUP(2)+')',pow:['a',2]},
 ];
 const st={base:BASES[0],n:3,stage:1};
 
@@ -302,18 +302,18 @@ function stages(){
     const top=Array(n).fill(fac(t)).join('·'),bot=Array(n).fill(d).join('·');
     const T=Math.pow(t,n),D=Math.pow(d,n);
     S.push({lines:[frac(top,bot),`<span class="res">${frac(fmt(T),fmt(D))}</span>`],
-      text:`Дроби множаться так: чисельник на чисельник, знаменник на знаменник. Тому в степінь іде і верх, і низ: ${n} ${plural(n,'копія','копії','копій')} ${t} нагорі й ${n} ${plural(n,'копія','копії','копій')} ${d} внизу.`});
+      text:`Дроби множаться так: чисельник на чисельник, знаменник на знаменник. Тому в ступінь іде і верх, і низ: ${n} ${plural(n,'копія','копії','копій')} ${t} нагорі й ${n} ${plural(n,'копія','копії','копій')} ${d} внизу.`});
   }else if(b.prod){
     const [k,v]=b.prod;
     const l1=Array(n).fill(`${k}${DOT}${v}`).join(DOT);
     const l2=`<span class="hl">${Array(n).fill(k).join('·')}</span>${DOT}${Array(n).fill(v).join('·')}`;
     S.push({lines:[l1,l2,`<span class="res">${Math.pow(k,n)}${v}${SUP(n)}</span>`],
-      text:`Усередині дужки тільки множення, тож дужки можна зняти й переставити множники: усі ${k} разом, усі ${v} разом. У степінь пішла <b>і двійка, і буква</b> — бо обидві були в основі.`});
+      text:`Усередині дужки тільки множення, тож дужки можна зняти й переставити множники: усі ${k} разом, усі ${v} разом. У ступінь пішла <b>і двійка, і буква</b> — бо обидві були в основі.`});
   }else if(b.pow){
     const [v,k]=b.pow;
     const l1=Array(n).fill(Array(k).fill(v).join('·')).join(' · ');
     S.push({lines:[Array(n).fill(`${v}${SUP(k)}`).join(DOT),l1,`<span class="res">${v}${SUP(k*n)}</span>`],
-      text:`Кожна копія сама є степенем і розкладається на ${k} множники ${v}. Разом: ${n} ${plural(n,'копія','копії','копій')} по ${k} = ${k*n} множників ${v}.`});
+      text:`Кожна копія сама є ступенем і розкладається на ${k} множники ${v}. Разом: ${n} ${plural(n,'копія','копії','копій')} по ${k} = ${k*n} множників ${v}.`});
   }else if(b.sum){
     const lines=[];
     if(n===2) lines.push('x·x + x·1 + 1·x + 1·1');
@@ -362,13 +362,13 @@ renderPalette();render(false);
 
 /* ---------- pitfalls ---------- */
 const PITS=[
-  {off:{expr:`${MINUS}${B('2')}${E(4)}`,steps:`= ${MINUS}(2·2·2·2) = <span class="res">${MINUS}16</span>`,why:'Основа — тільки 2. Мінус стоїть зовні й чекає, поки порахують степінь.'},
+  {off:{expr:`${MINUS}${B('2')}${E(4)}`,steps:`= ${MINUS}(2·2·2·2) = <span class="res">${MINUS}16</span>`,why:'Основа — тільки 2. Мінус стоїть зовні й чекає, поки порахують ступінь.'},
    on:{expr:`${B('('+MINUS+'2)')}${E(4)}`,steps:`= (${MINUS}2)·(${MINUS}2)·(${MINUS}2)·(${MINUS}2) = <span class="res">16</span>`,why:'Основа — вся дужка разом з мінусом. Чотири мінуси знищуються попарно.'}},
-  {off:{expr:`2${B('a')}${E(3)}`,steps:`= 2·a·a·a`,why:'Основа — тільки a. Двійка — окремий множник, у степінь не йде.'},
+  {off:{expr:`2${B('a')}${E(3)}`,steps:`= 2·a·a·a`,why:'Основа — тільки a. Двійка — окремий множник, у ступінь не йде.'},
    on:{expr:`${B('(2a)')}${E(3)}`,steps:`= 2a·2a·2a = 2·2·2·a·a·a = <span class="res">8a${SUP(3)}</span>`,why:'Основа — (2a). Кожна копія несе свою двійку, тому двійок теж три.'}},
   {off:{expr:`x + ${B('1')}${E(2)}`,steps:`= x + 1·1 = <span class="res">x + 1</span>`,why:'Основа — тільки 1. До x показник не дотягується.'},
    on:{expr:`${B('(x+1)')}${E(2)}`,steps:`= (x+1)·(x+1) = <span class="res">x${SUP(2)} + 2x + 1</span>`,why:'Основа — вся сума. Множимо дужку на дужку: кожен доданок на кожен.'}},
-  {off:{expr:`3·${B('5')}${E(2)}`,steps:`= 3·5·5 = <span class="res">75</span>`,why:'Основа — тільки 5. Спершу степінь, потім множення на 3.'},
+  {off:{expr:`3·${B('5')}${E(2)}`,steps:`= 3·5·5 = <span class="res">75</span>`,why:'Основа — тільки 5. Спершу ступінь, потім множення на 3.'},
    on:{expr:`${B('(3·5)')}${E(2)}`,steps:`= (3·5)·(3·5) = 15·15 = <span class="res">225</span>`,why:'Основа — весь добуток, тож і трійка повторюється двічі.'}},
 ];
 $('pits').innerHTML=PITS.map((p,i)=>`<div class="pit" id="pit${i}"><div class="pit-head"><span class="expr"></span><button type="button" class="switch" aria-pressed="false">дужки</button></div><div class="steps"></div><p class="why"></p></div>`).join('');

@@ -210,7 +210,7 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
 <main>
 <header class="hero">
   <h1>Логарифми з нуля</h1>
-  <p class="lead">Посібник для 11 класу. Потрібні тільки степені з 8 класу — їх ми теж згадаємо. Все можна натискати.</p>
+  <p class="lead">Посібник для 11 класу. Потрібні тільки ступені з 8 класу — їх ми теж згадаємо. Все можна натискати.</p>
 
   <div class="sheet" id="game">
     <p class="game-text" style="margin:0;text-align:center"></p>
@@ -219,7 +219,7 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
     <div class="fb" aria-live="polite"></div>
     <div class="row" style="justify-content:center"><button class="btn ghost" id="game-next" hidden>Інше питання</button></div>
   </div>
-  <p class="hand">Відповідь на питання «у який степінь?» — це і є логарифм. Решта посібника — про те, як цю відповідь знаходити.</p>
+  <p class="hand">Відповідь на питання «у який ступінь?» — це і є логарифм. Решта посібника — про те, як цю відповідь знаходити.</p>
 
   <nav class="toc" aria-label="Зміст"><ol></ol></nav>
   <p class="progress" id="progress"></p>
@@ -227,11 +227,11 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
 
 <!-- §1 -->
 <section id="s1">
-  <div class="sec-head"><span class="sec-num">§1</span><h2>Степені: коротко згадуємо</h2></div>
-  <p>Степінь — це скорочений запис множення однакових чисел:</p>
+  <div class="sec-head"><span class="sec-num">§1</span><h2>Ступені: коротко згадуємо</h2></div>
+  <p>Ступінь — це скорочений запис множення однакових чисел:</p>
   <div class="math-block">\[a^n = \underbrace{a\cdot a\cdot \ldots \cdot a}_{n}\]</div>
   <p>Тут \(a\) — <b>основа</b> (що множимо), \(n\) — <b>показник</b> (скільки разів). Наприклад, \(2^3 = 2\cdot2\cdot2 = 8\).</p>
-  <p>Подивись на «драбину» степенів. Обери основу:</p>
+  <p>Подивись на «драбину» ступенів. Обери основу:</p>
   <div class="sheet" id="ladder1"></div>
   <p>Кожен крок униз — показник меншає на 1, а число ділиться на основу. Дійшли до \(a^1 = a\), поділили ще раз — отримали \(a^0 = 1\). Ще раз — \(a^{-1} = \frac1a\). Тож \(a^0 = 1\) (для \(a \ne 0\), бо на нуль ділити не можна) і від'ємні показники — не правила «з повітря», а просто продовження драбини.</p>
 
@@ -248,15 +248,15 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
 <!-- §2 -->
 <section id="s2">
   <div class="sec-head"><span class="sec-num">§2</span><h2>Що таке логарифм</h2></div>
-  <p>Логарифм відповідає на питання: <b>у який степінь треба піднести основу, щоб отримати число?</b></p>
+  <p>Логарифм відповідає на питання: <b>у який ступінь треба піднести основу, щоб отримати число?</b></p>
   <div class="rule">
     <div class="math-block">\[\log_{\class{ka}{a}} \class{kb}{b} = \class{kc}{c} \quad\Longleftrightarrow\quad \class{ka}{a}^{\class{kc}{c}} = \class{kb}{b}\]</div>
     <div class="legend"><span class="a"><b>a</b> — основа</span><span class="b"><b>b</b> — число, з якого беремо логарифм</span><span class="c"><b>c</b> — логарифм, тобто показник</span></div>
   </div>
-  <p>Читається <span style="white-space:nowrap">«логарифм \(b\)</span> за <span style="white-space:nowrap">основою \(a\)».</span> Головне: <b>логарифм — це показник степеня.</b> Ось та сама драбина, прочитана справа наліво:</p>
+  <p>Читається <span style="white-space:nowrap">«логарифм \(b\)</span> за <span style="white-space:nowrap">основою \(a\)».</span> Головне: <b>логарифм — це показник ступеня.</b> Ось та сама драбина, прочитана справа наліво:</p>
   <div class="sheet" id="ladder2"></div>
 
-  <h3>Переклади з мови степенів на мову логарифмів</h3>
+  <h3>Переклади з мови ступенів на мову логарифмів</h3>
   <p class="soft">Спробуй сам, потім натисни на картку, щоб перевірити.</p>
   <div class="cards" id="cards"></div>
 
@@ -264,7 +264,7 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
   <ul class="rules">
     <li>\(\log_a 1 = 0\)<div class="why">Бо \(a^0 = 1\) для будь-якої допустимої основи.</div></li>
     <li>\(\log_a a = 1\)<div class="why">Бо \(a^1 = a\).</div></li>
-    <li>\(\log_a a^k = k\)<div class="why">Це головний інструмент для обчислень (див. §4): якщо число вже записане як степінь основи, логарифм — це просто показник.</div></li>
+    <li>\(\log_a a^k = k\)<div class="why">Це головний інструмент для обчислень (див. §4): якщо число вже записане як ступінь основи, логарифм — це просто показник.</div></li>
     <li>\(a^{\log_a b} = b\) — основна логарифмічна тотожність<div class="why">\(\log_a b\) — це саме той показник, у який треба піднести \(a\), щоб вийшло \(b\). Підносимо — отримуємо \(b\). Наприклад, \(2^{\log_2 7} = 7\).</div></li>
   </ul>
   <p>Дві основи мають власні позначення: \(\lg b = \log_{10} b\) (десятковий логарифм) і \(\ln b = \log_e b\) (натуральний, \(e \approx 2{,}718\) — це спеціальне число, пізніше побачиш, звідки воно). На калькуляторі зазвичай є саме кнопки <b>lg</b> (або log) і <b>ln</b>.</p>
@@ -277,13 +277,13 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
   <div class="rule"><p style="margin:0">\(\log_a b\) має сенс, тільки якщо</p><div class="math-block">\[a \gt 0,\qquad a \ne 1,\qquad b \gt 0\]</div></div>
   <p>Ці умови не треба зубрити — кожна має просту причину. Відкрий і подивись:</p>
   <details><summary>А що, якщо основа \(a = 1\)?</summary><div>
-    <p>\(1^c = 1\) при будь-якому \(c\). На питання «у який степінь піднести 1, щоб вийшло 5?» відповіді немає взагалі, а на «…щоб вийшло 1?» — безліч відповідей. Тому з основою 1 логарифм не визначають.</p>
+    <p>\(1^c = 1\) при будь-якому \(c\). На питання «у який ступінь піднести 1, щоб вийшло 5?» відповіді немає взагалі, а на «…щоб вийшло 1?» — безліч відповідей. Тому з основою 1 логарифм не визначають.</p>
   </div></details>
   <details><summary>А що, якщо основа від'ємна або нуль?</summary><div>
     <p>\((-2)^2 = 4\), \((-2)^3 = -8\) — знак скаче, а \((-2)^{\frac12} = \sqrt{-2}\) серед дійсних чисел не існує. З нулем теж погано: \(0^c = 0\) для будь-якого додатного \(c\). Тому основа — тільки додатна.</p>
   </div></details>
   <details><summary>А що, якщо число \(b \le 0\)?</summary><div>
-    <p>Додатна основа в будь-якому степені дає додатне число: навіть \(2^{-10} = \frac{1}{1024}\) — маленьке, але більше за нуль. Отже, \(2^c\) ніколи не дорівнює \(-8\) чи \(0\), і \(\log_2(-8)\), \(\log_2 0\) не існують.</p>
+    <p>Додатна основа в будь-якому ступені дає додатне число: навіть \(2^{-10} = \frac{1}{1024}\) — маленьке, але більше за нуль. Отже, \(2^c\) ніколи не дорівнює \(-8\) чи \(0\), і \(\log_2(-8)\), \(\log_2 0\) не існують.</p>
   </div></details>
   <p class="hand">Звідси береться ОДЗ у рівняннях: все, що стоїть під логарифмом, має бути більше за нуль. Повернемося до цього в §7.</p>
   <div class="quiz" data-quiz="s3"></div>
@@ -294,10 +294,10 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
   <div class="sec-head"><span class="sec-num">§4</span><h2>Як обчислити логарифм без калькулятора</h2></div>
   <div class="rule">
     <ol style="margin:0;padding-left:1.2em">
-      <li>Запиши число як степінь основи. Якщо не виходить — запиши і основу, і число як степені одного й того самого числа.</li>
+      <li>Запиши число як ступінь основи. Якщо не виходить — запиши і основу, і число як ступені одного й того самого числа.</li>
       <li>Користуйся тим, що \(\log_a a^k = k\), або прирівняй показники.</li>
     </ol>
-    <p style="margin:.5em 0 0">Так рахуються «гарні» логарифми, які дають цілу відповідь або простий дріб. Наприклад, \(\log_2 7\) так не порахуєш: 7 не є зручним степенем двійки. Для таких є калькулятор (§5).</p>
+    <p style="margin:.5em 0 0">Так рахуються «гарні» логарифми, які дають цілу відповідь або простий дріб. Наприклад, \(\log_2 7\) так не порахуєш: 7 не є зручним ступенем двійки. Для таких є калькулятор (§5).</p>
   </div>
   <p class="soft">Розв'язки відкриваються по кроку. Спробуй вгадати наступний крок, перш ніж натиснути.</p>
 
@@ -305,7 +305,7 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
     <p class="task-title">Приклад 1. \(\log_3 81\)</p>
     <ol>
       <li>\(81 = 3\cdot3\cdot3\cdot3 = 3^4\)<div class="why">Ділимо 81 на 3, поки не вийде 1: 81 → 27 → 9 → 3 → 1. Чотири ділення.</div></li>
-      <li>\(\log_3 81 = \log_3 3^4 = 4\)<div class="why">Логарифм степеня основи — це показник.</div></li>
+      <li>\(\log_3 81 = \log_3 3^4 = 4\)<div class="why">Логарифм ступеня основи — це показник.</div></li>
     </ol>
   </div>
 
@@ -320,9 +320,9 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
   <div class="sheet steps">
     <p class="task-title">Приклад 3. \(\log_4 8\)</p>
     <ol>
-      <li>\(4 = 2^2,\quad 8 = 2^3\)<div class="why">8 не є цілим степенем 4, зате обидва числа — степені двійки.</div></li>
+      <li>\(4 = 2^2,\quad 8 = 2^3\)<div class="why">8 не є цілим ступенем 4, зате обидва числа — ступені двійки.</div></li>
       <li>Нехай \(\log_4 8 = c\). Тоді \(4^c = 8\), тобто \(\left(2^2\right)^c = 2^3\).<div class="why">Означення логарифма (§2).</div></li>
-      <li>\(2^{2c} = 2^3\)<div class="why">Степінь степеня: показники множимо.</div></li>
+      <li>\(2^{2c} = 2^3\)<div class="why">Ступінь ступеня: показники множимо.</div></li>
       <li>\(2c = 3 \;\Rightarrow\; c = \frac32\)<div class="why">Основи однакові — значить, рівні й показники.</div></li>
     </ol>
   </div>
@@ -331,7 +331,7 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
     <p class="task-title">Приклад 4. \(\log_{\frac12} 8\)</p>
     <ol>
       <li>\(\frac12 = 2^{-1},\quad 8 = 2^3\)<div class="why">Знову все через двійку.</div></li>
-      <li>\(\left(2^{-1}\right)^c = 2^3 \;\Rightarrow\; 2^{-c} = 2^3\)<div class="why">Степінь степеня.</div></li>
+      <li>\(\left(2^{-1}\right)^c = 2^3 \;\Rightarrow\; 2^{-c} = 2^3\)<div class="why">Ступінь ступеня.</div></li>
       <li>\(-c = 3 \;\Rightarrow\; c = -3\)<div class="why">Перевірка: \(\left(\frac12\right)^{-3} = 2^3 = 8\). ✓</div></li>
     </ol>
   </div>
@@ -348,7 +348,7 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
   <p class="soft">Працюють, коли \(x \gt 0\) і \(y \gt 0\). У третьому правилі додатним має бути саме \(x\): наприклад, \(\log_2 (-4)^2\) існує (це \(\log_2 16 = 4\)), а \(2\log_2(-4)\) — ні.</p>
   <ul class="rules">
     <li>\(\log_a(xy) = \log_a x + \log_a y\)
-      <details><summary>Чому так</summary><div>Будь-яке додатне число можна записати як степінь основи: \(x = a^m\), \(y = a^n\), де \(m = \log_a x\), \(n = \log_a y\) (за основною тотожністю). Тоді \(xy = a^m\cdot a^n = a^{m+n}\), отже \(\log_a(xy) = m + n\).</div></details></li>
+      <details><summary>Чому так</summary><div>Будь-яке додатне число можна записати як ступінь основи: \(x = a^m\), \(y = a^n\), де \(m = \log_a x\), \(n = \log_a y\) (за основною тотожністю). Тоді \(xy = a^m\cdot a^n = a^{m+n}\), отже \(\log_a(xy) = m + n\).</div></details></li>
     <li>\(\log_a \dfrac{x}{y} = \log_a x - \log_a y\)
       <details><summary>Чому так</summary><div>Так само: \(\frac{x}{y} = \frac{a^m}{a^n} = a^{m-n}\), отже логарифм частки дорівнює \(m - n\).</div></details></li>
     <li>\(\log_a x^k = k\cdot\log_a x\)
@@ -361,7 +361,7 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
     <p style="margin-top:0"><strong>Типові пастки</strong></p>
     <p>\(\log_a(x + y) \ne \log_a x + \log_a y\). Перевір: \(\log_2(4 + 4) = \log_2 8 = 3\), а \(\log_2 4 + \log_2 4 = 4\).</p>
     <p>\(\dfrac{\log_a x}{\log_a y} \ne \log_a \dfrac{x}{y}\). Ліворуч — перехід до основи \(y\): це \(\log_y x\).</p>
-    <p style="margin-bottom:0">\(\left(\log_a x\right)^2 \ne 2\log_a x\). Правило про показник працює лише тоді, коли в степінь піднесене число під логарифмом, а не сам логарифм.</p>
+    <p style="margin-bottom:0">\(\left(\log_a x\right)^2 \ne 2\log_a x\). Правило про показник працює лише тоді, коли в ступінь піднесене число під логарифмом, а не сам логарифм.</p>
   </div>
 
   <div class="sheet steps">
@@ -396,7 +396,7 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
     <li><b>Існує лише при \(x \gt 0\).</b><div class="why">Графік весь праворуч від осі \(Oy\) і ніколи її не торкається — це умова \(b \gt 0\) з §3.</div></li>
     <li><b>Завжди проходить через точки \((1;\,0)\) і \((a;\,1)\).</b><div class="why">Бо \(\log_a 1 = 0\) і \(\log_a a = 1\) (§2).</div></li>
     <li><b>Якщо \(a \gt 1\) — функція зростає, якщо \(0 \lt a \lt 1\) — спадає.</b><div class="why">Це знадобиться для нерівностей у §7.</div></li>
-    <li><b>Це дзеркальне відображення графіка \(y = a^x\) відносно прямої \(y = x\).</b><div class="why">Бо логарифм «скасовує» піднесення в степінь: точка \((2;\,4)\) на графіку \(y = 2^x\) перетворюється на \((4;\,2)\) на графіку \(y = \log_2 x\). Увімкни галочку вище — побачиш.</div></li>
+    <li><b>Це дзеркальне відображення графіка \(y = a^x\) відносно прямої \(y = x\).</b><div class="why">Бо логарифм «скасовує» піднесення в ступінь: точка \((2;\,4)\) на графіку \(y = 2^x\) перетворюється на \((4;\,2)\) на графіку \(y = \log_2 x\). Увімкни галочку вище — побачиш.</div></li>
   </ul>
   <div class="quiz" data-quiz="s6"></div>
 </section>
@@ -497,7 +497,7 @@ footer { margin-top: 48px; font-size: .9rem; color: var(--ink-soft); }
 <section id="cheat">
   <div class="sec-head"><span class="sec-num">✎</span><h2>Шпаргалка</h2></div>
   <div class="sheet cheat">
-    <div>\(\log_a b = c \iff a^c = b\)<div class="soft">Логарифм — це показник степеня.</div></div>
+    <div>\(\log_a b = c \iff a^c = b\)<div class="soft">Логарифм — це показник ступеня.</div></div>
     <div>\(a \gt 0,\; a \ne 1,\; b \gt 0\)<div class="soft">Коли логарифм існує. Звідси ОДЗ.</div></div>
     <div>\(\log_a 1 = 0,\quad \log_a a = 1\)<br>\(\log_a a^k = k,\quad a^{\log_a b} = b\)</div>
     <div>\(\log_a(xy) = \log_a x + \log_a y\)<br>\(\log_a \frac{x}{y} = \log_a x - \log_a y\)<br>\(\log_a x^k = k\log_a x\)</div>
@@ -558,7 +558,7 @@ function parseAns(s) {
 }
 
 /* ---------- TOC & progress ---------- */
-const SECS = [['s1', 'Степені'], ['s2', 'Що таке логарифм'], ['s3', 'Коли існує'], ['s4', 'Обчислення'], ['s5', 'Властивості'], ['s6', 'Графік'], ['s7', 'Рівняння'], ['s8', 'Тренажер']];
+const SECS = [['s1', 'Ступені'], ['s2', 'Що таке логарифм'], ['s3', 'Коли існує'], ['s4', 'Обчислення'], ['s5', 'Властивості'], ['s6', 'Графік'], ['s7', 'Рівняння'], ['s8', 'Тренажер']];
 function renderToc() {
   const ol = $('nav.toc ol');
   ol.innerHTML = SECS.map(([id, name], i) =>
@@ -578,7 +578,7 @@ function initGame() {
   const text = $('.game-text', root), q = $('.game-q', root), opts = $('.game-opts', root), fb = $('.fb', root), next = $('#game-next');
   function show() {
     const [a, b] = QS[i];
-    text.innerHTML = `У який степінь треба піднести <b>${a}</b>, щоб вийшло <b>${b}</b>?`;
+    text.innerHTML = `У який ступінь треба піднести <b>${a}</b>, щоб вийшло <b>${b}</b>?`;
     setTex(q, T`\(${a}^{\boxed{\,?\,}} = ${b}\)`);
     opts.innerHTML = [0, 1, 2, 3, 4, 5, 6, 7].map(n => `<button type="button" data-n="${n}">${n}</button>`).join('');
     fb.className = 'fb'; fb.innerHTML = ''; next.hidden = true;
@@ -590,7 +590,7 @@ function initGame() {
       btn.classList.add('ok'); $$('button', opts).forEach(x => x.disabled = true);
       setTex(q, T`\(${a}^{${c}} = ${b}\)`);
       fb.className = 'fb ok show';
-      const extra = c === 0 ? ' Так, нуль теж може бути відповіддю: будь-яке число (крім 0) в нульовому степені дає 1.' : '';
+      const extra = c === 0 ? ' Так, нуль теж може бути відповіддю: будь-яке число (крім 0) в нульовому ступені дає 1.' : '';
       setTex(fb, T`<span class="tag">Так!</span> \(${a}^{${c}} = ${b}\). Ось це число ${c} і називається логарифмом: \(${logT(a, b, true)} = ${c}\).` + extra);
       next.hidden = false;
     } else {
@@ -608,7 +608,7 @@ function initGame() {
 function initLadder(root, { mode, toggle }) {
   let base = 2;
   const BASES = [2, 3, 5, 10];
-  root.innerHTML = `<div class="chips" role="group" aria-label="Основа"></div>${toggle ? '<div class="row" style="margin-top:0"><button type="button" class="btn ghost" data-t>Показати як степені</button></div>' : ''}<div class="ladder math-block"></div>`;
+  root.innerHTML = `<div class="chips" role="group" aria-label="Основа"></div>${toggle ? '<div class="row" style="margin-top:0"><button type="button" class="btn ghost" data-t>Показати як ступені</button></div>' : ''}<div class="ladder math-block"></div>`;
   const chips = $('.chips', root), lad = $('.ladder', root), tbtn = $('[data-t]', root);
   chips.innerHTML = BASES.map(b => `<button type="button" class="chip" data-b="${b}">основа ${b}</button>`).join('');
   function render() {
@@ -630,7 +630,7 @@ function initLadder(root, { mode, toggle }) {
       rows.push(`<div class="rung${n === 0 ? ' zero' : ''}"><span>${main}</span><span class="step">${step}</span>${note ? `<span class="note">${note}</span>` : ''}</div>`);
     }
     setTex(lad, rows.join(''));
-    if (tbtn) tbtn.textContent = mode === 'pow' ? 'Показати як логарифми' : 'Показати як степені';
+    if (tbtn) tbtn.textContent = mode === 'pow' ? 'Показати як логарифми' : 'Показати як ступені';
   }
   chips.addEventListener('click', e => { const c = e.target.closest('.chip'); if (!c) return; base = +c.dataset.b; render(); });
   if (tbtn) tbtn.addEventListener('click', () => { mode = mode === 'pow' ? 'log' : 'pow'; render(); });
@@ -749,7 +749,7 @@ const QUIZ = {
     { q: T`Скільки буде \(7^0\)?`, o: ['0', '1', '7'], a: 1, why: T`Крок униз по драбині — ділення на основу: \(7^0 = \frac{7^1}{7} = 1\).` }
   ],
   s2: [
-    { q: T`\(\log_3 81 = ?\)`, o: ['4', '27', '3', '243'], a: 0, why: T`Питання: 3 у якому степені дає 81? \(3^4 = 81\), отже 4.` },
+    { q: T`\(\log_3 81 = ?\)`, o: ['4', '27', '3', '243'], a: 0, why: T`Питання: 3 у якому ступені дає 81? \(3^4 = 81\), отже 4.` },
     { q: T`Як записати \(10^3 = 1000\) через логарифм?`, o: [T`\(\lg 3 = 1000\)`, T`\(\lg 1000 = 3\)`, T`\(\log_3 1000 = 10\)`], a: 1, why: T`Основа 10 (а \(\log_{10}\) пишуть як \(\lg\)), число 1000, логарифм — це показник 3.` },
     { q: T`\(\log_5 1 = ?\)`, o: ['5', '1', '0', 'не існує'], a: 2, why: T`\(5^0 = 1\), тож \(\log_5 1 = 0\). Так для будь-якої допустимої основи.` }
   ],
@@ -760,7 +760,7 @@ const QUIZ = {
   s4: [
     { q: T`\(\log_2 \frac18 = ?\)`, o: ['-3', '3', T`\(\frac13\)`, T`\(-\frac13\)`], a: 0, why: T`\(\frac18 = \frac{1}{2^3} = 2^{-3}\), отже відповідь \(-3\).` },
     { q: T`\(\log_9 3 = ?\)`, o: ['3', T`\(\frac12\)`, '2', T`\(\frac13\)`], a: 1, why: T`\(9 = 3^2\), тож \(9^c = 3\) означає \(3^{2c} = 3^1\), \(2c = 1\), \(c = \frac12\). Інакше: \(\sqrt9 = 3\).` },
-    { q: T`\(\lg 10\,000 = ?\)`, o: ['4', '1000', '5', '10'], a: 0, why: T`\(10\,000 = 10^4\). У десятковому логарифмі степеня десятки відповідь — кількість нулів.` }
+    { q: T`\(\lg 10\,000 = ?\)`, o: ['4', '1000', '5', '10'], a: 0, why: T`\(10\,000 = 10^4\). У десятковому логарифмі ступеня десятки відповідь — кількість нулів.` }
   ],
   s5: [
     { q: T`\(\lg 2 + \lg 50 = ?\)`, o: [T`\(\lg 52\)`, '2', '100', '1'], a: 1, why: T`Сума логарифмів — логарифм добутку: \(\lg(2\cdot50) = \lg 100 = 2\). \(\lg 52\) — пастка: числа треба множити, не додавати.` },
@@ -812,10 +812,10 @@ function genCompute() {
     const steps = [];
     if (k > 1) steps.push(S(T`${b} = ${a}^{${k}}`, T`Ділимо ${a ** k} на ${a}, поки не вийде 1: це ${k} ділень.`));
     if (k === 1) steps.push(S(T`${b} = ${a}^{1}`, 'Число дорівнює основі.'));
-    if (k === 0) steps.push(S(T`1 = ${a}^{0}`, T`Будь-яка основа в нульовому степені дає 1.`));
+    if (k === 0) steps.push(S(T`1 = ${a}^{0}`, T`Будь-яка основа в нульовому ступені дає 1.`));
     if (k < 0) steps.push(S(T`${b} = \frac{1}{${a}^{${-k}}} = ${a}^{${k}}`, T`Від'ємний показник: \(a^{-n} = \frac{1}{a^n}\).`));
     steps.push(S(T`${logT(a, b)} = ${logT(a, a + '^{' + k + '}')} = ${k}`, T`\(\log_a a^k = k\).`));
-    return { q: 'Обчисли', tex: T`${logT(a, b)}`, ans: k, ansTex: String(k), hint: T`Питання: \(${a}\) у якому степені дає \(${b}\)?`, steps };
+    return { q: 'Обчисли', tex: T`${logT(a, b)}`, ans: k, ansTex: String(k), hint: T`Питання: \(${a}\) у якому ступені дає \(${b}\)?`, steps };
   }
   const FR = [
     ['4', '8', 2, 2, 3], ['8', '4', 2, 3, 2], ['9', '27', 3, 2, 3], ['27', '9', 3, 3, 2], ['4', '2', 2, 2, 1], ['8', '2', 2, 3, 1],
@@ -827,11 +827,11 @@ function genCompute() {
   const ec = ea === 1 ? 'c' : ea === -1 ? '-c' : ea + 'c';
   return {
     q: 'Обчисли', tex: logT(a, b), ans, ansTex,
-    hint: T`Запиши і \(${a}\), і \(${b}\) як степені числа \(${B}\).`,
+    hint: T`Запиши і \(${a}\), і \(${b}\) як ступені числа \(${B}\).`,
     steps: [
-      S(T`${a} = ${B}^{${ea}},\quad ${b} = ${B}^{${eb}}`, T`Обидва числа — степені ${B}.`),
+      S(T`${a} = ${B}^{${ea}},\quad ${b} = ${B}^{${eb}}`, T`Обидва числа — ступені ${B}.`),
       S(T`${a}^{c} = ${b} \;\Rightarrow\; \left(${B}^{${ea}}\right)^{c} = ${B}^{${eb}}`, T`Позначили \(${logT(a, b)} = c\) і скористалися означенням.`),
-      S(T`${B}^{${ec}} = ${B}^{${eb}}`, 'Степінь степеня: показники множимо.'),
+      S(T`${B}^{${ec}} = ${B}^{${eb}}`, 'Ступінь ступеня: показники множимо.'),
       S(T`${ec} = ${eb} \;\Rightarrow\; c = ${ansTex}`, 'Основи однакові — прирівнюємо показники.')
     ]
   };
