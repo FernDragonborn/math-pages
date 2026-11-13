@@ -12,7 +12,7 @@
 <script src="/assets/theme.js"></script>
 <style>
 /* Ten menu mockups built from the cards of the live home page. Temporary: removed once one is chosen. */
-:root{--page-width:720px;--t1:var(--pen);--t2:var(--green);--t3:var(--violet);--t4:var(--orange)}
+:root{--page-width:720px;--t1:var(--pen);--t2:var(--green);--t3:var(--violet);--t4:var(--orange);--t5:color-mix(in srgb,var(--green) 45%,var(--pen))}
 *{box-sizing:border-box}
 .wrap{max-width:720px;margin:0 auto;padding:12px 16px 48px;display:flex;flex-direction:column;gap:12px}
 h1{margin:0;font-size:1.6rem;line-height:1.15}
@@ -111,6 +111,33 @@ a{color:inherit}
 .v10 .on{font-size:12.5px;color:var(--ink-soft)}
 .v10 .on b{color:var(--pen);font-weight:600}
 .v10 .lvl+.lvl h2::before{content:"↓ ";color:var(--pen)}
+
+/* 11 metro map */
+.v11 .scroll{overflow-x:auto;margin:0 -16px;padding:0 16px 6px;-webkit-overflow-scrolling:touch}
+.v11 svg{display:block}
+.v11 .gl{stroke:var(--line);stroke-width:1;stroke-dasharray:3 5}
+.v11 .gt{font:700 12px var(--font-body);fill:var(--ink-soft)}
+.v11 .ln{fill:none;stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+.v11 .tr{fill:none;stroke:var(--ink-soft);stroke-width:2.5;stroke-dasharray:5 4}
+.v11 .tr.on{stroke:var(--ink);stroke-width:3.5;stroke-dasharray:none}
+.v11 .stn{cursor:pointer}
+.v11 .stn circle{fill:var(--paper);stroke-width:4}
+.v11 .stn.hub circle{stroke:var(--ink);stroke-width:4.5}
+.v11 .stn.ext circle{stroke-dasharray:3 2}
+.v11 .stn text{font:600 11.5px var(--font-body);fill:var(--ink);paint-order:stroke;stroke:var(--paper);stroke-width:4px}
+.v11 .stn.sel circle{fill:var(--ink)}
+.v11 .stn:focus{outline:none}
+.v11 .stn:focus-visible circle{stroke-width:6}
+.v11 .dim{opacity:.22}
+.v11 .lane{font:700 12px var(--font-display)}
+.v11 .legend{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;color:var(--ink-soft);margin:4px 0 8px}
+.v11 .legend span{display:inline-flex;align-items:center;gap:5px}
+.v11 .legend b{display:inline-block;width:18px;height:6px;border-radius:3px;background:var(--c)}
+.v11 .card{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:6px;padding:12px;display:flex;flex-direction:column;gap:7px;margin-top:8px}
+.v11 .route{font-size:13px;color:var(--ink-soft);line-height:1.6}
+.v11 .route a{color:var(--pen);font-weight:600;text-decoration:none}
+.v11 .go{align-self:flex-start;background:var(--pen);color:var(--on-pen);border-radius:6px;padding:7px 14px;font-weight:700;text-decoration:none}
+.v11 .hint{font-size:13px;color:var(--ink-soft);margin:6px 0 0}
 </style>
 </head>
 <body>
@@ -125,7 +152,7 @@ a{color:inherit}
   </header>
   <nav class="pickers" aria-label="Мокап">
     <div>звичайні: <a href="?v=1">1 картки</a><a href="?v=2">2 зміст з описами</a><a href="?v=3">3 вкладки</a><a href="?v=4">4 сітка</a><a href="?v=5">5 рядки ＋</a></div>
-    <div>незвичні: <a href="?v=6">6 метро</a><a href="?v=7">7 класи</a><a href="?v=8">8 питання</a><a href="?v=9">9 формули</a><a href="?v=10">10 дерево</a></div>
+    <div>незвичні: <a href="?v=6">6 метро</a><a href="?v=7">7 класи</a><a href="?v=8">8 питання</a><a href="?v=9">9 формули</a><a href="?v=10">10 дерево</a><a href="?v=11">11 мапа метро</a></div>
   </nav>
   <p class="note" id="note"></p>
   <input class="search" id="q" type="search" placeholder="Пошук: ступінь, дріб, корінь…" autocomplete="off" aria-label="Пошук статті">
@@ -147,8 +174,11 @@ const NOTES={
  7:'Класи: гортаєш убік від 5-го до 11-го, на кожному «екрані» — що вчать у цьому класі.',
  8:'Питання: кожна стаття — питання, на яке вона відповідає. Шукаєш своє питання, а не назву теми.',
  9:'Стіна формул: плитка — головна формула статті; торкаєшся — під плитками назва, опис, теги.',
+ 11:'Мапа метро: теми — лінії, по горизонталі — класи. Пунктир — пересадка: стаття однієї теми спирається на статтю іншої. Торкнись станції — мапа підсвітить маршрут до неї, а під мапою зʼявиться опис. Мапа гортається вбік.',
  10:'Дерево: статті рівнями за тим, на чому вони стоять (блок «треба знати»): зверху основи, нижче — те, що з них виростає.'};
 document.getElementById('note').textContent=NOTES[v]||'';
+// the map needs room: on a wide screen it gets the whole width instead of the 720 px column
+if(v==='11'){document.querySelector('.wrap').style.maxWidth='1320px';document.documentElement.style.setProperty('--page-width','1320px');}
 
 const html=await (await fetch('/',{cache:'no-store'})).text();
 const doc=new DOMParser().parseFromString(html,'text/html');
@@ -241,12 +271,54 @@ async function render(){
       h+=`<div class="lvl"><h2>${names[Math.min(L,names.length-1)]}</h2>`+cs.map(c=>{const ns=(nm[c.href]||[]).map(n=>all.find(x=>x.href===n)).filter(Boolean);
         return A(c,`<span class="ttl">${esc(c.title)}${c.ext?' ↗':''}</span><span class="desc">${esc(c.desc)}</span>${tags(c)}${ns.length?`<span class="on">спирається на: ${ns.map(n=>`<b>${esc(n.title)}</b>`).join(', ')}</span>`:''}`);}).join('')+'</div>';}
     h='<div class="v10">'+h+'</div>';
+  } else if(v==='11'){
+    const nm=await needsMap();
+    const lanes=topics;                                   // every topic is a line, even when the filter hides its stations
+    const gOf=c=>Math.min(...c.cls.map(Number));
+    const cols=[...new Set(all.map(gOf))].sort((a,b)=>a-b);
+    const STEP=128, LANEH=118, X0=112, Y0=74;
+    const per=(t,g)=>t.cards.filter(c=>gOf(c)===g);
+    const colW=cols.map(g=>Math.max(...lanes.map(t=>per(t,g).length),1)*STEP+24);
+    const colX=cols.map((g,i)=>X0+colW.slice(0,i).reduce((a,b)=>a+b,0));
+    const pos={};
+    lanes.forEach((t,li)=>{let k=0;cols.forEach((g,gi)=>{per(t,g).forEach((c,j)=>{pos[c.href]={x:colX[gi]+24+STEP/2+j*STEP,y:Y0+li*LANEH,li,up:(k++)%2===0};});});});
+    const W=colX[colX.length-1]+colW[colW.length-1]+20, H=Y0+lanes.length*LANEH-30;
+    // cross-topic prerequisites become transfers; same-topic ones run along the line already
+    const tr=[]; all.forEach(c=>(nm[c.href]||[]).forEach(n=>{if(pos[n]&&pos[c.href]&&pos[n].li!==pos[c.href].li)tr.push([n,c.href]);}));
+    const hub=new Set(tr.flat());
+    const anc=h=>{const out=new Set(),st=[h];while(st.length){const x=st.pop();(nm[x]||[]).forEach(n=>{if(pos[n]&&!out.has(n)){out.add(n);st.push(n);}});}return out;};
+    const route=pickF?new Set([pickF,...anc(pickF)]):null;
+    const match=new Set(cards.map(c=>c.href));
+    const lit=h=>route?route.has(h):(filtering?match.has(h):true);
+    const wrapT=(t,n=17)=>{const w=t.split(' '),L=[];let cur='';w.forEach(x=>{if((cur+' '+x).trim().length>n&&cur){L.push(cur);cur=x;}else cur=(cur+' '+x).trim();});if(cur)L.push(cur);return L.slice(0,3);};
+    let svg=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Мапа тем: лінії, станції й пересадки">`;
+    cols.forEach((g,gi)=>{const x=colX[gi];svg+=`<line class="gl" x1="${x}" y1="26" x2="${x}" y2="${H-6}"/><text class="gt" x="${x+6}" y="18">${g} кл.</text>`;});
+    lanes.forEach((t,li)=>{const pts=t.cards.map(c=>pos[c.href]).filter(Boolean).sort((a,b)=>a.x-b.x);const y=Y0+li*LANEH;
+      svg+=`<text class="lane" x="8" y="${y+4}" fill="${t.c}">${esc(t.title.split(/[ ,]/)[0])}</text>`;
+      if(pts.length){const d=`M${pts[0].x-24} ${y} `+pts.map(p=>`L${p.x} ${y}`).join(' ')+` L${pts[pts.length-1].x+24} ${y}`;
+        const on=!route||t.cards.some(c=>route.has(c.href));svg+=`<path class="ln${on?'':' dim'}" d="${d}" stroke="${t.c}"/>`;}});
+    tr.forEach(([a,b])=>{const A=pos[a],B=pos[b],my=(A.y+B.y)/2,on=route&&route.has(a)&&route.has(b);
+      svg+=`<path class="tr${on?' on':''}${route&&!on?' dim':''}" d="M${A.x} ${A.y} C${A.x} ${my} ${B.x} ${my} ${B.x} ${B.y}"/>`;});
+    all.forEach((c,i)=>{const p=pos[c.href];if(!p)return;const L=wrapT(c.title,16),up=p.up,ty=up?p.y-18-(L.length-1)*13:p.y+27;
+      svg+=`<g class="stn${hub.has(c.href)?' hub':''}${c.ext?' ext':''}${c.href===pickF?' sel':''}${lit(c.href)?'':' dim'}" data-h="${c.href}" tabindex="0" role="button" aria-label="${esc(c.title)}">`+
+        `<circle cx="${p.x}" cy="${p.y}" r="${hub.has(c.href)?10:8}" stroke="${c.c}"/>`+
+        `<text x="${p.x}" y="${ty}" text-anchor="middle">${L.map((l,k)=>`<tspan x="${p.x}" dy="${k?13:0}">${esc(l)}${c.ext&&k===L.length-1?' ↗':''}</tspan>`).join('')}</text></g>`;});
+    svg+='</svg>';
+    let card='<p class="hint">Торкнись станції: мапа підсвітить маршрут до неї.</p>';
+    if(pickF){const c=all.find(x=>x.href===pickF);const depth={};const dp=h=>{if(h in depth)return depth[h];depth[h]=0;const ns=(nm[h]||[]).filter(n=>pos[n]);depth[h]=ns.length?1+Math.max(...ns.map(dp)):0;return depth[h];};
+      const before=[...anc(pickF)].map(h=>all.find(x=>x.href===h)).filter(Boolean).sort((a,b)=>dp(a.href)-dp(b.href)||gOf(a)-gOf(b));
+      card=`<div class="card" style="--c:${c.c}"><span class="ttl">${esc(c.title)}${c.ext?' ↗':''}</span><span class="desc">${esc(c.desc)}</span>${tags(c)}`+
+        `<span class="route">${before.length?'Маршрут: '+before.map(b=>`<a href="${b.href}">${esc(b.title)}</a>`).join(' → ')+' → <b>сюди</b>':'Кінцева: тут нічого не треба знати наперед — звідси можна починати.'}</span>`+
+        A(c,'Відкрити →','go')+'</div>';}
+    h='<div class="v11"><div class="legend">'+lanes.map(t=>`<span style="--c:${t.c}"><b></b>${esc(t.title)}</span>`).join('')+'<span>┅ пересадка</span></div>'+
+      `<div class="scroll">${svg}</div>${card}</div>`;
   }
   const out=document.getElementById('out'); out.innerHTML=h;
   document.getElementById('empty').hidden=cards.length>0;
   out.querySelectorAll('.v3 .tabs button').forEach(b=>b.onclick=()=>{tab=b.dataset.t;render();});
   out.querySelectorAll('.v5 .item>button').forEach(b=>b.onclick=()=>{const k=b.dataset.h;open.has(k)?open.delete(k):open.add(k);render();});
   out.querySelectorAll('.v9 button.f').forEach(b=>b.onclick=()=>{pickF=pickF===b.dataset.h?null:b.dataset.h;render();});
+  out.querySelectorAll('.v11 .stn').forEach(g=>{const go=()=>{pickF=pickF===g.dataset.h?null:g.dataset.h;render();};g.onclick=go;g.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();go();}};});
 }
 document.getElementById('q').addEventListener('input',e=>{q=e.target.value.trim().toLowerCase();render();});
 render();
