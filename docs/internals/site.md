@@ -17,7 +17,7 @@
 
 Головне меню — `index.html` у корені ([menu.md](menu.md)).
 
-Адресу, якої немає, сервер має переадресовувати на головну (`handle_errors` у Caddy, див. «Деплой»).
+Адресу, якої немає, сервер має переадресовувати на головну (`handle_errors` у Caddy, див. «Caddy» нижче).
 
 ## Спільне в `assets/`
 
@@ -58,8 +58,9 @@ math.45-145-224-180.sslip.io {
 	encode zstd gzip
 	root * /srv/math
 	file_server
-	handle_errors 404 {
-		redir * / 302
+	handle_errors {
+		@missing expression {err.status_code} == 404
+		redir @missing / 302
 	}
 }
 ```
