@@ -15,8 +15,8 @@
 /* Layout: one narrow column on squared exercise-book paper, phone first; each example is a worked "sheet" */
 :root{
   --muted:var(--ink-soft); --sheet:var(--card);
-  --f1:var(--pen); --f1bg:var(--pen-wash); --f2:var(--green); --f2bg:var(--green-wash);
-  --f3:var(--violet); --f3bg:var(--violet-wash);
+  --f1:var(--mark-1); --f1bg:var(--mark-1-wash); --f2:var(--mark-3); --f2bg:var(--mark-3-wash);
+  --f3:var(--mark-2); --f3bg:var(--mark-2-wash);
 }
 
 *{box-sizing:border-box}
@@ -37,7 +37,7 @@ h2{font-size:1.15rem;margin:0;font-weight:800}
 p{margin:0}
 ol.steps{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:10px}
 ol.steps li::marker{font-weight:800;color:var(--f1)}
-.hand{font-family:var(--font-hand);font-size:1.35rem;color:var(--red);line-height:1.2}
+.hand{font-family:var(--font-hand);font-size:1.35rem;color:var(--pen);line-height:1.2}
 
 /* math */
 .expr{display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:1.15rem;font-variant-numeric:tabular-nums}
@@ -48,12 +48,12 @@ ol.steps li::marker{font-weight:800;color:var(--f1)}
 .a{color:var(--f1);background:var(--f1bg)}
 .b{color:var(--f2);background:var(--f2bg)}
 .c{color:var(--f3);background:var(--f3bg)}
-.miss{outline:2px dashed var(--red);outline-offset:1px}
+.miss{outline:2px dashed var(--mark-4);outline-offset:1px}
 .row{display:grid;grid-template-columns:7.5em 1fr;gap:6px 10px;align-items:center}
 .row>div{min-width:0}
 .row .k{color:var(--muted);font-size:.9rem}
 .answer{border-top:1px dashed var(--line);padding-top:10px}
-.warn{border-left:3px solid var(--red);padding-left:10px}
+.warn{border-left:3px solid var(--alert);padding-left:10px}
 .examples{display:flex;flex-direction:column;gap:18px}
 .tabs{display:flex;flex-wrap:wrap;gap:6px}
 .tabs button{border:1px solid var(--line);background:var(--sheet);color:var(--ink);border-radius:8px;padding:6px 12px;font:600 .9rem var(--font-body);cursor:pointer}

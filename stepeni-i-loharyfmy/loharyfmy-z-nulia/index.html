@@ -55,28 +55,28 @@ header.hero { position: relative; padding: 36px 0 8px; }
 
 section { padding-top: 40px; }
 .sec-head { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
-.sec-num { font-family: var(--hand); font-weight: 700; font-size: 2.2rem; line-height: 1; color: var(--red); min-width: 1.6em; }
+.sec-num { font-family: var(--hand); font-weight: 700; font-size: 2.2rem; line-height: 1; color: var(--pen); min-width: 1.6em; }
 
 .sheet { background: var(--sheet); border: 1px solid var(--line); border-radius:4px; padding: 16px; margin: 18px 0; }
 .sheet.flat { border-radius: 8px; }
 .rule { background: var(--pen-soft); border-left: 4px solid var(--pen); border-radius: 4px 12px 12px 4px; padding: 10px 14px; margin: 16px 0; }
-.warn { background: var(--red-soft); border-left: 4px solid var(--red); border-radius: 4px 12px 12px 4px; padding: 10px 14px; margin: 16px 0; }
-.warn strong { color: var(--red); }
+.warn { background: var(--alert-wash); border-left: 4px solid var(--alert); border-radius: 4px 12px 12px 4px; padding: 10px 14px; margin: 16px 0; }
+.warn strong { color: var(--alert); }
 .math-block { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; }
 mjx-container[display="true"] { margin: .5em 0 !important; }
 mjx-container { max-width: 100%; }
-.ka, .ka * { color: var(--pen); fill: var(--pen); stroke: var(--pen); }
-.kb, .kb * { color: var(--green); fill: var(--green); stroke: var(--green); }
-.kc, .kc * { color: var(--red); fill: var(--red); stroke: var(--red); }
+.ka, .ka * { color: var(--mark-1); fill: var(--mark-1); stroke: var(--mark-1); }
+.kb, .kb * { color: var(--mark-3); fill: var(--mark-3); stroke: var(--mark-3); }
+.kc, .kc * { color: var(--mark-2); fill: var(--mark-2); stroke: var(--mark-2); }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .95rem; }
 .legend b { font-weight: 700; }
-.legend .a { color: var(--pen); } .legend .b { color: var(--green); } .legend .c { color: var(--red); }
+.legend .a { color: var(--mark-1); } .legend .b { color: var(--mark-3); } .legend .c { color: var(--mark-2); }
 
 /* toc */
 nav.toc { margin: 24px 0 0; }
 nav.toc ol { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 nav.toc a { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--sheet); color: var(--ink); text-decoration: none; font-size: .92rem; }
-nav.toc a .n { font-family: var(--hand); font-weight: 700; color: var(--red); font-size: 1.15rem; line-height: 1; }
+nav.toc a .n { font-family: var(--hand); font-weight: 700; color: var(--pen); font-size: 1.15rem; line-height: 1; }
 nav.toc a.done { border-color: var(--green); }
 nav.toc a.done::after { content: "✓"; color: var(--green); font-weight: 700; }
 .progress { margin-top: 10px; font-size: .92rem; color: var(--ink-soft); }
@@ -137,7 +137,7 @@ details > div { padding: 0 14px 12px; }
 .steps li { margin: 6px 0 12px; padding-left: 4px; }
 .steps li[hidden] { display: none; }
 .steps li .why { font-size: .95rem; color: var(--ink-soft); }
-.steps li::marker { font-family: var(--hand); font-weight: 700; color: var(--red); font-size: 1.3rem; }
+.steps li::marker { font-family: var(--hand); font-weight: 700; color: var(--pen); font-size: 1.3rem; }
 .task-title { font-weight: 600; margin: 0; }
 
 /* rules list */
@@ -165,14 +165,14 @@ details > div { padding: 0 14px 12px; }
 .graph .ax { stroke: var(--ink-soft); stroke-width: 1.5; }
 .graph .tick { fill: var(--ink-soft); font: 11px var(--sans); }
 .graph .lg { fill: none; stroke: var(--pen); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
-.graph .ex { fill: none; stroke: var(--red); stroke-width: 2.2; stroke-linecap: round; opacity: .85; }
+.graph .ex { fill: none; stroke: var(--mark-4); stroke-width: 2.2; stroke-linecap: round; opacity: .85; }
 .graph .yx { stroke: var(--ink-soft); stroke-width: 1.2; stroke-dasharray: 5 5; }
 .graph .pt { fill: var(--sheet); stroke: var(--pen); stroke-width: 2.5; }
-.graph .pte { fill: var(--sheet); stroke: var(--red); stroke-width: 2.2; }
+.graph .pte { fill: var(--sheet); stroke: var(--mark-4); stroke-width: 2.2; }
 .graph .pl { fill: var(--pen); font: 600 13px var(--sans); }
-.graph .ple { fill: var(--red); font: 600 13px var(--sans); }
+.graph .ple { fill: var(--mark-4); font: 600 13px var(--sans); }
 .toggle { display: flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer; margin-top: 8px; }
-.toggle input { flex: none; width: 22px; height: 22px; accent-color: var(--red); }
+.toggle input { flex: none; width: 22px; height: 22px; accent-color: var(--mark-4); }
 
 /* trainer */
 .task-tex { font-size: 1.25rem; min-height: 56px; display: flex; align-items: center; }

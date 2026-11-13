@@ -25,12 +25,12 @@ p{margin:8px 0}
 .m{font-family:var(--font-mono);font-weight:500;white-space:nowrap}
 
 /* the two roles, same colours everywhere on the page */
-.b{color:var(--pen);background:var(--pen-wash);border:1.5px solid color-mix(in srgb,var(--pen) 45%,transparent);border-radius:6px;padding:0 .14em;font-weight:700;white-space:nowrap}
-.b.g2{color:var(--violet);background:var(--violet-wash);border-color:color-mix(in srgb,var(--violet) 45%,transparent)}
-.e{color:var(--red);font-weight:700;font-size:.6em;vertical-align:.85em;line-height:0;margin-left:.06em;font-family:var(--font-mono)}
+.b{color:var(--mark-1);background:var(--mark-1-wash);border:1.5px solid color-mix(in srgb,var(--mark-1) 45%,transparent);border-radius:6px;padding:0 .14em;font-weight:700;white-space:nowrap}
+.b.g2{color:var(--mark-4);background:var(--mark-4-wash);border-color:color-mix(in srgb,var(--mark-4) 45%,transparent)}
+.e{color:var(--mark-2);font-weight:700;font-size:.6em;vertical-align:.85em;line-height:0;margin-left:.06em;font-family:var(--font-mono)}
 .b sup,.fr sup{font-size:.6em;line-height:0}
-.key-b{color:var(--pen);font-weight:700}
-.key-e{color:var(--red);font-weight:700}
+.key-b{color:var(--mark-1);font-weight:700}
+.key-e{color:var(--mark-2);font-weight:700}
 
 /* base palette */
 .palette{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:8px;margin:12px 0}
@@ -50,7 +50,7 @@ p{margin:8px 0}
 .stepper{display:inline-flex;align-items:center;border:1px solid var(--card-line);border-radius:6px;overflow:hidden}
 .stepper button{width:44px;height:40px;border:0;background:transparent;color:var(--ink);font-size:22px;cursor:pointer}
 .stepper button:disabled{opacity:.35;cursor:default}
-.stepper output{min-width:40px;text-align:center;font:700 18px var(--font-mono);color:var(--red)}
+.stepper output{min-width:40px;text-align:center;font:700 18px var(--font-mono);color:var(--mark-2)}
 .btn{border:1px solid var(--card-line);background:transparent;color:var(--ink);border-radius:6px;height:40px;padding:0 14px;font:600 15px var(--font-body);cursor:pointer}
 .btn.main{background:var(--pen);border-color:var(--pen);color:var(--on-pen)}
 .btn:disabled{opacity:.4;cursor:default}
@@ -64,22 +64,22 @@ p{margin:8px 0}
 .dot{color:var(--ink-soft);padding:0 2px}
 .anat{display:inline-flex;align-items:flex-start;font:700 46px/1 var(--font-mono);padding:34px 4px 36px 0}
 .anat .b{position:relative;padding:.04em .16em}
-.anat .b::after{content:"основа";position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);font:600 13px/1 var(--font-body);color:var(--pen);white-space:nowrap}
+.anat .b::after{content:"основа";position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);font:600 13px/1 var(--font-body);color:var(--mark-1);white-space:nowrap}
 .anat .e{position:relative;font-size:.55em;vertical-align:0;line-height:1;margin-top:-.42em}
-.anat .e::before{content:"показник";position:absolute;bottom:calc(100% + 6px);left:0;font:600 13px/1 var(--font-body);color:var(--red);white-space:nowrap}
-.copies{display:inline-flex;flex-wrap:wrap;align-items:center;gap:22px 4px;border-bottom:2px solid var(--red);padding-bottom:18px;position:relative}
+.anat .e::before{content:"показник";position:absolute;bottom:calc(100% + 6px);left:0;font:600 13px/1 var(--font-body);color:var(--mark-2);white-space:nowrap}
+.copies{display:inline-flex;flex-wrap:wrap;align-items:center;gap:22px 4px;border-bottom:2px solid var(--mark-2);padding-bottom:18px;position:relative}
 .copies .cp{position:relative;animation:pop .4s ease both}
-.copies .cp i{position:absolute;top:calc(100% + 3px);left:50%;transform:translateX(-50%);font:700 11px/1 var(--font-body);color:var(--red);font-style:normal}
-.copies + .cap{font:600 13px var(--font-body);color:var(--red);align-self:flex-end;white-space:nowrap}
-.hl{background:var(--green-wash);color:var(--green);border-radius:6px;padding:0 .14em;font-weight:700}
-.res{color:var(--green);font-weight:700}
+.copies .cp i{position:absolute;top:calc(100% + 3px);left:50%;transform:translateX(-50%);font:700 11px/1 var(--font-body);color:var(--mark-2);font-style:normal}
+.copies + .cap{font:600 13px var(--font-body);color:var(--mark-2);align-self:flex-end;white-space:nowrap}
+.hl{background:var(--mark-3-wash);color:var(--mark-3);border-radius:6px;padding:0 .14em;font-weight:700}
+.res{color:var(--mark-3);font-weight:700}
 .fr{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;line-height:1.2}
 .fr > span:first-child{border-bottom:2px solid currentColor;padding:0 4px 2px}
 .fr > span:last-child{padding:2px 4px 0}
 .explain{background:var(--pen-wash);border-radius:4px;padding:10px 12px;font-size:15px;margin-top:6px}
 .read{font-size:15px;color:var(--ink-soft);margin:-4px 0 4px}
-.warn{background:var(--red-wash);border-radius:4px;padding:10px 12px;font-size:15px;margin-top:10px}
-.warn b{color:var(--red)}
+.warn{background:var(--alert-wash);border-left:3px solid var(--alert);border-radius:4px;padding:10px 12px;font-size:15px;margin-top:10px}
+.warn b{color:var(--alert)}
 @keyframes pop{from{opacity:0;transform:translateX(-18px) scale(.7)}to{opacity:1;transform:none}}
 @keyframes rise{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){.copies .cp,.ln.enter{animation:none}}
@@ -127,7 +127,7 @@ details[open] summary::after{content:""}
   <p>У записі ступеня є рівно дві ролі:</p>
   <p><span class="key-b">Основа</span> — <b>що</b> множимо. Це одна «цеглинка», яку копіюють.<br>
      <span class="key-e">Показник</span> — <b>скільки разів</b> ця цеглинка стоїть у добутку. Пишеться маленьким, справа зверху.</p>
-  <p class="muted">Синя рамка на цій сторінці завжди означає основу, червоне — показник.</p>
+  <p class="muted">Синя рамка на цій сторінці завжди означає основу, фіолетове — показник.</p>
 
   <p style="margin-top:16px"><b>Основою може бути що завгодно</b> — не тільки число чи буква. Обери:</p>
   <div class="palette" id="palette"></div>

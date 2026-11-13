@@ -13,7 +13,7 @@
 <style>
 :root{
   --bg:var(--paper); --muted:var(--ink-soft);
-  --accent:var(--red); --accent-soft:var(--red-wash); --blue:var(--pen); --blue-soft:var(--pen-wash);
+  --step:var(--mark-2); --res:var(--mark-3); --blue:var(--pen); --blue-soft:var(--pen-wash);
   --good:var(--green); --good-soft:var(--green-wash); --warn:var(--orange);
 }
 *{box-sizing:border-box}
@@ -25,7 +25,7 @@ h1{font-size:28px;line-height:1.15;margin:0 0 6px;font-weight:800;letter-spacing
 .sub{color:var(--muted);margin:0;font-size:15px}
 section{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:18px 16px;margin:0 0 16px}
 h2{font-size:20px;margin:0 0 4px;font-weight:800;letter-spacing:-.01em}
-.num{display:inline-block;background:var(--accent);color:var(--paper);border-radius:8px;font-size:14px;padding:1px 8px;margin-right:6px;vertical-align:2px}
+.num{display:inline-block;background:var(--pen);color:var(--on-pen);border-radius:8px;font-size:14px;padding:1px 8px;margin-right:6px;vertical-align:2px}
 p{margin:8px 0}
 .m{font-family:"JetBrains Mono",ui-monospace,monospace;font-weight:500}
 sup{font-size:.68em;line-height:0;font-family:"JetBrains Mono",monospace}
@@ -39,13 +39,13 @@ sup{font-size:.68em;line-height:0;font-family:"JetBrains Mono",monospace}
 .stepper output{min-width:44px;text-align:center;font:700 18px "JetBrains Mono",monospace}
 .chain{display:flex;flex-wrap:wrap;align-items:center;gap:4px 2px;margin:12px 0;font-family:"JetBrains Mono",monospace}
 .val{background:var(--blue-soft);color:var(--blue);border-radius:8px;padding:4px 9px;font-weight:700}
-.val.last{background:var(--accent);color:var(--paper)}
+.val.last{background:var(--res);color:var(--paper)}
 .op{color:var(--muted);font-size:14px;padding:0 3px;white-space:nowrap}
-.op i{font-style:normal;color:var(--accent);font-weight:700}
+.op i{font-style:normal;color:var(--step);font-weight:700}
 .big{font:700 26px "JetBrains Mono",monospace;margin:10px 0 4px}
-.big .eq{color:var(--accent)}
-.note{background:var(--accent-soft);border-radius:4px;padding:10px 12px;font-size:15px;margin-top:12px}
-.note b{color:var(--accent)}
+.big .eq{color:var(--muted)}
+.note{background:var(--blue-soft);border-radius:4px;padding:10px 12px;font-size:15px;margin-top:12px}
+.note b{color:var(--blue)}
 .muted{color:var(--muted);font-size:15px}
 /* ladder */
 .ladder{display:flex;flex-direction:column;margin:12px 0}
@@ -54,12 +54,12 @@ sup{font-size:.68em;line-height:0;font-family:"JetBrains Mono",monospace}
 .rung.zero{border-style:dashed}
 .rung.zero::after{content:"старт";font:600 12px var(--font-body);color:var(--muted);margin-left:8px}
 .rung.path{background:var(--blue-soft);border-color:transparent}
-.rung.sel{background:var(--accent);color:var(--paper);border-color:var(--accent)}
+.rung.sel{background:var(--res);color:var(--paper);border-color:var(--res)}
 .rung.sel::after{color:var(--paper)}
 .rung span{flex:1}
 .between{font-size:12px;color:var(--muted);text-align:center;line-height:1;padding:3px 0;font-family:"JetBrains Mono",monospace;opacity:.75}
 /* slider game */
-input[type=range]{width:100%;height:36px;accent-color:var(--accent)}
+input[type=range]{width:100%;height:36px;accent-color:var(--step)}
 .track{position:relative;height:18px;background:var(--line);border-radius:9px;overflow:hidden;margin:6px 0 4px}
 .fill{position:absolute;left:0;top:0;bottom:0;background:var(--warn);border-radius:9px;transition:width .08s}
 .fill.ok{background:var(--good)}
@@ -76,7 +76,7 @@ summary::after{content:" — натисни";font:400 13px var(--font-body);colo
 details[open] summary::after{content:""}
 .ans{margin-top:6px;font-size:15px}
 .rule{background:var(--ink);color:var(--bg);border-radius:4px;padding:18px 16px;font-size:16px}
-.rule b{color:var(--accent)}
+.rule b{color:inherit}
 </style>
 </head>
 <body>
@@ -280,7 +280,7 @@ function r4(){
 }
 function drawLine(p,q){
   const x0=20,x1=320,Y=58,X=e=>x0+(e+2)/4*(x1-x0);
-  const css=getComputedStyle(root),ink=css.getPropertyValue('--ink'),mut=css.getPropertyValue('--muted'),acc=css.getPropertyValue('--accent');
+  const css=getComputedStyle(root),ink=css.getPropertyValue('--ink'),mut=css.getPropertyValue('--muted'),acc=css.getPropertyValue('--step'),res=css.getPropertyValue('--res');
   let s=`<line x1="${x0}" y1="${Y}" x2="${x1}" y2="${Y}" stroke="${mut}" stroke-width="1.5"/>`;
   for(let i=-2*q;i<=2*q;i++){const e=i/q,big=i%q===0,x=X(e);
     s+=`<line x1="${x}" y1="${Y-(big?8:4)}" x2="${x}" y2="${Y+(big?8:4)}" stroke="${big?ink:mut}" stroke-width="${big?2:1}"/>`;
@@ -289,7 +289,7 @@ function drawLine(p,q){
   for(let i=0;i<Math.abs(p);i++){const a=X(sg*i/q),b=X(sg*(i+1)/q),m=(a+b)/2,h=Math.min(28,8+Math.abs(b-a)*0.4);
     s+=`<path d="M${a} ${Y} Q${m} ${Y-Math.abs(h)*1.6} ${b} ${Y}" fill="none" stroke="${acc}" stroke-width="2.5"/>`;}
   s+=`<circle cx="${X(0)}" cy="${Y}" r="5" fill="${ink}"/>`;
-  if(p)s+=`<circle cx="${X(p/q)}" cy="${Y}" r="6.5" fill="${acc}"/>`;
+  if(p)s+=`<circle cx="${X(p/q)}" cy="${Y}" r="6.5" fill="${res}"/>`;
   $('s4svg').innerHTML=s;
 }
 $('s4pm').onclick=()=>{s4.p--;r4()};$('s4pp').onclick=()=>{s4.p++;r4()};

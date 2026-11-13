@@ -54,6 +54,17 @@
   color-scheme:dark;
 }
 
+/* Marks: informational colours for the things a lesson is about, one concept = one colour (see README).
+   A concept that already has a colour on another page keeps it there too: основа is always mark-1, показник mark-2.
+   Red is not a mark: it is kept for "часті помилки"/"увага" callouts and error states. */
+:root{
+  --mark-1:var(--pen);    --mark-1-wash:var(--pen-wash);
+  --mark-2:var(--violet); --mark-2-wash:var(--violet-wash);
+  --mark-3:var(--green);  --mark-3-wash:var(--green-wash);
+  --mark-4:var(--orange); --mark-4-wash:var(--orange-wash);
+  --alert:var(--red);     --alert-wash:var(--red-wash); --alert-line:var(--bad-line);
+}
+
 html{-webkit-text-size-adjust:100%}
 body{
   margin:0;

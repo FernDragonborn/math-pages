@@ -16,7 +16,7 @@
 :root{
   --bg:var(--paper); --muted:var(--ink-soft); --blue:var(--pen);
   --fill-a:color-mix(in srgb,var(--pen) 18%,transparent); --fill-b:color-mix(in srgb,var(--orange) 24%,transparent);
-  --shape:color-mix(in srgb,var(--pen) 6%,transparent); --badge-bg:var(--red-wash);
+  --shape:color-mix(in srgb,var(--pen) 6%,transparent); --badge-bg:var(--alert-wash); --mark:var(--mark-2);
   --display:var(--font-display); --body:var(--font-body); --hand:var(--font-hand);
 }
 body{
@@ -37,7 +37,7 @@ h1 span{color:var(--blue)}
 .legend{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 .legend li{display:flex;gap:12px;align-items:baseline}
 .legend b{font:700 1.5rem var(--hand);min-width:3.2ch}
-.legend .c-blue{color:var(--blue)} .legend .c-red{color:var(--red)}
+.legend .c-blue{color:var(--blue)} .legend .c-mark{color:var(--mark)}
 .anatomy h2{margin:0 0 12px}
 
 section{display:flex;flex-direction:column;gap:16px}
@@ -51,8 +51,8 @@ h2 small{display:block;font:400 .95rem var(--body);color:var(--muted);margin-top
 .num{font:700 1.2rem var(--hand);color:var(--muted)}
 .rule{font:600 1.05rem var(--body);color:var(--blue);margin:0;font-variant-numeric:tabular-nums}
 .why{font:600 1.2rem/1.25 var(--hand);color:var(--muted);margin:0}
-.why::before{content:"чому? ";color:var(--red)}
-.badge{position:absolute;top:10px;right:10px;font:700 .95rem var(--hand);color:var(--red);
+.why::before{content:"чому? ";color:var(--pen)}
+.badge{position:absolute;top:10px;right:10px;font:700 .95rem var(--hand);color:var(--alert);
   background:var(--badge-bg);border-radius:999px;padding:0 10px;transform:rotate(3deg)}
 .note{font-size:.9rem;color:var(--muted);margin:0}
 footer{color:var(--muted);font-size:.9rem}
@@ -62,14 +62,14 @@ footer{color:var(--muted);font-size:.9rem}
 .n{fill:none;stroke:var(--ink);stroke-width:2;stroke-linejoin:round}
 .l{fill:none;stroke:var(--muted);stroke-width:1.3}
 .hl{fill:none;stroke:var(--blue);stroke-width:3.5;stroke-linecap:round}
-.r{fill:none;stroke:var(--red);stroke-width:2;stroke-linecap:round}
-.rt{fill:none;stroke:var(--red);stroke-width:3.5;stroke-linecap:round}
+.r{fill:none;stroke:var(--mark);stroke-width:2;stroke-linecap:round}
+.rt{fill:none;stroke:var(--mark);stroke-width:3.5;stroke-linecap:round}
 .d{stroke-dasharray:6 4}
 .fa{fill:var(--fill-a);stroke:none} .fb{fill:var(--fill-b);stroke:none}
-.dot{fill:var(--red)} .bdot{fill:var(--blue)}
+.dot{fill:var(--mark)} .bdot{fill:var(--blue)}
 .t{font:700 19px var(--hand);fill:var(--ink)}
 .tb{font:700 19px var(--hand);fill:var(--blue)}
-.tr{font:700 19px var(--hand);fill:var(--red)}
+.tr{font:700 19px var(--hand);fill:var(--mark)}
 .v{font:600 12px var(--body);fill:var(--muted)}
 
 @media (max-width:640px){.anatomy{grid-template-columns:minmax(0,1fr)}}
@@ -85,7 +85,7 @@ footer{color:var(--muted);font-size:.9rem}
 <header>
   <div>
     <h1>Трапеція: <span>усе головне</span></h1>
-    <p class="lead">Шпаргалка для 8 класу. На кожному малюнку синім виділено те, про що правило, а червоним олівцем позначено рівні відрізки та кути.</p>
+    <p class="lead">Шпаргалка для 8 класу. На кожному малюнку синім виділено те, про що правило, а фіолетовим олівцем позначено рівні відрізки, кути й побудови.</p>
   </div>
 </header>
 
@@ -114,7 +114,7 @@ footer{color:var(--muted);font-size:.9rem}
     <ul class="legend">
       <li><b class="c-blue">a, b</b><span><strong>Основи</strong>: паралельні сторони. Зазвичай a більша, b менша.</span></li>
       <li><b>c, d</b><span><strong>Бічні сторони</strong>: дві непаралельні.</span></li>
-      <li><b class="c-red">h</b><span><strong>Висота</strong>: перпендикуляр між основами.</span></li>
+      <li><b class="c-mark">h</b><span><strong>Висота</strong>: перпендикуляр між основами.</span></li>
       <li><b class="c-blue">m</b><span><strong>Середня лінія</strong>: з'єднує середини бічних сторін.</span></li>
       <li><b>AC, BD</b><span><strong>Діагоналі</strong>: з'єднують протилежні вершини.</span></li>
     </ul>

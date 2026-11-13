@@ -104,11 +104,12 @@ section > .num{
 .wk-big{ font-size:23px; font-weight:700 }
 .wk-mid{ font-size:16px }
 .wk-new{ fill:var(--pen) }
-.wk-op{ fill:var(--red); font-weight:700 }
+.wk-op{ fill:var(--mark-2); font-weight:700 }
 .wk-lbl{ font-family:"Onest", sans-serif; font-size:12px; fill:var(--ink-soft) }
 .wk-ln{ stroke:var(--ink-soft); stroke-width:1.4; fill:none }
 .wk-ln-pen{ stroke:var(--pen); stroke-width:1.4; fill:none }
-.wk-ln-red{ stroke:var(--red); stroke-width:1.4; fill:none }
+.wk-ln-act{ stroke:var(--mark-2); stroke-width:1.4; fill:none }
+.wk-act-fill{ fill:var(--mark-2) }
 .wk-brace{ stroke:var(--pen); stroke-width:1.4; fill:none }
 figure.wk-fig{ margin:14px 0 18px }
 figure.wk-fig svg{ width:100%; height:auto; max-width:380px; display:block }
@@ -365,8 +366,8 @@ details .answer .eq{ color:var(--ink) }
         <text class="wk" x="210" y="40" text-anchor="middle">2x</text>
         <text class="wk" x="240" y="40" text-anchor="middle">+</text>
         <text class="wk" x="264" y="40" text-anchor="middle">8</text>
-        <path class="wk-ln-red" d="M210,52 C210,82 150,94 110,98"/>
-        <path d="M112,92 L112,104 L100,98 Z" fill="#B93A30"/>
+        <path class="wk-ln-act" d="M210,52 C210,82 150,94 110,98"/>
+        <path class="wk-act-fill" d="M112,92 L112,104 L100,98 Z"/>
         <text class="wk-lbl" x="196" y="78">переїжджає через «=»</text>
         <text class="wk-lbl" x="196" y="94">і змінює плюс на мінус</text>
         <text class="wk wk-new" x="180" y="136" text-anchor="middle">3x <tspan class="wk-op">− 2x</tspan> + 5 = 8</text>
