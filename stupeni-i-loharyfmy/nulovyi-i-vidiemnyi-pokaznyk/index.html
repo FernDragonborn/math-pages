@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Нульовий і відʼємний показник</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/lesson.css">
+<script src="/assets/theme.js"></script>
+<style>
+.ladder{display:flex;flex-direction:column;margin:12px 0}
+.rung{display:flex;justify-content:space-between;align-items:center;border:1px solid var(--card-line);background:transparent;color:var(--ink);border-radius:6px;padding:8px 14px;font:500 18px var(--font-mono);cursor:pointer;text-align:left}
+.rung b{font-weight:700}
+.rung span{flex:1}
+.rung.zero{border-style:dashed}
+.rung.zero::after{content:"старт";font:600 12px var(--font-body);color:var(--ink-soft);margin-left:8px}
+.rung.path{background:var(--pen-wash);border-color:transparent}
+.rung.sel{background:var(--mark-3-wash);border-color:var(--mark-3)}
+.rung.sel b{color:var(--mark-3)}
+.between{font-size:12px;color:var(--ink-soft);text-align:center;line-height:1;padding:3px 0;font-family:var(--font-mono)}
+.between i{font-style:normal;color:var(--mark-2)}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+
+<header>
+  <h1>Нульовий і відʼємний показник</h1>
+  <p class="sub">a<sup>0</sup> = 1 і a<sup>−n</sup> = 1/a<sup>n</sup> — не нові правила з повітря, а те саме правило, яке продовжили вниз.</p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <a href="../shcho-take-stupin/">Що таке ступінь</a> <a href="../vlastyvosti-stupenia/">Властивості ступеня</a> <i>ділення дробів, 6 клас</i></p>
+</header>
+
+<!-- 1 -->
+<section>
+  <h2><span class="num">1</span>Показник — це кроки від 1</h2>
+  <p>Уяви ступені як драбину, що починається з <b>1</b>. Крок угору — <b>помножити</b> на основу, крок униз — зворотна дія, <b>поділити</b>. Показник каже, скільки кроків і куди. Що буде нижче за 1?</p>
+  <div class="row"><span class="lbl">основа</span><span id="s1a"></span></div>
+  <div class="ladder" id="ladder"></div>
+  <div id="s1out"></div>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2><span class="num">2</span>Звідки a<sup>−n</sup> = 1/a<sup>n</sup></h2>
+  <p>Поділимо ступені так, щоб знизу копій було більше, — і порахуємо двома способами: розкладом і правилом <span class="m">a<sup>m</sup> : a<sup>n</sup> = a<sup>m−n</sup></span>.</p>
+  <div class="row"><span class="lbl">основа</span><span id="s2a"></span></div>
+  <div class="row"><span class="lbl">m</span>
+    <span class="stepper" id="stM"><button type="button" aria-label="Менше">−</button><output></output><button type="button" aria-label="Більше">+</button></span>
+    <span class="lbl">n</span>
+    <span class="stepper" id="stN"><button type="button" aria-label="Менше">−</button><output></output><button type="button" aria-label="Більше">+</button></span>
+  </div>
+  <div class="deriv" id="deriv" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next"></button>
+    <button class="btn" type="button" id="reset">Згорнути назад</button>
+  </div>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="num">3</span>Дріб у відʼємному ступені</h2>
+  <p>Відʼємний показник над дробом просто перевертає дріб.</p>
+  <div class="row"><span class="lbl">дріб</span><span id="s3f"></span></div>
+  <div class="row"><span class="lbl">показник −n, n =</span>
+    <span class="stepper" id="stK"><button type="button" aria-label="Менше">−</button><output></output><button type="button" aria-label="Більше">+</button></span>
+  </div>
+  <div class="deriv" id="deriv3" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next3"></button>
+    <button class="btn" type="button" id="reset3">Згорнути назад</button>
+  </div>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2><span class="num">4</span>А нуль?</h2>
+  <p>Для основи 0 драбина обривається одразу. Нагорі все звично: 0<sup>1</sup> = 0, 0<sup>2</sup> = 0. А крок униз з 0<sup>1</sup> — це <b>0 : 0</b>, і такій частці підходить будь-яке число: будь-яке, помножене на 0, дає 0. Однієї відповіді немає — тому 0<sup>0</sup> у школі не визначають.</p>
+  <p>Ще нижче — 0<sup>−1</sup> = 1 : 0, і тут навпаки: числа, яке після множення на 0 дасть 1, немає зовсім. Тому 0<sup>−n</sup> теж не визначають, і в правилах стоїть умова <b>a ≠ 0</b>.</p>
+  <aside class="beyond"><b>Поза шкільною програмою.</b> Часто домовляються, що 0<sup>0</sup> = 1: так працюють формули комбінаторики й многочленів; у границях 0<sup>0</sup> лишають невизначеністю. А 1/0 у «проєктивно розширеній прямій» вважають нескінченністю, але тоді ламаються звичні правила. <a href="https://en.wikipedia.org/wiki/Zero_to_the_power_of_zero" hreflang="en" target="_blank" rel="noopener noreferrer">0⁰, англійською ↗</a> <a href="https://en.wikipedia.org/wiki/Division_by_zero" hreflang="en" target="_blank" rel="noopener noreferrer">Ділення на нуль, англійською ↗</a></aside>
+</section>
+
+<!-- 5 -->
+<section>
+  <h2><span class="num">5</span>Пастки</h2>
+  <div id="pit1"></div><div id="pit2"></div><div id="pit3"></div>
+  <div class="warn"><b>Звідси:</b> відʼємний показник не робить число відʼємним і не множить на себе — він означає кроки <b>вниз</b>, тобто ділення.</div>
+</section>
+
+<!-- 6 -->
+<section>
+  <h2><span class="num">6</span>Властивості працюють і тут</h2>
+  <p>Усі пʼять властивостей ступеня лишаються правильними для будь-яких цілих показників. Наприклад, a<sup>m</sup>·a<sup>n</sup> = a<sup>m+n</sup>: m кроків, потім ще n — разом m + n. Перевір на основі 2 з будь-якими знаками:</p>
+  <div class="row"><span class="lbl">m</span>
+    <span class="stepper" id="stP"><button type="button" aria-label="Менше">−</button><output></output><button type="button" aria-label="Більше">+</button></span>
+    <span class="lbl">n</span>
+    <span class="stepper" id="stQ"><button type="button" aria-label="Менше">−</button><output></output><button type="button" aria-label="Більше">+</button></span>
+  </div>
+  <div id="s6out"></div>
+</section>
+
+<!-- 7 -->
+<section>
+  <h2><span class="num">7</span>Перевір себе</h2>
+  <p class="muted">Спершу порахуй сам, потім відкривай.</p>
+  <details><summary>2<sup>−3</sup></summary><div class="ans">= 1/2<sup>3</sup> = <b>1/8</b>. Три кроки вниз від 1: 1 → 1/2 → 1/4 → 1/8.</div></details>
+  <details><summary>7<sup>0</sup></summary><div class="ans">= <b>1</b>. Нуль кроків — стоїмо на старті.</div></details>
+  <details><summary>10<sup>−2</sup></summary><div class="ans">= 1/100 = <b>0,01</b>.</div></details>
+  <details><summary>(2/3)<sup>−2</sup></summary><div class="ans">= (3/2)<sup>2</sup> = <b>9/4</b>. Дріб перевернувся.</div></details>
+  <details><summary>5<sup>−1</sup> · 5<sup>3</sup></summary><div class="ans">= 5<sup>−1+3</sup> = 5<sup>2</sup> = <b>25</b>.</div></details>
+  <details><summary>(−2)<sup>−3</sup></summary><div class="ans">= 1/(−2)<sup>3</sup> = 1/(−8) = <b>−1/8</b>. Знак дає непарний ступінь відʼємної основи, а не мінус у показнику.</div></details>
+</section>
+
+<div class="rule">
+  <b>Для a ≠ 0 і натурального n:</b><br><br>
+  <span class="m">a<sup>0</sup> = 1</span><br>
+  <span class="m">a<sup>−n</sup> = 1/a<sup>n</sup></span><br>
+  <span class="m">(a/b)<sup>−n</sup> = (b/a)<sup>n</sup></span> (b ≠ 0)<br><br>
+  Усі пʼять <a href="../vlastyvosti-stupenia/">властивостей ступеня</a> працюють для цілих показників. Де відʼємні показники стають у пригоді — <a href="../standartnyi-vyhliad-chysla/">«Стандартний вигляд числа»</a>; що буде з дробовими — <a href="../drobovyi-pokaznyk/">«Дробовий показник»</a>.
+</div>
+
+</div>
+<script src="/assets/lesson.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const {B,E,pow,DOT,frac,fmt,plural,signed}=L;
+const P=(base,e)=>`${base}<sup>${e}</sup>`;
+const copies=(x,k,cls='')=>Array(k).fill(B(x,cls)).join(DOT);
+const exact=(b,k)=>k>=0?fmt(b**k):'1/'+fmt(b**(-k));
+function chain(vals,ops){let h='<div class="chain">';
+  vals.forEach((v,i)=>{if(i)h+=`<span class="op">→<i>${ops[i-1]}</i>→</span>`;h+=`<span class="val${i===vals.length-1?' last':''}">${v}</span>`;});
+  return h+'</div>';}
+
+/* ---------- 1: the ladder ---------- */
+const s1={a:2,n:-3};
+function r1(){
+  const {a,n}=s1;
+  L.chips($('s1a'),[2,3,10],a,v=>{s1.a=v;r1();});
+  let h='';
+  for(let k=4;k>=-4;k--){
+    const onPath=(n>0&&k>=0&&k<n)||(n<0&&k<=0&&k>n);
+    h+=`<button type="button" class="rung${k===0?' zero':''}${k===n?' sel':onPath?' path':''}" data-n="${k}" aria-pressed="${k===n}"><span>${pow(a,signed(k))}</span><b>${exact(a,k)}</b></button>`;
+    if(k>-4)h+=`<div class="between">↑ <i>×${a}</i> &nbsp; ↓ <i>÷${a}</i></div>`;
+  }
+  $('ladder').innerHTML=h;
+  $('ladder').querySelectorAll('.rung').forEach(b=>b.onclick=()=>{s1.n=+b.dataset.n;r1();});
+  const vals=['1'],ops=[],s=Math.sign(n),k=Math.abs(n);
+  for(let i=1;i<=k;i++){vals.push(exact(a,s*i));ops.push((s>0?'×':'÷')+a);}
+  let out=`<div class="big">${pow(a,signed(n))} <span class="eq">=</span> <span class="res">${exact(a,n)}</span></div>`+chain(vals,ops);
+  if(n===0) out+=`<div class="explain">Нуль кроків — стоїш на старті. Тому <b>${P(a,0)} = 1</b>.</div>`;
+  else if(n>0) out+=`<p class="muted">${k} ${plural(k,'крок','кроки','кроків')} угору: звичайний ступінь.</p>`;
+  else out+=`<div class="explain">${k} ${plural(k,'крок','кроки','кроків')} униз від 1: ділимо на ${a} ${k} ${plural(k,'раз','рази','разів')} поспіль — а це те саме, що один раз поділити на ${P(a,k)} = ${fmt(a**k)}. Тому <b>${P(a,signed(n))} = 1/${P(a,k)}</b>.</div>`;
+  $('s1out').innerHTML=out;
+}
+r1();
+
+/* ---------- 2: where a^−n = 1/a^n comes from ---------- */
+const s2={a:2,m:2,n:5};
+function stages2(){
+  const {a,m,n}=s2, k=Math.min(m,n), num=typeof a==='number';
+  const top=Array.from({length:m},(_,i)=>`<span class="${i<k?'x':''}">${B(a)}</span>`).join(DOT);
+  const bot=Array.from({length:n},(_,i)=>`<span class="${i<k?'x':''}">${B(a,'g2')}</span>`).join(DOT);
+  const left=m<n?frac('1',P(a,n-m)):m===n?'1':P(a,m-n);
+  const val=num?` = ${exact(a,m-n)}`:'';
+  const S=[
+    {lines:[pow(a,m)+' : '+pow(a,n,'g2')], text:m<n?`Знизу копій більше, ніж зверху. Правило з 7 класу вимагає m &gt; n — подивимось, що буде без цієї умови.`:m===n?`Копій порівну. Правило з 7 класу вимагає m &gt; n — подивимось, що буде без цієї умови.`:`Тут m &gt; n — звичайний випадок з 7 класу. Зменш m або збільш n, щоб побачити новий.`},
+    {lines:[frac(copies(a,m),copies(a,n,'g2'))], text:'Спосіб перший — розклад: ділення — це дріб, чисельник і знаменник розкладаємо на копії.'},
+    {lines:[frac(top,bot)], text:`Скорочуємо пари: ${k} ${plural(k,'пара','пари','пар')} (основа не 0, тож ділити на неї можна).`},
+    {lines:[`<span class="res">${left}</span>`], text:m<n?`Знизу лишилось ${n-m} ${plural(n-m,'копія','копії','копій')}.`:m===n?'Скоротилося все — лишилась 1.':`Зверху лишилось ${m-n}.`},
+    {lines:[`${pow(a,signed(m-n))} <span class="dot">—</span> за правилом`], text:`Спосіб другий — правило a<sup>m</sup> : a<sup>n</sup> = a<sup>m−n</sup>: ${m} − ${n} = ${signed(m-n)}.`},
+  ];
+  if(m<n) S.push({lines:[`<span class="res">${P(a,signed(m-n))} = ${frac('1',P(a,n-m))}${val}</span>`], text:`Обидва способи рахували те саме, тож відповіді мають збігтися. Щоб правило працювало завжди, домовились: <b>a<sup>−k</sup> = 1/a<sup>k</sup></b>. Це саме те, що показує драбина: ${n-m} ${plural(n-m,'крок','кроки','кроків')} униз.`});
+  else if(m===n) S.push({lines:[`<span class="res">${P(a,0)} = 1</span>`], text:'Обидва способи рахували те саме. Тому <b>a<sup>0</sup> = 1</b> для будь-якого a ≠ 0 — нуль кроків від 1.'});
+  else S.push({lines:[`<span class="res">${P(a,m-n)}${val}</span>`], text:'Обидва способи збігаються — нічого нового тут немає.'});
+  return S;
+}
+const D2=L.derivation({box:$('deriv'),next:$('next'),reset:$('reset'),stages:stages2});
+function draw2(){L.chips($('s2a'),[{v:2,label:'2'},{v:3,label:'3'},{v:10,label:'10'},{v:'a',label:'a'}],s2.a,v=>{s2.a=v;draw2();D2.render(false);});}
+L.stepper($('stM'),{min:1,max:6,get:()=>s2.m,set:v=>{s2.m=v;D2.restart();}});
+L.stepper($('stN'),{min:1,max:6,get:()=>s2.n,set:v=>{s2.n=v;D2.restart();}});
+draw2(); D2.render(false);
+
+/* ---------- 3: a fraction to a negative power ---------- */
+const FR=[[2,3],[1,2],[3,5],[5,1]];
+const s3={f:0,k:2};
+function stages3(){
+  const [p,q]=FR[s3.f], k=s3.k;
+  const base=q===1?B(p):`(${frac(B(p),B(q,'g2'))})`;
+  const flip=p===1?B(q,'g2'):`(${frac(B(q,'g2'),B(p))})`;
+  const value=p===1?fmt(q**k):`${fmt(q**k)}/${fmt(p**k)}`;
+  const first={lines:[base+E(signed(-k))], text:q===1?'Відʼємний показник над цілим числом.':'Відʼємний показник над дробом.'};
+  const last={lines:[`<span class="res">${p===1?P(q,k):flip+E(k)} = ${value}</span>`], text:'<b>(a/b)<sup>−n</sup> = (b/a)<sup>n</sup></b>: мінус у показнику перевертає дріб. Ціле число — теж дріб, зі знаменником 1.'};
+  if(q===1) return [first,
+    {lines:[frac('1',P(p,k))], text:'За означенням a<sup>−n</sup> = 1/a<sup>n</sup>: крок «вниз» — у знаменник.'},
+    last];
+  return [first,
+    {lines:[frac('1',`(${frac(p,q)})<sup>${k}</sup>`)], text:'За означенням a<sup>−n</sup> = 1/a<sup>n</sup>: крок «вниз» — у знаменник.'},
+    {lines:[frac('1',frac(P(p,k),P(q,k)))], text:'Дріб у ступені: ступінь іде і в чисельник, і в знаменник.'},
+    {lines:[frac(P(q,k),P(p,k))], text:'Поділити 1 на дріб — це помножити на перевернутий дріб.'},
+    last];
+}
+const D3=L.derivation({box:$('deriv3'),next:$('next3'),reset:$('reset3'),stages:stages3});
+function draw3(){L.chips($('s3f'),FR.map(([p,q],i)=>({v:i,label:q===1?String(p):`${p}/${q}`})),s3.f,v=>{s3.f=v;draw3();D3.render(false);});}
+L.stepper($('stK'),{min:1,max:4,get:()=>s3.k,set:v=>{s3.k=v;D3.restart();}});
+draw3(); D3.render(false);
+
+/* ---------- 5: traps ---------- */
+L.contrast($('pit1'),{labelA:'мінус у показнику',labelB:'мінус перед числом',
+  a:{expr:pow(2,signed(-3)), steps:'= 1/2³ = <span class="res">1/8</span>', why:'Три кроки вниз: число маленьке, але додатне.'},
+  b:{expr:'−'+pow(2,3), steps:'= −(2·2·2) = <span class="res">−8</span>', why:'Тут мінус стоїть перед числом і чекає, поки порахують ступінь.'}});
+L.contrast($('pit2'),{labelA:'основа 1/2',labelB:'основа 2',
+  a:{expr:`(${frac(B(1),B(2))})${E(signed(-1))}`, steps:'= 2/1 = <span class="res">2</span>', why:'Відʼємний показник перевернув дріб.'},
+  b:{expr:pow(2,signed(-1)), steps:'= <span class="res">1/2</span>', why:'А тут дріб зʼявився з цілого числа.'}});
+L.contrast($('pit3'),{labelA:'ступінь',labelB:'множення',
+  a:{expr:pow(3,signed(-2)), steps:'= 1/3² = <span class="res">1/9</span>', why:'Показник — кількість кроків, а не множник.'},
+  b:{expr:'3·(−2)', steps:'= <span class="res">−6</span>', why:'Ось це — множення на −2. Зовсім інше число.'}});
+
+/* ---------- 6: properties hold for integer exponents ---------- */
+const s6={m:-3,n:5};
+function r6(){
+  const {m,n}=s6;
+  $('s6out').innerHTML=`<div class="big">${pow(2,signed(m))}·${pow(2,signed(n),'g2')} <span class="eq">=</span> ${exact(2,m)} · ${exact(2,n)} <span class="eq">=</span> <span class="res">${exact(2,m+n)}</span></div>`+
+    `<div class="big">${pow(2,`${signed(m)}+${n<0?'('+signed(n)+')':n}`)} <span class="eq">=</span> ${pow(2,signed(m+n))} <span class="eq">=</span> <span class="res">${exact(2,m+n)}</span></div>`+
+    `<p class="muted">${m<0||n<0?'Відʼємні показники — кроки вниз, і вони просто віднімаються від кроків угору.':'Тут обидва показники невідʼємні — зроби один відʼємним.'}</p>`;
+}
+L.stepper($('stP'),{min:-4,max:4,get:()=>s6.m,set:v=>{s6.m=v;r6();}});
+L.stepper($('stQ'),{min:-4,max:4,get:()=>s6.n,set:v=>{s6.n=v;r6();}});
+r6();
+})();
+</script>
+</body>
+</html>

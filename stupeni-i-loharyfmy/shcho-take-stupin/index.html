@@ -21,7 +21,7 @@
 .copies .cp{position:relative;animation:pop .4s ease both}
 @media (prefers-reduced-motion:reduce){.copies .cp{animation:none}}
 .copies .cp i{position:absolute;top:calc(100% + 3px);left:50%;transform:translateX(-50%);font:700 11px/1 var(--font-body);color:var(--mark-2);font-style:normal}
-.copies + .cap{font:600 13px var(--font-body);color:var(--mark-2);align-self:flex-end;white-space:nowrap}
+.copies + .cap{font:600 13px var(--font-body);color:var(--mark-2);white-space:nowrap;margin-left:10px;vertical-align:bottom}
 summary::after{content:"  — де основа?";font:400 13px var(--font-body);color:var(--ink-soft)}
 details[open] summary::after{content:""}
 .rule .k1{color:var(--pen-wash);font-weight:700}
@@ -78,20 +78,7 @@ details[open] summary::after{content:""}
 
 <!-- 3 -->
 <section>
-  <h2><span class="num">3</span>Навіщо розкладати</h2>
-  <p>Коли не памʼятаєш правило — розклади на копії й порахуй. Наприклад, множення двох ступенів з однаковою основою:</p>
-  <div class="row">
-    <span class="lbl">перший показник</span>
-    <span class="stepper"><button type="button" id="mm" aria-label="Менше">−</button><output id="mOut"></output><button type="button" id="mp" aria-label="Більше">+</button></span>
-    <span class="lbl">другий</span>
-    <span class="stepper"><button type="button" id="km" aria-label="Менше">−</button><output id="kOut"></output><button type="button" id="kp" aria-label="Більше">+</button></span>
-  </div>
-  <div id="mul"></div>
-</section>
-
-<!-- 4 -->
-<section>
-  <h2><span class="num">4</span>Перевір себе</h2>
+  <h2><span class="num">3</span>Перевір себе</h2>
   <p class="muted">Спершу скажи сам: що тут основа, що показник і як це розкласти. Потім відкривай.</p>
   <details><summary>(x−3)<sup>5</sup></summary><div class="ans">Основа — <span class="m"><span class="b">(x−3)</span></span>, вся дужка; показник <span class="key-e">5</span>.<br><span class="m">= (x−3)·(x−3)·(x−3)·(x−3)·(x−3)</span></div></details>
   <details><summary>−5<sup>2</sup></summary><div class="ans">Основа — тільки <span class="m"><span class="b">5</span></span>, мінус стоїть зовні.<br><span class="m">= −(5·5) = −25</span></div></details>
@@ -107,7 +94,7 @@ details[open] summary::after{content:""}
   <span class="m">основа<sup>n</sup> = основа · основа · … · основа</span> — рівно n копій.<br><br>
   Основа — одна «цеглинка»: число, буква або <b>вся дужка</b>.<br>
   Показник — скільки цеглинок у добутку.<br>
-  Показник 1 — одна копія, тобто сама основа. Показник 0 дає 1, а чому так і що з відʼємними й дробовими показниками — на сторінці <a href="../stupeni-pid-kapotom/">«Ступені під капотом»</a>.
+  Показник 1 — одна копія, тобто сама основа.<br><br>Далі: як множити й ділити ступені — <a href="../vlastyvosti-stupenia/">«Властивості ступеня»</a>; звідки a<sup>0</sup> = 1 і відʼємні показники — <a href="../nulovyi-i-vidiemnyi-pokaznyk/">«Нульовий і відʼємний показник»</a>; усе разом — <a href="../shpargalka/">шпаргалка</a>.
 </div>
 
 </div>
@@ -203,7 +190,7 @@ function stages(){
     read:n<READ.length?`Читається: «${P} ${READ[n]}».`:''});
   // stage 2: unfold into copies
   if(n===0){
-    S.push({lines:[b.num===0?'?':'<span class="res">1</span>'],text:`Нуль копій — множити нічого, лишається 1. Чому саме 1, а не 0 — дивись <a href="../stupeni-pid-kapotom/">«Ступені під капотом»</a>.`+(b.num===0?' Для основи 0 чесної відповіді тут немає: нуль копій дає 1, а нуль у будь-якому додатному ступені — 0. Тому в школі 0⁰ не визначають.':''),beyond:b.num===0?ZERO0:''});
+    S.push({lines:[b.num===0?'?':'<span class="res">1</span>'],text:`Нуль копій — множити нічого, лишається 1. Чому саме 1, а не 0 — дивись <a href="../nulovyi-i-vidiemnyi-pokaznyk/">«Нульовий і відʼємний показник»</a>.`+(b.num===0?' Для основи 0 чесної відповіді тут немає: нуль копій дає 1, а нуль у будь-якому додатному ступені — 0. Тому в школі 0⁰ не визначають.':''),beyond:b.num===0?ZERO0:''});
     return S;
   }
   if(n===1){
@@ -302,23 +289,7 @@ PITS.forEach((p,i)=>{
   draw();
 });
 
-/* ---------- a^m · a^k ---------- */
-const mk={m:2,k:3};
-function rMul(){
-  const {m,k}=mk;
-  $('mOut').textContent=m;$('kOut').textContent=k;
-  $('mm').disabled=m<=1;$('mp').disabled=m>=4;$('km').disabled=k<=1;$('kp').disabled=k>=4;
-  const g1=Array(m).fill(B('a')).join(DOT),g2=Array(k).fill(B('a','g2')).join(DOT);
-  $('mul').innerHTML=
-    `<div class="ln"><span class="eqs"></span><span class="body">${B('a')}${E(m)}${DOT}${B('a','g2')}${E(k)}</span></div>`+
-    `<div class="ln"><span class="eqs">=</span><span class="body">(${g1})${DOT}(${g2})</span></div>`+
-    `<div class="ln"><span class="eqs">=</span><span class="body">${g1}${DOT}${g2}</span></div>`+
-    `<div class="ln"><span class="eqs">=</span><span class="body"><span class="res">a<span class="e">${m+k}</span></span></span></div>`+
-    `<div class="explain">${m} ${plural(m,'копія','копії','копій')} плюс ${k} ${plural(k,'копія','копії','копій')} стають в один ряд — разом ${m+k}. Звідси правило <span class="m">a${SUP('m')}·a${SUP('n')} = a${SUP('m+n')}</span>: його не треба зубрити, воно видно з розкладу.</div>`;
-}
-$('mm').onclick=()=>{mk.m--;rMul()};$('mp').onclick=()=>{mk.m++;rMul()};
-$('km').onclick=()=>{mk.k--;rMul()};$('kp').onclick=()=>{mk.k++;rMul()};
-rMul();
+
 })();
 </script>
 </body>

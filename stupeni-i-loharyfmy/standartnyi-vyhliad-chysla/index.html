@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Стандартний вигляд числа</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/lesson.css">
+<script src="/assets/theme.js"></script>
+<style>
+.digits{display:flex;flex-wrap:wrap;align-items:flex-end;gap:2px;font:600 22px/1 var(--font-mono)}
+.digits .d{min-width:.9em;text-align:center;padding:4px 1px;border-bottom:2px solid transparent}
+.digits .d.lead{color:var(--mark-1);border-bottom-color:var(--mark-1)}
+.digits .d.zero{color:var(--ink-soft)}
+.digits .c{color:var(--mark-2);font-weight:700;padding:0 1px}
+.digits .c.old{opacity:.35}
+.ten{color:var(--ink)}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+
+<header>
+  <h1>Стандартний вигляд числа</h1>
+  <p class="sub">Дуже великі й дуже малі числа записують коротко: <span class="m">a · 10<sup>n</sup></span>, де перед комою в a рівно одна ненульова цифра.</p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <a href="../nulovyi-i-vidiemnyi-pokaznyk/">Нульовий і відʼємний показник</a> <a href="../vlastyvosti-stupenia/">Властивості ступеня</a> <i>десяткові дроби, 5 клас</i></p>
+</header>
+
+<!-- 1 -->
+<section>
+  <h2><span class="num">1</span>Переносимо кому</h2>
+  <p>Стандартний вигляд — це <span class="m">a · 10<sup>n</sup></span>, де <span class="m">1 ≤ a &lt; 10</span>. Число <b>n</b> називають <b>порядком</b> числа. Обери число або впиши своє:</p>
+  <div id="presets"></div>
+  <div class="custom">
+    <label for="own">своє число:</label>
+    <input id="own" type="text" inputmode="decimal" maxlength="40" autocomplete="off" spellcheck="false" placeholder="напр. 45000 або 0,0072">
+  </div>
+  <div class="hint" id="hint"></div>
+  <div class="deriv" id="deriv" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next"></button>
+    <button class="btn" type="button" id="reset">Згорнути назад</button>
+  </div>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2><span class="num">2</span>Пастки</h2>
+  <div id="pit1"></div><div id="pit2"></div><div id="pit3"></div>
+  <div class="warn"><b>Звідси:</b> у стандартному вигляді перед комою стоїть <b>одна</b> цифра і вона <b>не нуль</b>. Велике число має додатний порядок, мале (менше за 1) — відʼємний.</div>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="num">3</span>Навіщо: рахувати з такими числами</h2>
+  <p>Числа в стандартному вигляді легко множити й ділити: окремо числа, окремо ступені десяти — за <a href="../vlastyvosti-stupenia/">властивостями ступеня</a>.</p>
+  <div id="ops"></div>
+  <div class="deriv" id="deriv2" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next2"></button>
+    <button class="btn" type="button" id="reset2">Згорнути назад</button>
+  </div>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2><span class="num">4</span>Перевір себе</h2>
+  <p class="muted">Спершу запиши сам, потім відкривай.</p>
+  <details><summary>45 000</summary><div class="ans">= <b>4,5 · 10<sup>4</sup></b>. Кома переїхала на 4 знаки вліво.</div></details>
+  <details><summary>0,0072</summary><div class="ans">= <b>7,2 · 10<sup>−3</sup></b>. Кома переїхала на 3 знаки вправо.</div></details>
+  <details><summary>6,1 · 10<sup>5</sup> — назад у звичайний</summary><div class="ans">= <b>610 000</b>. Кому — на 5 знаків вправо.</div></details>
+  <details><summary>3 · 10<sup>−2</sup> — назад у звичайний</summary><div class="ans">= <b>0,03</b>.</div></details>
+  <details><summary>120 · 10<sup>3</sup> — це стандартний вигляд?</summary><div class="ans">Ні: 120 ≥ 10. <b>1,2 · 10<sup>5</sup></b>.</div></details>
+  <details><summary>(2 · 10<sup>4</sup>) · (4 · 10<sup>3</sup>)</summary><div class="ans">= 8 · 10<sup>7</sup>.</div></details>
+</section>
+
+<div class="rule">
+  <b>Стандартний вигляд:</b> <span class="m">a · 10<sup>n</sup></span>, <span class="m">1 ≤ a &lt; 10</span>, n — ціле, порядок числа.<br><br>
+  Кома вліво на k знаків → <span class="m">· 10<sup>k</sup></span>; кома вправо на k знаків → <span class="m">· 10<sup>−k</sup></span>.<br>
+  Множення й ділення: числа окремо, показники десятки — за властивостями ступеня.<br><br>
+  Що таке відʼємний показник — <a href="../nulovyi-i-vidiemnyi-pokaznyk/">«Нульовий і відʼємний показник»</a>.
+</div>
+
+</div>
+<script src="/assets/lesson.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const {B,E,pow,frac,fmt,plural,signed,esc}=L;
+const P=(base,e)=>`${base}<sup>${e}</sup>`;
+const TEN=n=>`<span class="ten">10</span>${E(signed(n))}`;
+
+/* ---------- 1: move the comma ---------- */
+const PRESETS=[
+  {v:'384400', sub:'до Місяця, км', label:'384 400'},
+  {v:'299792,458', sub:'швидкість світла, км/с', label:'299 792,458'},
+  {v:'9460730472580,8', sub:'світловий рік, км', label:'9 460 730 472 580,8'},
+  {v:'0,000000001', sub:'1 нанометр, м', label:'0,000000001'},
+  {v:'52000', sub:'велике', label:'52 000'},
+  {v:'0,00052', sub:'мале', label:'0,00052'},
+];
+const st={s:'0,00052'};
+
+function parse(s){
+  s=s.replace(/\s+/g,'').replace('.',',');
+  const m=s.match(/^(\d+)(?:,(\d+))?$/);
+  if(!m) return null;
+  const digits=m[1]+(m[2]||''), comma=m[1].length;
+  const first=[...digits].findIndex(d=>d!=='0');
+  if(first<0) return {zero:true};
+  const n=comma-(first+1);                                  // how far the comma travels: >0 left, <0 right
+  let rest=digits.slice(first+1).replace(/0+$/,'');
+  const mant=digits[first]+(rest?','+rest:'');
+  return {digits,comma,first,n,mant};
+}
+function cells(digits,comma,first,newComma){
+  let h='<span class="digits">';
+  // only the digits that matter: from the first non-zero (or the comma) to the last non-zero (or the comma)
+  const lastNZ=Math.max(...[...digits].map((d,i)=>d!=='0'?i:-1));
+  const from=Math.min(first,comma-1,newComma===undefined?Infinity:newComma-1), to=Math.max(lastNZ,comma-1);
+  for(let i=Math.max(0,from);i<=to;i++){
+    if(i===comma&&i>0) h+=`<span class="c${newComma!==undefined?' old':''}">,</span>`;
+    if(newComma!==undefined&&i===newComma&&newComma!==comma) h+='<span class="c">,</span>';
+    h+=`<span class="d${i===first?' lead':''}${digits[i]==='0'?' zero':''}">${digits[i]}</span>`;
+  }
+  if(comma>to) {} // whole number: the comma sits after the last digit and is not drawn
+  return h+'</span>';
+}
+function stages(){
+  const p=parse(st.s);
+  if(!p) return [{lines:['?'], text:'Впиши додатне число цифрами, з комою або без, наприклад 45000 або 0,0072.'}];
+  if(p.zero) return [{lines:['0'], text:'Нуль у стандартному вигляді не записують: у ньому немає жодної ненульової цифри, яку можна поставити перед комою.'}];
+  const {digits,comma,first,n,mant}=p, k=Math.abs(n), shown=st.s.replace('.',',');
+  const S=[
+    {lines:[cells(digits,comma,first)], text:`Число ${esc(shown)}. Треба, щоб перед комою стояла рівно одна ненульова цифра.`},
+    {lines:[cells(digits,comma,first,first+1)], text:n===0?`Перша ненульова цифра — <b>${digits[first]}</b>, і кома вже стоїть одразу після неї. Переносити нічого не треба.`:`Перша ненульова цифра — <b>${digits[first]}</b> (синя). Кома має стати одразу після неї: це ${k} ${plural(k,'знак','знаки','знаків')} ${n>0?'вліво':'вправо'}.`},
+  ];
+  if(n!==0) S.push({lines:[`${mant} · ${TEN(n)}`], text:n>0?`Кома вліво на ${k} — число стало в ${P(10,k)} разів меншим. Щоб воно не змінилось, множимо назад на ${P(10,k)}.`:`Кома вправо на ${k} — число стало в ${P(10,k)} разів більшим. Щоб воно не змінилось, ділимо назад на ${P(10,k)}, тобто множимо на ${P(10,signed(-k))}.`});
+  S.push({lines:[`<span class="res">${mant} · ${P(10,signed(n))}</span>`], text:`Готово: a = ${mant}, порядок числа <b>n = ${signed(n)}</b>. ${n>0?'Велике число — додатний порядок.':n<0?'Число менше за 1 — відʼємний порядок.':'Число між 1 і 10 — порядок 0, бо 10<sup>0</sup> = 1.'}`});
+  return S;
+}
+const D=L.derivation({box:$('deriv'),next:$('next'),reset:$('reset'),stages,first:'Далі →'});
+function drawPresets(){L.chips($('presets'),PRESETS,st.s,v=>{st.s=v;$('own').value='';$('hint').textContent='';drawPresets();D.toStart();});}
+$('own').addEventListener('input',()=>{
+  const v=$('own').value.trim();
+  if(!v){st.s=PRESETS[5].v;$('hint').textContent='';}
+  else{st.s=v;$('hint').textContent=parse(v)?'':'Тільки цифри й одна кома, без мінуса.';}
+  drawPresets(); D.render(false);
+});
+drawPresets(); D.render(false);
+
+/* ---------- 2: traps ---------- */
+L.contrast($('pit1'),{labelA:'52 000',labelB:'0,00052',
+  a:{expr:'52 000', steps:'= <span class="res">5,2 · 10<sup>4</sup></span>', why:'Велике число: кома пішла вліво, порядок додатний.'},
+  b:{expr:'0,00052', steps:'= <span class="res">5,2 · 10<sup>−4</sup></span>', why:'Ті самі цифри, але число мале: кома пішла вправо, порядок відʼємний.'}});
+L.contrast($('pit2'),{labelA:'не стандартний',labelB:'стандартний',
+  a:{expr:'23 · 10<sup>5</sup>', steps:'перед комою дві цифри: 23 ≥ 10', why:'Так записати можна, але це не стандартний вигляд.'},
+  b:{expr:'2,3 · 10<sup>6</sup>', steps:'= 23 · 10<sup>5</sup> = 2 300 000', why:'Кома в 23 пішла на знак вліво — порядок виріс на 1.'}});
+L.contrast($('pit3'),{labelA:'не стандартний',labelB:'стандартний',
+  a:{expr:'0,5 · 10<sup>3</sup>', steps:'перед комою нуль: 0,5 &lt; 1', why:'Нуль перед комою — не те, що треба.'},
+  b:{expr:'5 · 10<sup>2</sup>', steps:'= 0,5 · 10<sup>3</sup> = 500', why:'Кома в 0,5 пішла на знак вправо — порядок зменшився на 1.'}});
+
+/* ---------- 3: multiply and divide ---------- */
+const OPS=[{a:3,p:8,op:'·',b:2,q:-3},{a:4,p:5,op:'·',b:5,q:7},{a:6,p:-4,op:':',b:3,q:2},{a:2,p:3,op:':',b:4,q:1}];
+let op=0;
+function opStages(){
+  const {a,p,op:o,b,q}=OPS[op], mul=o==='·';
+  let c=mul?a*b:a/b, e=mul?p+q:p-q;
+  const S=[
+    {lines:[`(${a} · ${TEN(p)}) ${o} (${b} · ${TEN(q)})`], text:mul?'Множимо два числа в стандартному вигляді.':'Ділимо два числа в стандартному вигляді.'},
+    {lines:[`(${a} ${o} ${b}) · (${TEN(p)} ${o} ${TEN(q)})`], text:mul?'Множники можна переставити: числа окремо, ступені десяти окремо.':'Ділення дробу на дріб: числа окремо, ступені десяти окремо.'},
+    {lines:[`${fmt(c)} · ${TEN(e)}`], text:mul?`${a} · ${b} = ${fmt(c)}; показники додаються: ${signed(p)} + ${q<0?'('+signed(q)+')':q} = ${signed(e)}.`:`${a} : ${b} = ${fmt(c)}; показники віднімаються: ${signed(p)} − ${q<0?'('+signed(q)+')':q} = ${signed(e)}.`},
+  ];
+  let k=0; while(c>=10){c/=10;e++;k++;} while(c<1){c*=10;e--;k--;}
+  if(k!==0) S.push({lines:[`<span class="res">${fmt(c)} · ${P(10,signed(e))}</span>`], text:`${fmt(k>0?c*10**k:c/10**(-k))} — не стандартний вигляд: ${k>0?'кому вліво на 1, порядок +1':'кому вправо на 1, порядок −1'}.`});
+  else S.push({lines:[`<span class="res">${fmt(c)} · ${P(10,signed(e))}</span>`], text:'Уже стандартний вигляд: перед комою одна ненульова цифра.'});
+  return S;
+}
+const D2=L.derivation({box:$('deriv2'),next:$('next2'),reset:$('reset2'),stages:opStages,first:'Порахувати →'});
+function drawOps(){L.chips($('ops'),OPS.map((x,i)=>({v:i,label:`(${x.a}·10<sup>${signed(x.p)}</sup>)${x.op}(${x.b}·10<sup>${signed(x.q)}</sup>)`})),op,v=>{op=v;drawOps();D2.toStart();});}
+drawOps(); D2.render(false);
+})();
+</script>
+</body>
+</html>

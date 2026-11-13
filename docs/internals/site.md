@@ -9,14 +9,15 @@
 
 | Тема в меню | Тека | Уроки |
 |---|---|---|
-| Ступені й логарифми | `stepeni-i-loharyfmy/` | Що таке ступінь (`shcho-take-stupin`), Ступені під капотом (`stupeni-pid-kapotom`), Логарифми з нуля (`loharyfmy-z-nulia`) |
+| Ступені, корені й логарифми | `stupeni-i-loharyfmy/` | Що таке ступінь (`shcho-take-stupin`), Властивості ступеня (`vlastyvosti-stupenia`), Нульовий і відʼємний показник (`nulovyi-i-vidiemnyi-pokaznyk`), Стандартний вигляд числа (`standartnyi-vyhliad-chysla`), Корінь n-го ступеня (`korin-n-stupenia`), Дробовий показник (`drobovyi-pokaznyk`), шпаргалка (`shpargalka`), Логарифми з нуля (`loharyfmy-z-nulia`) |
 | Арифметика | — | тільки зовнішня картка Quick maths |
 | Дроби | `droby/` | Спільний знаменник (`spilnyi-znamennyk`) |
 | Рівняння | `rivniannia/` | Що саме не має змінитися (`peretvorennia-rivnian`), Терези: роби з обома частинами однакове (`terezy-obydvi-chastyny`) |
 | Геометрія | `heometriia/` | Шпаргалка з трапеції (`trapetsiia`); зовнішня картка Розвʼязування трикутників |
 
-Головне меню — `index.html` у корені ([menu.md](menu.md)). Тека теми `stepeni-i-loharyfmy/`
-лишається з «степені» в назві, бо на неї ведуть посилання.
+Головне меню — `index.html` у корені ([menu.md](menu.md)).
+
+Адресу, якої немає, сервер має переадресовувати на головну (`handle_errors` у Caddy, див. «Деплой»).
 
 ## Спільне в `assets/`
 
@@ -26,6 +27,9 @@
   кидає подію `themechange`, на яку перемальовується SVG, зібраний у JS.
 - `lesson.css` — компоненти уроку ([lesson-page.md](lesson-page.md)), підключається після
   `site.css`.
+- `lesson.js` — спільна поведінка уроку: покроковий розклад, кнопки-варіанти, степери, картки-пари
+  з перемикачем, форматування чисел ([lesson-page.md](lesson-page.md)). Сторінка підключає його
+  перед власним скриптом і користується глобальним `L`.
 
 На початку `<body>` кожна сторінка ставить `<nav class="site-bar">` з посиланням `.site-home`
 («← Усі теми», крім самого меню) і кнопкою `#site-theme`.
@@ -44,3 +48,21 @@
 `/srv/math`.
 
 Код — https://github.com/FernDragonborn/math-pages (публічний).
+
+### Caddy
+
+Конфіг — `/etc/caddy/Caddyfile`, належить root; змінює його людина з `sudo`. Блок сайту:
+
+```
+math.45-145-224-180.sslip.io {
+	encode zstd gzip
+	root * /srv/math
+	file_server
+	handle_errors 404 {
+		redir * / 302
+	}
+}
+```
+
+`stupeni.45-145-224-180.sslip.io` — коротка адреса, яка переадресовує на статтю
+«Нульовий і відʼємний показник».

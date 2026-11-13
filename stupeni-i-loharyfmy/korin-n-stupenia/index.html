@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Корінь n-го ступеня</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/lesson.css">
+<script src="/assets/theme.js"></script>
+<style>
+.ok{color:var(--mark-3);font-weight:700}
+.no{color:var(--ink-soft);font-weight:700}
+.two{display:grid;grid-template-columns:1fr;gap:6px}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+
+<header>
+  <h1>Корінь n-го ступеня</h1>
+  <p class="sub">Корінь — це питання навпаки: яке число треба піднести до n-го ступеня, щоб вийшло a?</p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <a href="../shcho-take-stupin/">Що таке ступінь</a> <a href="../vlastyvosti-stupenia/">Властивості ступеня</a> <i>квадратний корінь, 8 клас</i></p>
+</header>
+
+<!-- 1 -->
+<section>
+  <h2><span class="num">1</span>Шукаємо x, у якого x<sup>n</sup> = a</h2>
+  <p><b>Коренем n-го ступеня</b> з числа a називають число, n-й ступінь якого дорівнює a. Обери n і a — і перевіримо кандидатів.</p>
+  <div class="row"><span class="lbl">ступінь n</span><span id="nn"></span></div>
+  <div class="row"><span class="lbl">число a</span><span id="aa"></span></div>
+  <div class="deriv" id="deriv" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next"></button>
+    <button class="btn" type="button" id="reset">Згорнути назад</button>
+  </div>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2><span class="num">2</span>Властивості коренів</h2>
+  <p>Кожна властивість — наслідок <a href="../vlastyvosti-stupenia/">властивостей ступеня</a>. Обери властивість і крути приклади: обидві частини щоразу дають те саме.</p>
+  <div id="props"></div>
+  <div id="propOut"></div>
+  <div class="row"><button class="btn" type="button" id="again">Інший приклад</button></div>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="num">3</span>Пастки</h2>
+  <div id="pit1"></div><div id="pit2"></div><div id="pit3"></div>
+  <div class="warn"><b>Звідси:</b> корінь не «розходиться» по доданках, корінь парного ступеня завжди невідʼємний, а з відʼємного числа серед дійсних його немає.</div>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2><span class="num">4</span>Перевір себе</h2>
+  <p class="muted">Спершу знайди сам, потім відкривай.</p>
+  <details><summary><sup>3</sup>√125</summary><div class="ans">= <b>5</b>, бо 5·5·5 = 125.</div></details>
+  <details><summary><sup>4</sup>√81</summary><div class="ans">= <b>3</b>. Рівняння x<sup>4</sup> = 81 має два корені, ±3, а знак <sup>4</sup>√ — це невідʼємний з них.</div></details>
+  <details><summary><sup>3</sup>√(−27)</summary><div class="ans">= <b>−3</b>, бо (−3)·(−3)·(−3) = −27. Непарний ступінь — корінь з відʼємного існує.</div></details>
+  <details><summary><sup>4</sup>√(−16)</summary><div class="ans">Серед дійсних чисел <b>не існує</b>: будь-яке число в четвертому ступені невідʼємне.</div></details>
+  <details><summary>√(4·25)</summary><div class="ans">= √4·√25 = 2·5 = <b>10</b>.</div></details>
+  <details><summary>√((−7)<sup>2</sup>)</summary><div class="ans">= √49 = <b>7</b> = |−7|, а не −7.</div></details>
+</section>
+
+<div class="rule">
+  <b>Корінь n-го ступеня з a</b> — число, n-й ступінь якого дорівнює a.<br><br>
+  n непарне: корінь є з будь-якого числа, і він один — <span class="m"><sup>n</sup>√a</span>.<br>
+  n парне: при a &gt; 0 коренів два, протилежних; <span class="m"><sup>n</sup>√a</span> — невідʼємний з них (арифметичний корінь). При a &lt; 0 — жодного.<br><br>
+  <span class="m"><sup>n</sup>√(ab) = <sup>n</sup>√a · <sup>n</sup>√b</span>, <span class="m"><sup>n</sup>√(a/b) = <sup>n</sup>√a / <sup>n</sup>√b</span>, <span class="m">(<sup>n</sup>√a)<sup>k</sup> = <sup>n</sup>√(a<sup>k</sup>)</span>, <span class="m"><sup>k</sup>√(<sup>n</sup>√a) = <sup>nk</sup>√a</span> (a, b ≥ 0, b ≠ 0 у частці).<br><br>
+  Далі — <a href="../drobovyi-pokaznyk/">«Дробовий показник»</a>: a<sup>1/n</sup> = <sup>n</sup>√a.
+</div>
+
+</div>
+<script src="/assets/lesson.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const {B,E,pow,DOT,frac,fmt,plural,signed}=L;
+const P=(base,e)=>`${base}<sup>${e}</sup>`;
+const RT=(n,x)=>(n===2?'':`<sup>${n}</sup>`)+'√'+x;
+const ord={2:'квадратний',3:'кубічний',4:'четвертого ступеня',5:'пʼятого ступеня'};
+const prod=(x,n)=>Array(n).fill(x<0?`(${signed(x)})`:fmt(x)).join(' · ');
+
+/* ---------- 1: find x with xⁿ = a ---------- */
+const A={2:[16,81,2,0,-16],3:[8,-8,27,-27,0],4:[16,81,-16,0],5:[32,-32,0,243]};
+const st={n:2,a:16};
+function stages(){
+  const {n,a}=st, even=n%2===0, r=Math.pow(Math.abs(a),1/n), ri=Math.round(r), exact=ri**n===Math.abs(a);
+  const R=exact?fmt(ri):fmt(r,3), approx=exact?'=':'≈';
+  const S=[{lines:[`x${E(n)} = ${signed(a)}`], text:`Шукаємо число x, яке в ${n}-му ступені дає ${signed(a)}.`}];
+  if(a===0){
+    S.push({lines:[`${prod(0,n)} = 0 <span class="ok">✓</span>`], text:'Нуль підходить: скільки нулів не перемнож — нуль.'});
+    S.push({lines:[`<span class="res">${RT(n,'0')} = 0</span>`], text:'Інших коренів немає: добуток ненульових чисел не дорівнює нулю.'});
+    return S;
+  }
+  if(a>0){
+    S.push({lines:[`${prod(exact?ri:+r.toFixed(3),n)} ${approx} ${a} <span class="ok">✓</span>`], text:`Кандидат ${R}: ${n} ${plural(n,'копія','копії','копій')} дають ${a}${exact?'':' (наближено — корінь тут некруглий)'}.`});
+    if(even){
+      S.push({lines:[`${prod(exact?-ri:-(+r.toFixed(3)),n)} ${approx} ${a} <span class="ok">✓</span>`], text:`А ${L.MINUS}${R}? Мінусів ${n} — парна кількість, вони знищуються попарно. Теж підходить!`});
+      S.push({lines:[`x = ±${R}`, `<span class="res">${RT(n,a)} ${approx} ${R}</span>`], text:`Коренів два, протилежних. Знак ${RT(n,'')} означає <b>невідʼємний</b> з них — його називають <b>арифметичним коренем</b>.`});
+    } else {
+      S.push({lines:[`${prod(exact?-ri:-(+r.toFixed(3)),n)} ${approx} ${signed(-a)} <span class="no">✗</span>`], text:`А ${L.MINUS}${R}? Мінусів ${n} — непарна кількість, один лишається без пари. Вийшло відʼємне — не підходить.`});
+      S.push({lines:[`<span class="res">${RT(n,a)} ${approx} ${R}</span>`], text:'Непарний ступінь: корінь рівно один.'});
+    }
+    return S;
+  }
+  // a < 0
+  if(!even){
+    S.push({lines:[`${prod(exact?ri:+r.toFixed(3),n)} ${approx} ${-a} <span class="no">✗</span>`], text:`Кандидат ${R} дає додатне — не підходить.`});
+    S.push({lines:[`${prod(exact?-ri:-(+r.toFixed(3)),n)} ${approx} ${signed(a)} <span class="ok">✓</span>`], text:`А ${L.MINUS}${R}: мінусів ${n}, непарна кількість — результат відʼємний. Підходить!`});
+    S.push({lines:[`<span class="res">${RT(n,`(${signed(a)})`)} ${approx} ${L.MINUS}${R}</span>`], text:'Корінь непарного ступеня з відʼємного числа існує, і він один.'});
+    return S;
+  }
+  S.push({lines:[`${prod(exact?ri:+r.toFixed(3),n)} ${approx} ${-a} <span class="no">✗</span>`, `${prod(exact?-ri:-(+r.toFixed(3)),n)} ${approx} ${-a} <span class="no">✗</span>`], text:`І ${R}, і ${L.MINUS}${R} у ${n}-му ступені дають <b>додатне</b> число: мінусів парна кількість.`});
+  S.push({lines:['коренів немає'], text:`Будь-яке число в парному ступені невідʼємне, тож ${signed(a)} не отримати. Корінь ${ord[n]} з відʼємного числа серед дійсних чисел не існує.`,
+    beyond:L.beyond(`Серед комплексних чисел він існує: з числом i, у якого i² = −1, маємо, наприклад, √(−16) = 4i, бо (4i)² = 16·i² = −16.`,'https://uk.wikipedia.org/wiki/Уявна_одиниця','Уявна одиниця')});
+  return S;
+}
+const D=L.derivation({box:$('deriv'),next:$('next'),reset:$('reset'),stages,first:'Шукати →'});
+function draw(){
+  L.chips($('nn'),[2,3,4,5],st.n,v=>{st.n=v;if(!A[v].includes(st.a))st.a=A[v][0];draw();D.toStart();});
+  L.chips($('aa'),A[st.n],st.a,v=>{st.a=v;draw();D.toStart();});
+}
+draw(); D.render(false);
+
+/* ---------- 2: properties, each checked on numbers ---------- */
+const pick=arr=>arr[Math.floor(Math.random()*arr.length)];
+const SQ=[4,9,16,25,36], CU=[8,27,64,125];
+const PROPS=[
+  {v:'mul', sub:'корінь добутку', label:'<sup>n</sup>√(ab)', make(){const n=pick([2,3]),L1=n===2?SQ:CU,a=pick(L1),b=pick(L1),ra=Math.round(a**(1/n)),rb=Math.round(b**(1/n));
+    return [`${RT(n,`(${a}·${b})`)} = ${RT(n,a*b)} = <span class="res">${ra*rb}</span>`, `${RT(n,a)} · ${RT(n,b)} = ${ra} · ${rb} = <span class="res">${ra*rb}</span>`, `Корінь з добутку — добуток коренів: (${ra}·${rb})<sup>${n}</sup> = ${P(ra,n)}·${P(rb,n)} = ${a}·${b}.`];}},
+  {v:'div', sub:'корінь частки', label:'<sup>n</sup>√(a/b)', make(){const n=pick([2,3]),L1=n===2?SQ:CU,b=pick(L1),rb=Math.round(b**(1/n)),ra=pick([1,2,3,5]),a=ra**n;
+    return [`${RT(n,`(${a}/${b})`)} = <span class="res">${ra}/${rb}</span>`, `${RT(n,a)} / ${RT(n,b)} = <span class="res">${ra}/${rb}</span>`, `Бо (${ra}/${rb})<sup>${n}</sup> = ${a}/${b}: ступінь іде і в чисельник, і в знаменник.`];}},
+  {v:'pow', sub:'ступінь кореня', label:'(<sup>n</sup>√a)<sup>k</sup>', make(){const n=pick([2,3]),r=pick([2,3]),a=r**n,k=pick([2,3]);
+    return [`(${RT(n,a)})<sup>${k}</sup> = ${P(r,k)} = <span class="res">${r**k}</span>`, `${RT(n,`${a}<sup>${k}</sup>`)} = ${RT(n,a**k)} = <span class="res">${r**k}</span>`, `Можна спершу добути корінь, а можна спершу піднести до ступеня — відповідь та сама.`];}},
+  {v:'nest', sub:'корінь з кореня', label:'<sup>k</sup>√<sup>n</sup>√a', make(){const [n,k]=pick([[2,2],[2,3],[3,2]]),r=2,a=r**(n*k);
+    return [`${RT(k,'('+RT(n,a)+')')} = ${RT(k,r**k)} = <span class="res">${r}</span>`, `${RT(n*k,a)} = <span class="res">${r}</span>`, `Показники коренів множаться: ${k}·${n} = ${n*k}, бо ${r}<sup>${n*k}</sup> = ${a}.`];}},
+  {v:'abs', sub:'корінь зі ступеня', label:'<sup>n</sup>√(a<sup>n</sup>)', make(){const n=pick([2,3,4]),a=pick([3,-3,2,-2]);
+    const v=a**n, res=n%2?a:Math.abs(a);
+    return [`${RT(n,`(${signed(a)})<sup>${n}</sup>`)} = ${RT(n,v<0?`(${signed(v)})`:v)} = <span class="res">${signed(res)}</span>`, n%2?`n непарне: ${RT(n,'(a<sup>n</sup>)')} = a = ${signed(a)}`:`n парне: ${RT(n,'(a<sup>n</sup>)')} = |a| = |${signed(a)}| = ${res}`, n%2?'Непарний ступінь зберігає знак — корінь повертає саме a.':'Парний ступінь стирає знак, а арифметичний корінь невідʼємний — тому |a|, а не a.'];}},
+];
+let prop='mul';
+function drawProp(){
+  L.chips($('props'),PROPS,prop,v=>{prop=v;drawProp();});
+  const [l,r,why]=PROPS.find(p=>p.v===prop).make();
+  $('propOut').innerHTML=`<div class="two"><div class="ln"><span class="eqs"></span><span class="body">${l}</span></div><div class="ln"><span class="eqs"></span><span class="body">${r}</span></div></div><div class="explain">${why}</div>`;
+}
+$('again').onclick=drawProp; drawProp();
+
+/* ---------- 3: traps ---------- */
+L.contrast($('pit1'),{labelA:'x = 3',labelB:'x = −3',
+  a:{expr:'√(3<sup>2</sup>)', steps:'= √9 = <span class="res">3</span> = x', why:'Здається, що корінь і квадрат просто знищились…'},
+  b:{expr:'√((−3)<sup>2</sup>)', steps:'= √9 = <span class="res">3</span> ≠ x', why:'…але ні: √(x²) = |x|. Квадрат стер знак, а арифметичний корінь невідʼємний.'}});
+L.contrast($('pit2'),{labelA:'корінь суми',labelB:'сума коренів',
+  a:{expr:'√(9 + 16)', steps:'= √25 = <span class="res">5</span>', why:'Спершу додаємо під коренем.'},
+  b:{expr:'√9 + √16', steps:'= 3 + 4 = <span class="res">7</span>', why:'Інше число. Корінь не розходиться по доданках — тільки по множниках.'}});
+L.contrast($('pit3'),{labelA:'непарний',labelB:'парний',
+  a:{expr:'<sup>3</sup>√(−8)', steps:'= <span class="res">−2</span>, бо (−2)³ = −8', why:'Непарний ступінь: з відʼємного — можна.'},
+  b:{expr:'√(−8)', steps:'серед дійсних чисел не існує', why:'Парний ступінь: квадрат будь-якого числа невідʼємний, тож −8 не отримати.'}});
+})();
+</script>
+</body>
+</html>

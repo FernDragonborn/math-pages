@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Дробовий показник</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/lesson.css">
+<script src="/assets/theme.js"></script>
+<style>
+input[type=range]{width:100%;height:36px;accent-color:var(--mark-2)}
+.track{position:relative;height:18px;background:var(--line);border-radius:9px;overflow:hidden;margin:6px 0 4px}
+.fill{position:absolute;left:0;top:0;bottom:0;background:var(--mark-4);border-radius:9px;transition:width .08s}
+.fill.ok{background:var(--mark-3)}
+.target{position:absolute;top:-2px;bottom:-2px;width:3px;background:var(--ink)}
+.status{font-weight:600;min-height:1.5em}
+.status.ok{color:var(--mark-3)}
+svg text{font-family:var(--font-mono);fill:var(--ink-soft)}
+.ans b{color:var(--mark-3)}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+
+<header>
+  <h1>Дробовий показник</h1>
+  <p class="sub">Показник — це кроки від 1. Дробовий показник — це частина кроку: крок ріжуть на однакові маленькі.</p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <a href="../korin-n-stupenia/">Корінь n-го ступеня</a> <a href="../nulovyi-i-vidiemnyi-pokaznyk/">Нульовий і відʼємний показник</a> <a href="../vlastyvosti-stupenia/">Властивості ступеня</a></p>
+</header>
+
+<!-- 1 -->
+<section>
+  <h2><span class="num">1</span>Пів сходинки</h2>
+  <p>Одна сходинка — це <b>×a</b>. Розріжмо її на кілька <b>однакових</b> маленьких кроків. Кожен маленький крок — множення на якесь число <span class="m">x</span>, і всі разом мають дати одну цілу сходинку. Знайди <span class="m">x</span> повзунком.</p>
+  <div class="row"><span class="lbl">сходинка ×</span><span id="s1a"></span></div>
+  <div class="row"><span class="lbl">ріжемо на</span><span id="s1q"></span></div>
+  <input type="range" id="s1x" min="1" max="5" step="0.01" value="1" aria-label="x">
+  <div class="big" id="s1eq"></div>
+  <div class="track"><div class="fill" id="s1fill"></div><div class="target" id="s1target"></div></div>
+  <div class="muted" style="font-size:13px">риска — ціль (одна сходинка ×<span id="s1t"></span>)</div>
+  <p class="status" id="s1status"></p>
+  <button class="btn" type="button" id="s1show">Показати відповідь</button>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2><span class="num">2</span>Розклад a<sup>p/q</sup></h2>
+  <p><b>Знаменник q</b> — на скільки маленьких кроків ріжемо сходинку. <b>Чисельник p</b> — скільки таких кроків робимо (мінус — униз, тобто ділимо).</p>
+  <div class="row"><span class="lbl">основа</span><span id="s2a"></span></div>
+  <div class="row">
+    <span class="lbl">p</span>
+    <span class="stepper" id="stP"><button type="button" aria-label="Зменшити p">−</button><output></output><button type="button" aria-label="Збільшити p">+</button></span>
+    <span class="lbl">q</span>
+    <span class="stepper" id="stQ"><button type="button" aria-label="Зменшити q">−</button><output></output><button type="button" aria-label="Збільшити q">+</button></span>
+  </div>
+  <svg id="line" viewBox="0 0 340 96" width="100%" aria-label="Шкала показників"></svg>
+  <div class="deriv" id="deriv" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next"></button>
+    <button class="btn" type="button" id="reset">Згорнути назад</button>
+  </div>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="num">3</span>Пастки</h2>
+  <div id="pit1"></div><div id="pit2"></div>
+  <div class="warn"><b>Звідси:</b> знаменник показника — це корінь, чисельник — ступінь; мінус у показнику — ділення, а не мінус у відповіді. І основа — тільки додатна: обери −8 у розділі 2, щоб побачити чому.</div>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2><span class="num">4</span>Перевір себе</h2>
+  <p class="muted">Спершу порахуй сам, потім відкривай.</p>
+  <details><summary>25<sup>1/2</sup></summary><div class="ans">= √25 = <b>5</b>.</div></details>
+  <details><summary>8<sup>2/3</sup></summary><div class="ans">= (∛8)<sup>2</sup> = 2<sup>2</sup> = <b>4</b>.</div></details>
+  <details><summary>16<sup>−3/4</sup></summary><div class="ans">= 1/(<sup>4</sup>√16)<sup>3</sup> = 1/2<sup>3</sup> = <b>1/8</b>.</div></details>
+  <details><summary>4<sup>3/2</sup></summary><div class="ans">= (√4)<sup>3</sup> = 2<sup>3</sup> = <b>8</b>.</div></details>
+  <details><summary>0<sup>1/2</sup></summary><div class="ans">= <b>0</b>. Нуль з додатним дробовим показником — можна.</div></details>
+  <details><summary>(−8)<sup>1/3</sup></summary><div class="ans">У шкільній програмі <b>не означено</b>: дробовий показник — тільки для додатної основи. Чому — у розділі 2 з основою −8.</div></details>
+</section>
+
+<div class="rule">
+  <b>Для a &gt; 0, цілого p і натурального q &gt; 1:</b><br><br>
+  <span class="m">a<sup>1/q</sup> = <sup>q</sup>√a</span><br>
+  <span class="m">a<sup>p/q</sup> = <sup>q</sup>√(a<sup>p</sup>) = (<sup>q</sup>√a)<sup>p</sup></span><br>
+  <span class="m">0<sup>p/q</sup> = 0</span> лише при p/q &gt; 0.<br><br>
+  Усі <a href="../vlastyvosti-stupenia/">властивості ступеня</a> лишаються правильними. Що таке корінь — <a href="../korin-n-stupenia/">«Корінь n-го ступеня»</a>.
+</div>
+
+</div>
+<script src="/assets/lesson.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const {B,E,pow,DOT,frac,fmt,plural,signed,MINUS}=L;
+const root=document.documentElement;
+const P=(base,e)=>`${base}<sup>${e}</sup>`;
+const RT=(q,x)=>q===1?String(x):q===2?'√'+x:q===3?'∛'+x:q===4?'∜'+x:`<sup>${q}</sup>√${x}`;
+const exact=(b,k)=>{if(k>=0)return fmt(b**k);const d=b**(-k);return (d<0?MINUS:'')+'1/'+fmt(Math.abs(d));};
+const bl=a=>a<0?`(${signed(a)})`:String(a);
+function chain(vals,ops){let h='<span class="chain">';
+  vals.forEach((v,i)=>{if(i)h+=`<span class="op">→<i>${ops[i-1]}</i>→</span>`;h+=`<span class="val${i===vals.length-1?' last':''}">${v}</span>`;});
+  return h+'</span>';}
+
+/* ---------- 1: half a step ---------- */
+const s1={a:9,q:2,x:1};
+function setup1(){
+  L.chips($('s1a'),[4,9,8,27,16,2],s1.a,v=>{s1.a=v;s1.x=1;setup1();});
+  L.chips($('s1q'),[2,3,4],s1.q,v=>{s1.q=v;s1.x=1;setup1();});
+  const r=Math.pow(s1.a,1/s1.q), sl=$('s1x'); sl.max=Math.max(2,Math.ceil(r*1.7)); sl.value=s1.x;
+  $('s1t').textContent=s1.a; r1();
+}
+function r1(){
+  const {a,q}=s1, x=+$('s1x').value; s1.x=x;
+  const prod=Math.pow(x,q), r=Math.pow(a,1/q), ri=Math.round(r), rInt=ri**q===a;
+  $('s1eq').innerHTML=`${Array(q).fill(x.toFixed(2).replace('.',',')).join(' · ')} <span class="eq">=</span> ${prod.toFixed(2).replace('.',',')}`;
+  const SCALE=1.5; $('s1target').style.left=(100/SCALE)+'%';
+  const ok=Math.abs(prod-a)/a<0.012;
+  const f=$('s1fill'); f.style.width=Math.min(prod/a,SCALE)/SCALE*100+'%'; f.classList.toggle('ok',ok);
+  const st=$('s1status'); st.classList.toggle('ok',ok);
+  if(ok) st.innerHTML=`Влучив! Маленький крок = ${RT(q,a)} ${rInt?'= '+ri:'≈ '+fmt(r,3)}. Разом ці ${q} ${plural(q,'крок','кроки','кроків')} дають ×${a}.<br>Тому <span class="m">${P(a,'1/'+q)} = ${RT(q,a)}</span> — це «1/${q} сходинки».`;
+  else st.textContent=prod<a?'Замало — збільш x.':'Забагато — зменш x.';
+}
+$('s1x').oninput=r1;
+$('s1show').onclick=()=>{$('s1x').value=Math.round(Math.pow(s1.a,1/s1.q)*100)/100;r1();};
+setup1();
+
+/* ---------- 2: a^(p/q) step by step ---------- */
+const s2={a:8,p:2,q:3};
+function stages(){
+  const {a,p,q}=s2, ex=q===1?signed(p):`${signed(p)}/${q}`;
+  if(a<0&&q>1) return [
+    {lines:[`${pow(bl(a),'1/3')} = ?`], text:'Відʼємна основа. Спробуймо найпростіше: кубічний корінь з −8 існує, бо (−2)·(−2)·(−2) = −8.'},
+    {lines:[`${pow(bl(a),'1/3')} = ∛(−8) = −2`], text:'Тож хочеться сказати, що це −2.'},
+    {lines:[`${pow(bl(a),'2/6')} = <sup>6</sup>√((−8)<sup>2</sup>) = <sup>6</sup>√64 = <span class="res">2</span>`], text:'Але 1/3 = 2/6 — той самий показник, точка на шкалі та сама. Порахуємо через 2/6: спершу квадрат, потім корінь шостого ступеня.',
+     warn:'<b>Один показник — дві різні відповіді: −2 і 2.</b> Щоб правила ступенів не суперечили самі собі, у школі дробовий показник означають тільки для <b>додатної</b> основи (Мерзляк, 10 клас). З цілим показником (q = 1) відʼємна основа працює як завжди.',
+     beyond:L.beyond('Серед комплексних чисел у −8 три кубічні корені: −2 і ще два, 1 ± i√3. Тому (−8)<sup>1/3</sup> там має кілька значень, і «той самий» корінь обирають окремою домовленістю.','https://en.wikipedia.org/wiki/Exponentiation#Rational_exponents','Exponentiation: rational exponents, англійською','en')},
+  ];
+  const r=a<0?a:Math.pow(a,1/q), ri=Math.round(r), rInt=ri**q===a;
+  const step=q===1?bl(a):rInt?String(ri):RT(q,a);
+  const sgn=Math.sign(p), k=Math.abs(p);
+  const vals=['1'],ops=[];
+  for(let i=1;i<=k;i++){vals.push(rInt?exact(ri,sgn*i):fmt(Math.pow(r,sgn*i),3));ops.push((sgn>0?'×':'÷')+step);}
+  const res=rInt?exact(ri,p):fmt(Math.pow(a,p/q),3), eq=rInt?'=':'≈';
+  const S=[{lines:[pow(bl(a),ex)], text:q===1?'q = 1 — сходинка не ріжеться, це звичайний цілий ступінь.':`Показник ${ex}: знаменник ${q}, чисельник ${signed(p)}.`}];
+  if(q>1){
+    S.push({lines:[`(${RT(q,a)})${E(signed(p))}`], text:`Знаменник ${q}: ріжемо сходинку ×${a} на ${q} однакові кроки. Маленький крок — число, яке в ${q}-му ступені дає ${a}, тобто ${RT(q,a)}.`});
+    S.push({lines:[`${rInt?ri:'('+fmt(r,3)+')'}${E(signed(p))}`], text:rInt?`${RT(q,a)} = ${ri}, бо ${Array(q).fill(ri).join('·')} = ${a}.`:`${RT(q,a)} — некруглий, ≈ ${fmt(r,3)}. Механіка та сама, відповідь наближена.`});
+  }
+  S.push({lines:[p===0?'1':chain(vals,ops)], text:p===0?'Чисельник 0 — кроків нуль, лишаємось на 1.':`Чисельник ${signed(p)}: ${k} ${plural(k,'такий крок','таких кроки','таких кроків')} ${p>0?'вгору (множимо)':'вниз (ділимо)'} від 1.`});
+  const g=L.gcd(p,q);
+  S.push({lines:[`<span class="res">${P(bl(a),ex)} ${eq} ${res}</span>`], text:(q>1?`Можна і в іншому порядку: ${RT(q,`(${a}<sup>${signed(p)}</sup>)`)} — відповідь та сама.`:'')+(p!==0&&g>1&&q>1?` А ${ex} = ${signed(p/g)}${q/g===1?'':'/'+(q/g)} — та сама точка на шкалі, тож і відповідь та сама.`:'')});
+  return S;
+}
+const D=L.derivation({box:$('deriv'),next:$('next'),reset:$('reset'),stages});
+function drawLine(){
+  const {p,q}=s2, x0=20,x1=320,Y=58,X=e=>x0+(e+2)/4*(x1-x0);
+  const css=getComputedStyle(root),ink=css.getPropertyValue('--ink'),mut=css.getPropertyValue('--ink-soft'),acc=css.getPropertyValue('--mark-2'),res=css.getPropertyValue('--mark-3');
+  let s=`<line x1="${x0}" y1="${Y}" x2="${x1}" y2="${Y}" stroke="${mut}" stroke-width="1.5"/>`;
+  for(let i=-2*q;i<=2*q;i++){const e=i/q,big=i%q===0,x=X(e);
+    s+=`<line x1="${x}" y1="${Y-(big?8:4)}" x2="${x}" y2="${Y+(big?8:4)}" stroke="${big?ink:mut}" stroke-width="${big?2:1}"/>`;
+    if(big)s+=`<text x="${x}" y="${Y+26}" text-anchor="middle" font-size="13">${signed(e)}</text>`;}
+  const sg=Math.sign(p);
+  for(let i=0;i<Math.abs(p);i++){const a=X(sg*i/q),b=X(sg*(i+1)/q),m=(a+b)/2,h=Math.min(28,8+Math.abs(b-a)*0.4);
+    s+=`<path d="M${a} ${Y} Q${m} ${Y-h*1.6} ${b} ${Y}" fill="none" stroke="${acc}" stroke-width="2.5"/>`;}
+  s+=`<circle cx="${X(0)}" cy="${Y}" r="5" fill="${ink}"/>`;
+  if(p)s+=`<circle cx="${X(p/q)}" cy="${Y}" r="6.5" fill="${res}"/>`;
+  $('line').innerHTML=s;
+}
+function clampP(){s2.p=Math.max(-2*s2.q,Math.min(2*s2.q,s2.p));}
+function draw2(){L.chips($('s2a'),[2,4,8,9,16,27,-8],s2.a,v=>{s2.a=v;draw2();D.toStart();drawLine();});}
+const drawP=L.stepper($('stP'),{min:-8,max:8,get:()=>s2.p,set:v=>{s2.p=v;clampP();drawP();D.restart();drawLine();}});
+L.stepper($('stQ'),{min:1,max:4,get:()=>s2.q,set:v=>{s2.q=v;clampP();drawP();D.restart();drawLine();}});
+draw2(); D.render(false); drawLine();
+document.addEventListener('themechange',drawLine);
+
+/* ---------- 3: traps ---------- */
+L.contrast($('pit1'),{labelA:'8^(2/3)',labelB:'8^(3/2)',
+  a:{expr:pow(8,'2/3'), steps:'= (∛8)² = 2² = <span class="res">4</span>', why:'Знаменник 3 — кубічний корінь, чисельник 2 — квадрат.'},
+  b:{expr:pow(8,'3/2'), steps:'= (√8)³ ≈ 2,83³ ≈ <span class="res">22,6</span>', why:'Переставили — і корінь став квадратним, а ступінь кубом. Зовсім інше число.'}});
+L.contrast($('pit2'),{labelA:'мінус у показнику',labelB:'мінус перед числом',
+  a:{expr:pow(27,`${MINUS}1/3`), steps:'= 1/∛27 = <span class="res">1/3</span>', why:'Мінус у показнику — кроки вниз, тобто ділення. Відповідь додатна.'},
+  b:{expr:`${MINUS}${pow(27,'1/3')}`, steps:'= −∛27 = <span class="res">−3</span>', why:'Тут мінус стоїть перед числом.'}});
+})();
+</script>
+</body>
+</html>

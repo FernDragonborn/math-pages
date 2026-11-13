@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Шпаргалка: ступені й корені</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/lesson.css">
+<script src="/assets/theme.js"></script>
+<style>
+.wrap{max-width:980px}
+.group{margin:22px 0 10px;font:700 18px var(--font-display)}
+.group small{font:500 14px var(--font-body);color:var(--ink-soft);margin-left:6px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.cheat{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.cheat .f{font:700 20px/1.4 var(--font-mono)}
+.cheat .cond{font-size:13px;color:var(--ink-soft)}
+.cheat .ex{font:500 16px/1.6 var(--font-mono);background:var(--pen-wash);border-radius:4px;padding:8px 10px;min-height:2.6em}
+.cheat .foot{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:auto}
+.cheat .foot .btn{height:34px;font-size:14px}
+.cheat .foot a{color:var(--pen);font-size:14px;font-weight:600;text-decoration:none}
+.cheat .foot a:hover{text-decoration:underline}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+
+<header>
+  <h1>Шпаргалка: ступені й корені</h1>
+  <p class="sub">Усі правила теми на одній сторінці. Кожне — з живим прикладом: тисни «інший приклад», доки правило не стане очевидним. Розклад кожного — у статті за посиланням.</p>
+</header>
+
+<div id="out"></div>
+
+<div class="rule" style="margin-top:22px">
+  <b>Статті теми:</b> <a href="../shcho-take-stupin/">Що таке ступінь</a> · <a href="../vlastyvosti-stupenia/">Властивості ступеня</a> · <a href="../nulovyi-i-vidiemnyi-pokaznyk/">Нульовий і відʼємний показник</a> · <a href="../standartnyi-vyhliad-chysla/">Стандартний вигляд числа</a> · <a href="../korin-n-stupenia/">Корінь n-го ступеня</a> · <a href="../drobovyi-pokaznyk/">Дробовий показник</a>
+</div>
+
+</div>
+<script src="/assets/lesson.js"></script>
+<script>
+(function(){
+const {fmt,signed,MINUS}=L;
+const P=(b,e)=>`${b}<sup>${e}</sup>`;
+const r=(lo,hi)=>lo+Math.floor(Math.random()*(hi-lo+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const prod=(x,n)=>Array(n).fill(x).join('·');
+const RT=(n,x)=>(n===2?'√':n===3?'∛':`<sup>${n}</sup>√`)+x;
+const A='../';
+
+const GROUPS=[
+ {title:'Натуральний показник', note:'7 клас', rules:[
+  {f:'a<sup>n</sup> = a·a·…·a', cond:'n копій основи a', link:'shcho-take-stupin/', ex(){const a=r(2,5),n=r(2,4);return `${P(a,n)} = ${prod(a,n)} = ${fmt(a**n)}`;}},
+  {f:'(−a)<sup>n</sup>', cond:'n парне — плюс, n непарне — мінус', link:'shcho-take-stupin/', ex(){const a=r(2,3),n=r(2,5);return `(${MINUS}${a})<sup>${n}</sup> = ${prod(`(${MINUS}${a})`,n)} = ${signed((-a)**n)} — ${n%2?'непарний':'парний'}`;}},
+  {f:'a<sup>m</sup>·a<sup>n</sup> = a<sup>m+n</sup>', cond:'однакова основа; копії в один ряд', link:'vlastyvosti-stupenia/', ex(){const a=r(2,3),m=r(1,4),n=r(1,4);return `${P(a,m)}·${P(a,n)} = ${fmt(a**m)}·${fmt(a**n)} = ${fmt(a**(m+n))} = ${P(a,m+n)}`;}},
+  {f:'a<sup>m</sup> : a<sup>n</sup> = a<sup>m−n</sup>', cond:'a ≠ 0, m &gt; n; копії скорочуються', link:'vlastyvosti-stupenia/', ex(){const a=r(2,3),n=r(1,3),m=n+r(1,3);return `${P(a,m)} : ${P(a,n)} = ${fmt(a**m)} : ${fmt(a**n)} = ${fmt(a**(m-n))} = ${P(a,m-n)}`;}},
+  {f:'(a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup>', cond:'n груп по m копій', link:'vlastyvosti-stupenia/', ex(){const a=2,m=r(2,3),n=r(2,3);return `(${P(a,m)})<sup>${n}</sup> = ${P(fmt(a**m),n)} = ${fmt(a**(m*n))} = ${P(a,m*n)}`;}},
+  {f:'(ab)<sup>n</sup> = a<sup>n</sup>b<sup>n</sup>', cond:'у ступінь іде кожен множник', link:'vlastyvosti-stupenia/', ex(){const a=r(2,3),b=r(4,5),n=r(2,3);return `(${a}·${b})<sup>${n}</sup> = ${P(a*b,n)} = ${fmt((a*b)**n)} = ${fmt(a**n)}·${fmt(b**n)}`;}},
+  {f:'(a/b)<sup>n</sup> = a<sup>n</sup>/b<sup>n</sup>', cond:'b ≠ 0; і чисельник, і знаменник', link:'vlastyvosti-stupenia/', ex(){const a=r(1,3),b=a+r(1,3),n=r(2,3);return `(${a}/${b})<sup>${n}</sup> = ${fmt(a**n)}/${fmt(b**n)}`;}},
+ ]},
+ {title:'Цілий показник', note:'8 клас', rules:[
+  {f:'a<sup>0</sup> = 1', cond:'a ≠ 0; нуль кроків від 1', link:'nulovyi-i-vidiemnyi-pokaznyk/', ex(){const a=pick([2,7,10,'(−3)','(1/2)']);return `${P(a,0)} = 1`;}},
+  {f:'a<sup>−n</sup> = 1/a<sup>n</sup>', cond:'a ≠ 0; кроки вниз — ділення', link:'nulovyi-i-vidiemnyi-pokaznyk/', ex(){const a=r(2,5),n=r(1,3);return `${P(a,MINUS+n)} = 1/${P(a,n)} = 1/${fmt(a**n)}`;}},
+  {f:'(a/b)<sup>−n</sup> = (b/a)<sup>n</sup>', cond:'a, b ≠ 0; мінус перевертає дріб', link:'nulovyi-i-vidiemnyi-pokaznyk/', ex(){const a=r(1,3),b=a+r(1,3),n=r(1,3);return `(${a}/${b})<sup>${MINUS}${n}</sup> = (${b}/${a})<sup>${n}</sup> = ${fmt(b**n)}/${fmt(a**n)}`;}},
+  {f:'a · 10<sup>n</sup>, 1 ≤ a &lt; 10', cond:'стандартний вигляд; n — порядок', link:'standartnyi-vyhliad-chysla/', ex(){const d=r(1,9),e=r(1,9),n=pick([-1,1])*r(2,7);
+    const digits=`${d}${e}`, s=n>0?digits+'0'.repeat(n-1):'0,'+'0'.repeat(-n-1)+digits;
+    return `${s.replace(/\B(?=(\d{3})+(?!\d))/g,n>0?' ':'')} = ${d},${e} · ${P(10,signed(n))}`;}},
+  {f:'усі 5 властивостей', cond:'працюють і для цілих показників', link:'nulovyi-i-vidiemnyi-pokaznyk/', ex(){const m=r(-3,3),n=r(-3,3);const v=k=>k>=0?fmt(2**k):'1/'+fmt(2**-k);return `${P(2,signed(m))}·${P(2,signed(n))} = ${v(m)}·${v(n)} = ${v(m+n)} = ${P(2,signed(m+n))}`;}},
+ ]},
+ {title:'Корені й дробовий показник', note:'10 клас', rules:[
+  {f:'<sup>n</sup>√a = x ⇔ x<sup>n</sup> = a', cond:'парне n: a ≥ 0, x ≥ 0; непарне n: будь-яке a', link:'korin-n-stupenia/', ex(){const n=r(2,4),x=r(2,4),neg=n%2&&Math.random()<.5;const a=(neg?-1:1)*x**n;return `${RT(n,a<0?`(${signed(a)})`:a)} = ${signed(neg?-x:x)}, бо ${P(neg?`(${MINUS}${x})`:x,n)} = ${signed(a)}`;}},
+  {f:'<sup>n</sup>√(ab) = <sup>n</sup>√a·<sup>n</sup>√b', cond:'a, b ≥ 0; так само для частки', link:'korin-n-stupenia/', ex(){const x=r(2,5),y=r(2,5);return `√(${x*x}·${y*y}) = √${x*x}·√${y*y} = ${x}·${y} = ${x*y}`;}},
+  {f:'√(a<sup>2</sup>) = |a|', cond:'парний ступінь стирає знак', link:'korin-n-stupenia/', ex(){const a=pick([-1,1])*r(2,9);return `√((${signed(a)})<sup>2</sup>) = √${a*a} = ${Math.abs(a)}`;}},
+  {f:'a<sup>p/q</sup> = (<sup>q</sup>√a)<sup>p</sup>', cond:'a &gt; 0; знаменник — корінь, чисельник — ступінь', link:'drobovyi-pokaznyk/', ex(){const [a,q]=pick([[4,2],[9,2],[8,3],[27,3],[16,4],[16,2]]),p=pick([1,2,3,-1,-2]),x=Math.round(a**(1/q));const v=p>=0?fmt(x**p):'1/'+fmt(x**-p);return `${P(a,`${signed(p)}/${q}`)} = (${RT(q,a)})<sup>${signed(p)}</sup> = ${P(x,signed(p))} = ${v}`;}},
+  {f:'основа дробового показника &gt; 0', cond:'інакше 1/3 = 2/6 дає різні відповіді; 0<sup>0</sup>, 0<sup>−n</sup> не означені', link:'drobovyi-pokaznyk/', ex(){return '(−8)<sup>1/3</sup> «= −2», але (−8)<sup>2/6</sup> = <sup>6</sup>√64 = 2';}},
+ ]},
+];
+
+let h='', id=0;
+GROUPS.forEach(g=>{
+  h+=`<h2 class="group">${g.title}<small>${g.note}</small></h2><div class="cards">`;
+  g.rules.forEach(rule=>{rule.id='c'+(id++);
+    h+=`<article class="cheat"><div class="f">${rule.f}</div><div class="cond">${rule.cond}</div><div class="ex" id="${rule.id}" aria-live="polite"></div><div class="foot"><button type="button" class="btn" data-id="${rule.id}">Інший приклад</button><a href="${A}${rule.link}">розклад →</a></div></article>`;});
+  h+='</div>';
+});
+document.getElementById('out').innerHTML=h;
+const all=GROUPS.flatMap(g=>g.rules);
+const show=rule=>{document.getElementById(rule.id).innerHTML=rule.ex();};
+all.forEach(show);
+document.querySelectorAll('.cheat .btn').forEach(b=>b.onclick=()=>show(all.find(x=>x.id===b.dataset.id)));
+})();
+</script>
+</body>
+</html>

@@ -50,7 +50,8 @@ p{margin:8px 0}
 .deriv{border-top:1px dashed var(--line);margin-top:14px;padding-top:8px}
 .ln{display:flex;align-items:flex-start;gap:10px;font:500 22px/1.5 var(--font-mono);padding:10px 0;overflow-x:auto}
 .ln .eqs{color:var(--ink-soft);flex:none;width:18px}
-.ln .body{display:flex;flex-wrap:wrap;align-items:center;gap:6px 4px;min-width:0}
+/* inline flow, not flex: a flex body would split a base and its exponent into separate items with a gap */
+.ln .body{min-width:0}
 .ln.enter{animation:rise .35s ease both}
 .dot{color:var(--ink-soft);padding:0 2px}
 .hl{background:var(--mark-3-wash);color:var(--mark-3);border-radius:6px;padding:0 .14em;font-weight:700}
@@ -86,3 +87,16 @@ summary::-webkit-details-marker{display:none}
 .explain .m,.rule .m{white-space:normal}
 .rule{background:var(--ink);color:var(--paper);border-radius:4px;padding:18px 16px;font-size:16px}
 .rule a{color:inherit}
+/* a crossed-out factor: cancelled in a fraction */
+.x{opacity:.45;text-decoration:line-through;text-decoration-thickness:2px;text-decoration-color:var(--ink-soft)}
+/* a chain of values from 1 with the step between them */
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px 2px;margin:10px 0;font-family:var(--font-mono)}
+.val{border:1px solid var(--card-line);border-radius:6px;padding:2px 9px;font-weight:700}
+.val.last{background:var(--mark-3-wash);color:var(--mark-3);border-color:color-mix(in srgb,var(--mark-3) 45%,transparent)}
+.op{color:var(--ink-soft);font-size:14px;padding:0 3px;white-space:nowrap}
+.op i{font-style:normal;color:var(--mark-2);font-weight:700}
+.big{font:700 28px/1.4 var(--font-mono);margin:12px 0 4px}
+.big .eq{color:var(--ink-soft)}
+.grid-cells{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0}
+.grid-cells span{min-width:30px;text-align:center;border:1px solid var(--card-line);border-radius:4px;padding:2px 4px;font:600 15px var(--font-mono)}
+.grid-cells span.on{background:var(--mark-3-wash);border-color:var(--mark-3);color:var(--mark-3)}

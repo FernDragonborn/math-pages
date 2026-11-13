@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Властивості ступеня</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/lesson.css">
+<script src="/assets/theme.js"></script>
+<style>
+.cmp{font:700 26px var(--font-mono)}
+.cmp .rel{color:var(--mark-3);padding:0 8px}
+.powers{font:500 15px/1.9 var(--font-mono)}
+.powers b{color:var(--mark-3)}
+input[type=range]{width:100%;height:36px;accent-color:var(--mark-2)}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+
+<header>
+  <h1>Властивості ступеня</h1>
+  <p class="sub">Пʼять правил, і жодне не треба зубрити: розклади ступені на копії — і правило видно саме.</p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <a href="../shcho-take-stupin/">Що таке ступінь</a> <i>множення й ділення дробів, 6 клас</i></p>
+</header>
+
+<!-- 1 -->
+<section>
+  <h2><span class="num">1</span>Розклади — і правило зʼявиться саме</h2>
+  <p>Обери властивість і показники. Синя рамка — <span class="key-b">основа</span>, фіолетове — <span class="key-e">показник</span>; друга порція копій — помаранчева.</p>
+  <div id="rules"></div>
+  <div class="row" id="rowM"><span class="lbl" id="lblM">m</span>
+    <span class="stepper" id="stM"><button type="button" aria-label="Менше">−</button><output></output><button type="button" aria-label="Більше">+</button></span>
+  </div>
+  <div class="row"><span class="lbl" id="lblN">n</span>
+    <span class="stepper" id="stN"><button type="button" aria-label="Менше">−</button><output></output><button type="button" aria-label="Більше">+</button></span>
+  </div>
+  <div class="deriv" id="deriv" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next"></button>
+    <button class="btn" type="button" id="reset">Згорнути назад</button>
+  </div>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2><span class="num">2</span>Пастки</h2>
+  <p>Кожна пара виглядає майже однаково, а розкладається по-різному. Перемикай і дивись, що змінюється.</p>
+  <div id="pit1"></div><div id="pit2"></div><div id="pit3"></div><div id="pit4"></div>
+  <div class="warn"><b>Звідси:</b> правила працюють тільки для <b>множення й ділення</b> ступенів з <b>однаковою основою</b> і для ступеня добутку чи частки. Сума, різниця й різні основи в один ступінь не склеюються.</div>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="num">3</span>Навіщо: порівняти величезні числа</h2>
+  <p>У 2<sup>300</sup> майже сотня цифр — порахувати не вийде. Але правило <span class="m">(a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup></span>, прочитане справа наліво, зводить обидва числа до однакового показника.</p>
+  <div id="pairs"></div>
+  <div class="deriv" id="deriv2" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next2"></button>
+    <button class="btn" type="button" id="reset2">Згорнути назад</button>
+  </div>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2><span class="num">4</span>Якою цифрою закінчується</h2>
+  <p>Остання цифра добутку залежить тільки від останніх цифр множників. Тому останні цифри ступенів ходять по колу — і 2<sup>100</sup> можна «порахувати» без калькулятора.</p>
+  <div class="row"><span class="lbl">основа</span><span id="ldBase"></span></div>
+  <div class="row"><span class="lbl">показник</span><output id="ldOut" class="m"></output></div>
+  <input type="range" id="ldN" min="1" max="100" value="100" aria-label="Показник">
+  <div id="ldShow"></div>
+</section>
+
+<!-- 5 -->
+<section>
+  <h2><span class="num">5</span>Перевір себе</h2>
+  <p class="muted">Спершу розклади подумки, потім відкривай.</p>
+  <details><summary>a<sup>7</sup> : a<sup>3</sup></summary><div class="ans">= <b>a<sup>4</sup></b>. Сім копій зверху, три знизу; три пари скоротились, лишилось чотири.</div></details>
+  <details><summary>(x<sup>2</sup>)<sup>5</sup></summary><div class="ans">= <b>x<sup>10</sup></b>. Пʼять груп по дві копії.</div></details>
+  <details><summary>(2y)<sup>3</sup></summary><div class="ans">= 2y·2y·2y = 2·2·2·y·y·y = <b>8y<sup>3</sup></b>. У ступінь іде і двійка.</div></details>
+  <details><summary>(a/3)<sup>2</sup></summary><div class="ans">= (a·a)/(3·3) = <b>a<sup>2</sup>/9</b>.</div></details>
+  <details><summary>5<sup>3</sup> · 2<sup>3</sup></summary><div class="ans">= (5·2)<sup>3</sup> = 10<sup>3</sup> = <b>1000</b>. Правило ступеня добутку, прочитане справа наліво.</div></details>
+  <details><summary>2<sup>10</sup> · 2<sup>5</sup> : 2<sup>12</sup></summary><div class="ans">= 2<sup>15</sup> : 2<sup>12</sup> = 2<sup>3</sup> = <b>8</b>.</div></details>
+</section>
+
+<div class="rule">
+  <b>Пʼять властивостей</b> (a, b — числа, m, n — натуральні):<br><br>
+  <span class="m">a<sup>m</sup> · a<sup>n</sup> = a<sup>m+n</sup></span><br>
+  <span class="m">a<sup>m</sup> : a<sup>n</sup> = a<sup>m−n</sup></span> (a ≠ 0, m &gt; n)<br>
+  <span class="m">(a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup></span><br>
+  <span class="m">(ab)<sup>n</sup> = a<sup>n</sup>b<sup>n</sup></span><br>
+  <span class="m">(a/b)<sup>n</sup> = a<sup>n</sup>/b<sup>n</sup></span> (b ≠ 0)<br><br>
+  Що буде, коли m ≤ n у діленні, — <a href="../nulovyi-i-vidiemnyi-pokaznyk/">«Нульовий і відʼємний показник»</a>. Що таке основа й показник — <a href="../shcho-take-stupin/">«Що таке ступінь»</a>.
+</div>
+
+</div>
+<script src="/assets/lesson.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const {B,E,pow,DOT,frac,fmt,plural,MINUS}=L;
+const a='a', b='b';
+const copies=(x,k,cls='')=>Array(k).fill(B(x,cls)).join(DOT);
+const P=(base,e)=>`${base}<sup>${e}</sup>`;          // a plain power in prose
+const num=v=>fmt(v,0);
+
+/* ---------- 1: the five properties ---------- */
+const RULES=[
+  {v:'mul', sub:'множення', label:'a<sup>m</sup>·a<sup>n</sup>'},
+  {v:'div', sub:'ділення', label:'a<sup>m</sup>:a<sup>n</sup>'},
+  {v:'pow', sub:'ступінь ступеня', label:'(a<sup>m</sup>)<sup>n</sup>'},
+  {v:'prod', sub:'ступінь добутку', label:'(ab)<sup>n</sup>'},
+  {v:'quot', sub:'ступінь частки', label:'(a/b)<sup>n</sup>'},
+];
+const st={rule:'mul', m:3, n:2};
+
+function stagesFor(){
+  const {rule,m,n}=st;
+  if(rule==='mul') return [
+    {lines:[pow(a,m)+DOT+pow(a,n,'g2')], text:`Два ступені з однаковою основою множаться. Що вийде?`},
+    {lines:[`(${copies(a,m)})${DOT}(${copies(a,n,'g2')})`], text:`Розклади кожен: ${P(a,m)} — це ${m} ${plural(m,'копія','копії','копій')} a, ${P(a,n)} — ще ${n}.`},
+    {lines:[copies(a,m)+DOT+copies(a,n,'g2')], text:`Дужки між множниками нічого не значать — усі копії стають в один ряд: ${m} + ${n} = ${m+n}.`},
+    {lines:[`<span class="res">${P(a,m+n)}</span>`], text:`<b>Показники додаються:</b> a<sup>m</sup>·a<sup>n</sup> = a<sup>m+n</sup>.<br>Перевірка при a = 2: ${P(2,m)}·${P(2,n)} = ${num(2**m)}·${num(2**n)} = ${num(2**(m+n))} = ${P(2,m+n)}.`},
+  ];
+  if(rule==='div'){
+    const k=Math.min(m,n);
+    const top=Array.from({length:m},(_,i)=>`<span class="${i<k?'x':''}">${B(a)}</span>`).join(DOT);
+    const bot=Array.from({length:n},(_,i)=>`<span class="${i<k?'x':''}">${B(a,'g2')}</span>`).join(DOT);
+    let res, text;
+    if(m>n){res=P(a,m-n); text=`<b>Показники віднімаються:</b> a<sup>m</sup> : a<sup>n</sup> = a<sup>m−n</sup>.`;}
+    else if(m===n){res='1'; text=`Скоротилося все — лишилась 1. За правилом вийшло б ${P(a,0)}: що це таке, дивись <a href="../nulovyi-i-vidiemnyi-pokaznyk/">«Нульовий і відʼємний показник»</a>.`;}
+    else {res=frac('1',P(a,n-m)); text=`Знизу копій більше — після скорочення вони лишились у знаменнику. За правилом вийшло б ${P(a,m-n)} з відʼємним показником: це <a href="../nulovyi-i-vidiemnyi-pokaznyk/">8 клас</a>, і там якраз так і означають.`;}
+    return [
+      {lines:[pow(a,m)+' : '+pow(a,n,'g2')], text:`Ділимо ступені з однаковою основою. Ділення — це дріб.`},
+      {lines:[frac(copies(a,m),copies(a,n,'g2'))], text:`Розклади чисельник і знаменник на копії.`},
+      {lines:[frac(top,bot)], text:`Кожна a зверху скорочується з a знизу: ${k} ${plural(k,'пара','пари','пар')}. Ділити на a можна, бо a ≠ 0 — на нуль не ділять, і саме тому в правилі ця умова.`},
+      {lines:[`<span class="res">${res}</span>`], text:text+`<br>Перевірка при a = 2: ${P(2,m)} : ${P(2,n)} = ${num(2**m)} : ${num(2**n)} = ${fmt(2**m/2**n)}.`},
+    ];
+  }
+  if(rule==='pow'){
+    const groups=Array.from({length:n},(_,i)=>`(${copies(a,m,i%2?'g2':'')})`).join(DOT);
+    return [
+      {lines:[`(${pow(a,m)})${L.E(n)}`], text:`Ступінь, піднесений ще раз до ступеня.`},
+      {lines:[Array.from({length:n},(_,i)=>pow(a,m,i%2?'g2':'')).join(DOT)], text:`Зовнішній показник ${n}: основа тут — уся дужка ${P(a,m)}, і вона повторюється ${n} ${plural(n,'раз','рази','разів')}.`},
+      {lines:[groups], text:`Кожна копія ${P(a,m)} сама розкладається на ${m} ${plural(m,'множник','множники','множників')} a. Груп ${n}, у кожній ${m}.`},
+      {lines:[`<span class="res">${P(a,m*n)}</span>`], text:`<b>Показники множаться:</b> (a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup>, бо ${n} груп по ${m} — це ${m}·${n} = ${m*n} копій.<br>Перевірка при a = 2: (${P(2,m)})<sup>${n}</sup> = ${P(num(2**m),n)} = ${num((2**m)**n)} = ${P(2,m*n)}.`},
+    ];
+  }
+  if(rule==='prod'){
+    const ab=`(${B(a)}${DOT}${B(b,'g2')})`;
+    return [
+      {lines:[`(${B(a)}${B(b,'g2')})${L.E(n)}`], text:`Основа — добуток ab, уся дужка.`},
+      {lines:[Array(n).fill(ab).join(DOT)], text:`Дужка повторюється ${n} ${plural(n,'раз','рази','разів')}.`},
+      {lines:[Array(n).fill(B(a)+DOT+B(b,'g2')).join(DOT)], text:`Усередині тільки множення, тож дужки знімаємо.`},
+      {lines:[copies(a,n)+DOT+copies(b,n,'g2')], text:`Множники можна переставляти: усі a разом, усі b разом.`},
+      {lines:[`<span class="res">${P(a,n)}${P(b,n)}</span>`], text:`<b>У ступінь іде кожен множник:</b> (ab)<sup>n</sup> = a<sup>n</sup>b<sup>n</sup>.<br>Перевірка при a = 2, b = 3: (2·3)<sup>${n}</sup> = ${P(6,n)} = ${num(6**n)}, а ${P(2,n)}·${P(3,n)} = ${num(2**n)}·${num(3**n)} = ${num(6**n)}.`},
+    ];
+  }
+  // quot
+  return [
+    {lines:[`(${frac(B(a),B(b,'g2'))})${L.E(n)}`], text:`Основа — дріб a/b, увесь.`},
+    {lines:[Array(n).fill(frac(B(a),B(b,'g2'))).join(DOT)], text:`Дріб повторюється ${n} ${plural(n,'раз','рази','разів')}.`},
+    {lines:[frac(copies(a,n),copies(b,n,'g2'))], text:`Дроби множаться так: чисельник на чисельник, знаменник на знаменник.`},
+    {lines:[`<span class="res">${frac(P(a,n),P(b,n))}</span>`], text:`<b>У ступінь іде і чисельник, і знаменник:</b> (a/b)<sup>n</sup> = a<sup>n</sup>/b<sup>n</sup> (b ≠ 0).<br>Перевірка при a = 2, b = 3: (2/3)<sup>${n}</sup> = ${num(2**n)}/${num(3**n)}.`},
+  ];
+}
+
+const D=L.derivation({box:$('deriv'),next:$('next'),reset:$('reset'),stages:stagesFor});
+function drawRules(){
+  L.chips($('rules'),RULES,st.rule,v=>{st.rule=v;drawRules();D.restart();});
+  const one=st.rule==='prod'||st.rule==='quot';
+  $('rowM').hidden=one;
+  $('lblM').textContent=st.rule==='pow'?'внутрішній m':'m';
+  $('lblN').textContent=st.rule==='pow'?'зовнішній n':'n';
+}
+L.stepper($('stM'),{min:1,max:6,get:()=>st.m,set:v=>{st.m=v;D.restart();}});
+L.stepper($('stN'),{min:1,max:5,get:()=>st.n,set:v=>{st.n=v;D.restart();}});
+drawRules(); D.render(false);
+
+/* ---------- 2: traps ---------- */
+L.contrast($('pit1'),{labelA:'множення',labelB:'ступінь ступеня',
+  a:{expr:pow(a,2)+DOT+pow(a,3,'g2'), steps:`= a·a · a·a·a = <span class="res">${P(a,5)}</span>`, why:'Копії стають в один ряд: 2 + 3 = 5.'},
+  b:{expr:`(${pow(a,2)})${L.E(3)}`, steps:`= ${P(a,2)}·${P(a,2)}·${P(a,2)} = a·a · a·a · a·a = <span class="res">${P(a,6)}</span>`, why:'Три групи по дві: 2 · 3 = 6.'}});
+L.contrast($('pit2'),{labelA:'сума',labelB:'добуток',
+  a:{expr:`(${B('a+b')})${L.E(2)}`, steps:`= (a+b)(a+b) = a² + 2ab + b²; при a = 2, b = 3: 25, а a² + b² = 13`, why:'Над сумою ступінь не «розходиться» по доданках: (a + b)² ≠ a² + b².'},
+  b:{expr:`(${B('ab')})${L.E(2)}`, steps:`= ab·ab = a²b²; при a = 2, b = 3: 36 = 4·9`, why:'Над добутком — розходиться: множники можна переставити.'}});
+L.contrast($('pit3'),{labelA:'додавання',labelB:'множення',
+  a:{expr:pow(a,3)+' + '+pow(a,2,'g2'), steps:`= a·a·a + a·a; при a = 2: 8 + 4 = 12`, why:'Додавання не ставить копії в один ряд: це два окремі доданки, і 12 — навіть не ступінь двійки.'},
+  b:{expr:pow(a,3)+DOT+pow(a,2,'g2'), steps:`= a·a·a·a·a = <span class="res">${P(a,5)}</span>; при a = 2: 32`, why:'Множення — ставить: 3 + 2 = 5.'}});
+L.contrast($('pit4'),{labelA:'різні основи',labelB:'однакові основи',
+  a:{expr:pow(2,3)+DOT+pow(3,2,'g2'), steps:`= 2·2·2 · 3·3 = 72`, why:'Копії різні — у ряд одного ступеня вони не стануть. Показники тут не додаються.'},
+  b:{expr:pow(2,3)+DOT+pow(2,2,'g2'), steps:`= 2·2·2·2·2 = <span class="res">${P(2,5)}</span> = 32`, why:'Однакова основа — копії однакові, показники додаються.'}});
+
+/* ---------- 3: compare huge powers ---------- */
+const PAIRS=[{a:2,p:300,b:3,q:200},{a:2,p:100,b:10,q:30},{a:5,p:300,b:3,q:500},{a:4,p:15,b:8,q:10}];
+let pair=0;
+function pairStages(){
+  const {a:x,p,b:y,q}=PAIRS[pair], g=L.gcd(p,q), X=x**(p/g), Y=y**(q/g);
+  const rel=X>Y?'&gt;':X<Y?'&lt;':'=';
+  return [
+    {lines:[`<span class="cmp">${pow(x,p)} <span class="rel">?</span> ${pow(y,q,'g2')}</span>`], text:'Порахувати ці числа повністю не вийде. Порівняємо інакше.'},
+    {lines:[`<span class="cmp">(${pow(x,p/g)})${L.E(g)} <span class="rel">?</span> (${pow(y,q/g,'g2')})${L.E(g)}</span>`], text:`У показників ${p} і ${q} спільний множник ${g}: ${p} = ${p/g}·${g}, ${q} = ${q/g}·${g}. За правилом ступеня ступеня ${P(x,p)} = (${P(x,p/g)})<sup>${g}</sup>.`},
+    {lines:[`<span class="cmp">${pow(num(X),g)} <span class="rel">?</span> ${pow(num(Y),g,'g2')}</span>`], text:`Тепер показник однаковий — ${g}. З двох ступенів з однаковим показником більший той, у кого більша основа.`},
+    {lines:[`<span class="cmp">${pow(x,p)} <span class="rel">${rel}</span> ${pow(y,q,'g2')}</span>`], text:X===Y?`${num(X)} = ${num(Y)}, тож числа рівні — хоча записані зовсім по-різному.`:`${num(X)} ${rel} ${num(Y)}, тож і ${P(x,p)} ${rel} ${P(y,q)}.`},
+  ];
+}
+const D2=L.derivation({box:$('deriv2'),next:$('next2'),reset:$('reset2'),stages:pairStages,first:'Порівняти →'});
+function drawPairs(){
+  L.chips($('pairs'),PAIRS.map((p,i)=>({v:i,label:`${P(p.a,p.p)} і ${P(p.b,p.q)}`})),pair,v=>{pair=v;drawPairs();D2.toStart();});
+}
+drawPairs(); D2.render(false);
+
+/* ---------- 4: last digit ---------- */
+let ldBase=2;
+function ld(){
+  const n=+$('ldN').value; $('ldOut').textContent=n;
+  const cyc=[]; let d=ldBase%10;
+  while(!cyc.includes(d)){cyc.push(d); d=(d*ldBase)%10;}
+  const L0=cyc.length, idx=(n-1)%L0;
+  const first=Array.from({length:Math.min(8,L0*2)},(_,i)=>{const v=String(BigInt(ldBase)**BigInt(i+1));return `${P(ldBase,i+1)} = ${v.slice(0,-1)}<b>${v.slice(-1)}</b>`;}).join(' &nbsp; ');
+  $('ldShow').innerHTML=`<p class="powers">${first}</p>`+
+    `<div class="grid-cells">${cyc.map((c,i)=>`<span class="${i===idx?'on':''}">${c}</span>`).join('')}</div>`+
+    `<div class="explain">Останні цифри повторюються по колу довжиною ${L0}: ${cyc.join(', ')}. Показник ${n}: ${n} = ${L0}·${Math.floor((n-1)/L0)} + ${idx+1}, тож це ${idx+1}-та цифра кола — <b>${P(ldBase,n)} закінчується на ${cyc[idx]}</b>.</div>`;
+}
+L.chips($('ldBase'),[2,3,4,7,8,9],ldBase,function pick(v){ldBase=v;L.chips($('ldBase'),[2,3,4,7,8,9],ldBase,pick);ld();});
+$('ldN').oninput=ld; ld();
+})();
+</script>
+</body>
+</html>
