@@ -11,55 +11,54 @@
 <link rel="stylesheet" href="/assets/site.css">
 <script src="/assets/theme.js"></script>
 <style>
-:root{--page-width:720px}  /* the column width; the top bar follows it */
-:root{
+:root{--page-width:720px;
   --muted:var(--ink-soft); --sheet:var(--card); --accent:var(--pen); --accent-bg:var(--pen-wash);
   --t1:var(--pen); --t2:var(--green); --t3:var(--violet); --t4:var(--orange);
 }
 *{box-sizing:border-box}
 body{margin:0;}
-.wrap{max-width:720px;margin:0 auto;padding:28px 16px 48px;display:flex;flex-direction:column;gap:22px}
-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.wrap{max-width:720px;margin:0 auto;padding:16px 16px 48px;display:flex;flex-direction:column;gap:14px}
 h1{margin:0;font-size:1.9rem;line-height:1.15;font-weight:800}
 .sub{margin:6px 0 0;color:var(--muted)}
-.hand{font-family:"Caveat",cursive;font-size:1.4rem;color:var(--accent)}
+.hand{font-family:var(--font-hand);font-size:1.4rem;color:var(--accent)}
 
-/* filter bar: tag chips + grouping */
-.filters{display:flex;flex-direction:column;gap:10px;background:var(--sheet);border:1px solid var(--line);border-radius:4px;padding:12px 14px}
-.filters[hidden]{display:none}
-.frow{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
-.flbl{font-size:.8rem;color:var(--muted);min-width:4.6em}
-.tagbtn{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;height:32px;padding:0 12px;font:600 .88rem var(--font-body);cursor:pointer}
-.tagbtn:hover{border-color:var(--accent)}
-.tagbtn[aria-pressed="true"]{background:var(--accent-bg);border-color:var(--accent);color:var(--accent)}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
-.seg button{border:0;background:transparent;color:var(--ink);height:32px;padding:0 12px;font:600 .88rem var(--font-body);cursor:pointer}
-.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-pen)}
-.reset{border:0;background:none;color:var(--accent);font:600 .85rem var(--font-body);cursor:pointer;padding:0 4px;text-decoration:underline}
-.reset[hidden]{display:none}
-.empty{color:var(--muted);text-align:center;padding:12px 0;margin:0}
+/* search and grades */
+.search{width:100%;height:46px;border:1px solid var(--card-line);border-radius:10px;background:var(--sheet);color:var(--ink);padding:0 14px;font:500 16px var(--font-body)}
+.search:focus{outline:none;border-color:var(--accent)}
+.grades{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.grades::-webkit-scrollbar{display:none}
+.grades button{flex:none;height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--card-line);background:var(--sheet);color:var(--ink);font:600 14px var(--font-body);cursor:pointer}
+.grades button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-pen)}
+.grades button:focus-visible,.search:focus-visible,.toc summary:focus-visible,.toc a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.empty{color:var(--muted);text-align:center;margin:0}
 .empty[hidden]{display:none}
 
+/* the table of contents: a topic is a row that opens into one line per article */
+.toc details{background:var(--sheet);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:4px;margin-bottom:8px}
+.toc summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;padding:13px 14px;font:700 16px var(--font-display);min-height:48px}
+.toc summary::-webkit-details-marker{display:none}
+.toc summary .n{font:600 13px var(--font-body);color:var(--muted);margin-left:auto}
+.toc summary::after{content:"▾";color:var(--muted)}
+.toc details[open] summary::after{content:"▴"}
+.toc ul{list-style:none;margin:0;padding:0 6px 6px}
+.toc li a{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 8px;border-top:1px solid var(--card-line-2);color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;min-height:46px}
+.toc li a:hover{background:var(--accent-bg)}
+.toc .cls{font:600 12px var(--font-body);color:var(--muted);white-space:nowrap}
+.toc .ext{color:var(--muted);font-weight:500}
+.toc .kind{font:500 12px var(--font-body);color:var(--muted);margin-left:6px}
+
+/* the cards below are the data the contents are built from; without JS they are the menu */
 #list{display:flex;flex-direction:column;gap:22px}
-section.topic{display:flex;flex-direction:column;gap:10px;scroll-margin-top:16px}
-section.topic[hidden]{display:none}
-section.topic h2{margin:0;font-size:1.2rem;font-weight:800;display:flex;align-items:center;gap:10px}
-section.topic h2::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--c,var(--muted))}
+#list[hidden]{display:none}
+section.topic{display:flex;flex-direction:column;gap:10px}
+section.topic h2{margin:0;font-size:1.2rem;font-weight:800}
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
-a.card{display:flex;flex-direction:column;gap:6px;background:var(--sheet);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:4px;padding:14px 16px;color:inherit;text-decoration:none;transition:transform .12s,border-color .12s}
-a.card[hidden]{display:none}
-a.card:hover{transform:translateY(-2px);border-color:var(--c)}
-a.card:focus-visible,.tagbtn:focus-visible,.seg button:focus-visible,.reset:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a.card{display:flex;flex-direction:column;gap:6px;background:var(--sheet);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:4px;padding:14px 16px;color:inherit;text-decoration:none}
 .card b{font-size:1.05rem}
 .card > span{color:var(--muted);font-size:.92rem}
-/* a link to someone else's site: dashed edge, arrow, and where it leads */
-a.card.ext{border-style:dashed;border-left-style:solid}
 .card .src{font-size:.8rem;color:var(--muted);font-style:italic}
-.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:4px}
-.tags i{font-style:normal;font-size:.75rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:0 8px}
 footer{color:var(--muted);font-size:.85rem;text-align:center}
 footer a{color:inherit}
-@media (prefers-reduced-motion:reduce){a.card{transition:none}}
 </style>
 </head>
 <body>
@@ -74,9 +73,11 @@ footer a{color:inherit}
     </div>
   </header>
 
-  <!-- Tags live on each card: data-class (grades, space-separated), data-area, data-kind (comma-separated).
-       The filter bar and the "by grade" grouping are built from them. -->
-  <div class="filters" id="filters" hidden></div>
+  <!-- The cards in #list carry the tags: data-class (grades, space-separated), data-area, data-kind (comma-separated).
+       The search, the grade chips and the contents (#toc) are built from them; without JS the cards themselves are the menu. -->
+  <input class="search" id="q" type="search" placeholder="Пошук: ступінь, дріб, корінь…" autocomplete="off" aria-label="Пошук статті" hidden>
+  <div class="grades" id="grades" role="group" aria-label="Клас" hidden></div>
+  <div class="toc" id="toc"></div>
 
   <div id="list">
   <section class="topic" id="stupeni-i-loharyfmy" style="--c:var(--t1)">
@@ -126,72 +127,45 @@ footer a{color:inherit}
     </div>
   </section>
   </div>
-  <p class="empty" id="empty" hidden>Під ці теги поки нічого немає.</p>
+  <p class="empty" id="empty" hidden>Нічого не знайшлося.</p>
 
   <footer><a href="https://github.com/FernDragonborn">@FernDragonborn</a></footer>
 </div>
 <script>
 (function(){
-  const list=document.getElementById('list'), bar=document.getElementById('filters'), empty=document.getElementById('empty');
-  const topicSections=[...list.querySelectorAll('section.topic')];
-  const cards=[...list.querySelectorAll('a.card')];
-  const tagsOf=c=>({class:c.dataset.class.split(' '),area:[c.dataset.area],kind:c.dataset.kind.split(',')});
-  const GROUPS=[['class','Клас',v=>v+' клас'],['area','Розділ',v=>v],['kind','Формат',v=>v]];
-  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const list=document.getElementById('list'), toc=document.getElementById('toc'), empty=document.getElementById('empty');
+  const q=document.getElementById('q'), gr=document.getElementById('grades');
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const topics=[...list.querySelectorAll('section.topic')].map(sec=>({id:sec.id,title:sec.querySelector('h2').textContent.trim(),c:sec.style.getPropertyValue('--c'),
+    cards:[...sec.querySelectorAll('a.card')].map(a=>({href:a.getAttribute('href'),title:a.querySelector('b').textContent.replace('↗','').trim(),
+      desc:(a.querySelector(':scope > span')||{}).textContent||'',cls:a.dataset.class.split(' '),kind:a.dataset.kind.split(','),ext:a.classList.contains('ext')}))}));
+  const grades=[...new Set(topics.flatMap(t=>t.cards.flatMap(c=>c.cls)))].sort((a,b)=>a-b);
 
-  // visible tag labels on every card
-  cards.forEach(c=>{const t=tagsOf(c),el=document.createElement('span');el.className='tags';
-    el.innerHTML=GROUPS.flatMap(([g,,lab])=>t[g].map(v=>`<i>${esc(lab(v))}</i>`)).join('');c.appendChild(el);});
+  let state={sel:[],open:[]};
+  try{const s=JSON.parse(localStorage.getItem('menu-toc')||'null');if(s&&Array.isArray(s.sel)&&Array.isArray(s.open))state=s;}catch(e){}
+  state.sel=state.sel.filter(g=>grades.includes(g));
+  const save=()=>{try{localStorage.setItem('menu-toc',JSON.stringify(state));}catch(e){}};
+  let query='';
 
-  // every value that occurs, sorted (grades as numbers)
-  const values={};
-  GROUPS.forEach(([g])=>{const set=new Set();cards.forEach(c=>tagsOf(c)[g].forEach(v=>set.add(v)));
-    values[g]=[...set].sort((a,b)=>g==='class'?a-b:a.localeCompare(b,'uk'));});
+  const pass=c=>(!state.sel.length||c.cls.some(g=>state.sel.includes(g)))&&(!query||(c.title+' '+c.desc).toLowerCase().includes(query));
+  const label=c=>{const g=c.cls.map(Number);return (g.length>1&&g[g.length-1]-g[0]===g.length-1?g[0]+'–'+g[g.length-1]:c.cls.join(', '))+' кл.';};
+  const kindNote=c=>c.kind.includes('шпаргалка')?'<span class="kind">шпаргалка</span>':c.kind.includes('тренажер')&&!c.ext?'<span class="kind">+ тренажер</span>':'';
 
-  let state={sel:{class:[],area:[],kind:[]},group:'topic'};
-  try{const s=JSON.parse(localStorage.getItem('menu-view')||'null');if(s&&s.sel&&(s.group==='topic'||s.group==='class'))state=s;}catch(e){}
-  GROUPS.forEach(([g])=>{state.sel[g]=(Array.isArray(state.sel[g])?state.sel[g]:[]).filter(v=>values[g].includes(v));});
-
-  function save(){try{localStorage.setItem('menu-view',JSON.stringify(state))}catch(e){}}
-  // a card passes when, in every group with a selection, it has at least one of the selected tags
-  const passes=c=>{const t=tagsOf(c);return GROUPS.every(([g])=>!state.sel[g].length||t[g].some(v=>state.sel[g].includes(v)));};
-
-  function renderBar(){
-    const any=GROUPS.some(([g])=>state.sel[g].length);
-    bar.innerHTML=GROUPS.map(([g,name,lab])=>`<div class="frow"><span class="flbl">${name}</span>`+
-      values[g].map(v=>`<button type="button" class="tagbtn" data-g="${g}" data-v="${esc(v)}" aria-pressed="${state.sel[g].includes(v)}">${esc(lab(v))}</button>`).join('')+'</div>').join('')+
-      `<div class="frow"><span class="flbl">Групувати</span><span class="seg" role="group" aria-label="Групувати">`+
-      [['topic','за темою'],['class','за класом']].map(([k,l])=>`<button type="button" data-group="${k}" aria-pressed="${state.group===k}">${l}</button>`).join('')+
-      `</span><button type="button" class="reset" id="reset"${any?'':' hidden'}>скинути теги</button></div>`;
-    bar.querySelectorAll('.tagbtn').forEach(b=>b.onclick=()=>{const a=state.sel[b.dataset.g],v=b.dataset.v,i=a.indexOf(v);
-      if(i<0)a.push(v);else a.splice(i,1);update();});
-    bar.querySelectorAll('[data-group]').forEach(b=>b.onclick=()=>{state.group=b.dataset.group;update();});
-    bar.querySelector('#reset').onclick=()=>{GROUPS.forEach(([g])=>state.sel[g]=[]);update();};
+  function render(){
+    gr.innerHTML=grades.map(g=>`<button type="button" data-g="${g}" aria-pressed="${state.sel.includes(g)}">${g} клас</button>`).join('');
+    gr.querySelectorAll('button').forEach(b=>b.onclick=()=>{const g=b.dataset.g;state.sel=state.sel.includes(g)?state.sel.filter(x=>x!==g):[...state.sel,g];save();render();});
+    const filtering=state.sel.length||query;
+    const vis=topics.map(t=>({...t,cards:t.cards.filter(pass)})).filter(t=>t.cards.length);
+    toc.innerHTML=vis.map(t=>`<details data-t="${t.id}" style="--c:${t.c}"${filtering||state.open.includes(t.id)?' open':''}><summary><span>${esc(t.title)}</span><span class="n">${t.cards.length}</span></summary><ul>`+
+      t.cards.map(c=>`<li><a href="${esc(c.href)}"${c.ext?' target="_blank" rel="noopener noreferrer"':''}><span>${esc(c.title)}${c.ext?' <span class="ext">↗</span>':''}${kindNote(c)}</span><span class="cls">${label(c)}</span></a></li>`).join('')+'</ul></details>').join('');
+    // remember which topics the reader keeps open (not while a search or grade filter forces them open)
+    toc.querySelectorAll('details').forEach(d=>d.addEventListener('toggle',()=>{if(state.sel.length||query)return;const id=d.dataset.t;
+      state.open=d.open?[...new Set([...state.open,id])]:state.open.filter(x=>x!==id);save();}));
+    empty.hidden=vis.length>0;
   }
-
-  let gradeSections=[];
-  function layout(){
-    gradeSections.forEach(s=>s.remove());gradeSections=[];
-    if(state.group==='class'){
-      topicSections.forEach(s=>s.hidden=true);
-      // a card for several grades is listed under each of them
-      (state.sel.class.length?values.class.filter(v=>state.sel.class.includes(v)):values.class).forEach(v=>{
-        const mine=cards.filter(c=>tagsOf(c).class.includes(v)&&passes(c));
-        if(!mine.length)return;
-        const s=document.createElement('section');s.className='topic';
-        s.innerHTML=`<h2>${esc(v)} клас</h2><div class="cards"></div>`;
-        mine.forEach(c=>{const k=c.cloneNode(true);k.hidden=false;s.lastChild.appendChild(k);});
-        list.appendChild(s);gradeSections.push(s);
-      });
-      empty.hidden=gradeSections.length>0;
-    }else{
-      let shown=0;
-      topicSections.forEach(s=>{let n=0;s.querySelectorAll('a.card').forEach(c=>{const ok=passes(c);c.hidden=!ok;if(ok)n++;});s.hidden=!n;shown+=n;});
-      empty.hidden=shown>0;
-    }
-  }
-  function update(){save();renderBar();layout();}
-  bar.hidden=false;update();
+  q.addEventListener('input',()=>{query=q.value.trim().toLowerCase();render();});
+  list.hidden=true; q.hidden=false; gr.hidden=false;
+  render();
 })();
 </script>
 </body>
