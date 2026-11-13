@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Основна властивість дробу</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/lesson.css">
+<script src="/assets/theme.js"></script>
+<style>
+/* the factor k both parts are multiplied or divided by: mark 4, as the extra factor in «Спільний знаменник» */
+.k{color:var(--mark-4);background:var(--mark-4-wash);border-radius:5px;padding:0 .12em;font-weight:700}
+.bar{display:flex;width:300px;max-width:100%;height:34px;border:2px solid var(--ink-soft);border-radius:4px;overflow:hidden;margin:4px 0}
+.bar span{flex:1;border-right:1px solid var(--card-line)}
+.bar span:last-child{border-right:0}
+.bar span.on{background:var(--mark-1)}
+.bar.fine span{border-right-style:dashed}
+.chk{font:500 17px/1.7 var(--font-mono)}
+.chk .bad{color:var(--alert);font-weight:700}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+
+<header>
+  <h1>Основна властивість дробу</h1>
+  <p class="sub">Чисельник і знаменник можна помножити або поділити на те саме ненульове число чи вираз — дріб не зміниться. На цьому стоїть і скорочення, і спільний знаменник.</p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <i>звичайні дроби, 6 клас</i> <i>винесення спільного множника, 7 клас</i> <i>різниця квадратів, 7 клас</i> <a href="/stupeni-i-loharyfmy/vlastyvosti-stupenia/">Властивості ступеня</a></p>
+</header>
+
+<!-- 1 -->
+<section>
+  <h2><span class="num">1</span>Чому дріб не змінюється</h2>
+  <p>Дріб a/b — це a частин із b. Поріжемо кожну частину ще на <span class="k">k</span> — і порахуємо знову.</p>
+  <div class="row"><span class="lbl">дріб</span><span id="s1f"></span></div>
+  <div class="row"><span class="lbl">ріжемо кожну частину на k =</span>
+    <span class="stepper" id="stK"><button type="button" aria-label="Менше">−</button><output></output><button type="button" aria-label="Більше">+</button></span>
+  </div>
+  <div class="deriv" id="deriv1" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next1"></button>
+    <button class="btn" type="button" id="reset1">Згорнути назад</button>
+  </div>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2><span class="num">2</span>Скорочення: розклади й закресли</h2>
+  <p>Скоротити дріб — поділити чисельник і знаменник на їхній <b>спільний множник</b>. Щоб його побачити, розклади обидва на множники.</p>
+  <div id="s2f"></div>
+  <div class="deriv" id="deriv2" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next2"></button>
+    <button class="btn" type="button" id="reset2">Згорнути назад</button>
+  </div>
+  <div id="checkBox" hidden>
+    <p class="muted" style="margin-top:14px">Перевір на числі: дріб до і після скорочення.</p>
+    <div class="row"><span class="lbl" id="chkVar">x =</span>
+      <span class="stepper" id="stX"><button type="button" aria-label="Менше">−</button><output></output><button type="button" aria-label="Більше">+</button></span>
+    </div>
+    <div id="chkOut"></div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="num">3</span>Пастки</h2>
+  <div id="pit1"></div><div id="pit2"></div><div id="pit3"></div>
+  <div class="warn"><b>Звідси:</b> скорочують тільки <b>множники</b> — те, що стоїть через «·» з усім іншим. Доданок, відділений плюсом чи мінусом, скоротити не можна: спершу розклади на множники, якщо вийде.</div>
+</section>
+
+<!-- 4 -->
+<section>
+  <h2><span class="num">4</span>Навпаки: до нового знаменника</h2>
+  <p>Та сама властивість, прочитана справа наліво: множимо чисельник і знаменник на <span class="k">k</span>, щоб отримати потрібний знаменник. Так дроби зводять до <a href="../spilnyi-znamennyk/">спільного знаменника</a>.</p>
+  <div id="s4f"></div>
+  <div class="deriv" id="deriv4" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next4"></button>
+    <button class="btn" type="button" id="reset4">Згорнути назад</button>
+  </div>
+</section>
+
+<!-- 5 -->
+<section>
+  <h2><span class="num">5</span>Перевір себе</h2>
+  <p class="muted">Спершу зроби сам, потім відкривай.</p>
+  <details><summary>14/21</summary><div class="ans">= (2·7)/(3·7) = <b>2/3</b>.</div></details>
+  <details><summary>5x / (10x<sup>2</sup>)</summary><div class="ans">= (5·x)/(2·5·x·x) = <b>1/(2x)</b>, x ≠ 0.</div></details>
+  <details><summary>(x<sup>2</sup> − 1) / (x + 1)</summary><div class="ans">= (x − 1)(x + 1)/(x + 1) = <b>x − 1</b>, але x ≠ −1: там вихідний дріб не існує.</div></details>
+  <details><summary>(x + 5) / 5 — скорочується?</summary><div class="ans"><b>Ні.</b> 5 у чисельнику — доданок, а не множник. При x = 5: 10/5 = 2, а не x = 5.</div></details>
+  <details><summary>3/4 до знаменника 20</summary><div class="ans">k = 20 : 4 = 5, тож <b>15/20</b>.</div></details>
+  <details><summary>(y − 3) / (3 − y)</summary><div class="ans">= −(3 − y)/(3 − y) = <b>−1</b>, y ≠ 3.</div></details>
+</section>
+
+<div class="rule">
+  <b>Основна властивість дробу:</b> <span class="m">a/b = (a·k)/(b·k)</span>, якщо b ≠ 0 і k ≠ 0.<br><br>
+  Скорочення — ділимо на спільний множник; зведення до нового знаменника — множимо на k = новий знаменник : старий.<br>
+  Скорочують лише множники. Значення змінної, при яких знаменник вихідного дробу нуль, заборонені й після скорочення.<br><br>
+  Далі: <a href="../mnozhennia-i-dilennia-drobiv/">«Множення, ділення й ступінь дробу»</a>, <a href="../spilnyi-znamennyk/">«Спільний знаменник»</a>.
+</div>
+
+</div>
+<script src="/assets/lesson.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const {frac,fmt,plural,signed,MINUS}=L;
+const K=x=>`<span class="k">${x}</span>`;
+const bar=(cells,on,fine)=>`<span class="bar${fine?' fine':''}">${Array.from({length:cells},(_,i)=>`<span class="${i<on?'on':''}"></span>`).join('')}</span>`;
+
+/* ---------- 1: why the fraction stays the same ---------- */
+const FR=[[1,2],[2,3],[3,4],[3,5]];
+const s1={f:1,k:2};
+function st1(){
+  const [a,b]=FR[s1.f], k=s1.k;
+  return [
+    {lines:[`${frac(a,b)} ${bar(b,a)}`], text:`${a} ${plural(a,'частина','частини','частин')} з ${b}.`},
+    {lines:[`${frac(`${a}·${K(k)}`,`${b}·${K(k)}`)} ${bar(b*k,a*k,true)}`], text:`Кожну частину поріжемо на ${k}: частин стало в ${k} ${plural(k,'раз','рази','разів')} більше, а зафарбованих — теж у ${k}.`},
+    {lines:[`${frac(a*k,b*k)} ${bar(b*k,a*k,true)}`], text:`Тепер це ${a*k} ${plural(a*k,'частина','частини','частин')} з ${b*k}. Частинки дрібніші, але зафарбована площа та сама.`},
+    {lines:[`<span class="res">${frac(a*k,b*k)} = ${frac(a,b)}</span>`], text:`<b>Помножили чисельник і знаменник на ${K(k)} — дріб не змінився.</b> Прочитане навпаки — це скорочення: поділили обидва на ${K(k)}.`},
+  ];
+}
+const D1=L.derivation({box:$('deriv1'),next:$('next1'),reset:$('reset1'),stages:st1,first:'Різати →'});
+function draw1(){L.chips($('s1f'),FR.map(([a,b],i)=>({v:i,label:`${a}/${b}`})),s1.f,v=>{s1.f=v;draw1();D1.render(false);});}
+L.stepper($('stK'),{min:1,max:5,get:()=>s1.k,set:v=>{s1.k=v;D1.restart();}});
+draw1(); D1.render(false);
+
+/* ---------- 2: cancelling ---------- */
+// factors: [text, common?]; check: the fraction before and after on a number
+const CUT=[
+  {label:'12/18', top:'12', bot:'18', ft:[['2',1],['2'],['3',1]], fb:[['2',1],['3',1],['3']], how:'Розклали на прості множники.', k:'2·3 = 6', res:frac('2','3')},
+  {label:'15a²b / 25ab³', top:'15a<sup>2</sup>b', bot:'25ab<sup>3</sup>', ft:[['3'],['5',1],['a',1],['a'],['b',1]], fb:[['5',1],['5'],['a',1],['b',1],['b'],['b']], how:'Число — на прості множники, ступені — на копії.', k:'5ab', res:frac('3a','5b<sup>2</sup>'), cond:'a ≠ 0, b ≠ 0'},
+  {label:'(x² − 9) / (x² + 3x)', top:'x<sup>2</sup> − 9', bot:'x<sup>2</sup> + 3x', ft:[['(x − 3)'],['(x + 3)',1]], fb:[['x'],['(x + 3)',1]], how:'Чисельник — різниця квадратів: x² − 9 = (x − 3)(x + 3). У знаменнику виносимо x: x² + 3x = x(x + 3).', k:'(x + 3)', res:frac('x − 3','x'), cond:'x ≠ 0, x ≠ −3',
+   chk:{v:'x',orig:x=>(x*x-9)/(x*x+3*x), res:x=>(x-3)/x, origBad:x=>x===0||x===-3, resBad:x=>x===0, o:'(x² − 9)/(x² + 3x)', r:'(x − 3)/x'}},
+  {label:'(4x + 8) / (x² − 4)', top:'4x + 8', bot:'x<sup>2</sup> − 4', ft:[['4'],['(x + 2)',1]], fb:[['(x − 2)'],['(x + 2)',1]], how:'У чисельнику виносимо 4: 4x + 8 = 4(x + 2). Знаменник — різниця квадратів.', k:'(x + 2)', res:frac('4','x − 2'), cond:'x ≠ 2, x ≠ −2',
+   chk:{v:'x',orig:x=>(4*x+8)/(x*x-4), res:x=>4/(x-2), origBad:x=>x===2||x===-2, resBad:x=>x===2, o:'(4x + 8)/(x² − 4)', r:'4/(x − 2)'}},
+  {label:'(a − b) / (b − a)', top:'a − b', bot:'b − a', ft:[['(−1)'],['(b − a)',1]], fb:[['(b − a)',1]], how:'Доданки ті самі, знаки протилежні: a − b = −(b − a) = (−1)·(b − a).', k:'(b − a)', res:'−1', cond:'a ≠ b',
+   chk:{v:'a',fixed:'b = 2',orig:x=>(x-2)/(2-x), res:()=>-1, origBad:x=>x===2, resBad:()=>false, o:'(a − 2)/(2 − a)', r:'−1'}},
+];
+let cut=2;
+const row=(fs,cross)=>fs.map(([t,c])=>c?(cross?`<span class="x">${K(t)}</span>`:K(t)):t).join('·');
+function st2(){
+  const c=CUT[cut];
+  return [
+    {lines:[frac(c.top,c.bot)], text:'Що в чисельнику й знаменнику спільного — одразу не видно.'},
+    {lines:[frac(row(c.ft),row(c.fb))], text:`${c.how} Спільні множники — помаранчеві.`},
+    {lines:[frac(row(c.ft,1),row(c.fb,1))], text:`Ділимо чисельник і знаменник на спільний множник ${K(c.k)} — закреслюємо його зверху й знизу.`},
+    {lines:[`<span class="res">${c.res}</span>`], text:`Дріб скоротили на ${K(c.k)}.${c.cond?` <b>Умова ${c.cond}</b> лишається: при цих значеннях вихідний дріб не існує, бо його знаменник — нуль.`:''}`},
+  ];
+}
+const D2=L.derivation({box:$('deriv2'),next:$('next2'),reset:$('reset2'),stages:st2,first:'Розкласти →'});
+const s2={x:1};
+function drawChk(){
+  const c=CUT[cut].chk; $('checkBox').hidden=!c; if(!c) return;
+  $('chkVar').textContent=`${c.v} =`;
+  const x=s2.x, ob=c.origBad(x), rb=c.resBad(x);
+  const val=(bad,f)=>bad?'<span class="bad">не існує</span>':fmt(f(x),4);
+  $('chkOut').innerHTML=`<div class="chk">${c.fixed?c.fixed+', ':''}${c.v} = ${signed(x)}:<br>до: ${c.o} = ${val(ob,c.orig)}<br>після: ${c.r} = ${val(rb,c.res)}</div>`+
+    (ob&&!rb?`<div class="explain">Тут знаменник <b>вихідного</b> дробу — нуль, тож дріб не існує, хоча скорочений має значення. Тому при скороченні записують умову ${CUT[cut].cond}: значення не змінюється <b>там, де дріб існує</b>.</div>`:ob?'<div class="explain">Знаменник нуль — дріб не існує ні до, ні після.</div>':'<p class="muted">Однаково — скорочення значення не змінило.</p>');
+}
+function draw2(){L.chips($('s2f'),CUT.map((c,i)=>({v:i,label:c.label})),cut,v=>{cut=v;s2.x=1;drawX();draw2();D2.toStart();drawChk();});}
+const drawX=L.stepper($('stX'),{min:-5,max:5,get:()=>s2.x,set:v=>{s2.x=v;drawChk();}});
+draw2(); D2.render(false); drawChk();
+
+/* ---------- 3: traps ---------- */
+L.contrast($('pit1'),{labelA:'множник',labelB:'доданок',
+  a:{expr:frac(`3·x`,'3'), steps:`= ${frac(`<span class="x">${K(3)}</span>·x`,`<span class="x">${K(3)}</span>`)} = <span class="res">x</span>`, why:'3 — множник у чисельнику, ділимо обидва на 3.'},
+  b:{expr:frac('x + 3','3'), steps:'не скорочується; при x = 2: 5/3, а не 2', why:'Тут 3 — доданок. Поділити на 3 треба весь чисельник, а не одну його частину.'}});
+L.contrast($('pit2'),{labelA:'добуток',labelB:'сума',
+  a:{expr:frac('a·b','a·c'), steps:`= <span class="res">${frac('b','c')}</span>; при a = 1, b = 2, c = 3: 2/3 = 2/3`, why:'a — спільний множник.'},
+  b:{expr:frac('a + b','a + c'), steps:'не скорочується; при a = 1, b = 2, c = 3: 3/4 ≠ 2/3', why:'a — доданок і зверху, і знизу; закреслити його — все одно що відняти 1 і з чисельника, і зі знаменника.'}});
+L.contrast($('pit3'),{labelA:'той самий порядок',labelB:'протилежний порядок',
+  a:{expr:frac('x − 2','x − 2'), steps:'= <span class="res">1</span>, x ≠ 2', why:'Чисельник і знаменник однакові.'},
+  b:{expr:frac('x − 2','2 − x'), steps:`= ${frac('−(2 − x)','2 − x')} = <span class="res">−1</span>, x ≠ 2`, why:'Знаки протилежні: винеси −1 і скорочуй.'}});
+
+/* ---------- 4: to a new denominator ---------- */
+const NEW=[
+  {label:'2/3 → ?/12', a:'2', b:'3', t:'12', split:'12 = 3·4', k:'4', ak:'2·4', top:'8'},
+  {label:'5/6 → ?/18', a:'5', b:'6', t:'18', split:'18 = 6·3', k:'3', ak:'5·3', top:'15'},
+  {label:'x/(x − 1) → ?/(x² − 1)', a:'x', b:'x − 1', t:'x<sup>2</sup> − 1', split:'x² − 1 = (x − 1)(x + 1)', k:'(x + 1)', ak:'x(x + 1)', top:'x<sup>2</sup> + x'},
+  {label:'3/(2a) → ?/(6a²)', a:'3', b:'2a', t:'6a<sup>2</sup>', split:'6a² = 2a·3a', k:'3a', ak:'3·3a', top:'9a'},
+];
+let nw=0;
+function st4(){
+  const c=NEW[nw];
+  return [
+    {lines:[`${frac(c.a,c.b)} = ${frac('?',c.t)}`], text:'Потрібен новий знаменник. На що помножити старий?'},
+    {lines:[`${c.split}, тож k = ${K(c.k)}`], text:'Розклади новий знаменник: у ньому є старий і ще один множник — це k.'},
+    {lines:[frac(`${c.a}·${K(c.k)}`,`${c.b.includes(' ')?'('+c.b+')':c.b}·${K(c.k)}`)], text:'Множимо на k і чисельник, і знаменник — за основною властивістю дріб не змінюється.'},
+    {lines:[`<span class="res">${frac(c.top,c.t)}</span>`], text:`Готово: чисельник ${c.ak} = ${c.top}.`},
+  ];
+}
+const D4=L.derivation({box:$('deriv4'),next:$('next4'),reset:$('reset4'),stages:st4,first:'Далі →'});
+function draw4(){L.chips($('s4f'),NEW.map((c,i)=>({v:i,label:c.label})),nw,v=>{nw=v;draw4();D4.toStart();});}
+draw4(); D4.render(false);
+})();
+</script>
+</body>
+</html>

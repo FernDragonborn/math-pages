@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Множення, ділення й ступінь дробу</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/lesson.css">
+<script src="/assets/theme.js"></script>
+<style>
+.k{color:var(--mark-4);background:var(--mark-4-wash);border-radius:5px;padding:0 .12em;font-weight:700}
+.flip{color:var(--mark-2);font-weight:700}
+.chk{font:500 17px/1.7 var(--font-mono)}
+.chk .bad{color:var(--alert);font-weight:700}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+
+<header>
+  <h1>Множення, ділення й ступінь дробу</h1>
+  <p class="sub">Тут не треба спільного знаменника. Збери все в один дріб, розклади на множники — і скороти.</p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <a href="../osnovna-vlastyvist-drobu/">Основна властивість дробу</a> <a href="/stupeni-i-loharyfmy/vlastyvosti-stupenia/">Властивості ступеня</a> <i>розкладання на множники, 7 клас</i></p>
+</header>
+
+<!-- 1 -->
+<section>
+  <h2><span class="num">1</span>В один дріб — розклади — скороти</h2>
+  <p>Множення: чисельник на чисельник, знаменник на знаменник. Ділення: <span class="flip">перевертаємо дільник</span> і множимо. Ступінь: іде і в чисельник, і в знаменник. Обери приклад:</p>
+  <div id="pick"></div>
+  <div class="deriv" id="deriv" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next"></button>
+    <button class="btn" type="button" id="reset">Згорнути назад</button>
+  </div>
+  <div id="checkBox" hidden>
+    <p class="muted" style="margin-top:14px">Перевір на числі: вираз на початку й відповідь.</p>
+    <div class="row"><span class="lbl" id="chkVar">x =</span>
+      <span class="stepper" id="stX"><button type="button" aria-label="Менше">−</button><output></output><button type="button" aria-label="Більше">+</button></span>
+    </div>
+    <div id="chkOut"></div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section>
+  <h2><span class="num">2</span>Пастки</h2>
+  <div id="pit1"></div><div id="pit2"></div><div id="pit3"></div>
+  <div class="warn"><b>Звідси:</b> перевертають тільки <b>дільник</b> — дріб після знака «:»; ступінь іде і в чисельник, і в знаменник, разом зі знаком.</div>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="num">3</span>Перевір себе</h2>
+  <p class="muted">Спершу зроби сам, потім відкривай.</p>
+  <details><summary>2/5 · 15/4</summary><div class="ans">= (2·15)/(5·4) = (2·3·5)/(5·2·2) = <b>3/2</b>.</div></details>
+  <details><summary>a/b : a<sup>2</sup>/b</summary><div class="ans">= a/b · b/a<sup>2</sup> = (a·b)/(b·a·a) = <b>1/a</b>, a ≠ 0, b ≠ 0.</div></details>
+  <details><summary>(x + 1)/x · x<sup>2</sup>/(x<sup>2</sup> − 1)</summary><div class="ans">= (x + 1)·x·x / (x·(x − 1)(x + 1)) = <b>x/(x − 1)</b>, x ≠ 0, x ≠ ±1.</div></details>
+  <details><summary>(3/a)<sup>2</sup></summary><div class="ans">= 3<sup>2</sup>/a<sup>2</sup> = <b>9/a<sup>2</sup></b>.</div></details>
+  <details><summary>(−2/y)<sup>3</sup></summary><div class="ans">= (−2)<sup>3</sup>/y<sup>3</sup> = <b>−8/y<sup>3</sup></b>: непарний ступінь зберіг мінус.</div></details>
+</section>
+
+<div class="rule">
+  <span class="m">a/b · c/d = ac/(bd)</span><br>
+  <span class="m">a/b : c/d = a/b · d/c</span> (c ≠ 0)<br>
+  <span class="m">(a/b)<sup>n</sup> = a<sup>n</sup>/b<sup>n</sup></span><br><br>
+  Порядок: в один дріб → розклади на множники → скороти. Значення, при яких знаменник чи дільник — нуль, заборонені й у відповіді.<br><br>
+  Скорочення — <a href="../osnovna-vlastyvist-drobu/">«Основна властивість дробу»</a>; додавання й віднімання — <a href="../spilnyi-znamennyk/">«Спільний знаменник»</a>.
+</div>
+
+</div>
+<script src="/assets/lesson.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+const {frac,fmt,signed}=L;
+const K=x=>`<span class="k">${x}</span>`;
+const X=x=>`<span class="x">${K(x)}</span>`;
+const F=x=>`<span class="flip">${x}</span>`;
+
+const EX=[
+  {sub:'множення', label:'(x² − 4)/(3x) · 6x/(x + 2)', st:[
+    {l:`${frac('x<sup>2</sup> − 4','3x')} · ${frac('6x','x + 2')}`, t:'Множимо два дроби.'},
+    {l:frac('(x<sup>2</sup> − 4)·6x','3x·(x + 2)'), t:'В один дріб: чисельник на чисельник, знаменник на знаменник. Розкривати дужки не треба — навпаки.'},
+    {l:frac(`(x − 2)·${K('(x + 2)')}·2·${K('3')}·${K('x')}`,`${K('3')}·${K('x')}·${K('(x + 2)')}`), t:'Розклади на множники: x² − 4 = (x − 2)(x + 2), 6x = 2·3·x. Спільні — помаранчеві.'},
+    {l:frac(`(x − 2)·${X('(x + 2)')}·2·${X('3')}·${X('x')}`,`${X('3')}·${X('x')}·${X('(x + 2)')}`), t:'Скорочуємо спільні множники.'},
+    {l:'<span class="res">2(x − 2)</span>', t:'Лишилось 2(x − 2) = 2x − 4. <b>Умова x ≠ 0, x ≠ −2</b>: там знаменники вихідних дробів — нуль.'},
+  ], chk:{v:'x', orig:x=>(x*x-4)/(3*x)*(6*x)/(x+2), res:x=>2*(x-2), bad:x=>x===0||x===-2, o:'(x² − 4)/(3x) · 6x/(x + 2)', r:'2(x − 2)'}},
+  {sub:'множення', label:'4/9 · 3/8', st:[
+    {l:`${frac(4,9)} · ${frac(3,8)}`, t:'Множимо два звичайні дроби.'},
+    {l:frac('4·3','9·8'), t:'В один дріб. Перемножувати 4·3 і 9·8 поки не варто — спершу скоротимо.'},
+    {l:frac(`${K(2)}·${K(2)}·${K(3)}`,`${K(3)}·3·${K(2)}·${K(2)}·2`), t:'Розклади на прості множники: 4 = 2·2, 9 = 3·3, 8 = 2·2·2.'},
+    {l:frac(`${X(2)}·${X(2)}·${X(3)}`,`${X(3)}·3·${X(2)}·${X(2)}·2`), t:'Скорочуємо.'},
+    {l:`<span class="res">${frac(1,6)}</span>`, t:'Зверху нічого не лишилось — там 1; знизу 3·2 = 6.'},
+  ]},
+  {sub:'ділення', label:'(x² − 1)/x : (x + 1)/x²', st:[
+    {l:`${frac('x<sup>2</sup> − 1','x')} : ${frac('x + 1','x<sup>2</sup>')}`, t:'Ділимо дріб на дріб.'},
+    {l:`${frac('x<sup>2</sup> − 1','x')} · ${F(frac('x<sup>2</sup>','x + 1'))}`, t:'Ділення на дріб — це множення на <b>перевернутий дільник</b>. Перший дріб не чіпаємо.'},
+    {l:frac('(x<sup>2</sup> − 1)·x<sup>2</sup>','x·(x + 1)'), t:'В один дріб.'},
+    {l:frac(`(x − 1)·${K('(x + 1)')}·${K('x')}·x`,`${K('x')}·${K('(x + 1)')}`), t:'Розклади: x² − 1 = (x − 1)(x + 1), x² = x·x.'},
+    {l:frac(`(x − 1)·${X('(x + 1)')}·${X('x')}·x`,`${X('x')}·${X('(x + 1)')}`), t:'Скорочуємо.'},
+    {l:'<span class="res">x(x − 1)</span>', t:'<b>Умова x ≠ 0, x ≠ −1</b>: x = 0 обнуляє знаменники, а x = −1 обнуляє дільник (x + 1)/x²: поділити на нуль означало б знайти число, яке після множення на 0 дає ненульове, а такого немає.'},
+  ], chk:{v:'x', orig:x=>((x*x-1)/x)/((x+1)/(x*x)), res:x=>x*(x-1), bad:x=>x===0||x===-1, o:'(x² − 1)/x : (x + 1)/x²', r:'x(x − 1)'}},
+  {sub:'ділення', label:'3/4 : 9/8', st:[
+    {l:`${frac(3,4)} : ${frac(9,8)}`, t:'Ділимо дріб на дріб.'},
+    {l:`${frac(3,4)} · ${F(frac(8,9))}`, t:'Перевертаємо дільник і множимо.'},
+    {l:frac(`${K(3)}·${K(2)}·${K(2)}·2`,`${K(2)}·${K(2)}·${K(3)}·3`), t:'В один дріб і розклади: 8 = 2·2·2, 4 = 2·2, 9 = 3·3.'},
+    {l:frac(`${X(3)}·${X(2)}·${X(2)}·2`,`${X(2)}·${X(2)}·${X(3)}·3`), t:'Скорочуємо.'},
+    {l:`<span class="res">${frac(2,3)}</span>`, t:'Лишилось 2/3.'},
+  ]},
+  {sub:'ступінь', label:'(2a/b²)³', st:[
+    {l:`(${frac('2a','b<sup>2</sup>')})<sup>3</sup>`, t:'Дріб у ступені.'},
+    {l:frac('(2a)<sup>3</sup>','(b<sup>2</sup>)<sup>3</sup>'), t:'Ступінь іде і в чисельник, і в знаменник.'},
+    {l:frac('2<sup>3</sup>·a<sup>3</sup>','b<sup>2·3</sup>'), t:'Зверху — ступінь добутку, знизу — ступінь ступеня: показники множаться.'},
+    {l:`<span class="res">${frac('8a<sup>3</sup>','b<sup>6</sup>')}</span>`, t:'b ≠ 0.'},
+  ], chk:{v:'a', fixed:'b = 2', orig:a=>Math.pow(2*a/4,3), res:a=>8*a**3/64, bad:()=>false, o:'(2a/b²)³', r:'8a³/b⁶'}},
+  {sub:'ступінь', label:'(−x/3)²', st:[
+    {l:`(${frac('−x','3')})<sup>2</sup>`, t:'Дріб з мінусом у ступені.'},
+    {l:frac('(−x)<sup>2</sup>','3<sup>2</sup>'), t:'Ступінь іде в чисельник разом з мінусом.'},
+    {l:`<span class="res">${frac('x<sup>2</sup>','9')}</span>`, t:'Парний ступінь — мінус зник: (−x)·(−x) = x².'},
+  ], chk:{v:'x', orig:x=>Math.pow(-x/3,2), res:x=>x*x/9, bad:()=>false, o:'(−x/3)²', r:'x²/9'}},
+];
+let ex=0;
+const D=L.derivation({box:$('deriv'),next:$('next'),reset:$('reset'),stages:()=>EX[ex].st.map(s=>({lines:[s.l],text:s.t})),first:'Далі →'});
+const s={x:1};
+function drawChk(){
+  const c=EX[ex].chk; $('checkBox').hidden=!c; if(!c) return;
+  $('chkVar').textContent=`${c.v} =`;
+  const x=s.x, bad=c.bad(x), v=f=>bad?'<span class="bad">не існує</span>':fmt(f(x),4);
+  $('chkOut').innerHTML=`<div class="chk">${c.fixed?c.fixed+', ':''}${c.v} = ${signed(x)}:<br>на початку: ${c.o} = ${v(c.orig)}<br>відповідь: ${c.r} = ${bad?fmt(c.res(x),4):v(c.res)}</div>`+
+    (bad?'<div class="explain">Вихідний вираз тут не існує — ділення на нуль, хоча відповідь має значення. Тому до відповіді дописують умову.</div>':'<p class="muted">Однаково.</p>');
+}
+function draw(){L.chips($('pick'),EX.map((e,i)=>({v:i,sub:e.sub,label:e.label})),ex,v=>{ex=v;s.x=1;drawX();draw();D.toStart();drawChk();});}
+const drawX=L.stepper($('stX'),{min:-5,max:5,get:()=>s.x,set:v=>{s.x=v;drawChk();}});
+draw(); D.render(false); drawChk();
+
+/* ---------- 2: traps ---------- */
+L.contrast($('pit1'),{labelA:'перевернули дільник',labelB:'перевернули ділене',
+  a:{expr:`${frac(3,4)} : ${frac(9,8)}`, steps:`= ${frac(3,4)} · ${F(frac(8,9))} = <span class="res">${frac(2,3)}</span>`, why:'Перевертаємо дріб, на який ділимо.'},
+  b:{expr:`${frac(3,4)} : ${frac(9,8)}`, steps:`≠ ${F(frac(4,3))} · ${frac(9,8)} = 3/2`, why:'Перевернули не той дріб — відповідь стала оберненою.'}});
+L.contrast($('pit2'),{labelA:'весь дріб у ступені',labelB:'лише чисельник',
+  a:{expr:`(${frac(2,3)})<sup>2</sup>`, steps:`= ${frac('2<sup>2</sup>','3<sup>2</sup>')} = <span class="res">${frac(4,9)}</span>`, why:'Основа — увесь дріб, тож ступінь іде і вниз.'},
+  b:{expr:frac('2<sup>2</sup>','3'), steps:`= <span class="res">${frac(4,3)}</span>`, why:'Тут у ступені лише чисельник — інше число. Дужки вирішують.'}});
+L.contrast($('pit3'),{labelA:'мінус у дужках',labelB:'мінус перед дробом',
+  a:{expr:`(${frac('−x','3')})<sup>2</sup>`, steps:`= <span class="res">${frac('x<sup>2</sup>','9')}</span>`, why:'Мінус усередині — у квадраті зникає.'},
+  b:{expr:`−${frac('x<sup>2</sup>','3')}`, steps:'лишається від\'ємним при x ≠ 0', why:'Мінус зовні не підноситься до ступеня, і знаменник тут 3, а не 9.'}});
+})();
+</script>
+</body>
+</html>
