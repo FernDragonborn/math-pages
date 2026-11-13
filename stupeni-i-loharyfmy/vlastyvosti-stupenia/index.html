@@ -17,6 +17,13 @@
 .powers{font:500 15px/1.9 var(--font-mono)}
 .powers b{color:var(--mark-3)}
 input[type=range]{width:100%;height:36px;accent-color:var(--mark-2)}
+.map{width:100%;border-collapse:collapse;margin:10px 0;font-size:15px}
+.map th{text-align:left;font:600 13px var(--font-body);color:var(--ink-soft);padding:4px 6px;border-bottom:1px solid var(--line)}
+.map td{padding:6px;border-bottom:1px solid var(--line);vertical-align:top}
+.map td:first-child{font:600 16px var(--font-mono);white-space:nowrap}
+.map td:nth-child(2){font:600 16px var(--font-mono);color:var(--mark-2);white-space:nowrap}
+.map td:last-child{color:var(--ink-soft);font-size:14px}
+.lift{color:var(--mark-2);font-weight:700}
 </style>
 </head>
 <body>
@@ -52,15 +59,41 @@ input[type=range]{width:100%;height:36px;accent-color:var(--mark-2)}
 
 <!-- 2 -->
 <section>
-  <h2><span class="num">2</span>Пастки</h2>
+  <h2><span class="num">2</span>Над показниками — звичайна арифметика</h2>
+  <p>Подивись на розклади вище: дія зі ступенями завжди перетворюється на <b>простішу</b> дію з показниками — на поверх нижче. А з показниками вже рахуєш як з будь-якими числами, з тими самими правилами знаків. Тому показники можуть бути й відʼємними (що це таке — у <a href="../nulovyi-i-vidiemnyi-pokaznyk/">«Нульовому й відʼємному показнику»</a>, 8 клас).</p>
+  <table class="map">
+    <thead><tr><th>зі ступенями</th><th>з показниками</th><th>чому</th></tr></thead>
+    <tbody>
+      <tr><td>a<sup>m</sup> · a<sup>n</sup></td><td><b>m + n</b></td><td>кроки підряд: m, потім ще n</td></tr>
+      <tr><td>a<sup>m</sup> : a<sup>n</sup></td><td><b>m − n</b></td><td>n кроків назад</td></tr>
+      <tr><td>(a<sup>m</sup>)<sup>n</sup></td><td><b>m · n</b></td><td>m кроків, повторені n разів</td></tr>
+      <tr><td>a<sup>m</sup> + a<sup>n</sup></td><td>—</td><td>додавання ступенів на показники не перекладається</td></tr>
+    </tbody>
+  </table>
+  <div id="ops"></div>
+  <div class="row"><span class="lbl" id="lblX">m</span>
+    <span class="stepper" id="stX"><button type="button" aria-label="Менше">−</button><output></output><button type="button" aria-label="Більше">+</button></span>
+    <span class="lbl" id="lblY">n</span>
+    <span class="stepper" id="stY"><button type="button" aria-label="Менше">−</button><output></output><button type="button" aria-label="Більше">+</button></span>
+  </div>
+  <div class="deriv" id="deriv4" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next4"></button>
+    <button class="btn" type="button" id="reset4">Згорнути назад</button>
+  </div>
+</section>
+
+<!-- 3 -->
+<section>
+  <h2><span class="num">3</span>Пастки</h2>
   <p>Кожна пара виглядає майже однаково, а розкладається по-різному. Перемикай і дивись, що змінюється.</p>
   <div id="pit1"></div><div id="pit2"></div><div id="pit3"></div><div id="pit4"></div>
   <div class="warn"><b>Звідси:</b> правила працюють тільки для <b>множення й ділення</b> ступенів з <b>однаковою основою</b> і для ступеня добутку чи частки. Сума, різниця й різні основи в один ступінь не склеюються.</div>
 </section>
 
-<!-- 3 -->
+<!-- 4 -->
 <section>
-  <h2><span class="num">3</span>Навіщо: порівняти величезні числа</h2>
+  <h2><span class="num">4</span>Навіщо: порівняти величезні числа</h2>
   <p>У 2<sup>300</sup> майже сотня цифр — порахувати не вийде. Але правило <span class="m">(a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup></span>, прочитане справа наліво, зводить обидва числа до однакового показника.</p>
   <div id="pairs"></div>
   <div class="deriv" id="deriv2" aria-live="polite"></div>
@@ -70,9 +103,9 @@ input[type=range]{width:100%;height:36px;accent-color:var(--mark-2)}
   </div>
 </section>
 
-<!-- 4 -->
+<!-- 5 -->
 <section>
-  <h2><span class="num">4</span>Якою цифрою закінчується</h2>
+  <h2><span class="num">5</span>Якою цифрою закінчується</h2>
   <p>Остання цифра добутку залежить тільки від останніх цифр множників. Тому останні цифри ступенів ходять по колу — і 2<sup>100</sup> можна «порахувати» без калькулятора.</p>
   <div class="row"><span class="lbl">основа</span><span id="ldBase"></span></div>
   <div class="row"><span class="lbl">показник</span><output id="ldOut" class="m"></output></div>
@@ -80,15 +113,17 @@ input[type=range]{width:100%;height:36px;accent-color:var(--mark-2)}
   <div id="ldShow"></div>
 </section>
 
-<!-- 5 -->
+<!-- 6 -->
 <section>
-  <h2><span class="num">5</span>Перевір себе</h2>
+  <h2><span class="num">6</span>Перевір себе</h2>
   <p class="muted">Спершу розклади подумки, потім відкривай.</p>
   <details><summary>a<sup>7</sup> : a<sup>3</sup></summary><div class="ans">= <b>a<sup>4</sup></b>. Сім копій зверху, три знизу; три пари скоротились, лишилось чотири.</div></details>
   <details><summary>(x<sup>2</sup>)<sup>5</sup></summary><div class="ans">= <b>x<sup>10</sup></b>. Пʼять груп по дві копії.</div></details>
   <details><summary>(2y)<sup>3</sup></summary><div class="ans">= 2y·2y·2y = 2·2·2·y·y·y = <b>8y<sup>3</sup></b>. У ступінь іде і двійка.</div></details>
   <details><summary>(a/3)<sup>2</sup></summary><div class="ans">= (a·a)/(3·3) = <b>a<sup>2</sup>/9</b>.</div></details>
   <details><summary>5<sup>3</sup> · 2<sup>3</sup></summary><div class="ans">= (5·2)<sup>3</sup> = 10<sup>3</sup> = <b>1000</b>. Правило ступеня добутку, прочитане справа наліво.</div></details>
+  <details><summary>a<sup>6</sup> · a<sup>−3</sup></summary><div class="ans">= a<sup>6 + (−3)</sup> = <b>a<sup>3</sup></b>. Множення ступенів — додавання показників; 6 кроків угору й 3 вниз.</div></details>
+  <details><summary>(a<sup>−2</sup>)<sup>3</sup></summary><div class="ans">= a<sup>(−2)·3</sup> = <b>a<sup>−6</sup></b>. Ступінь ступеня — множення показників, мінус на плюс дає мінус.</div></details>
   <details><summary>2<sup>10</sup> · 2<sup>5</sup> : 2<sup>12</sup></summary><div class="ans">= 2<sup>15</sup> : 2<sup>12</sup> = 2<sup>3</sup> = <b>8</b>.</div></details>
 </section>
 
@@ -99,6 +134,7 @@ input[type=range]{width:100%;height:36px;accent-color:var(--mark-2)}
   <span class="m">(a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup></span><br>
   <span class="m">(ab)<sup>n</sup> = a<sup>n</sup>b<sup>n</sup></span><br>
   <span class="m">(a/b)<sup>n</sup> = a<sup>n</sup>/b<sup>n</sup></span> (b ≠ 0)<br><br>
+  На показниках дія стає простішою: <b>· → +</b>, <b>: → −</b>, <b>степінь → ×</b>; а додавання ступенів не перекладається ніяк.<br><br>
   Що буде, коли m ≤ n у діленні, — <a href="../nulovyi-i-vidiemnyi-pokaznyk/">«Нульовий і відʼємний показник»</a>. Що таке основа й показник — <a href="../shcho-take-stupin/">«Що таке ступінь»</a>.
 </div>
 
@@ -186,7 +222,39 @@ L.stepper($('stM'),{min:1,max:6,get:()=>st.m,set:v=>{st.m=v;D.restart();}});
 L.stepper($('stN'),{min:1,max:5,get:()=>st.n,set:v=>{st.n=v;D.restart();}});
 drawRules(); D.render(false);
 
-/* ---------- 2: traps ---------- */
+/* ---------- 2: operations on powers become arithmetic on exponents ---------- */
+const OPS2=[{v:'mul',sub:'множення → +',label:'a<sup>m</sup>·a<sup>n</sup>'},{v:'div',sub:'ділення → −',label:'a<sup>m</sup>:a<sup>n</sup>'},{v:'pow',sub:'ступінь ступеня → ×',label:'(a<sup>m</sup>)<sup>n</sup>'}];
+const ex={op:'mul',m:6,n:-3};
+const par=k=>k<0?`(${L.signed(k)})`:String(k);
+const val2=k=>k>=0?num(2**k):'1/'+num(2**-k);
+function exStages(){
+  const {op,m,n}=ex, S=L.signed;
+  const sign={mul:'+',div:'−',pow:'·'}[op], res={mul:m+n,div:m-n,pow:m*n}[op];
+  const left={mul:pow(a,S(m))+DOT+pow(a,S(n),'g2'), div:pow(a,S(m))+' : '+pow(a,S(n),'g2'), pow:`(${pow(a,S(m))})${L.E(S(n))}`}[op];
+  const word={mul:'Множення ступенів з однаковою основою',div:'Ділення ступенів з однаковою основою',pow:'Ступінь ступеня'}[op];
+  const down={mul:'додавання показників: кроки підряд, спершу m, потім ще n',div:'віднімання показників: n кроків назад',pow:'множення показників: m кроків, повторені n разів'}[op];
+  const K=(k)=>`${Math.abs(k)} ${plural(Math.abs(k),'крок','кроки','кроків')} ${k<0?'униз':'угору'}`;
+  const steps={mul:`${K(m)}, потім ${K(n)}`,div:`${K(m)}, потім ${K(n)} назад, тобто ${K(-n)}`,pow:`${K(m)}, повторені ${Math.abs(n)} ${plural(Math.abs(n),'раз','рази','разів')}${n<0?' у зворотний бік':''}`}[op];
+  const arith={mul:`${S(m)} + ${par(n)}`,div:`${S(m)} − ${par(n)}`,pow:`${par(m)} · ${par(n)}`}[op];
+  const rule={mul:n<0?'додати відʼємне — це відняти':'звичайне додавання',div:n<0?'відняти відʼємне — це додати':'звичайне віднімання',pow:(m<0)!==(n<0)&&m!==0&&n!==0?'мінус на плюс дає мінус':(m<0&&n<0)?'мінус на мінус дає плюс':'звичайне множення'}[op];
+  const check={mul:`${P(2,S(m))}·${P(2,S(n))} = ${val2(m)} · ${val2(n)} = ${val2(res)}`,div:`${P(2,S(m))} : ${P(2,S(n))} = ${val2(m)} : ${val2(n)} = ${val2(res)}`,pow:`(${P(2,S(m))})<sup>${S(n)}</sup> = (${val2(m)})<sup>${S(n)}</sup> = ${val2(res)}`}[op];
+  return [
+    {lines:[left], text:`${word}. Яка тут дія з показниками?`},
+    {lines:[`${B(a)}<sup class="lift">${arith}</sup>`], text:`<b>Дія зі ступенями спускається на поверх нижче</b> і стає ${down}. Основа лишається та сама.`},
+    {lines:[`<span class="lift">${arith} = ${S(res)}</span>`], text:`Тепер це звичайний приклад з цілими числами: ${rule}. На мові кроків: ${steps} — разом ${S(res)}.`},
+    {lines:[`<span class="res">${P(a,S(res))}</span>`], text:`Перевірка при a = 2: ${check} = ${P(2,S(res))}.${res<0?' Відʼємний показник — це дріб: '+P(2,S(res))+' = 1/'+P(2,-res)+'.':''}`},
+  ];
+}
+const D4=L.derivation({box:$('deriv4'),next:$('next4'),reset:$('reset4'),stages:exStages,first:'Перекласти →'});
+function drawEx(){
+  L.chips($('ops'),OPS2,ex.op,v=>{ex.op=v;drawEx();D4.restart();});
+  $('lblX').textContent='m'; $('lblY').textContent=ex.op==='pow'?'зовнішній n':'n';
+}
+L.stepper($('stX'),{min:-6,max:6,get:()=>ex.m,set:v=>{ex.m=v;D4.restart();}});
+L.stepper($('stY'),{min:-5,max:5,get:()=>ex.n,set:v=>{ex.n=v;D4.restart();}});
+drawEx(); D4.render(false);
+
+/* ---------- 3: traps ---------- */
 L.contrast($('pit1'),{labelA:'множення',labelB:'ступінь ступеня',
   a:{expr:pow(a,2)+DOT+pow(a,3,'g2'), steps:`= a·a · a·a·a = <span class="res">${P(a,5)}</span>`, why:'Копії стають в один ряд: 2 + 3 = 5.'},
   b:{expr:`(${pow(a,2)})${L.E(3)}`, steps:`= ${P(a,2)}·${P(a,2)}·${P(a,2)} = a·a · a·a · a·a = <span class="res">${P(a,6)}</span>`, why:'Три групи по дві: 2 · 3 = 6.'}});
