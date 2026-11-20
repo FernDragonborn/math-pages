@@ -127,7 +127,7 @@ footer a{color:var(--pen)}
     <article class="card" id="c-parts">
       <span class="badge">часто в задачах</span>
       <svg viewBox="0 0 240 150" aria-hidden="true"><g class="draw"></g></svg>
-      <h3><span class="num">2</span>Кут з двох частин</h3>
+      <h3><span class="num">2</span>Основна властивість величини кута</h3>
       <label class="ctl"><span>∠AOC</span><input type="range" min="40" max="180" value="120" data-k="t"></label>
       <label class="ctl"><span>∠AOB</span><input type="range" min="20" max="160" value="50" data-k="p"></label>
       <p class="rule" aria-live="polite"></p>
@@ -169,7 +169,7 @@ footer a{color:var(--pen)}
     <article class="card" id="c-alt" data-pair="alt">
       <span class="badge">часто в задачах</span>
       <svg viewBox="0 0 240 170" aria-hidden="true"><g class="draw"></g></svg>
-      <h3><span class="num">6</span>Навхрест лежачі</h3>
+      <h3><span class="num">6</span>Внутрішні різносторонні</h3>
       <label class="ctl"><span>нахил c</span><input type="range" min="45" max="135" value="60" data-k="f"></label>
       <div class="opts" role="group" aria-label="Чи паралельні a і b">
         <button class="chip" type="button" data-par="1">a ∥ b</button>
@@ -177,7 +177,7 @@ footer a{color:var(--pen)}
       </div>
       <p class="rule" aria-live="polite"></p>
       <p class="why">між прямими, по різні боки від січної: c перетинає паралельні прямі під однаковим нахилом</p>
-      <p class="note">Працює й навпаки: якщо навхрест лежачі кути рівні, прямі паралельні.</p>
+      <p class="note">Працює й навпаки: якщо внутрішні різносторонні кути рівні, прямі паралельні.</p>
     </article>
 
     <article class="card" id="c-cor" data-pair="cor">
@@ -195,14 +195,14 @@ footer a{color:var(--pen)}
     <article class="card" id="c-one" data-pair="one">
       <span class="badge">часто в задачах</span>
       <svg viewBox="0 0 240 170" aria-hidden="true"><g class="draw"></g></svg>
-      <h3><span class="num">8</span>Односторонні</h3>
+      <h3><span class="num">8</span>Внутрішні односторонні</h3>
       <label class="ctl"><span>нахил c</span><input type="range" min="45" max="135" value="60" data-k="f"></label>
       <div class="opts" role="group" aria-label="Чи паралельні a і b">
         <button class="chip" type="button" data-par="1">a ∥ b</button>
         <button class="chip" type="button" data-par="0">a не ∥ b</button>
       </div>
       <p class="rule" aria-live="polite"></p>
-      <p class="why">між прямими, з одного боку від c: ∠2 дорівнює навхрест лежачому, а той суміжний з ∠1</p>
+      <p class="why">між прямими, з одного боку від c: ∠2 дорівнює різносторонньому з ним куту при прямій a, а той суміжний з ∠1</p>
     </article>
 
     <article class="card" id="c-trap">
@@ -211,7 +211,7 @@ footer a{color:var(--pen)}
       <h3><span class="num">9</span>Діагональ трапеції — січна</h3>
       <label class="ctl"><span>∠CAD</span><input type="range" min="30" max="50" value="45" data-k="f"></label>
       <p class="rule" aria-live="polite"></p>
-      <p class="why">основи BC і AD паралельні, AC — січна, а ці кути навхрест лежачі</p>
+      <p class="why">основи BC і AD паралельні, AC — січна, а ці кути внутрішні різносторонні</p>
       <p class="note">∠BAC з ними не рівний: AB і CD не паралельні. Більше про трапецію — у <a href="/heometriia/trapetsiia/">шпаргалці з трапеції</a>.</p>
     </article>
 
@@ -230,7 +230,7 @@ footer a{color:var(--pen)}
       <label class="ctl"><span>β</span><input type="range" min="30" max="120" value="60" data-k="b"></label>
       <div class="opts"><button class="chip" type="button" data-proof aria-pressed="false">провести пряму через C</button></div>
       <p class="rule" aria-live="polite"></p>
-      <p class="why">пряма через C, паралельна AB, переносить α і β до C як навхрест лежачі, і разом з γ вони дають розгорнутий кут</p>
+      <p class="why">пряма через C, паралельна AB, переносить α і β до C як внутрішні різносторонні, і разом з γ вони дають розгорнутий кут</p>
     </article>
 
     <article class="card" id="c-ext">
@@ -387,7 +387,7 @@ function pairCard(id){
     init(s,root){s.par=1;root.querySelectorAll('[data-par]').forEach(b=>b.addEventListener('click',()=>{s.par=+b.dataset.par;root._render()}))},
     draw(g,s){const d=s.par?0:TILT,P1={x:120,y:50},Mb={x:120,y:134},P2=inter(P1,s.f,Mb,d);
       const [[f1,s1],[f2,s2]]=pick(s.f,d);
-      // equal angles share a colour; односторонні are two different angles by nature
+      // equal angles share a colour; внутрішні односторонні are two different angles by nature
       const c2=pair!=='one'&&s1===s2?'1':'2';
       arc(g,P1,22,f1,s1,'a1');arc(g,P2,22,f2,s2,'a'+c2);
       line(g,{x:12,y:50},{x:228,y:50},'ln');line(g,P(Mb,108,d+180),P(Mb,108,d),'ln');
