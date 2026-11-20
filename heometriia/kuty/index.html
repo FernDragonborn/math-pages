@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Кути</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script src="/assets/theme.js"></script>
+<style>
+:root{--page-width:1120px}
+/* Same notebook-grid cheat sheet as Трапеція, but every drawing is live: drag the dot or use the slider. */
+.wrap{max-width:1120px;margin:0 auto;padding-block:28px 56px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:36px}
+body{font-size:16px;line-height:1.5}
+h1{font-family:var(--font-display);font-weight:700;font-size:clamp(1.7rem,4.5vw,2.6rem);line-height:1.15;margin:0;text-wrap:balance}
+h1 span{color:var(--pen)}
+.lead{margin:8px 0 0;color:var(--ink-soft);max-width:60ch}
+
+.anatomy{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:24px;align-items:center;
+  background:var(--card);border:1.5px solid var(--line);border-radius:4px;padding:20px}
+.anatomy svg{width:100%;height:auto;max-width:460px;display:block}
+.anatomy h2{margin:0 0 12px}
+.legend{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:10px}
+.legend li{display:flex;gap:12px;align-items:baseline}
+.legend b{font:700 1.4rem var(--font-hand);min-width:4.6ch;flex:none;color:var(--pen)}
+
+section{display:flex;flex-direction:column;gap:16px}
+h2{font-family:var(--font-display);font-weight:600;font-size:1.25rem;margin:0;text-wrap:balance}
+h2 small{display:block;font:400 .95rem var(--font-body);color:var(--ink-soft);margin-top:4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:4px;padding:14px 16px 16px;
+  display:flex;flex-direction:column;gap:8px;position:relative;min-width:0}
+.card svg{width:100%;height:auto;display:block;user-select:none;-webkit-user-select:none}
+.card h3{font:600 1.02rem var(--font-body);margin:0;display:flex;gap:8px;align-items:baseline}
+.num{font:700 1.2rem var(--font-hand);color:var(--ink-soft)}
+.rule{font:600 1.05rem var(--font-body);color:var(--pen);margin:0;font-variant-numeric:tabular-nums}
+.why{font:600 1.2rem/1.25 var(--font-hand);color:var(--ink-soft);margin:0}
+.why::before{content:"чому? ";color:var(--pen)}
+.badge{position:absolute;top:10px;right:10px;font:700 .95rem var(--font-hand);color:var(--alert);
+  background:var(--alert-wash);border-radius:999px;padding:0 10px;transform:rotate(3deg)}
+.note{font-size:.9rem;color:var(--ink-soft);margin:0}
+.note a,.lead a{color:var(--pen)}
+footer{color:var(--ink-soft);font-size:.9rem}
+footer a{color:var(--pen)}
+
+/* controls */
+.ctl{display:flex;align-items:center;gap:10px;font:600 .95rem var(--font-body);color:var(--ink-soft)}
+.ctl span{min-width:4.5ch;white-space:nowrap}
+.ctl input{flex:1;min-width:0;accent-color:var(--pen);height:28px}
+.ctl input:focus-visible{outline:3px solid var(--pen);outline-offset:2px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--card-line);background:transparent;color:var(--ink);border-radius:6px;padding:6px 12px;cursor:pointer;font:600 1rem var(--font-body);min-height:44px}
+.chip:hover{border-color:var(--pen)}
+.chip:focus-visible{outline:3px solid var(--pen);outline-offset:2px}
+.chip[aria-pressed="true"]{border-color:var(--pen);background:var(--pen-wash)}
+.k1{color:var(--mark-2)} .k2{color:var(--mark-4)} .k3{color:var(--mark-3)} .k0{color:var(--pen)}
+.off{color:var(--alert)}
+
+/* SVG */
+.ln{fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round}
+.lt{fill:none;stroke:var(--ink-soft);stroke-width:1.3;stroke-dasharray:5 4}
+.hl{fill:none;stroke:var(--pen);stroke-width:3.5;stroke-linecap:round}
+.fig{fill:color-mix(in srgb,var(--pen) 6%,transparent);stroke:var(--ink);stroke-width:2;stroke-linejoin:round}
+.a0{fill:var(--mark-1-wash);stroke:var(--mark-1);stroke-width:2}
+.a1{fill:var(--mark-2-wash);stroke:var(--mark-2);stroke-width:2}
+.a2{fill:var(--mark-4-wash);stroke:var(--mark-4);stroke-width:2}
+.a3{fill:var(--mark-3-wash);stroke:var(--mark-3);stroke-width:2}
+.t0,.t1,.t2,.t3,.t{font:700 19px var(--font-hand);text-anchor:middle;dominant-baseline:central}
+.t0{fill:var(--mark-1)} .t1{fill:var(--mark-2)} .t2{fill:var(--mark-4)} .t3{fill:var(--mark-3)} .t{fill:var(--ink)}
+.v{font:600 12px var(--font-body);fill:var(--ink-soft);text-anchor:middle;dominant-baseline:central}
+.dot{fill:var(--ink)}
+.grip{fill:var(--pen);stroke:var(--card);stroke-width:2}
+.hit{fill:transparent;cursor:grab;touch-action:none}
+.hit:active{cursor:grabbing}
+
+@media (max-width:640px){.anatomy{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+<header>
+  <h1>Кути: <span>усе головне</span></h1>
+  <p class="lead">Шпаргалка для 7 класу. Рівні кути мають однаковий колір.</p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <i>пряма, промінь і відрізок, 7 клас</i></p>
+</header>
+
+<div class="anatomy" id="names">
+  <svg viewBox="0 0 300 190" aria-hidden="true"><g class="draw"></g></svg>
+  <div>
+    <h2>Як читати назву кута</h2>
+    <div class="opts" role="group" aria-label="Назва кута">
+      <button class="chip" type="button" data-n="BAC">∠BAC</button>
+      <button class="chip" type="button" data-n="ABC">∠ABC</button>
+      <button class="chip" type="button" data-n="CBA">∠CBA</button>
+      <button class="chip" type="button" data-n="ACB">∠ACB</button>
+    </div>
+    <p class="rule" id="names-rule" aria-live="polite"></p>
+    <ul class="legend">
+      <li><b>O</b><span><strong>Вершина</strong>: точка, з якої виходять два промені.</span></li>
+      <li><b>OA, OB</b><span><strong>Сторони</strong>: ці два промені.</span></li>
+      <li><b>∠AOB</b><span><strong>Назва</strong>: середня літера завжди вершина, крайні — точки на сторонах.</span></li>
+    </ul>
+  </div>
+</div>
+
+<section>
+  <h2>Один кут і його сусіди</h2>
+  <div class="grid">
+
+    <article class="card" id="c-measure">
+      <svg viewBox="0 0 240 150" aria-hidden="true"><g class="draw"></g></svg>
+      <h3><span class="num">1</span>Яким буває кут</h3>
+      <label class="ctl"><span>∠AOB</span><input type="range" min="5" max="180" value="60" data-k="a"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">градус — одна сто вісімдесята розгорнутого кута</p>
+    </article>
+
+    <article class="card" id="c-parts">
+      <span class="badge">часто в задачах</span>
+      <svg viewBox="0 0 240 150" aria-hidden="true"><g class="draw"></g></svg>
+      <h3><span class="num">2</span>Кут з двох частин</h3>
+      <label class="ctl"><span>∠AOC</span><input type="range" min="40" max="180" value="120" data-k="t"></label>
+      <label class="ctl"><span>∠AOB</span><input type="range" min="20" max="160" value="50" data-k="p"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">промінь OB ділить кут на два, і їхні градуси складаються</p>
+    </article>
+
+    <article class="card" id="c-adj">
+      <span class="badge">часто в задачах</span>
+      <svg viewBox="0 0 240 150" aria-hidden="true"><g class="draw"></g></svg>
+      <h3><span class="num">3</span>Суміжні кути</h3>
+      <label class="ctl"><span>α</span><input type="range" min="20" max="160" value="60" data-k="a"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">разом вони дають розгорнутий кут</p>
+    </article>
+
+    <article class="card" id="c-vert">
+      <svg viewBox="0 0 240 150" aria-hidden="true"><g class="draw"></g></svg>
+      <h3><span class="num">4</span>Вертикальні кути</h3>
+      <label class="ctl"><span>α</span><input type="range" min="15" max="165" value="55" data-k="a"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">обидва α доповнюють той самий β до 180°</p>
+    </article>
+
+    <article class="card" id="c-bis">
+      <svg viewBox="0 0 240 150" aria-hidden="true"><g class="draw"></g></svg>
+      <h3><span class="num">5</span>Бісектриса</h3>
+      <label class="ctl"><span>∠AOB</span><input type="range" min="40" max="180" step="2" value="100" data-k="a"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">це промінь, що ділить кут навпіл</p>
+    </article>
+
+  </div>
+</section>
+
+<section>
+  <h2>Паралельні прямі й січна<small>Пряма c перетинає прямі a і b. Перемкни «не ∥» і подивись, що ламається.</small></h2>
+  <div class="grid">
+
+    <article class="card" id="c-alt" data-pair="alt">
+      <span class="badge">часто в задачах</span>
+      <svg viewBox="0 0 240 170" aria-hidden="true"><g class="draw"></g></svg>
+      <h3><span class="num">6</span>Навхрест лежачі</h3>
+      <label class="ctl"><span>нахил c</span><input type="range" min="45" max="135" value="60" data-k="f"></label>
+      <div class="opts" role="group" aria-label="Чи паралельні a і b">
+        <button class="chip" type="button" data-par="1">a ∥ b</button>
+        <button class="chip" type="button" data-par="0">a не ∥ b</button>
+      </div>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">між прямими, по різні боки від січної: c перетинає паралельні прямі під однаковим нахилом</p>
+      <p class="note">Працює й навпаки: якщо навхрест лежачі кути рівні, прямі паралельні.</p>
+    </article>
+
+    <article class="card" id="c-cor" data-pair="cor">
+      <svg viewBox="0 0 240 170" aria-hidden="true"><g class="draw"></g></svg>
+      <h3><span class="num">7</span>Відповідні</h3>
+      <label class="ctl"><span>нахил c</span><input type="range" min="45" max="135" value="60" data-k="f"></label>
+      <div class="opts" role="group" aria-label="Чи паралельні a і b">
+        <button class="chip" type="button" data-par="1">a ∥ b</button>
+        <button class="chip" type="button" data-par="0">a не ∥ b</button>
+      </div>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">однакове місце при кожній прямій: b — це a, зсунута вздовж c, а кут при зсуві не міняється</p>
+    </article>
+
+    <article class="card" id="c-one" data-pair="one">
+      <span class="badge">часто в задачах</span>
+      <svg viewBox="0 0 240 170" aria-hidden="true"><g class="draw"></g></svg>
+      <h3><span class="num">8</span>Односторонні</h3>
+      <label class="ctl"><span>нахил c</span><input type="range" min="45" max="135" value="60" data-k="f"></label>
+      <div class="opts" role="group" aria-label="Чи паралельні a і b">
+        <button class="chip" type="button" data-par="1">a ∥ b</button>
+        <button class="chip" type="button" data-par="0">a не ∥ b</button>
+      </div>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">між прямими, з одного боку від c: ∠2 дорівнює навхрест лежачому, а той суміжний з ∠1</p>
+    </article>
+
+    <article class="card" id="c-trap">
+      <span class="badge">часто в задачах</span>
+      <svg viewBox="0 0 240 170" aria-hidden="true"><g class="draw"></g></svg>
+      <h3><span class="num">9</span>Діагональ трапеції — січна</h3>
+      <label class="ctl"><span>∠CAD</span><input type="range" min="30" max="50" value="45" data-k="f"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">основи BC і AD паралельні, AC — січна, а ці кути навхрест лежачі</p>
+      <p class="note">∠BAC з ними не рівний: AB і CD не паралельні. Більше про трапецію — у <a href="/heometriia/trapetsiia/">шпаргалці з трапеції</a>.</p>
+    </article>
+
+  </div>
+</section>
+
+<section>
+  <h2>Кути трикутника</h2>
+  <div class="grid">
+
+    <article class="card" id="c-sum">
+      <span class="badge">часто в задачах</span>
+      <svg viewBox="0 0 240 205" aria-hidden="true"><g class="draw"></g></svg>
+      <h3><span class="num">10</span>Сума кутів трикутника</h3>
+      <label class="ctl"><span>α</span><input type="range" min="30" max="120" value="50" data-k="a"></label>
+      <label class="ctl"><span>β</span><input type="range" min="30" max="120" value="60" data-k="b"></label>
+      <div class="opts"><button class="chip" type="button" data-proof aria-pressed="false">провести пряму через C</button></div>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">пряма через C, паралельна AB, переносить α і β до C як навхрест лежачі, і разом з γ вони дають розгорнутий кут</p>
+    </article>
+
+    <article class="card" id="c-ext">
+      <svg viewBox="0 0 240 205" aria-hidden="true"><g class="draw"></g></svg>
+      <h3><span class="num">11</span>Зовнішній кут</h3>
+      <label class="ctl"><span>α</span><input type="range" min="30" max="120" value="50" data-k="a"></label>
+      <label class="ctl"><span>β</span><input type="range" min="30" max="120" value="70" data-k="b"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">δ разом з β дає 180°, і α з γ разом з β теж дають 180°, тож δ — це α і γ разом</p>
+    </article>
+
+  </div>
+</section>
+
+<footer>Кути на малюнках округлено до цілих градусів, тож суми сходяться точно.</footer>
+</div>
+
+<script>
+(function(){
+const NS='http://www.w3.org/2000/svg', R=Math.PI/180;
+function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;parent&&parent.appendChild(e);return e}
+// Angles are in the maths sense (counter-clockwise, y up); the SVG y axis points down.
+const P=(c,r,d)=>({x:c.x+r*Math.cos(d*R),y:c.y-r*Math.sin(d*R)});
+const dirOf=(a,b)=>{let d=Math.atan2(a.y-b.y,b.x-a.x)/R;return (d+360)%360};
+function line(g,a,b,cls){return el('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,class:cls},g)}
+function arc(g,c,r,from,span,cls){
+  if(Math.abs(span-90)<1e-6){const s=r*.62,p1=P(c,s,from),p2=P(c,s,from+90),p3={x:p1.x+p2.x-c.x,y:p1.y+p2.y-c.y};
+    return el('path',{d:`M${c.x} ${c.y}L${p1.x} ${p1.y}L${p3.x} ${p3.y}L${p2.x} ${p2.y}Z`,class:cls},g)}
+  const p1=P(c,r,from),p2=P(c,r,from+span);
+  return el('path',{d:`M${c.x} ${c.y}L${p1.x} ${p1.y}A${r} ${r} 0 ${span>180?1:0} 0 ${p2.x} ${p2.y}Z`,class:cls},g)}
+// Label sits on the bisector, far enough out that a narrow angle doesn't squeeze it onto a side.
+// A narrow angle has no room inside: then the label goes just outside, past the second side.
+function lab(g,c,r,from,span,txt,cls,gap=13){const half=Math.max(span/2,.5),need=gap/Math.sin(half*R)+2;let p;
+  if(need<=r+70)p=P(c,Math.max(r+gap,need),from+span/2);
+  else{const rr=r+gap;p=P(c,rr,from+span+Math.asin(Math.min(1,gap/rr))/R)}
+  return el('text',{x:p.x,y:p.y,class:cls},g,txt)}
+function vtx(g,p,txt,dx,dy){el('text',{x:p.x+dx,y:p.y+dy,class:'v'},g,txt)}
+function grip(g,p,key){el('circle',{cx:p.x,cy:p.y,r:6,class:'grip'},g);el('circle',{cx:p.x,cy:p.y,r:18,class:'hit','data-grip':key},g)}
+const span=(from,to)=>((to-from)%360+360)%360;
+const k=(cls,t)=>`<span class="${cls}">${t}</span>`;
+
+// Each card: state from its sliders, draw(g,s) redraws, rule(s) writes the line under it,
+// dragTo(key,pt,s) turns a dragged point back into slider values.
+function card(id,{draw,rule,dragTo,init}){
+  const root=document.getElementById(id),svg=root.querySelector('svg'),g=svg.querySelector('.draw'),out=root.querySelector('.rule');
+  const sliders=[...root.querySelectorAll('input[type=range]')],s={};
+  sliders.forEach(i=>s[i.dataset.k]=+i.value);
+  init&&init(s,root);
+  function render(){
+    sliders.forEach(i=>i.value=s[i.dataset.k]);
+    g.replaceChildren();draw(g,s);out.innerHTML=rule(s);
+  }
+  sliders.forEach(i=>i.addEventListener('input',()=>{s[i.dataset.k]=+i.value;fix&&fix(s,i.dataset.k);render()}));
+  const fix=card.fix[id];
+  let active=null;
+  svg.addEventListener('pointerdown',e=>{const t=e.target.closest('[data-grip]');if(!t)return;active=t.dataset.grip;svg.setPointerCapture(e.pointerId);e.preventDefault()});
+  svg.addEventListener('pointermove',e=>{if(!active)return;const m=svg.getScreenCTM().inverse(),q=new DOMPoint(e.clientX,e.clientY).matrixTransform(m);
+    if(dragTo(active,q,s)!==false){fix&&fix(s,active);render()}});
+  const stop=()=>{active=null};svg.addEventListener('pointerup',stop);svg.addEventListener('pointercancel',stop);
+  root._s=s;root._render=render;render();return root;
+}
+card.fix={};
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* names on a triangle */
+(function(){
+  const root=document.getElementById('names'),g=root.querySelector('.draw'),out=document.getElementById('names-rule');
+  const A={x:40,y:160},B={x:120,y:30},C={x:270,y:160},pts={A,B,C};
+  let cur='BAC';
+  function render(){
+    g.replaceChildren();
+    const [p,v,q]=cur.split(''),V=pts[v],d1=dirOf(V,pts[p]),d2=dirOf(V,pts[q]);
+    let from=d1,sp=span(d1,d2);if(sp>180){from=d2;sp=360-sp}
+    el('polygon',{points:`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`,class:'fig'},g);
+    arc(g,V,26,from,sp,'a0');
+    line(g,V,pts[p],'hl');line(g,V,pts[q],'hl');
+    el('circle',{cx:V.x,cy:V.y,r:4,class:'dot'},g);
+    for(const n of 'ABC'){const o={A:[-12,8],B:[0,-14],C:[12,8]}[n];el('text',{x:pts[n].x+o[0],y:pts[n].y+o[1],class:n===v?'t0':'t'},g,n)}
+    out.innerHTML=`∠${p}${k('k0',v)}${q}: вершина ${k('k0',v)}, сторони ${v}${p} і ${v}${q}`+(cur==='CBA'||cur==='ABC'?' — ∠ABC і ∠CBA той самий кут':'');
+    root.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.n===cur)));
+  }
+  root.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{cur=b.dataset.n;render()}));
+  render();
+})();
+
+/* 1 measure */
+const kind=a=>a<90?'гострий':a===90?'прямий':a<180?'тупий':'розгорнутий';
+card('c-measure',{
+  draw(g,s){const O={x:120,y:122},A=P(O,105,0),B=P(O,96,s.a);
+    arc(g,O,30,0,s.a,'a0');line(g,O,A,'ln');line(g,O,B,'hl');lab(g,O,30,0,s.a,s.a+'°','t0',22);
+    el('circle',{cx:O.x,cy:O.y,r:3.5,class:'dot'},g);
+    vtx(g,O,'O',0,16);vtx(g,A,'A',0,14);vtx(g,P(O,110,s.a),'B',0,0);grip(g,B,'b')},
+  rule:s=>`∠AOB = ${s.a}° — ${kind(s.a)}`,
+  dragTo(_,q,s){const d=dirOf({x:120,y:122},q);s.a=clamp(Math.round(d>270?0:d),5,180)}
+});
+
+/* 2 parts */
+card.fix['c-parts']=s=>{s.p=clamp(s.p,20,s.t-20)};
+card('c-parts',{
+  draw(g,s){const O={x:120,y:124},A=P(O,105,0),Bp=P(O,92,s.p),Cp=P(O,96,s.t);
+    arc(g,O,30,0,s.p,'a1');arc(g,O,30,s.p,s.t-s.p,'a2');
+    line(g,O,A,'ln');line(g,O,Cp,'ln');line(g,O,Bp,'hl');
+    lab(g,O,30,0,s.p,'α','t1');lab(g,O,30,s.p,s.t-s.p,'β','t2');
+    el('circle',{cx:O.x,cy:O.y,r:3.5,class:'dot'},g);
+    vtx(g,O,'O',0,16);vtx(g,A,'A',0,14);vtx(g,P(O,108,s.p),'B',0,0);vtx(g,P(O,110,s.t),'C',0,0);
+    grip(g,Bp,'p');grip(g,Cp,'t')},
+  rule:s=>`∠AOC = ${k('k1',s.p+'°')} + ${k('k2',(s.t-s.p)+'°')} = ${s.t}°`,
+  dragTo(key,q,s){let d=dirOf({x:120,y:124},q);if(d>270)d=0;s[key]=Math.round(key==='t'?clamp(d,40,180):clamp(d,20,160))}
+});
+
+/* 3 adjacent */
+card('c-adj',{
+  draw(g,s){const O={x:120,y:124},A=P(O,108,0),D=P(O,108,180),B=P(O,96,s.a);
+    arc(g,O,28,0,s.a,'a1');arc(g,O,28,s.a,180-s.a,'a2');
+    line(g,A,D,'ln');line(g,O,B,'hl');
+    lab(g,O,28,0,s.a,'α','t1');lab(g,O,28,s.a,180-s.a,'β','t2');
+    el('circle',{cx:O.x,cy:O.y,r:3.5,class:'dot'},g);vtx(g,O,'O',0,16);grip(g,B,'a')},
+  rule:s=>`${k('k1','α')} + ${k('k2','β')} = ${k('k1',s.a+'°')} + ${k('k2',(180-s.a)+'°')} = 180°`,
+  dragTo(_,q,s){let d=dirOf({x:120,y:124},q);if(d>270)d=0;s.a=Math.round(clamp(d,20,160))}
+});
+
+/* 4 vertical */
+card('c-vert',{
+  draw(g,s){const O={x:120,y:75},b=180-s.a;
+    arc(g,O,26,0,s.a,'a1');arc(g,O,26,180,s.a,'a1');arc(g,O,26,s.a,b,'a2');arc(g,O,26,180+s.a,b,'a2');
+    line(g,P(O,105,0),P(O,105,180),'ln');const E=P(O,70,s.a);line(g,E,P(O,70,s.a+180),'hl');
+    lab(g,O,26,0,s.a,'α','t1');lab(g,O,26,180,s.a,'α','t1');lab(g,O,26,s.a,b,'β','t2');lab(g,O,26,180+s.a,b,'β','t2');
+    el('circle',{cx:O.x,cy:O.y,r:3.5,class:'dot'},g);grip(g,E,'a')},
+  rule:s=>`${k('k1','α')} = ${k('k1','α')} = ${k('k1',s.a+'°')},&nbsp; ${k('k2','β')} = ${k('k2','β')} = ${k('k2',(180-s.a)+'°')}`,
+  dragTo(_,q,s){let d=dirOf({x:120,y:75},q);if(d>180)d-=180;s.a=Math.round(clamp(d,15,165))}
+});
+
+/* 5 bisector */
+card('c-bis',{
+  draw(g,s){const O={x:120,y:126},h=s.a/2,A=P(O,105,0),B=P(O,96,s.a),L=P(O,96,h);
+    arc(g,O,30,0,h,'a1');arc(g,O,30,h,h,'a1');
+    line(g,O,A,'ln');line(g,O,B,'ln');line(g,O,L,'hl');
+    lab(g,O,30,0,h,'α','t1');lab(g,O,30,h,h,'α','t1');
+    el('circle',{cx:O.x,cy:O.y,r:3.5,class:'dot'},g);
+    vtx(g,O,'O',0,16);vtx(g,A,'A',0,14);vtx(g,P(O,110,s.a),'B',0,0);vtx(g,P(O,108,h),'L',0,0);grip(g,B,'a')},
+  rule:s=>`∠AOL = ∠LOB = ${s.a}° : 2 = ${k('k1',s.a/2+'°')}`,
+  dragTo(_,q,s){let d=dirOf({x:120,y:126},q);if(d>270)d=0;s.a=2*Math.round(clamp(d,40,180)/2)}
+});
+
+/* 6–8 parallel lines and a transversal */
+const TILT=10;
+function inter(p,d1,q,d2){const u={x:Math.cos(d1*R),y:-Math.sin(d1*R)},v={x:Math.cos(d2*R),y:-Math.sin(d2*R)};
+  const den=u.x*v.y-u.y*v.x,t=((q.x-p.x)*v.y-(q.y-p.y)*v.x)/den;return{x:p.x+t*u.x,y:p.y+t*u.y}}
+function pairCard(id){
+  const pair=document.getElementById(id).dataset.pair;
+  // ∠1 at a∩c, ∠2 at b∩c; directions: along a/b to the right = 0 (or δ), up along c = φ.
+  const pick={alt:(f,d)=>[[180,f],[d,f-d]],cor:(f,d)=>[[0,f],[d,f-d]],one:(f,d)=>[[f+180,180-f],[d,f-d]]}[pair];
+  const root=card(id,{
+    init(s,root){s.par=1;root.querySelectorAll('[data-par]').forEach(b=>b.addEventListener('click',()=>{s.par=+b.dataset.par;root._render()}))},
+    draw(g,s){const d=s.par?0:TILT,P1={x:120,y:50},Mb={x:120,y:134},P2=inter(P1,s.f,Mb,d);
+      const [[f1,s1],[f2,s2]]=pick(s.f,d);
+      // equal angles share a colour; односторонні are two different angles by nature
+      const c2=pair!=='one'&&s1===s2?'1':'2';
+      arc(g,P1,22,f1,s1,'a1');arc(g,P2,22,f2,s2,'a'+c2);
+      line(g,{x:12,y:50},{x:228,y:50},'ln');line(g,P(Mb,108,d+180),P(Mb,108,d),'ln');
+      const top=P(P1,(50-10)/Math.sin(s.f*R),s.f),bot=P(P1,-(166-50)/Math.sin(s.f*R),s.f);line(g,bot,top,'hl');
+      lab(g,P1,22,f1,s1,'1','t1');lab(g,P2,22,f2,s2,'2','t'+c2);
+      el('text',{x:16,y:38,class:'t'},g,'a');// b's name goes on the end of b that the transversal leans away from
+      const bl=P(Mb,104,s.f<90?d:d+180);el('text',{x:bl.x+(s.f<90?-6:6),y:bl.y-14,class:'t'},g,'b');
+      
+      const gp=P(P1,-104/Math.sin(s.f*R),s.f);// c's name: left of the transversal above a — no ∠1 of any pair lives there
+      const cq=P(P(P1,26/Math.sin(s.f*R),s.f),17,s.f+90);el('text',{x:cq.x,y:cq.y,class:'t0'},g,'c');grip(g,gp,'f')},
+    rule(s){const d=s.par?0:TILT,[[,s1],[,s2]]=pick(s.f,d);
+      if(pair==='one'){const sum=s1+s2;return `${k('k1','∠1')} + ${k('k2','∠2')} = ${k('k1',s1+'°')} + ${k('k2',s2+'°')} = `+(sum===180?'180°':k('off',sum+'°, не 180°'))}
+      return s1===s2?`${k('k1','∠1')} = ${k('k1','∠2')} = ${k('k1',s1+'°')}`:`${k('k1','∠1')} = ${k('k1',s1+'°')},&nbsp; ${k('k2','∠2')} = ${k('k2',s2+'°')}: ${k('off','не рівні')}`},
+    dragTo(_,q,s){let dd=dirOf({x:120,y:50},q);if(dd>180)dd-=180;s.f=Math.round(clamp(dd,45,135))}
+  });
+  const sync=()=>root.querySelectorAll('[data-par]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.par===root._s.par)));
+  root.querySelectorAll('[data-par]').forEach(b=>b.addEventListener('click',sync));sync();
+}
+['c-alt','c-cor','c-one'].forEach(pairCard);
+
+/* 9 trapezoid diagonal */
+card('c-trap',{
+  draw(g,s){const A={x:22,y:145},D={x:222,y:145},yT=50,h=A.y-yT,B={x:A.x+h/Math.tan(80*R),y:yT},C={x:A.x+h/Math.tan(s.f*R),y:yT};
+    el('polygon',{points:`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y} ${D.x},${D.y}`,class:'fig'},g);
+    arc(g,A,34,0,s.f,'a1');arc(g,A,24,s.f,80-s.f,'a2');arc(g,C,26,180,s.f,'a1');
+    line(g,A,C,'hl');
+    lab(g,A,34,0,s.f,'1','t1');lab(g,A,24,s.f,80-s.f,'β','t2');lab(g,C,26,180,s.f,'1','t1');
+    vtx(g,A,'A',-8,8);vtx(g,B,'B',-4,-12);vtx(g,C,'C',4,-12);vtx(g,D,'D',8,8);grip(g,C,'c')},
+  rule:s=>`∠ACB = ∠CAD = ${k('k1',s.f+'°')},&nbsp; а ∠BAC = ${k('k2',(80-s.f)+'°')}`,
+  dragTo(_,q,s){const d=Math.atan2(145-50,q.x-22)/R;s.f=Math.round(clamp(d,30,50))}
+});
+
+/* 10–11 triangle: driven by whole-degree α and β, fitted into the box */
+function tri(a,b,box){const ab=180-a-b,ac=Math.sin(b*R)/Math.sin(ab*R),C={x:ac*Math.cos(a*R),y:ac*Math.sin(a*R)};
+  const xs=[0,1,C.x],w=Math.max(...xs)-Math.min(...xs),sc=Math.min(box.w/w,box.h/C.y),x0=box.x+(box.w-w*sc)/2-Math.min(...xs)*sc;
+  return{A:{x:x0,y:box.b},B:{x:x0+sc,y:box.b},C:{x:x0+C.x*sc,y:box.b-C.y*sc}}}
+const triFix=(s,key)=>{if(s.a+s.b>150){if(key==='a')s.b=150-s.a;else s.a=150-s.b}};
+function triDrag(box){return(_,q,s)=>{const t=tri(s.a,s.b,box);
+  let a=Math.round(dirOf(t.A,q)),b=Math.round(180-dirOf(t.B,q));if(a>180||b<0||b>180)return false;
+  s.a=clamp(a,30,120);s.b=clamp(b,30,120);if(s.a+s.b>150)return false}}
+card.fix['c-sum']=triFix;
+const SUMBOX={x:28,w:184,h:136,b:180};
+card('c-sum',{
+  init(s,root){s.pr=0;const b=root.querySelector('[data-proof]');b.addEventListener('click',()=>{s.pr=1-s.pr;b.setAttribute('aria-pressed',String(!!s.pr));root._render()})},
+  draw(g,s){const {A,B,C}=tri(s.a,s.b,SUMBOX),c=180-s.a-s.b;
+    el('polygon',{points:`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`,class:'fig'},g);
+    arc(g,A,18,0,s.a,'a1');arc(g,B,18,180-s.b,s.b,'a2');arc(g,C,18,180+s.a,c,'a3');
+    lab(g,A,18,0,s.a,'α','t1');lab(g,B,18,180-s.b,s.b,'β','t2');lab(g,C,18,180+s.a,c,'γ','t3');
+    if(s.pr){line(g,{x:C.x-70,y:C.y},{x:C.x+70,y:C.y},'lt');
+      arc(g,C,20,180,s.a,'a1');arc(g,C,20,360-s.b,s.b,'a2');
+      lab(g,C,20,180,s.a,'α','t1');lab(g,C,20,360-s.b,s.b,'β','t2')}
+    vtx(g,A,'A',-8,8);vtx(g,B,'B',8,8);vtx(g,C,'C',s.pr?14:0,s.pr?-12:-14);grip(g,C,'c')},
+  rule:s=>`${k('k1','α')} + ${k('k2','β')} + ${k('k3','γ')} = ${k('k1',s.a+'°')} + ${k('k2',s.b+'°')} + ${k('k3',(180-s.a-s.b)+'°')} = 180°`,
+  dragTo:triDrag(SUMBOX)
+});
+card.fix['c-ext']=triFix;
+const EXTBOX={x:14,w:166,h:136,b:180};
+card('c-ext',{
+  draw(g,s){const {A,B,C}=tri(s.a,s.b,EXTBOX),c=180-s.a-s.b;
+    line(g,B,{x:234,y:B.y},'ln');
+    el('polygon',{points:`${A.x},${A.y} ${B.x},${B.y} ${C.x},${C.y}`,class:'fig'},g);
+    arc(g,A,18,0,s.a,'a1');arc(g,C,18,180+s.a,c,'a3');arc(g,B,18,180-s.b,s.b,'a2');arc(g,B,28,0,180-s.b,'a0');
+    lab(g,A,18,0,s.a,'α','t1');lab(g,C,18,180+s.a,c,'γ','t3');lab(g,B,18,180-s.b,s.b,'β','t2');lab(g,B,28,0,180-s.b,'δ','t0');
+    vtx(g,A,'A',-8,8);vtx(g,B,'B',0,12);vtx(g,C,'C',0,-14);grip(g,C,'c')},
+  rule:s=>`${k('k0','δ')} = ${k('k1','α')} + ${k('k3','γ')} = ${k('k1',s.a+'°')} + ${k('k3',(180-s.a-s.b)+'°')} = ${k('k0',(180-s.b)+'°')}`,
+  dragTo:triDrag(EXTBOX)
+});
+})();
+</script>
+</body>
+</html>

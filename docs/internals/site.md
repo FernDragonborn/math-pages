@@ -13,7 +13,7 @@
 | Корисні сайти | — | зовнішні картки без своєї теми (Quick maths); на мапі не лінія |
 | Дроби | `droby/` | Основна властивість дробу (`osnovna-vlastyvist-drobu`), Множення, ділення й ступінь дробу (`mnozhennia-i-dilennia-drobiv`), Спільний знаменник (`spilnyi-znamennyk`) |
 | Рівняння | `rivniannia/` | Тотожні перетворення (`totozhni-peretvorennia`), Терези: роби з обома частинами однакове (`terezy-obydvi-chastyny`), Що саме не має змінитися (`peretvorennia-rivnian`) |
-| Геометрія | `heometriia/` | Шпаргалка з трапеції (`trapetsiia`); зовнішня картка Розвʼязування трикутників |
+| Геометрія | `heometriia/` | Кути (`kuty`), Шпаргалка з трапеції (`trapetsiia`); зовнішня картка Розвʼязування трикутників |
 
 Головне меню — `index.html` у корені ([menu.md](menu.md)).
 
