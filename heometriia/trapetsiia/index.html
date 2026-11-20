@@ -55,6 +55,11 @@ h2 small{display:block;font:400 .95rem var(--body);color:var(--muted);margin-top
 .why::before{content:"чому? ";color:var(--pen)}
 .badge{position:absolute;top:10px;right:10px;font:700 .95rem var(--hand);color:var(--alert);
   background:var(--badge-bg);border-radius:999px;padding:0 10px;transform:rotate(3deg)}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--card-line);background:transparent;color:var(--ink);border-radius:6px;padding:6px 12px;cursor:pointer;font:700 1rem var(--font-mono);min-height:40px}
+.chip:hover{border-color:var(--pen)}
+.chip:focus-visible{outline:3px solid var(--pen);outline-offset:2px}
+.chip[aria-pressed="true"]{border-color:var(--pen);background:var(--pen-wash)}
 .note{font-size:.9rem;color:var(--muted);margin:0}
 footer{color:var(--muted);font-size:.9rem}
 
@@ -315,6 +320,26 @@ footer{color:var(--muted);font-size:.9rem}
     </article>
 
     <article class="card">
+      <span class="badge">часто в задачах</span>
+      <svg viewBox="0 0 240 160" aria-hidden="true">
+        <polygon class="fa" points="30,130 30,30 140,30 140,130"/>
+        <polygon class="n" points="30,130 30,30 140,30 220,130"/>
+        <line class="r d" x1="140" y1="30" x2="140" y2="130"/>
+        <path class="r" d="M140 120 h10 v10 M30 120 h10 v10"/>
+        <line class="rt" x1="140" y1="130" x2="220" y2="130"/>
+        <text class="tb" x="80" y="22">b</text><text class="tb" x="80" y="150">b</text>
+        <text class="tr" x="164" y="152" style="font-size:16px">a − b</text>
+        <text class="tr" x="146" y="86">h</text>
+        <text class="v" x="16" y="146">A</text><text class="v" x="20" y="22">B</text><text class="v" x="142" y="22">C</text>
+        <text class="v" x="134" y="146">H</text><text class="v" x="224" y="146">D</text>
+      </svg>
+      <h3><span class="num">13</span>Висота з тупого кута</h3>
+      <p class="rule">AH = BC = b,&nbsp; HD = a − b</p>
+      <p class="why">ABCH — прямокутник, а в прямокутнику протилежні сторони рівні</p>
+      <p class="note">CH = AB = h: висота відрізає від трапеції прямокутник і прямокутний трикутник.</p>
+    </article>
+
+    <article class="card">
       <svg viewBox="0 0 240 160" aria-hidden="true">
         <polygon class="s" points="57.5,130 80,30 160,30 182.5,130"/>
         <circle class="r" cx="120" cy="80" r="50"/>
@@ -324,7 +349,7 @@ footer{color:var(--muted);font-size:.9rem}
         <text class="tb" x="150" y="152">a</text><text class="tb" x="96" y="22">b</text>
         <text class="t" x="44" y="80">c</text><text class="t" x="186" y="80">d</text>
       </svg>
-      <h3><span class="num">13</span>Можна вписати коло</h3>
+      <h3><span class="num">14</span>Можна вписати коло</h3>
       <p class="rule">якщо a + b = c + d</p>
       <p class="why">так працює будь-який описаний чотирикутник. Тоді h = 2r</p>
     </article>
@@ -345,7 +370,7 @@ footer{color:var(--muted);font-size:.9rem}
         <circle class="dot" cx="181.8" cy="30" r="3.5"/>
         <text class="v" x="6" y="146">A</text><text class="v" x="62" y="22">B</text><text class="v" x="176" y="22">K</text><text class="v" x="204" y="22">C</text><text class="v" x="228" y="146">D</text>
       </svg>
-      <h3><span class="num">14</span>Бісектриса кута при основі</h3>
+      <h3><span class="num">15</span>Бісектриса кута при основі</h3>
       <p class="rule">△ABK рівнобедрений: AB = BK</p>
       <p class="why">∠BKA = ∠KAD як навхрест лежачі, а ∠KAD = ∠BAK</p>
     </article>
@@ -358,7 +383,7 @@ footer{color:var(--muted);font-size:.9rem}
         <text class="tr" x="108" y="86">90°</text>
         <text class="v" x="6" y="146">A</text><text class="v" x="62" y="22">B</text>
       </svg>
-      <h3><span class="num">15</span>Бісектриси при бічній стороні</h3>
+      <h3><span class="num">16</span>Бісектриси при бічній стороні</h3>
       <p class="rule">перетинаються під кутом 90°</p>
       <p class="why">α + β = 180°, отже α/2 + β/2 = 90°</p>
     </article>
@@ -371,7 +396,7 @@ footer{color:var(--muted);font-size:.9rem}
         <line class="r d" x1="210" y1="30" x2="210" y2="130"/>
         <text class="tr" x="216" y="86">h</text>
       </svg>
-      <h3><span class="num">16</span>Діагоналі перпендикулярні</h3>
+      <h3><span class="num">17</span>Діагоналі перпендикулярні</h3>
       <p class="rule">тоді h = (a + b) / 2 = m</p>
       <p class="why">для рівнобічної: трикутники при основах рівнобедрені прямокутні</p>
     </article>
@@ -385,7 +410,7 @@ footer{color:var(--muted);font-size:.9rem}
         <text class="v" x="126" y="16">E</text>
         <text class="tb" x="114" y="64">b</text><text class="t" x="114" y="159">a</text>
       </svg>
-      <h3><span class="num">17</span>Продовження бічних сторін</h3>
+      <h3><span class="num">18</span>Продовження бічних сторін</h3>
       <p class="rule">△EBC ∼ △EAD,&nbsp; k = b / a</p>
       <p class="why">BC ∥ AD, тому відповідні кути рівні</p>
     </article>
@@ -399,10 +424,35 @@ footer{color:var(--muted);font-size:.9rem}
         <text class="tr" x="76" y="110">h</text><text class="tb" x="140" y="74">m</text>
         <text class="t" x="150" y="152">a</text><text class="t" x="110" y="22">b</text>
       </svg>
-      <h3><span class="num">18</span>Площа трапеції</h3>
+      <h3><span class="num">19</span>Площа трапеції</h3>
       <p class="rule">S = (a + b) / 2 · h = m · h</p>
       <p class="why">трапецію можна розрізати діагоналлю на два трикутники</p>
       <p class="note">У деяких програмах площі вивчають у 9 класі.</p>
+    </article>
+
+    <article class="card" id="ratio">
+      <span class="badge">часто в задачах</span>
+      <svg viewBox="0 0 240 160" aria-hidden="true">
+        <polygon class="fa" id="ratio-rect" points="20,120 20,40 153.33,40 153.33,120"/>
+        <polygon class="n" id="ratio-trap" points="20,120 20,40 153.33,40 220,120"/>
+        <line class="r d" id="ratio-h" x1="153.33" y1="40" x2="153.33" y2="120"/>
+        <path class="r" d="M20 110 h10 v10"/>
+        <line class="hl" id="ratio-ah" x1="20" y1="120" x2="153.33" y2="120"/>
+        <line class="rt" id="ratio-hd" x1="153.33" y1="120" x2="220" y2="120"/>
+        <text class="tb" id="ratio-bc" x="76" y="32">2x</text>
+        <text class="tb" id="ratio-tah" x="76" y="142">2x</text>
+        <text class="tr" id="ratio-thd" x="180" y="142">x</text>
+        <text class="v" x="6" y="136">A</text><text class="v" x="10" y="36">B</text>
+        <text class="v" id="ratio-c" x="156" y="34">C</text><text class="v" id="ratio-vh" x="148" y="156">H</text><text class="v" x="224" y="136">D</text>
+      </svg>
+      <h3><span class="num">20</span>Відрізки у відношенні</h3>
+      <div class="opts" role="group" aria-label="Відношення AH : HD">
+        <button class="chip" type="button" data-k="2" aria-pressed="true">AH : HD = 2 : 1</button>
+        <button class="chip" type="button" data-k="0.5" aria-pressed="false">AH : HD = 1 : 2</button>
+      </div>
+      <p class="rule" id="ratio-rule" aria-live="polite">AH = 2x,&nbsp; HD = x,&nbsp; AD = 3x,&nbsp; BC = 2x</p>
+      <p class="why">«у 2 рази більший» — це дві однакові частини x проти однієї</p>
+      <p class="note">Рахуй від тієї вершини, яку назвала умова: від цього залежить, котра частина 2x.</p>
     </article>
 
   </div>
@@ -412,5 +462,26 @@ footer{color:var(--muted);font-size:.9rem}
 </div>
 
 
+<script>
+// Moving H (and C with it) shows that BC follows AH: the same 3x split the other way gives other bases.
+(function(){
+  const card=document.getElementById('ratio'), $=id=>document.getElementById(id);
+  const A=20, D=220;
+  function set(k){
+    const big=k>1, h=A+(D-A)*(big?2:1)/3, mid=(A+h)/2, a=big?'2x':'x', d=big?'x':'2x';
+    $('ratio-rect').setAttribute('points',`${A},120 ${A},40 ${h},40 ${h},120`);
+    $('ratio-trap').setAttribute('points',`${A},120 ${A},40 ${h},40 ${D},120`);
+    for(const id of ['ratio-h']){$(id).setAttribute('x1',h);$(id).setAttribute('x2',h)}
+    $('ratio-ah').setAttribute('x2',h);$('ratio-hd').setAttribute('x1',h);
+    $('ratio-bc').setAttribute('x',mid-8);$('ratio-tah').setAttribute('x',mid-8);$('ratio-thd').setAttribute('x',(h+D)/2-8);
+    $('ratio-bc').textContent=a;$('ratio-tah').textContent=a;$('ratio-thd').textContent=d;
+    $('ratio-c').setAttribute('x',h+3);$('ratio-vh').setAttribute('x',h-5);
+    $('ratio-rule').innerHTML=`AH = ${a},&nbsp; HD = ${d},&nbsp; AD = 3x,&nbsp; BC = ${a}`;
+    card.querySelectorAll('.chip').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.k===k)));
+  }
+  card.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>set(+b.dataset.k)));
+  set(2);
+})();
+</script>
 </body>
 </html>
