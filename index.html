@@ -2,7 +2,7 @@
 <html lang="uk">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <title>Математика по темах</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -60,7 +60,7 @@ button:focus-visible,.search:focus-visible,a:focus-visible,.stn:focus-visible{ou
 .mcard .desc{color:var(--muted);font-size:14px;line-height:1.45}
 
 /* map view: a pannable, zoomable sheet */
-.mapbox{position:relative;height:min(72vh,640px);border:1px solid var(--line);border-radius:8px;background:var(--paper);overflow:hidden;touch-action:none;cursor:grab;user-select:none}
+.mapbox{position:relative;height:min(72vh,640px);border:1px solid var(--line);border-radius:8px;background:var(--paper);overflow:hidden;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
 .mapbox.drag{cursor:grabbing}
 .mapbox svg{display:block;width:100%;height:100%}
 .zoom{position:absolute;right:8px;top:8px;display:flex;flex-direction:column;gap:6px}
@@ -70,13 +70,13 @@ button:focus-visible,.search:focus-visible,a:focus-visible,.stn:focus-visible{ou
 /* the map opens on the whole screen; the controls float over it (docs/internals/menu.md) */
 body.mapmode{overflow:hidden}
 body.mapmode .site-bar,body.mapmode header,body.mapmode footer,body.mapmode .maphint{display:none}
-body.mapmode #controls{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;flex-direction:column;gap:8px;padding:10px 12px;background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+body.mapmode #controls{position:fixed;top:0;left:0;right:0;z-index:10;display:flex;flex-direction:column;gap:8px;padding:max(10px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) 10px max(12px,env(safe-area-inset-left,0px));background:color-mix(in srgb,var(--paper) 86%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
 /* the map shows every grade down the screen already, so the grade buttons stay with the cards */
 body.mapmode #grades{display:none}
 body.mapmode #mapView{position:fixed;inset:0;z-index:5;background:var(--paper)}
 body.mapmode .mapbox{height:100%;border:0;border-radius:0}
-body.mapmode .zoom{top:auto;bottom:16px;right:12px}
-body.mapmode .legend{position:fixed;left:12px;bottom:12px;z-index:9;max-width:calc(100% - 90px);margin:0;padding:6px 9px;border-radius:8px;background:color-mix(in srgb,var(--paper) 86%,transparent);border:1px solid var(--line)}
+body.mapmode .zoom{top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));right:max(12px,env(safe-area-inset-right,0px))}
+body.mapmode .legend{position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9;max-width:calc(100% - 90px);margin:0;padding:6px 9px;border-radius:8px;background:color-mix(in srgb,var(--paper) 86%,transparent);border:1px solid var(--line)}
 /* the station card is a bottom sheet, as in a maps app: folded it shows the name and «Відкрити», pulled up the
    whole card, swiped down it closes */
 body.mapmode #station:not(:empty){position:fixed;left:0;right:0;bottom:0;z-index:11;max-height:80vh;overflow:auto;padding:0 10px calc(10px + env(safe-area-inset-bottom,0px));background:var(--paper);box-shadow:0 -6px 18px rgba(0,0,0,.12);border-top:1px solid var(--line);border-radius:14px 14px 0 0;transition:transform .22s ease}
@@ -92,6 +92,13 @@ body.mapmode #station .scard{max-width:720px;margin:0 auto}
 .scard .close{position:absolute;top:6px;right:6px;width:36px;height:36px;border:0;border-radius:50%;background:transparent;color:var(--muted);font:700 22px var(--font-body);cursor:pointer}
 .legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px;color:var(--muted);margin:6px 0}
 .legend span{display:inline-flex;align-items:center;gap:5px}
+.legend .ltoggle{display:none}
+/* on the map the legend folds into one button: four rows of it would cover the lines on a phone */
+body.mapmode .legend .ltoggle{display:inline-flex;align-items:center;gap:6px;height:32px;border:0;background:transparent;color:var(--ink);font:600 13px var(--font-body);padding:0 4px;cursor:pointer}
+body.mapmode .legend .ltoggle::after{content:"▴";font-size:11px;color:var(--muted)}
+body.mapmode .legend.open .ltoggle::after{content:"▾"}
+body.mapmode .legend:not(.open) span{display:none}
+body.mapmode .legend.open .ltoggle{width:100%;justify-content:space-between}
 .legend b{display:inline-block;width:18px;height:6px;border-radius:3px;background:var(--c)}
 .legend .hubdot{display:inline-block;width:12px;height:12px;border-radius:50%;border:3px solid var(--ink);background:var(--paper)}
 .legend .exitdot{display:inline-block;width:20px;height:12px;border-radius:6px;border:2px dashed var(--orange);background:var(--sheet)}
@@ -512,7 +519,9 @@ footer a{color:inherit}
         `<circle cx="${p.x}" cy="${p.y}" r="${hub?13:9}" stroke="${hub?'var(--ink)':c.c}"/>`+
         `<text x="${b.x1+2}" y="${b.y1+11}">${b.L.map((l,k)=>`<tspan x="${b.x1+2}" dy="${k?14:0}">${esc(l)}</tspan>`).join('')}</text></g>`;});
     $('cam').innerHTML=g;
-    $('legend').innerHTML=lines.map(l=>`<span style="--c:${l.t.c}"><b></b>${esc(l.t.title)}</span>`).join('')+'<span><i class="hubdot"></i>пересадка</span>'+(exits.length?'<span><i class="exitdot"></i>корисний сайт ↗</span>':'');
+    const lg=$('legend');if(!lg.dataset.init){lg.dataset.init=1;lg.classList.toggle('open',innerWidth>=700);}
+    $('legend').innerHTML=`<button type="button" class="ltoggle" aria-expanded="${lg.classList.contains('open')}">Лінії</button>`+lines.map(l=>`<span style="--c:${l.t.c}"><b></b>${esc(l.t.title)}</span>`).join('')+'<span><i class="hubdot"></i>пересадка</span>'+(exits.length?'<span><i class="exitdot"></i>корисний сайт ↗</span>':'');
+    lg.querySelector('.ltoggle').onclick=()=>{lg.classList.toggle('open');lg.querySelector('.ltoggle').setAttribute('aria-expanded',lg.classList.contains('open'));};
     $('cam').querySelectorAll('.stn').forEach(s=>s.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(s.dataset.h);}});
     let card='';
     if(pick){const c=all.find(x=>x.abs===pick);const depth={};const dp=h=>{if(h in depth)return depth[h];depth[h]=0;const ns=upstream(h);depth[h]=ns.length?1+Math.max(...ns.map(dp)):0;return depth[h];};
@@ -566,7 +575,7 @@ footer a{color:inherit}
   function zoomAt(k,px,py){const nk=clampK(k);cam.x=px-(px-cam.x)*nk/cam.k;cam.y=py-(py-cam.y)*nk/cam.k;cam.k=nk;apply();}
   function fit(all){const r=box.getBoundingClientRect(),B=built.bounds,bw=B.x2-B.x1+24,bh=B.y2-B.y1+24,mapmode=document.body.classList.contains('mapmode');
     const top=mapmode?$('controls').offsetHeight:0,bottom=mapmode?$('legend').offsetHeight+16:0,h=r.height-top-bottom;
-    const k=clampK(all?Math.min(r.width/bw,h/bh):Math.max(Math.min(r.width/bw,h/bh),0.8));
+    const k=clampK(all?Math.min(r.width/bw,h/bh):Math.max(Math.min(r.width/bw,h/bh),r.width<700?1:0.8));
     // always centred across; down the screen centred when it fits, otherwise from the first grade
     cam.k=k;cam.x=(r.width-bw*k)/2-(B.x1-12)*k;cam.y=top+(bh*k<=h?(h-bh*k)/2:8)-(B.y1-12)*k;apply();}
   /* touch, as in a maps app: one finger pans and keeps gliding after a flick; two fingers pinch; a double tap
