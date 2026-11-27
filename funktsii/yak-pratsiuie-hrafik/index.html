@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Як працює графік функції</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/lesson.css">
+<script src="/assets/theme.js"></script>
+<style>
+/* marks of this page (docs/internals/colours.md): x, what we put in — mark-1; y and the graph — mark-3 */
+.cx{color:var(--mark-1);font-weight:700}
+.cy{color:var(--mark-3);font-weight:700}
+.pair{font:700 30px var(--font-mono);margin:10px 0 4px}
+/* a step line is a whole computation, so it is set smaller than an expression of the model page */
+#deriv .ln{font-size:16px;padding:5px 0}
+.plot{display:block;width:100%;max-width:420px;height:auto;margin:10px auto 0;user-select:none;-webkit-user-select:none}
+.plot .gl{stroke:var(--grid);stroke-width:1}
+.plot .ax{stroke:var(--ink-soft);stroke-width:1.5}
+.plot .ah{fill:var(--ink-soft)}
+.plot .al{font:italic 600 14px var(--font-body);fill:var(--ink-soft);text-anchor:middle;dominant-baseline:central}
+.plot .tk{font:500 10.5px var(--font-mono);fill:var(--ink-soft);dominant-baseline:central}
+.plot .cv{fill:none;stroke:var(--mark-3);stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+.plot .ch{fill:none;stroke:var(--ink-soft);stroke-width:2;stroke-dasharray:6 4;stroke-linejoin:round}
+.plot .pj{stroke:var(--mark-1);stroke-width:1.5;stroke-dasharray:4 3}
+.plot .pjy{stroke:var(--mark-3);stroke-width:1.5;stroke-dasharray:4 3}
+.plot .lv{stroke:var(--mark-3);stroke-width:2;stroke-dasharray:7 4}
+.plot .pt{fill:var(--mark-3);stroke:var(--card);stroke-width:2}
+.plot .now{fill:var(--mark-3);stroke:var(--card);stroke-width:2.5}
+.plot .own{fill:var(--card);stroke:var(--mark-3);stroke-width:3}
+.plot .px{fill:var(--mark-1);stroke:var(--card);stroke-width:2}
+.plot .po{fill:var(--card);stroke:var(--ink);stroke-width:2}
+.ctl{display:flex;align-items:center;gap:10px;font:600 15px var(--font-mono);margin:10px 0}
+.ctl span{min-width:7ch}
+.ctl input{flex:1;min-width:0;accent-color:var(--pen);height:28px}
+.found{font-size:16px;margin:6px 0}
+summary::after{content:"  — так чи ні?";font:400 13px var(--font-body);color:var(--ink-soft)}
+details[open] summary::after{content:""}
+details.q summary::after{content:""}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+
+<header>
+  <h1>Як працює графік функції</h1>
+  <p class="sub">Графік — це не малюнок «на око»: кожна його точка обчислена. Тут видно, як із правила виходять точки, а з точок — лінія.</p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <i>координатна площина, 6 клас</i> <i>дії з відʼємними числами, 6 клас</i> <a href="/rivniannia/totozhni-peretvorennia/">Тотожні перетворення</a></p>
+</header>
+
+<section>
+  <h2><span class="num">1</span>Правило й пара чисел</h2>
+  <p><b>Функція</b> — правило, яке кожному числу дає рівно одне число.</p>
+  <p><span class="cx">x</span> — те, що ти підставляєш. Його вибираєш сам.<br>
+     <span class="cy">y</span> — те, що виходить за правилом. Його обчислюєш.</p>
+  <p>Кожна пара — це точка на площині: першим завжди йде <span class="cx">x</span>, другим <span class="cy">y</span>.</p>
+  <div class="pair">(<span class="cx">x</span>; <span class="cy">y</span>)</div>
+  <p class="muted">Синє на цій сторінці — завжди x, зелене — завжди y і сам графік.</p>
+</section>
+
+<section>
+  <h2><span class="num">2</span>Від правила до графіка</h2>
+  <p>Обери правило й підставляй x по одному.</p>
+  <div id="pick"></div>
+  <svg class="plot" id="plot" aria-hidden="true"></svg>
+  <div class="row">
+    <button class="btn main" type="button" id="next">Підставити x →</button>
+    <button class="btn" type="button" id="reset">Згорнути назад</button>
+  </div>
+  <div class="deriv" id="deriv" aria-live="polite"></div>
+  <div class="custom" style="margin-top:14px">
+    <label for="own">підстав свій x:</label>
+    <input id="own" type="text" inputmode="decimal" maxlength="8" autocomplete="off" spellcheck="false" placeholder="напр. 1,5 або −4">
+  </div>
+  <div class="hint" id="ownOut" aria-live="polite"></div>
+</section>
+
+<section>
+  <h2><span class="num">3</span>Де помиляються</h2>
+  <p>Перша пастка: переплутати, яке число в парі x, а яке y. Чи лежить точка на графіку y = 2x − 1?</p>
+  <div id="pit1"></div>
+  <p style="margin-top:16px">Друга: зʼєднати точки відрізками, ніби це ламана. Графік y = x² через ті самі пʼять точок:</p>
+  <div class="pit" id="pit2">
+    <div class="pit-head"><span class="expr">y = x²</span><button type="button" class="switch" aria-pressed="false"></button></div>
+    <svg class="plot" id="plot2" aria-hidden="true"></svg>
+    <p class="why"></p>
+  </div>
+  <div class="warn"><b>Звідси правило:</b> у парі (x; y) першим іде x. Щоб перевірити точку, підстав її x у правило: вийшов її y — точка на графіку, ні — не на ньому. А зʼєднуй плавно: між точками теж є x, і кожен дає свою точку.</div>
+</section>
+
+<section>
+  <h2><span class="num">4</span>Навіщо це: графік відповідає й навпаки</h2>
+  <p>Правило дає y за x. А графік показує й зворотне: при якому x вийде потрібний y. Проведи пряму на висоті y і дивись, де вона перетинає графік y = x².</p>
+  <label class="ctl"><span class="cy" id="cOut"></span><input type="range" id="c" min="-2" max="6" step="1" value="4" aria-label="Значення y"></label>
+  <svg class="plot" id="plot3" aria-hidden="true"></svg>
+  <p class="found" id="found" aria-live="polite"></p>
+  <p class="muted">Так графіком розвʼязують рівняння: кожна точка перетину дає корінь.</p>
+</section>
+
+<section>
+  <h2><span class="num">5</span>Перевір себе</h2>
+  <p class="muted">Спершу підстав сам. Потім відкривай.</p>
+  <details><summary>A(2; 3) і y = 2x − 1</summary><div class="ans">Підставляємо x = 2: <span class="m">y = 2·2 − 1 = 3</span>. Вийшов y точки, тож <b>так</b>, лежить.</div></details>
+  <details><summary>B(−1; 1) і y = x²</summary><div class="ans">Підставляємо x = −1: <span class="m">y = (−1)² = 1</span>. <b>Так</b>, лежить.</div></details>
+  <details><summary>C(−2; 3) і y = 6/x</summary><div class="ans">Підставляємо x = −2: <span class="m">y = 6 : (−2) = −3</span>, а в точки y = 3. <b>Ні</b>, не лежить: на графіку є (−2; −3).</div></details>
+  <details><summary>D(5; 3) і y = 3</summary><div class="ans">Тут y дорівнює 3 при будь-якому x. <b>Так</b>, лежить.</div></details>
+  <details class="q"><summary>Де y = −3x + 6 перетинає осі?</summary><div class="ans">Вісь y — там, де x = 0: <span class="m">y = −3·0 + 6 = 6</span>, точка (0; 6).<br>Вісь x — там, де y = 0: <span class="m">−3x + 6 = 0, x = 2</span>, точка (2; 0).</div></details>
+</section>
+
+<div class="rule">
+  <b>Коротко:</b><br>
+  Функція — правило: кожен x дає один y.<br>
+  Пара (x; y) — точка; першим іде x.<br>
+  Графік — усі такі точки разом. Їх безліч, тому вони зливаються в лінію.<br>
+  Точка лежить на графіку, якщо її x, підставлений у правило, дає її y.<br><br>
+  Далі: як виглядають графіки прямої, параболи, гіперболи, кореня й інших функцій і як їх зсувати — <a href="../hrafiky/">шпаргалка «Графіки функцій»</a>.
+</div>
+
+</div>
+<script src="/assets/lesson.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg', M=L.MINUS;
+const fmt=v=>L.fmt(v===0?0:v), par=v=>v<0?`(${fmt(v)})`:fmt(v);
+const X_=t=>`<span class="cx">${t}</span>`, Y_=t=>`<span class="cy">${t}</span>`;
+function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;parent&&parent.appendChild(e);return e}
+
+/* a plot with numbers along the bottom and left edges, outside the grid: a curve or a point
+   inside never runs over them */
+function plot(svg,{xmin,xmax,ymin,ymax,U,step=1}){
+  const lab=v=>Math.abs(v-Math.round(v))<1e-9;   // numbers only on whole values: half-cell labels collide
+  const L0=26,T0=18,W=(xmax-xmin)*U,H=(ymax-ymin)*U;
+  svg.setAttribute('viewBox',`0 0 ${L0+W+20} ${T0+H+22}`);svg.replaceChildren();
+  const X=x=>L0+(x-xmin)*U, Y=y=>T0+(ymax-y)*U, id='c'+svg.id;
+  const cp=el('clipPath',{id},el('defs',{},svg));el('rect',{x:L0,y:T0,width:W,height:H},cp);
+  const b=el('g',{},svg);
+  for(let x=Math.ceil(xmin/step)*step;x<=xmax+1e-9;x+=step){el('line',{x1:X(x),y1:T0,x2:X(x),y2:T0+H,class:'gl'},b);if(lab(x))el('text',{x:X(x),y:T0+H+11,class:'tk','text-anchor':'middle'},b,fmt(Math.round(x)))}
+  for(let y=Math.ceil(ymin/step)*step;y<=ymax+1e-9;y+=step){el('line',{x1:L0,y1:Y(y),x2:L0+W,y2:Y(y),class:'gl'},b);if(lab(y))el('text',{x:L0-5,y:Y(y),class:'tk','text-anchor':'end'},b,fmt(Math.round(y)))}
+  el('line',{x1:L0,y1:Y(0),x2:L0+W+4,y2:Y(0),class:'ax'},b);el('line',{x1:X(0),y1:T0+H,x2:X(0),y2:T0-4,class:'ax'},b);
+  el('path',{d:`M${L0+W+10} ${Y(0)}l-7 -4v8z`,class:'ah'},b);el('path',{d:`M${X(0)} ${T0-10}l-4 7h8z`,class:'ah'},b);
+  el('text',{x:L0+W+13,y:Y(0)+12,class:'al'},b,'x');el('text',{x:X(0)+11,y:T0-9,class:'al'},b,'y');
+  const g=el('g',{'clip-path':`url(#${id})`},svg),top=el('g',{},svg);
+  const inside=(x,y)=>isFinite(y)&&x>=xmin-1e-9&&x<=xmax+1e-9&&y>=ymin-1e-9&&y<=ymax+1e-9;
+  return {
+    g,top,inside,
+    curve(f,cls,breaks=[]){let d='',pen=false,px=null;
+      for(let x=xmin-.5;x<=xmax+.5;x+=.01){const y=f(x),cross=px!==null&&breaks.some(q=>(px-q)*(x-q)<=0);px=x;
+        if(!isFinite(y)||Math.abs(y)>60||cross){pen=false;continue}
+        d+=(pen?'L':'M')+X(x).toFixed(1)+' '+Y(y).toFixed(1);pen=true}
+      el('path',{d,class:cls},g)},
+    poly(pts,cls){el('polyline',{points:pts.map(([x,y])=>X(x)+','+Y(y)).join(' '),class:cls},g)},
+    seg(x1,y1,x2,y2,cls){el('line',{x1:X(x1),y1:Y(y1),x2:X(x2),y2:Y(y2),class:cls},g)},
+    dot(x,y,cls,r=5){if(inside(x,y))el('circle',{cx:X(x),cy:Y(y),r,class:cls},top)},
+    // the dashed way to a point: along x first, then up or down to y
+    feet(x,y){if(!inside(x,y))return;el('line',{x1:X(0),y1:Y(0),x2:X(x),y2:Y(0),class:'pj'},g);el('line',{x1:X(x),y1:Y(0),x2:X(x),y2:Y(y),class:'pjy'},g)}
+  };
+}
+const cells=n=>`${fmt(Math.abs(n))} ${L.plural(Math.abs(n),'клітинку','клітинки','клітинок')}`;
+const isInt=v=>Math.abs(v-Math.round(v))<1e-9;
+function way(x,y){
+  const a=x===0?'по x нікуди не йдемо':`${cells(x)} ${x>0?'вправо':'вліво'}`;
+  const b=y===0?'по y нікуди не йдемо':`${cells(y)} ${y>0?'вгору':'вниз'}`;
+  return isInt(x)&&isInt(y)?`від початку координат ${a}, потім ${b}`:`від початку координат ${a}, потім ${b} (частина клітинки — на око)`;
+}
+
+/* ---------- 2: the main derivation ---------- */
+const DIV0=L.beyond('У вищій математиці ділення на нуль зазвичай дає нескінченність: чим ближче x до нуля, тим більший y. Школа з нескінченністю як з числом не працює, тому точки тут немає.','https://en.wikipedia.org/wiki/Division_by_zero','Division by zero, англійською','en');
+const FN=[
+  {sub:'пряма',label:'y = 2x − 1',f:x=>2*x-1,xs:[-2,-1,0,1,2,3],calc:x=>`2·${par(x)} − 1`,rule:'візьми x, помнож на 2 і відніми 1',
+   end:'Точки лягли на одну пряму. Між ними теж є x — 0,5, 1,25 і будь-які інші, — і кожен дає свою точку. Таких точок безліч, тож вони зливаються в суцільну лінію: це і є графік. Для прямої вистачає двох точок і лінійки.'},
+  {sub:'квадрат',label:'y = x²',f:x=>x*x,xs:[-2,-1,0,1,2],calc:x=>`${par(x)}²`,rule:'візьми x і помнож його сам на себе',
+   end:'Ці точки не лежать на одній прямій. Між ними теж є x, і кожен дає свою точку, тому зʼєднуємо плавною кривою, а не відрізками. Ця крива — парабола.'},
+  {sub:'ділення',label:'y = 6/x',f:x=>6/x,xs:[-3,-2,-1,0,1,2,3],calc:x=>`6 : ${par(x)}`,rule:'поділи 6 на x',breaks:[0],
+   end:'Між точками теж є x, і кожен дає точку, — крім нуля. Тому графік розпадається на дві окремі гілки, і вісь y жодна з них не перетинає. Ця крива — гіпербола.'},
+  {sub:'стала',label:'y = 3',f:()=>3,xs:[-2,0,2],calc:null,rule:'хоч який x, y завжди 3',
+   end:'y не залежить від x: усі точки на висоті 3, і так при кожному x. Графік — горизонтальна пряма.'}
+];
+let fi=0, stage=1, own=null;
+function stages(){
+  const F=FN[fi],S=[{lines:[F.label],text:`Правило: ${F.rule}. Підставлятимемо ${X_('x')} по черзі й дивитимемось, який ${Y_('y')} виходить.`}];
+  F.xs.forEach((x,i)=>{
+    if(F.breaks&&x===0){S.push({lines:[`${X_('x = 0')}: y = 6 : 0`],text:'На нуль ділити не можна: немає числа, яке після множення на 0 дасть 6. Тому при x = 0 точки немає.',beyond:DIV0});return}
+    const y=F.f(x);
+    S.push({lines:[`${X_('x = '+fmt(x))}: y = ${F.calc?F.calc(x)+' = ':''}${Y_(fmt(y))}`],
+      text:`Пара (${X_(fmt(x))}; ${Y_(fmt(y))}) — точка: ${way(x,y)}.`+(i===0?' Першим у парі завжди йде x.':'')});
+  });
+  S.push({lines:[],text:F.end});
+  return S;
+}
+const D=L.derivation({box:$('deriv'),next:$('next'),reset:$('reset'),stages,first:'Підставити x →',more:'Наступний x →',mark:''});
+// L.derivation keeps its stage to itself; the plot follows the same presses
+$('next').addEventListener('click',()=>{stage=Math.min(stage+1,stages().length);drawPlot()});
+$('reset').addEventListener('click',()=>{stage=1;drawPlot()});
+function drawPlot(){
+  const F=FN[fi],P=plot($('plot'),{xmin:-6,xmax:6,ymin:-7,ymax:7,U:20}),n=Math.min(stage-1,F.xs.length);
+  const done=stage>=F.xs.length+2;
+  if(done)P.curve(F.f,'cv',F.breaks||[]);
+  for(let i=0;i<n;i++){const x=F.xs[i],y=F.f(x);if(!isFinite(y))continue;
+    if(i===n-1&&!done){P.feet(x,y);P.dot(x,y,'now',7)}else P.dot(x,y,'pt',5)}
+  if(own&&isFinite(own.y)){P.feet(own.x,own.y);P.dot(own.x,own.y,'own',7)}
+}
+function pick(){L.chips($('pick'),FN.map((F,i)=>({v:i,sub:F.sub,label:F.label})),fi,v=>{fi=v;stage=1;pick();D.toStart();ownRead();drawPlot()})}
+function ownRead(){
+  const raw=$('own').value.trim().replace(/\s+/g,'').replace(/[−–]/g,'-').replace(',','.');
+  const out=$('ownOut');own=null;
+  if(!raw){out.textContent='';return}
+  if(!/^-?\d+(\.\d+)?$/.test(raw)){out.textContent='Тут потрібне число, наприклад 1,5 або −4.';return}
+  const x=parseFloat(raw),F=FN[fi];
+  if(F.breaks&&x===0){own={x,y:NaN};out.innerHTML=`${X_('x = 0')}: на нуль ділити не можна, тож точки немає.`;return}
+  const y=F.f(x),yr=Math.round(y*100)/100,ex=Math.abs(y-yr)<1e-9;
+  own={x,y};
+  out.innerHTML=`${X_('x = '+fmt(x))}: y = ${F.calc?F.calc(x)+(ex?' = ':' ≈ '):''}${Y_(fmt(yr))} → точка (${X_(fmt(x))}; ${Y_(fmt(yr))})`+
+    (Math.abs(x)>6||Math.abs(y)>7?'. Вона за краєм малюнка, але на графіку теж є.':'. На малюнку вона в кільці.');
+}
+$('own').addEventListener('input',()=>{ownRead();drawPlot()});
+pick();D.toStart();drawPlot();
+
+/* ---------- 3: pitfalls ---------- */
+L.contrast($('pit1'),{labelA:'x = 2, y = 3',labelB:'x = 3, y = 2',
+  a:{expr:`(${X_('2')}; ${Y_('3')})`,steps:`y = 2·${X_('2')} − 1 = ${Y_('3')}`,why:'Підставили x = 2 і отримали y = 3 — саме той y, що в точці. Лежить.'},
+  b:{expr:`(${X_('3')}; ${Y_('2')})`,steps:`y = 2·${X_('3')} − 1 = 5 ≠ ${Y_('2')}`,why:'Ті самі числа, але переставлені: тепер x = 3, і за правилом y мав би бути 5. Не лежить.'}});
+
+(function(){
+  const sw=$('pit2').querySelector('.switch'),why=$('pit2').querySelector('.why'),PTS=[-2,-1,0,1,2].map(x=>[x,x*x]);
+  function draw(){
+    const on=sw.getAttribute('aria-pressed')==='true',P=plot($('plot2'),{xmin:-2.5,xmax:2.5,ymin:-.5,ymax:4.5,U:50,step:.5});
+    if(on)P.curve(x=>x*x,'cv');else P.poly(PTS,'ch');
+    PTS.forEach(([x,y])=>P.dot(x,y,'pt',5.5));
+    // the test point x = 1,5: on the curve 2,25, on the chord 2,5
+    P.seg(1.5,0,1.5,on?2.25:2.5,'pj');P.dot(1.5,on?2.25:2.5,on?'now':'po',6);
+    sw.textContent=on?'плавна крива':'ламана';
+    why.innerHTML=on?`При ${X_('x = 1,5')} правило дає y = 1,5² = ${Y_('2,25')} — і крива проходить саме там. Так з кожним x між точками.`:
+      `Візьми ${X_('x = 1,5')} між точками. На відрізку там y = 2,5, а за правилом y = 1,5² = 2,25. Відрізок проходить повз справжню точку.`;
+  }
+  sw.onclick=()=>{sw.setAttribute('aria-pressed',String(sw.getAttribute('aria-pressed')!=='true'));draw()};
+  draw();
+})();
+
+/* ---------- 4: from y back to x ---------- */
+(function(){
+  const c=$('c');
+  function draw(){
+    const v=+c.value,P=plot($('plot3'),{xmin:-4,xmax:4,ymin:-3,ymax:7,U:28});
+    $('cOut').textContent='y = '+fmt(v);
+    P.curve(x=>x*x,'cv');P.seg(-5,v,5,v,'lv');
+    let t;
+    if(v<0)t=`<span class="m">x² = ${fmt(v)}</span>: квадрат не буває відʼємним, тож такого x немає — пряма графіка не торкається.`+L.beyond(`Серед комплексних чисел такий x є: з числом i, у якого i² = −1, маємо x = ±i√${fmt(-v)}. Але точки на площині x, y для нього немає.`,'https://uk.wikipedia.org/wiki/Уявна_одиниця','Уявна одиниця');
+    else if(v===0){P.dot(0,0,'px',6.5);t=`<span class="m">x² = 0</span>: тільки ${X_('x = 0')} — одна точка, вершина.`}
+    else{const r=Math.sqrt(v),ex=isInt(r),s=ex?fmt(r):fmt(Math.round(r*100)/100);
+      [-r,r].forEach(x=>{P.seg(x,0,x,v,'pj');P.dot(x,v,'pt',5.5);P.dot(x,0,'px',6)});
+      t=`<span class="m">x² = ${fmt(v)}</span>: ${X_('x '+(ex?'= ':'≈ ')+M+s)} або ${X_('x '+(ex?'= ':'≈ ')+s)} — дві точки перетину.`+(ex?'':` Точно це ±√${fmt(v)}.`)}
+    $('found').innerHTML=t;
+  }
+  c.addEventListener('input',draw);draw();
+})();
+})();
+</script>
+</body>
+</html>
