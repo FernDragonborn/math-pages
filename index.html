@@ -318,14 +318,14 @@ footer a{color:inherit}
     const minX=Math.min(...allX),minY=Math.min(...allY),X0=70,Y0=40;
     H.forEach(h=>{P[h].x+=X0-minX;P[h].y+=Y0-minY;}); Object.values(EX).forEach(e=>{e.x+=X0-minX;e.y+=Y0-minY;});
     const rowYOf=()=>rows.map((g,ri)=>{const ys=mall.filter(c=>rowOf(c)===ri).map(c=>P[c.abs].y);return ys.length?Math.min(...ys):null;});
-    const LB=placeLabels(P,EX,lines,onLines,rowYOf,G);
+    const {placed:LB,elbow}=placeLabels(P,EX,lines,onLines,rowYOf,G);
     // everything that is drawn, so the camera can centre the real map and not an estimate of it
     const boxes=[...H.map(h=>({x1:P[h].x-14,x2:P[h].x+14,y1:P[h].y-14,y2:P[h].y+14})),...Object.values(LB),...Object.values(EX).map(e=>({x1:e.x,x2:e.x+e.w,y1:e.y-14,y2:e.y+14}))];
     const bounds={x1:Math.min(0,...boxes.map(b=>b.x1)),y1:Math.min(...boxes.map(b=>b.y1))-30,x2:Math.max(...boxes.map(b=>b.x2)),y2:Math.max(...boxes.map(b=>b.y2))};
     const W=bounds.x2+30, Hgt=bounds.y2+30;
     // to ride to a station you pass every station above it on its own line
     const prev={};lines.forEach(l=>{const own=l.seq.filter(h=>byAbs[h].topic===l.t.title);own.forEach((h,i)=>{if(i)prev[h]=own[i-1];});});
-    return {pos:P,lines,onLines,rows,rowY:rowYOf(),W,H:Hgt,EX,LB,bounds,prev};
+    return {pos:P,lines,onLines,rows,rowY:rowYOf(),W,H:Hgt,EX,LB,bounds,prev,elbow};
   }
   // label width as the browser will draw it (the map is built after the fonts are in)
   const measure=(()=>{const cx=document.createElement('canvas').getContext('2d');cx.font='600 12px Onest, "Segoe UI", system-ui, sans-serif';return t=>cx.measureText(t).width;})();
@@ -337,14 +337,24 @@ footer a{color:inherit}
     const byAbs=Object.fromEntries(mall.map(c=>[c.abs,c]));
     const text=h=>{const c=byAbs[h],L=wrapT(c.title,20);if(c.ext)L[L.length-1]+=' ↗';return L;};
     const over=(a,b)=>a.x1<b.x2+PAD&&b.x1<a.x2+PAD&&a.y1<b.y2+PAD&&b.y1<a.y2+PAD;
-    const tries={};let placed={};
+    const tries={},jogs={};let placed={},elbow=[];
+    // a stretch between two stations bends once; it may bend diagonal-first or straight-first, and takes the
+    // one that passes no other station — a line drawn through a station reads as stopping there
+    const dist=(q,A,B)=>{const vx=B.x-A.x,vy=B.y-A.y,t=Math.max(0,Math.min(1,((q.x-A.x)*vx+(q.y-A.y)*vy)/((vx*vx+vy*vy)||1)));return Math.hypot(A.x+t*vx-q.x,A.y+t*vy-q.y);};
     for(let iter=0;iter<60;iter++){
       Object.values(EX).forEach(e=>{if(e.anchor)e.x=P[e.anchor].x-16;});
       const pts=[];   // every line, sampled: a label may not sit on any of it
       const addSeg=(A,B)=>{const n=Math.max(1,Math.ceil(Math.hypot(B.x-A.x,B.y-A.y)/3));for(let i=0;i<=n;i++)pts.push({x:A.x+(B.x-A.x)*i/n,y:A.y+(B.y-A.y)*i/n});};
-      lines.forEach(l=>{const q=l.seq.map(h=>P[h]);
+      let blocker=null;elbow=lines.map(l=>{const q=l.seq.map(h=>P[h]),modes=[];
         if(q.length===1)addSeg({x:q[0].x,y:q[0].y-24},{x:q[0].x,y:q[0].y+24});
-        for(let i=1;i<q.length;i++){const A=q[i-1],B=q[i],dx=B.x-A.x,dy=B.y-A.y,m=Math.min(Math.abs(dx),Math.abs(dy)),M={x:A.x+Math.sign(dx)*m,y:A.y+Math.sign(dy)*m};addSeg(A,M);addSeg(M,B);}});
+        for(let i=1;i<q.length;i++){const A=q[i-1],B=q[i];
+          const hits=mode=>{const M=bend(A,B,mode);return H.filter(h=>h!==l.seq[i-1]&&h!==l.seq[i]&&Math.min(dist(P[h],A,M),dist(P[h],M,B))<R(h)+4);};
+          const hd=hits('dg'),hs=hd.length?hits('st'):[],mode=!hd.length?'dg':!hs.length?'st':'dg';
+          if(hd.length&&hs.length&&!blocker)blocker=hd[0];
+          const M=bend(A,B,mode);addSeg(A,M);addSeg(M,B);modes.push(mode);}
+        return modes;});
+      // no bend misses it: the station in the way steps one grid column to the right, and everything is redone
+      if(blocker&&(jogs[blocker]=(jogs[blocker]||0)+1)<=3){const x0=P[blocker].x;H.forEach(k=>{if(P[k].x>x0||k===blocker)P[k].x+=G;});continue;}
       Object.values(EX).forEach(e=>{if(e.anchor){const a=P[e.anchor];addSeg({x:a.x,y:a.y+12},{x:a.x,y:e.y-14});}});
       const fixed=[...H.map(h=>({h,x1:P[h].x-R(h),x2:P[h].x+R(h),y1:P[h].y-R(h),y2:P[h].y+R(h)})),
         ...Object.values(EX).map(e=>({x1:e.x,x2:e.x+e.w,y1:e.y-14,y2:e.y+14})),
@@ -364,14 +374,16 @@ footer a{color:inherit}
       if(!stuck)break;
       const x0=P[stuck].x;H.forEach(k=>{if(P[k].x>x0)P[k].x+=G;});Object.values(EX).forEach(e=>{if(!e.anchor&&e.x>x0)e.x+=G;});
     }
-    return placed;
+    return {placed,elbow};
   }
   // what lies upstream of a station: what it needs, and the station before it on its own line
   const upstream=h=>[...(needs[h]||[]),...(built.prev[h]?[built.prev[h]]:[])].filter(n=>built.pos[n]);
   const anc=h=>{const out=new Set(),stack=[h];while(stack.length){const x=stack.pop();upstream(x).forEach(n=>{if(!out.has(n)){out.add(n);stack.push(n);}});}return out;};
   const wrapT=(t,n)=>{const w=t.split(' '),L=[];let cur='';w.forEach(x=>{if((cur+' '+x).trim().length>n&&cur){L.push(cur);cur=x;}else cur=(cur+' '+x).trim();});if(cur)L.push(cur);return L.slice(0,3);};
-  // a metro segment: diagonal first, then straight — only 0°, 45° and 90°
-  const seg=(A,B)=>{const dx=B.x-A.x,dy=B.y-A.y,m=Math.min(Math.abs(dx),Math.abs(dy));return `L${A.x+Math.sign(dx)*m} ${A.y+Math.sign(dy)*m} L${B.x} ${B.y}`;};
+  // a metro segment bends once, so it runs only at 0°, 45° and 90°: diagonal first ('dg') or straight first ('st')
+  function bend(A,B,mode){const dx=B.x-A.x,dy=B.y-A.y,m=Math.min(Math.abs(dx),Math.abs(dy));
+    return mode==='st'?{x:B.x-Math.sign(dx)*m,y:B.y-Math.sign(dy)*m}:{x:A.x+Math.sign(dx)*m,y:A.y+Math.sign(dy)*m};}
+  const seg=(A,B,mode='dg')=>{const M=bend(A,B,mode);return `L${M.x} ${M.y} L${B.x} ${B.y}`;};
   function drawMap(){
     const {pos,lines,onLines,rows,rowY,W,H,EX}=built;
     const route=pick?new Set([pick,...anc(pick)]):null, match=new Set(mall.filter(pass).map(c=>c.abs)), filtering=st.sel.length||query;
@@ -381,12 +393,12 @@ footer a{color:inherit}
     lines.forEach((l,li)=>{const pts=l.seq.map(h=>pos[h]);const on=!route||l.seq.filter(h=>route.has(h)).length>=2||(l.seq.length===1&&route.has(l.seq[0]));
       // lines that share a stretch sit side by side, a few pixels apart, as on a printed map
       const o=(li-(lines.length-1)/2)*3;
-      const d=pts.length>1?`M${pts[0].x+o} ${pts[0].y}`+pts.slice(1).map((p,i)=>seg({x:pts[i].x+o,y:pts[i].y},{x:p.x+o,y:p.y})).join(''):`M${pts[0].x} ${pts[0].y-24} L${pts[0].x} ${pts[0].y+24}`;
+      const d=pts.length>1?`M${pts[0].x+o} ${pts[0].y}`+pts.slice(1).map((p,i)=>seg({x:pts[i].x+o,y:pts[i].y},{x:p.x+o,y:p.y},built.elbow[li][i])).join(''):`M${pts[0].x} ${pts[0].y-24} L${pts[0].x} ${pts[0].y+24}`;
       // with a route picked, the line stays faint and only the stretches between route stations light up
       if(!route||l.seq.length===1){g+=`<path class="ln${on?'':' dim'}" stroke="${l.t.c}" d="${d}"/>`;return;}
       g+=`<path class="ln dim" stroke="${l.t.c}" d="${d}"/>`;
       for(let i=1;i<pts.length;i++)if(route.has(l.seq[i-1])&&route.has(l.seq[i]))
-        g+=`<path class="ln" stroke="${l.t.c}" d="M${pts[i-1].x+o} ${pts[i-1].y}${seg({x:pts[i-1].x+o,y:pts[i-1].y},{x:pts[i].x+o,y:pts[i].y})}"/>`;});
+        g+=`<path class="ln" stroke="${l.t.c}" d="M${pts[i-1].x+o} ${pts[i-1].y}${seg({x:pts[i-1].x+o,y:pts[i-1].y},{x:pts[i].x+o,y:pts[i].y},built.elbow[li][i-1])}"/>`;});
     exits.forEach(c=>{const e=EX[c.abs];if(!e)return;const a=e.anchor&&pos[e.anchor],on=lit(c.abs);
       if(a)g+=`<path class="xl${on?'':' dim'}" d="M${a.x} ${a.y+12} L${a.x} ${e.y-14}"/>`;
       g+=`<g class="stn exit${c.abs===pick?' sel':''}${on?'':' dim'}" data-h="${c.abs}" tabindex="0" role="button" aria-label="${esc(c.title)} — сторонній сайт">`+
