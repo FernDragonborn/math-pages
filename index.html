@@ -356,10 +356,12 @@ footer a{color:inherit}
           const hits=mode=>{const M=bend(A,B,mode);return H.filter(h=>h!==l.seq[i-1]&&h!==l.seq[i]&&Math.min(dist(P[h],A,M),dist(P[h],M,B))<R(h)+4);};
           const hd=hits('dg'),hs=hd.length?hits('st'):[],mode=!hd.length?'dg':!hs.length?'st':'dg';
           if(hd.length&&hs.length&&!blocker)blocker=hd[0];
-          const M=bend(A,B,mode);addSeg(A,M);addSeg(M,B);modes.push(mode);}
+          modes.push(mode);}
         return modes;});
-      // no bend misses it: the station in the way steps one grid column to the right, and everything is redone
-      if(blocker&&(jogs[blocker]=(jogs[blocker]||0)+1)<=3){const x0=P[blocker].x;H.forEach(k=>{if(P[k].x>x0||k===blocker)P[k].x+=G;});continue;}
+      // no bend misses it: the station in the way — only it — steps right to the next free grid cell; moving
+      // everything right of it too would carry the line along and change nothing
+      if(blocker&&(jogs[blocker]=(jogs[blocker]||0)+1)<=4){const p=P[blocker];let nx=p.x+G;while(H.some(k=>k!==blocker&&Math.abs(P[k].x-nx)<1&&Math.abs(P[k].y-p.y)<G))nx+=G;p.x=nx;continue;}
+      lanes(lines,P,elbow).forEach(L=>{if(L)for(let i=1;i<L.V.length;i++)addSeg(L.V[i-1],L.V[i]);});
       Object.values(EX).forEach(e=>{if(e.anchor){const a=P[e.anchor];addSeg({x:a.x,y:a.y+12},{x:a.x,y:e.y-14});}});
       const fixed=[...H.map(h=>({h,x1:P[h].x-R(h),x2:P[h].x+R(h),y1:P[h].y-R(h),y2:P[h].y+R(h)})),
         ...Object.values(EX).map(e=>({x1:e.x,x2:e.x+e.w,y1:e.y-14,y2:e.y+14})),
@@ -389,21 +391,54 @@ footer a{color:inherit}
   function bend(A,B,mode){const dx=B.x-A.x,dy=B.y-A.y,m=Math.min(Math.abs(dx),Math.abs(dy));
     return mode==='st'?{x:B.x-Math.sign(dx)*m,y:B.y-Math.sign(dy)*m}:{x:A.x+Math.sign(dx)*m,y:A.y+Math.sign(dy)*m};}
   const seg=(A,B,mode='dg')=>{const M=bend(A,B,mode);return `L${M.x} ${M.y} L${B.x} ${B.y}`;};
+  /* lines that share a corridor run side by side, as on a printed metro map: every straight piece of a line
+     that lies on one straight with a piece of another line and overlaps it gets its own lane, SP apart
+     (a line is 7 px wide). Corners are where the shifted straights meet; a lane change on a straight run is
+     a short step sideways. Returns per line the vertices V and, per stretch between two stations, where it
+     starts and ends in V — the route lights those stretches */
+  const SP=8;
+  function lanes(lines,P,elbow){
+    const E=[];
+    lines.forEach((l,li)=>{for(let i=1;i<l.seq.length;i++){const A=P[l.seq[i-1]],B=P[l.seq[i]],M=bend(A,B,elbow[li][i-1]);
+      [[A,M],[M,B]].forEach(([u,v])=>{if(Math.hypot(v.x-u.x,v.y-u.y)<.5)return;
+        let cx=Math.sign(v.x-u.x),cy=Math.sign(v.y-u.y);const dx=cx,dy=cy;if(cx<0||(cx===0&&cy<0)){cx=-cx;cy=-cy;}
+        const key=cx===0?'v'+Math.round(u.x):cy===0?'h'+Math.round(u.y):cy===cx?'d'+Math.round(u.y-u.x):'a'+Math.round(u.y+u.x);
+        const t=p=>cx!==0?p.x:p.y;E.push({li,s:i-1,u,v,dx,dy,cx,cy,key,lo:Math.min(t(u),t(v)),hi:Math.max(t(u),t(v)),o:0});});}});
+    const groups={};E.forEach(e=>(groups[e.key]=groups[e.key]||[]).push(e));
+    Object.values(groups).forEach(G=>{const par=G.map((_,i)=>i),find=i=>par[i]===i?i:(par[i]=find(par[i]));
+      for(let i=0;i<G.length;i++)for(let j=i+1;j<G.length;j++)if(G[i].li!==G[j].li&&Math.min(G[i].hi,G[j].hi)-Math.max(G[i].lo,G[j].lo)>2)par[find(i)]=find(j);
+      const comp={};G.forEach((e,i)=>(comp[find(i)]=comp[find(i)]||[]).push(e));
+      Object.values(comp).forEach(C=>{const ls=[...new Set(C.map(e=>e.li))].sort((a,b)=>a-b);if(ls.length>1)C.forEach(e=>e.o=(ls.indexOf(e.li)-(ls.length-1)/2)*SP);});});
+    const off=e=>{const n=Math.hypot(e.cx,e.cy);return {x:-e.cy/n*e.o,y:e.cx/n*e.o};};
+    const plus=(p,v)=>({x:p.x+v.x,y:p.y+v.y});
+    const meet=(p,d,q,e)=>{const den=d.x*e.y-d.y*e.x;if(Math.abs(den)<1e-9)return null;const t=((q.x-p.x)*e.y-(q.y-p.y)*e.x)/den;return {x:p.x+t*d.x,y:p.y+t*d.y};};
+    return lines.map((l,li)=>{const es=E.filter(e=>e.li===li);if(!es.length)return null;
+      const V=[plus(es[0].u,off(es[0]))],start=[],end=[];start[es[0].s]=0;
+      for(let k=0;k<es.length;k++){const e=es[k],a=off(e),nx=es[k+1];
+        if(!nx){V.push(plus(e.v,a));end[e.s]=V.length-1;break;}
+        const b=off(nx),turn=nx.s!==e.s;
+        if(e.dx===nx.dx&&e.dy===nx.dy){
+          if(Math.hypot(a.x-b.x,a.y-b.y)<.1){if(turn){V.push(plus(e.v,a));end[e.s]=start[nx.s]=V.length-1;}}
+          else{V.push(plus(e.v,a));end[e.s]=V.length-1;V.push(plus(nx.u,b));if(turn)start[nx.s]=V.length-1;}
+        }else{const X=meet(plus(e.u,a),{x:e.dx,y:e.dy},plus(nx.u,b),{x:nx.dx,y:nx.dy})||plus(e.v,a);V.push(X);if(turn)end[e.s]=start[nx.s]=V.length-1;}
+      }
+      return {V,start,end};});
+  }
+  const pathOf=(V,i=0,j=V.length-1)=>'M'+V.slice(i,j+1).map(p=>`${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' L');
   function drawMap(){
     const {pos,lines,onLines,rows,rowY,W,H,EX}=built;
     const route=pick?new Set([pick,...anc(pick)]):null, match=new Set(mall.filter(pass).map(c=>c.abs)), filtering=st.sel.length||query;
     const lit=h=>route?route.has(h):(filtering?match.has(h):true);
     let g='';
     rows.forEach((r,i)=>{if(rowY[i]==null)return;g+=`<line class="gl" x1="0" y1="${rowY[i]-30}" x2="${W}" y2="${rowY[i]-30}"/><text class="gt" x="6" y="${rowY[i]-14}">${r} кл.</text>`;});
-    lines.forEach((l,li)=>{const pts=l.seq.map(h=>pos[h]);const on=!route||l.seq.filter(h=>route.has(h)).length>=2||(l.seq.length===1&&route.has(l.seq[0]));
-      // lines that share a stretch sit side by side, a few pixels apart, as on a printed map
-      const o=(li-(lines.length-1)/2)*3;
-      const d=pts.length>1?`M${pts[0].x+o} ${pts[0].y}`+pts.slice(1).map((p,i)=>seg({x:pts[i].x+o,y:pts[i].y},{x:p.x+o,y:p.y},built.elbow[li][i])).join(''):`M${pts[0].x} ${pts[0].y-24} L${pts[0].x} ${pts[0].y+24}`;
+    const LG=lanes(lines,pos,built.elbow);
+    lines.forEach((l,li)=>{const pts=l.seq.map(h=>pos[h]),G=LG[li];const on=!route||l.seq.filter(h=>route.has(h)).length>=2||(l.seq.length===1&&route.has(l.seq[0]));
+      const d=G?pathOf(G.V):`M${pts[0].x} ${pts[0].y-24} L${pts[0].x} ${pts[0].y+24}`;
       // with a route picked, the line stays faint and only the stretches between route stations light up
       if(!route||l.seq.length===1){g+=`<path class="ln${on?'':' dim'}" stroke="${l.t.c}" d="${d}"/>`;return;}
       g+=`<path class="ln dim" stroke="${l.t.c}" d="${d}"/>`;
-      for(let i=1;i<pts.length;i++)if(route.has(l.seq[i-1])&&route.has(l.seq[i]))
-        g+=`<path class="ln" stroke="${l.t.c}" d="M${pts[i-1].x+o} ${pts[i-1].y}${seg({x:pts[i-1].x+o,y:pts[i-1].y},{x:pts[i].x+o,y:pts[i].y},built.elbow[li][i-1])}"/>`;});
+      for(let i=1;i<pts.length;i++)if(route.has(l.seq[i-1])&&route.has(l.seq[i])&&G.start[i-1]!=null)
+        g+=`<path class="ln" stroke="${l.t.c}" d="${pathOf(G.V,G.start[i-1],G.end[i-1])}"/>`;});
     exits.forEach(c=>{const e=EX[c.abs];if(!e)return;const a=e.anchor&&pos[e.anchor],on=lit(c.abs);
       if(a)g+=`<path class="xl${on?'':' dim'}" d="M${a.x} ${a.y+12} L${a.x} ${e.y-14}"/>`;
       g+=`<g class="stn exit${c.abs===pick?' sel':''}${on?'':' dim'}" data-h="${c.abs}" tabindex="0" role="button" aria-label="${esc(c.title)} — сторонній сайт">`+
