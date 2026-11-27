@@ -80,6 +80,12 @@ footer{color:var(--ink-soft);font-size:.9rem}
 .pt{fill:var(--mark-3);stroke:var(--card);stroke-width:2}
 .pr{fill:var(--ink);stroke:var(--card);stroke-width:2}
 .all{fill:var(--mark-3-wash);opacity:.6}
+.sol{stroke:var(--mark-1);stroke-width:6;stroke-linecap:butt;opacity:.75}
+.pmo{fill:var(--card);stroke:var(--mark-1);stroke-width:2.5}
+.pmf{fill:var(--mark-1);stroke:var(--card);stroke-width:2}
+.ar{fill:var(--mark-2-wash);stroke:none;opacity:.9}
+.tg{fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round}
+sub,sup{line-height:0}
 .pk{fill:var(--mark-2);stroke:var(--card);stroke-width:2}
 .pn{fill:var(--mark-4);stroke:var(--card);stroke-width:2}
 .pm{fill:var(--mark-1);stroke:var(--card);stroke-width:2}
@@ -96,7 +102,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 <div class="wrap">
 <header>
   <h1>Графіки функцій: <span>усе головне</span></h1>
-  <p class="lead">Шпаргалка з 7 по 11 клас. Одна клітинка на малюнку — одиниця. Зелена точка — x, який ти вибрав, і його y; її можна тягнути.</p>
+  <p class="lead">Шпаргалка з 7 по 11 клас, за програмою Мерзляка. Одна клітинка на малюнку — одиниця, якщо на картці не сказано інше. Зелена точка — x, який ти вибрав, і його y; її можна тягнути.</p>
   <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <i>координатна площина, 6 клас</i> <a href="/funktsii/yak-pratsiuie-hrafik/">Як працює графік функції</a> <a href="/stupeni-i-loharyfmy/shcho-take-stupin/">Що таке ступінь</a> <a href="/stupeni-i-loharyfmy/korin-n-stupenia/">Корінь n-го ступеня</a></p>
 </header>
 
@@ -138,7 +144,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 </section>
 
 <section>
-  <h2>Парабола, гіпербола, корінь<small>8 клас, і ступінь xⁿ з 10 класу.</small></h2>
+  <h2>Парабола, гіпербола, корінь<small>8 клас.</small></h2>
   <div class="grid">
 
     <article class="card" id="c-sq">
@@ -180,30 +186,43 @@ footer{color:var(--ink-soft);font-size:.9rem}
       <p class="note">З малюнка корінь часто видно лише приблизно: перевір його підстановкою.</p>
     </article>
 
-    <article class="card" id="c-pow">
-      <svg aria-hidden="true"></svg>
-      <h3><span class="num">8</span><span data-title>Ступенева функція</span> <span class="f">y = xⁿ</span></h3>
-      <div class="opts" role="group" aria-label="Показник n" data-chips="n"></div>
-      <label class="ctl x"><span data-name="x"></span><input type="range" min="-2" max="2" step="0.5" value="-1.5" data-k="x"></label>
-      <p class="rule" aria-live="polite"></p>
-      <p class="why">у парному ступені мінус зникає, і гілки однакові, як у x²; у непарному мінус лишається, і ліва гілка йде вниз</p>
-    </article>
 
   </div>
 </section>
 
 <section>
-  <h2>Квадратична функція<small>9 клас: y = ax² + bx + c.</small></h2>
+  <h2>Квадратична функція<small>9 клас: y = ax² + bx + c, квадратні нерівності, системи графічно.</small></h2>
   <div class="grid">
 
     <article class="card" id="c-quad">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">9</span>Парабола <span class="f">y = ax² + bx + c</span></h3>
+      <h3><span class="num">8</span>Парабола <span class="f">y = ax² + bx + c</span></h3>
       <label class="ctl k"><span data-name="a"></span><input type="range" min="-2" max="2" step="0.5" value="1" data-k="a"></label>
       <label class="ctl"><span data-name="b"></span><input type="range" min="-4" max="4" step="1" value="-2" data-k="b"></label>
       <label class="ctl n"><span data-name="c"></span><input type="range" min="-4" max="4" step="1" value="-3" data-k="c"></label>
       <p class="rule" aria-live="polite"></p>
       <p class="why">a — куди гілки й наскільки вузька парабола, c — де вона перетинає вісь y, а вершина стоїть на осі симетрії</p>
+    </article>
+
+    <article class="card" id="c-ineq">
+      <svg aria-hidden="true"></svg>
+      <h3><span class="num">9</span>Квадратна нерівність <span class="f">ax² + bx + c &gt; 0</span></h3>
+      <div class="opts" role="group" aria-label="Знак нерівності" data-chips="sg"></div>
+      <label class="ctl k"><span data-name="a"></span><input type="range" min="-2" max="2" step="0.5" value="1" data-k="a"></label>
+      <label class="ctl"><span data-name="b"></span><input type="range" min="-4" max="4" step="1" value="-2" data-k="b"></label>
+      <label class="ctl n"><span data-name="c"></span><input type="range" min="-4" max="4" step="1" value="-3" data-k="c"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">знак виразу — це те, над віссю x парабола чи під нею: потрібні ті x, де вона з потрібного боку; нулі — межі, які входять у відповідь тільки при ≥ і ≤</p>
+    </article>
+
+    <article class="card" id="c-circ">
+      <svg aria-hidden="true"></svg>
+      <h3><span class="num">10</span>Коло й пряма <span class="f">x² + y² = r²</span></h3>
+      <label class="ctl"><span data-name="r"></span><input type="range" min="1" max="5" step="1" value="5" data-k="r"></label>
+      <label class="ctl"><span data-name="k"></span><input type="range" min="-2" max="2" step="0.5" value="1" data-k="k"></label>
+      <label class="ctl"><span data-name="b"></span><input type="range" min="-5" max="5" step="1" value="1" data-k="b"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">коло — графік рівняння, а не функції: одному x відповідають два y; спільні точки кола й прямої — розвʼязки системи</p>
     </article>
 
   </div>
@@ -215,7 +234,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-shift">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">10</span>Зсув графіка <span class="f">y = f(x − m) + n</span></h3>
+      <h3><span class="num">11</span>Зсув графіка <span class="f">y = f(x − m) + n</span></h3>
       <div class="opts" role="group" aria-label="Який графік зсуваємо" data-chips="f"></div>
       <label class="ctl m"><span data-name="m"></span><input type="range" min="-4" max="4" step="1" value="2" data-k="m"></label>
       <label class="ctl n"><span data-name="n"></span><input type="range" min="-4" max="4" step="1" value="1" data-k="n"></label>
@@ -225,7 +244,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-scale">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">11</span>Розтяг графіка <span class="f">y = a·f(x)</span></h3>
+      <h3><span class="num">12</span>Розтяг графіка <span class="f">y = a·f(x)</span></h3>
       <div class="opts" role="group" aria-label="Який графік розтягуємо" data-chips="f"></div>
       <label class="ctl k"><span data-name="a"></span><input type="range" min="-3" max="3" step="0.5" value="2" data-k="a"></label>
       <p class="rule" aria-live="polite"></p>
@@ -236,18 +255,73 @@ footer{color:var(--ink-soft);font-size:.9rem}
 </section>
 
 <section>
-  <h2>Показникова й логарифмічна<small>11 клас: y = aˣ і обернена до неї.</small></h2>
+  <h2>Ступені, корені, тригонометрія, похідна<small>10 клас.</small></h2>
+  <div class="grid">
+
+    <article class="card" id="c-pow">
+      <svg aria-hidden="true"></svg>
+      <h3><span class="num">13</span><span data-title>Ступенева функція</span> <span class="f">y = xⁿ</span></h3>
+      <div class="opts" role="group" aria-label="Показник n" data-chips="n"></div>
+      <label class="ctl x"><span data-name="x"></span><input type="range" min="-2" max="2" step="0.5" value="-1.5" data-k="x"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">у парному ступені мінус зникає, і гілки однакові, як у x²; у непарному мінус лишається, і ліва гілка йде вниз; відʼємний показник — це одиниця, поділена на додатний ступінь</p>
+      <aside class="beyond"><b>Поза шкільною програмою.</b> При відʼємному n біля нуля у вищій математиці кажуть, що y прямує до нескінченності. Школа з нескінченністю як з числом не працює, тому точки при x = 0 немає. <a href="https://en.wikipedia.org/wiki/Division_by_zero" hreflang="en" target="_blank" rel="noopener noreferrer">Division by zero, англ. ↗</a></aside>
+    </article>
+
+    <article class="card" id="c-nroot">
+      <svg aria-hidden="true"></svg>
+      <h3><span class="num">14</span>Корінь n-го ступеня <span class="f">y = ⁿ√x</span></h3>
+      <div class="opts" role="group" aria-label="Ступінь кореня n" data-chips="n"></div>
+      <label class="ctl x"><span data-name="x"></span><input type="range" min="-6" max="6" step="0.5" value="-5" data-k="x"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">ⁿ√x — число, n-й ступінь якого дає x; тому графік — графік y = xⁿ, віддзеркалений відносно прямої y = x</p>
+      <aside class="beyond"><b>Поза шкільною програмою.</b> Серед комплексних чисел корінь парного ступеня з відʼємного існує, наприклад √(−4) = 2i, де i² = −1. Точки на площині x, y для нього немає. <a href="https://uk.wikipedia.org/wiki/Уявна_одиниця" target="_blank" rel="noopener noreferrer">Уявна одиниця ↗</a></aside>
+    </article>
+
+    <article class="card" id="c-trig">
+      <svg aria-hidden="true"></svg>
+      <h3><span class="num">15</span><span data-title>Синус</span> <span class="f">y = sin x</span></h3>
+      <div class="opts" role="group" aria-label="Функція" data-chips="f"></div>
+      <label class="ctl x"><span data-name="x"></span><input type="range" min="-12" max="12" step="1" value="1" data-k="t" aria-label="x, кроками по π/6"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">sin x і cos x — координати точки одиничного кола, тому вони між −1 і 1 і повторюються через повний оберт 2π; tg x — їхня частка</p>
+      <p class="note">Тут по x одна клітинка — π/2, по y — 0,5.</p>
+      <aside class="beyond"><b>Поза шкільною програмою.</b> Біля π/2 у вищій математиці кажуть, що tg x прямує до нескінченності. Школа з нескінченністю як з числом не працює, тому там графіка немає. <a href="https://en.wikipedia.org/wiki/Division_by_zero" hreflang="en" target="_blank" rel="noopener noreferrer">Division by zero, англ. ↗</a></aside>
+    </article>
+
+    <article class="card" id="c-der">
+      <svg aria-hidden="true"></svg>
+      <h3><span class="num">16</span>Дотична й похідна <span class="f">f(x) = x³ − 3x</span></h3>
+      <label class="ctl x"><span data-name="x"></span><input type="range" min="-2.5" max="2.5" step="0.5" value="1.5" data-k="x"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">похідна в точці — кутовий коефіцієнт дотичної: де вона додатна, графік іде вгору, де відʼємна — вниз, де нуль — вершина горба чи дно ями</p>
+    </article>
+
+  </div>
+</section>
+
+<section>
+  <h2>Показникова, логарифмічна, інтеграл<small>11 клас.</small></h2>
   <div class="grid">
 
     <article class="card" id="c-exp">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">12</span>Показникова функція <span class="f">y = aˣ</span></h3>
+      <h3><span class="num">17</span><span data-title>Показникова функція</span> <span class="f">y = aˣ</span></h3>
       <div class="opts" role="group" aria-label="Основа a" data-chips="a"></div>
       <label class="ctl x"><span data-name="x"></span><input type="range" min="-3" max="3" step="1" value="-2" data-k="x"></label>
       <div class="opts"><button class="chip" type="button" data-toggle aria-pressed="false">показати логарифм</button></div>
       <p class="rule" aria-live="polite"></p>
       <p class="why">a⁰ = 1 для будь-якої основи, тому всі ці графіки проходять через (0; 1); логарифм — той самий графік, віддзеркалений відносно прямої y = x</p>
       <p class="note">Докладно — у <a href="/stupeni-i-loharyfmy/loharyfmy-z-nulia/">Логарифмах з нуля</a>.</p>
+    </article>
+
+    <article class="card" id="c-int">
+      <svg aria-hidden="true"></svg>
+      <h3><span class="num">18</span>Інтеграл як площа <span class="f">y = x²</span></h3>
+      <label class="ctl"><span data-name="a"></span><input type="range" min="-2" max="2" step="0.5" value="0" data-k="a"></label>
+      <label class="ctl"><span data-name="b"></span><input type="range" min="-1.5" max="2.5" step="0.5" value="2" data-k="b"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">площа під графіком — різниця значень первісної на кінцях: F(b) − F(a), де похідна F дає f</p>
     </article>
 
   </div>
@@ -262,18 +336,22 @@ footer{color:var(--ink-soft);font-size:.9rem}
 const NS='http://www.w3.org/2000/svg', M=L.MINUS, fmt=v=>L.fmt(v===0?0:v);   // never «−0»
 function el(tag,attrs,parent){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);parent&&parent.appendChild(e);return e}
 
-/* one plot for every card: 12 × 10 cells, the axis letters sit in the margin outside the clip,
-   so a curve can never run over them */
-const U=18, OX=118, OY=112, XMIN=-6, XMAX=6, YMIN=-5, YMAX=5, VW=248, VH=214;
-const X=x=>OX+x*U, Y=y=>OY-y*U, toX=px=>(px-OX)/U;
+/* one plot box for every card, the axis letters in the margin outside the clip, so a curve can never
+   run over them. A card may choose its own view (trigonometry needs π on x); by default 12 × 10 cells of 1 */
+const VW=248, VH=214, BOX={l:10,t:22,w:216,h:180};
+let XMIN,XMAX,YMIN,YMAX,UX,UY,OX,OY,GX,GY;
+function setView(v={}){({xmin:XMIN=-6,xmax:XMAX=6,ymin:YMIN=-5,ymax:YMAX=5,gx:GX=1,gy:GY=1}=v);
+  UX=BOX.w/(XMAX-XMIN);UY=BOX.h/(YMAX-YMIN);OX=BOX.l-XMIN*UX;OY=BOX.t+YMAX*UY}
+setView();
+const X=x=>OX+x*UX, Y=y=>OY-y*UY, toX=px=>(px-OX)/UX;
 const inPlot=(x,y)=>isFinite(y)&&y>=YMIN-1e-9&&y<=YMAX+1e-9&&x>=XMIN&&x<=XMAX;
 function frame(svg,id){
   svg.setAttribute('viewBox',`0 0 ${VW} ${VH}`);svg.replaceChildren();
   const d=el('defs',{},svg),cp=el('clipPath',{id:'clip-'+id},d);
-  el('rect',{x:X(XMIN),y:Y(YMAX),width:(XMAX-XMIN)*U,height:(YMAX-YMIN)*U},cp);
+  el('rect',{x:X(XMIN),y:Y(YMAX),width:(XMAX-XMIN)*UX,height:(YMAX-YMIN)*UY},cp);
   const back=el('g',{},svg);
-  for(let x=XMIN;x<=XMAX;x++)el('line',{x1:X(x),y1:Y(YMAX),x2:X(x),y2:Y(YMIN),class:'gl'},back);
-  for(let y=YMIN;y<=YMAX;y++)el('line',{x1:X(XMIN),y1:Y(y),x2:X(XMAX),y2:Y(y),class:'gl'},back);
+  for(let i=Math.ceil(XMIN/GX-1e-9);i*GX<=XMAX+1e-9;i++)el('line',{x1:X(i*GX),y1:Y(YMAX),x2:X(i*GX),y2:Y(YMIN),class:'gl'},back);
+  for(let i=Math.ceil(YMIN/GY-1e-9);i*GY<=YMAX+1e-9;i++)el('line',{x1:X(XMIN),y1:Y(i*GY),x2:X(XMAX),y2:Y(i*GY),class:'gl'},back);
   el('line',{x1:X(XMIN),y1:OY,x2:X(XMAX)+4,y2:OY,class:'ax'},back);
   el('line',{x1:OX,y1:Y(YMIN),x2:OX,y2:Y(YMAX)-4,class:'ax'},back);
   el('path',{d:`M${X(XMAX)+10} ${OY}l-7 -4v8z`,class:'ah'},back);
@@ -319,14 +397,14 @@ const sup=n=>String(n).split('').map(ch=>SUP[ch]).join('');
 const coef=(k,cls,v='x')=>k===1?v:k===-1?M+v:c(cls,fmt(k))+v;
 
 /* a card: sliders are its state, draw(g,top,s) redraws it, rule(s) writes the line under it */
-function card(id,{draw,rule,init,fix}){
+function card(id,{draw,rule,init,fix,view,show={}}){
   const root=document.getElementById(id),svg=root.querySelector('svg'),out=root.querySelector('.rule');
   const sliders=[...root.querySelectorAll('input[type=range]')],s={};
   sliders.forEach(i=>s[i.dataset.k]=+i.value);
   init&&init(s,root);
   function render(){
-    sliders.forEach(i=>{i.value=s[i.dataset.k];const n=i.parentElement.querySelector('[data-name]');n.textContent=`${n.dataset.name} = ${fmt(s[i.dataset.k])}`});
-    const {g,top}=frame(svg,id);draw(g,top,s);out.innerHTML=rule(s);
+    sliders.forEach(i=>{i.value=s[i.dataset.k];const n=i.parentElement.querySelector('[data-name]');const k=i.dataset.k;n.textContent=`${n.dataset.name} = ${show[k]?show[k](s[k]):fmt(s[k])}`});
+    setView(view);const {g,top}=frame(svg,id);draw(g,top,s);out.innerHTML=rule(s);setView();
   }
   sliders.forEach(i=>i.addEventListener('input',()=>{const k=i.dataset.k,was=s[k];s[k]=+i.value;fix&&fix(s,k,was);render()}));
   // dragging the probe moves x along the curve, snapped to the x slider's step
@@ -334,7 +412,7 @@ function card(id,{draw,rule,init,fix}){
   let active=false;
   svg.addEventListener('pointerdown',e=>{if(!e.target.closest('[data-grip]'))return;active=true;svg.setPointerCapture(e.pointerId);e.preventDefault()});
   svg.addEventListener('pointermove',e=>{if(!active||!xs)return;const q=new DOMPoint(e.clientX,e.clientY).matrixTransform(svg.getScreenCTM().inverse());
-    const st=+xs.step,v=Math.round(toX(q.x)/st)*st;const nv=Math.max(+xs.min,Math.min(+xs.max,v));if(nv!==s.x){s.x=nv;render()}});
+    setView(view);const st=+xs.step,v=Math.round(toX(q.x)/st)*st;setView();const nv=Math.max(+xs.min,Math.min(+xs.max,v));if(nv!==s.x){s.x=nv;render()}});
   const stop=()=>{active=false};svg.addEventListener('pointerup',stop);svg.addEventListener('pointercancel',stop);
   root._s=s;root._render=render;render();return root;
 }
@@ -377,7 +455,7 @@ card('c-lineq',{
   draw(g,top,s){
     if(s.b)curve(g,x=>(s.c-s.a*x)/s.b,'cv');
     else if(s.a)seg(g,s.c/s.a,YMIN-1,s.c/s.a,YMAX+1,'cv');
-    else if(!s.c)el('rect',{x:X(XMIN),y:Y(YMAX),width:(XMAX-XMIN)*U,height:(YMAX-YMIN)*U,class:'all'},g)},
+    else if(!s.c)el('rect',{x:X(XMIN),y:Y(YMAX),width:(XMAX-XMIN)*UX,height:(YMAX-YMIN)*UY,class:'all'},g)},
   rule(s){const eq=`${terms([[s.a,'x'],[s.b,'y']])} = ${fmt(s.c)}`;
     if(!s.a&&!s.b)return `${eq}<br><span class="say">${s.c?'така рівність неправильна при будь-яких x і y: графіка немає, жодної точки':'така рівність правильна при будь-яких x і y: графік — уся площина'}</span>`;
     if(!s.b)return `${eq}<br>x = ${rat(s.c,s.a)}<br><span class="say">b = 0: y з рівняння зник, тож x завжди той самий, а y будь-який. Пряма вертикальна, і це не графік функції: одному x відповідає безліч y</span>`;
@@ -419,7 +497,7 @@ card('c-hyp',{
   init(s){s._id='c-hyp'},
   fix:skipZero('k'),
   draw(g,top,s){const y=s.x?s.k/s.x:NaN;
-    if(s.x&&inPlot(s.x,y))el('rect',{x:Math.min(X(0),X(s.x)),y:Math.min(Y(0),Y(y)),width:Math.abs(s.x)*U,height:Math.abs(y)*U,class:'ra'},g);
+    if(s.x&&inPlot(s.x,y))el('rect',{x:Math.min(X(0),X(s.x)),y:Math.min(Y(0),Y(y)),width:Math.abs(s.x)*UX,height:Math.abs(y)*UY,class:'ra'},g);
     curve(g,x=>s.k/x,'cv',{breaks:[0]});
     if(s.x)probe(g,top,s.x,y);else el('circle',{cx:X(0),cy:OY,r:20,class:'hit','data-grip':'x'},top)},
   rule(s){
@@ -468,13 +546,131 @@ card('c-eq',{
 });
 document.getElementById('c-eq')._sync();
 
-/* 6 power xⁿ */
+/* 9th grade: a quadratic inequality read off the parabola */
+const SIGNS=[{v:'>',label:'> 0'},{v:'<',label:'< 0'},{v:'≥',label:'≥ 0'},{v:'≤',label:'≤ 0'}];
+const num=v=>exact(v)?fmt(v):'≈ '+fmt(round2(v));
+card('c-ineq',{
+  init(s,root){s._id='c-ineq';s.sg='>';root._sync=chipGroup(root,'sg',SIGNS,s)},
+  fix:skipZero('a'),
+  draw(g,top,s){document.querySelector('#c-ineq h3 .f').textContent='ax² + bx + c '+s.sg+' 0';
+    const f=x=>s.a*x*x+s.b*x+s.c,D=s.b*s.b-4*s.a*s.c,rs=D<0?[]:D===0?[-s.b/(2*s.a)]:[(-s.b-Math.sqrt(D))/(2*s.a),(-s.b+Math.sqrt(D))/(2*s.a)].sort((p,q)=>p-q);
+    curve(g,f,'cv');
+    // the solution on the x axis: walk the pieces between the zeros and keep those with the right sign
+    const want=x=>{const v=f(x);return s.sg==='>'?v>1e-9:s.sg==='<'?v<-1e-9:s.sg==='≥'?v>-1e-9:v<1e-9};
+    const cuts=[XMIN-1,...rs,XMAX+1];
+    for(let i=0;i<cuts.length-1;i++){const m=(cuts[i]+cuts[i+1])/2;if(cuts[i+1]-cuts[i]>1e-9&&want(m))seg(g,cuts[i],0,cuts[i+1],0,'sol')}
+    const closed=s.sg==='≥'||s.sg==='≤';rs.forEach(x=>dot(top,x,0,closed?'pmf':'pmo',5.5))},
+  rule(s){const D=s.b*s.b-4*s.a*s.c,up=s.a>0,form=coef(s.a,'ck','x²')+(s.b?(s.b<0?` ${M} `:' + ')+(Math.abs(s.b)===1?'':fmt(Math.abs(s.b)))+'x':'')+(s.c?sgn(s.c,'cn'):'');
+    const strict=s.sg==='>'||s.sg==='<',pos=s.sg==='>'||s.sg==='≥',L1=strict?'(':'[',R1=strict?')':']';
+    let zeros,ans;
+    if(D>0){const r=[(-s.b-Math.sqrt(D))/(2*s.a),(-s.b+Math.sqrt(D))/(2*s.a)].sort((p,q)=>p-q),[p,q]=r.map(num);
+      zeros=`нулі: x ${exact(r[0])?'=':''} ${p} і x ${exact(r[1])?'=':''} ${q}`;
+      ans=(pos===up)?`(${M}∞; ${p}${R1} ∪ ${L1}${q}; +∞)`:`${L1}${p}; ${q}${R1}`}
+    else if(D===0){const r=num(-s.b/(2*s.a));zeros=`один нуль: x = ${r}`;
+      ans=pos===up?(strict?`(${M}∞; ${r}) ∪ (${r}; +∞)`:'усі числа'):(strict?'розвʼязків немає':`x = ${r}`)}
+    else{zeros='нулів немає: парабола вісь x не перетинає';ans=pos===up?'усі числа':'розвʼязків немає'}
+    return `${form} ${s.sg} 0<br><span class="say">${up?'гілки вгору':'гілки вниз'}; ${zeros}</span><br>відповідь: ${c('cm',ans)}`}
+});
+document.getElementById('c-ineq')._sync();
+
+/* 9th grade: a circle and a line, a system read off the picture */
+card('c-circ',{
+  draw(g,top,s){el('circle',{cx:X(0),cy:Y(0),r:s.r*UX,class:'cv'},g);curve(g,x=>s.k*x+s.b,'cv2');
+    circPts(s).forEach(([x,y])=>dot(top,x,y,'po',5.5))},
+  rule(s){const P=circPts(s),line=s.k===0?fmt(s.b):coef(s.k,'')+(s.b?sgn(s.b,''):'');
+    const head=`<span class="say">система:</span><br>x² + y² = ${fmt(s.r*s.r)}<br>y = ${line}`;
+    const what=P.length===0?'спільних точок немає — система розвʼязків не має':P.length===1?'пряма дотикається до кола: один розвʼязок':'дві спільні точки — два розвʼязки';
+    return `${head}${P.length?'<br>'+P.map(([x,y])=>`(${num(x)}; ${num(y)})`).join(' і '):''}<br><span class="say">${what}</span>`}
+});
+// x² + (kx + b)² = r²  →  (1 + k²)x² + 2kbx + b² − r² = 0
+function circPts(s){const A=1+s.k*s.k,B=2*s.k*s.b,C=s.b*s.b-s.r*s.r,D=B*B-4*A*C;
+  const xs=D<-1e-9?[]:Math.abs(D)<1e-9?[-B/(2*A)]:[(-B-Math.sqrt(D))/(2*A),(-B+Math.sqrt(D))/(2*A)];
+  return xs.map(x=>[x,s.k*x+s.b])}
+
+/* 10th grade: the n-th root */
+const rootN=(n,x)=>n%2===0?(x<0?NaN:Math.pow(x,1/n)):Math.sign(x)*Math.pow(Math.abs(x),1/n);
+const rootSign=n=>n===2?'√':sup(n)+'√';
+card('c-nroot',{
+  init(s,root){s.n=3;root._sync=chipGroup(root,'n',[2,3,4,5].map(n=>({v:n,label:'n = '+n})),s)},
+  draw(g,top,s){
+    curve(g,x=>Math.pow(x,s.n),'cv0',{});
+    seg(g,-6,-6,6,6,'as');
+    curve(g,x=>rootN(s.n,x),'cv',{from:s.n%2?XMIN-.5:0,extra:[0,.0005,.002,.008,-.0005,-.002,-.008]});
+    const y=rootN(s.n,s.x);if(isFinite(y))probe(g,top,s.x,y);else el('circle',{cx:X(s.x),cy:OY,r:20,class:'hit','data-grip':'x'},top)},
+  rule(s){const y=rootN(s.n,s.x),R=rootSign(s.n);
+    const dom=s.n%2?'непарний n: корінь є з будь-якого числа, і він того самого знака':'парний n: тільки x ≥ 0, і корінь теж не відʼємний';
+    if(!isFinite(y))return `x = ${fmt(s.x)}: ${R}(${fmt(s.x)})<br><span class="say">парний ступінь будь-якого числа не відʼємний, тож такого кореня серед шкільних чисел немає<br>${dom}</span>`;
+    const r=round2(y),ex=Math.abs(Math.pow(r,s.n)-s.x)<1e-9;
+    return `x = ${fmt(s.x)}: y = ${R}${par(s.x)} ${ex?'= ':'≈ '}${c('cy',fmt(r))}${ex?`, бо ${par(r)}${sup(s.n)} = ${fmt(s.x)}`:''}<br><span class="say">${dom}; пунктир — y = x${sup(s.n)}</span>`}
+});
+document.getElementById('c-nroot')._sync();
+
+/* 10th grade: sin, cos, tg at whole multiples of π/6, with exact values */
+const PI=Math.PI;
+const SIN6=['0','1/2','√3/2','1','√3/2','1/2','0',M+'1/2',M+'√3/2',M+'1',M+'√3/2',M+'1/2'];
+const TG6=['0','√3/3','√3',null,M+'√3',M+'√3/3'];
+const angle=k=>{if(!k)return '0';const g=L.gcd(Math.abs(k),6),p=k/g,q=6/g;return (p<0?M:'')+(Math.abs(p)===1?'':Math.abs(p))+'π'+(q===1?'':'/'+q)};
+const TRIG=[{v:'sin',label:'sin x',name:'Синус',f:Math.sin},{v:'cos',label:'cos x',name:'Косинус',f:Math.cos},{v:'tg',label:'tg x',name:'Тангенс',f:Math.tan}];
+const mod=(a,n)=>((a%n)+n)%n;
+function trigExact(f,k){if(f==='sin')return SIN6[mod(k,12)];if(f==='cos')return SIN6[mod(k+3,12)];return TG6[mod(k,6)]}
+card('c-trig',{
+  view:{xmin:-2*PI,xmax:2*PI,ymin:-2,ymax:2,gx:PI/2,gy:.5},
+  show:{t:angle},
+  init(s,root){s.f='sin';root._sync=chipGroup(root,'f',TRIG,s)},
+  draw(g,top,s){const T=TRIG.find(t=>t.v===s.f),x=s.t*PI/6;
+    document.querySelector('#c-trig [data-title]').textContent=T.name;document.querySelector('#c-trig h3 .f').textContent='y = '+T.label;
+    if(s.f==='tg')for(let j=-3;j<=3;j+=2)seg(g,j*PI/2,YMIN-1,j*PI/2,YMAX+1,'as');
+    curve(g,T.f,'cv',{breaks:s.f==='tg'?[-1.5*PI,-.5*PI,.5*PI,1.5*PI]:[]});
+    const ex=trigExact(s.f,s.t);
+    if(ex!==null){const y=T.f(x);if(inPlot(x,y)){seg(g,x,0,x,y,'pj');dot(top,x,y,'pt',6)}}},
+  rule(s){const T=TRIG.find(t=>t.v===s.f),ex=trigExact(s.f,s.t),a=angle(s.t);
+    const facts=s.f==='tg'?'період π; x ≠ π/2 + πk; область значень: усі числа':`період 2π; область значень: ${M}1 ≤ y ≤ 1; ${s.f==='sin'?'непарна':'парна'} функція`;
+    if(ex===null)return `x = ${a}: tg x = sin x : cos x<br><span class="say">тут cos x = 0, а на нуль ділити не можна: tg x не існує, і графік розривається<br>${facts}</span>`;
+    const v=T.f(s.t*PI/6),approx=ex.includes('√')?` ≈ ${fmt(round2(v))}`:'';
+    return `x = ${a}: ${T.label.replace(' x','')} ${a} = ${c('cy',ex)}${approx}${inPlot(s.t*PI/6,v)?'':' <span class="say">(точка поза малюнком)</span>'}<br><span class="say">${facts}</span>`}
+});
+document.getElementById('c-trig')._sync();
+
+/* 10th grade: the tangent and the derivative of x³ − 3x */
+const cub=x=>x*x*x-3*x, dcub=x=>3*x*x-3;
+card('c-der',{
+  view:{xmin:-3,xmax:3,ymin:-2.5,ymax:2.5},
+  draw(g,top,s){const a=s.x,k=dcub(a),b=cub(a)-k*a;
+    curve(g,cub,'cv');curve(g,x=>k*x+b,'tg');
+    dot(top,-1,2,'po',5);dot(top,1,-2,'po',5);probe(g,top,a,cub(a))},
+  rule(s){const a=s.x,k=dcub(a),fa=cub(a),b=fa-k*a;
+    const how=k>0?'f′ > 0: дотична йде вгору, функція тут зростає':k<0?'f′ < 0: дотична йде вниз, функція тут спадає':(a<0?'f′ = 0: дотична горизонтальна — x = −1 точка максимуму':'f′ = 0: дотична горизонтальна — x = 1 точка мінімуму');
+    const tline=k===0?fmt(fa):coef(k,'')+(b?sgn(b,''):'');
+    return `f′(x) = 3x² ${M} 3<br>x = ${fmt(a)}: f′(${fmt(a)}) = 3·${par(a)}² ${M} 3 = ${c('ck',fmt(k))}<br>дотична: y = ${tline}${off(a,fa)}<br><span class="say">${how}; зростає при x ≤ ${M}1 і x ≥ 1, спадає між ними</span>`}
+});
+
+/* 11th grade: the area under y = x² by Newton–Leibniz */
+card('c-int',{
+  view:{xmin:-3,xmax:3,ymin:-.5,ymax:4.5},
+  fix(s,k){if(s.b<=s.a){if(k==='a')s.b=Math.min(2.5,s.a+.5);else s.a=Math.max(-2,s.b-.5)}if(s.b<=s.a)s.a=s.b-.5},
+  draw(g,top,s){const pts=[[s.a,0]];for(let x=s.a;x<=s.b+1e-9;x+=.02)pts.push([x,x*x]);pts.push([s.b,s.b*s.b],[s.b,0]);
+    el('polygon',{points:pts.map(([x,y])=>X(x).toFixed(1)+','+Y(y).toFixed(1)).join(' '),class:'ar'},g);
+    curve(g,x=>x*x,'cv');seg(g,s.a,0,s.a,s.a*s.a,'pj');seg(g,s.b,0,s.b,s.b*s.b,'pj')},
+  rule(s){const p=Math.round(s.a*2),q=Math.round(s.b*2),S=(s.b**3-s.a**3)/3;
+    // a = p/2, b = q/2, so F(b) − F(a) = (q³ − p³)/24 exactly
+    return `S = ∫<sub>${fmt(s.a)}</sub><sup>${fmt(s.b)}</sup> x² dx<br>F(x) = ${frac('x³','3')}<br>S = ${frac(par(s.b)+'³','3')} ${M} ${frac(par(s.a)+'³','3')} = ${c('ck',rat(q**3-p**3,24))}${exact(S)?'':' ≈ '+fmt(round2(S))}<br><span class="say">x² ≥ 0, тож площа завжди додатна, навіть якщо a < 0</span>`}
+});
+
+/* power xⁿ */
 card('c-pow',{
-  init(s,root){s.n=3;root._sync=chipGroup(root,'n',[1,2,3,4,5].map(n=>({v:n,label:'n = '+n})),s)},
-  draw(g,top,s){document.querySelector('#c-pow [data-title]').textContent=['','Пряма','Парабола','Кубічна парабола','Ступенева функція','Ступенева функція'][s.n];curve(g,x=>Math.pow(x,s.n),'cv');dot(top,1,1,'po',4.5);dot(top,-1,Math.pow(-1,s.n),'po',4.5);probe(g,top,s.x,Math.pow(s.x,s.n))},
-  rule(s){const y=Math.pow(s.x,s.n);
-    const how=s.n===1?'n = 1: це пряма y = x':s.n%2?'непарний n: знак x лишається, графік іде через (−1; −1)':'парний n: знак зникає, графік іде через (−1; 1)';
-    return `y = x${s.n===1?'':sup(s.n)}<br>x = ${fmt(s.x)}: y = ${par(s.x)}${s.n===1?'':sup(s.n)} = ${c('cy',fmt(y))}${off(s.x,y)}<br><span class="say">${how}</span>`}
+  init(s,root){s.n=3;root._sync=chipGroup(root,'n',[-3,-2,-1,1,2,3,4,5].map(n=>({v:n,label:'n = '+fmt(n)})),s)},
+  draw(g,top,s){document.querySelector('#c-pow [data-title]').textContent={'-1':'Гіпербола',1:'Пряма',2:'Парабола',3:'Кубічна парабола'}[s.n]||'Ступенева функція';
+    curve(g,x=>Math.pow(x,s.n),'cv',{breaks:s.n<0?[0]:[]});
+    // the reference points (±1; …) step aside when the probe is next to them
+    if(Math.abs(s.x-1)>.5)dot(top,1,1,'po',4.5);if(Math.abs(s.x+1)>.5)dot(top,-1,Math.pow(-1,s.n),'po',4.5);
+    if(s.n<0&&s.x===0)el('circle',{cx:X(0),cy:OY,r:20,class:'hit','data-grip':'x'},top);else probe(g,top,s.x,Math.pow(s.x,s.n))},
+  rule(s){const y=Math.pow(s.x,s.n),e=s.n===1?'':sup(s.n);
+    const par2=s.n%2===0?'парна функція: графік симетричний відносно осі y':'непарна функція: графік симетричний відносно початку координат';
+    const dom=s.n<0?'область визначення: x ≠ 0':'область визначення: усі числа';
+    if(s.n<0&&s.x===0)return `y = x${e}<br>x = 0: y = 1 : 0${sup(-s.n)}<br><span class="say">на нуль ділити не можна: при x = 0 точки немає<br>${par2}; ${dom}</span>`;
+    // x moves in halves, x = p/2, so 1 : xᵐ = 2ᵐ/pᵐ exactly
+    const m=-s.n,pp=Math.round(2*s.x),calc=s.n<0?`1 : ${par(s.x)}${m===1?'':sup(m)} = ${c('cy',rat(2**m,pp**m))}${exact(y)?'':' ≈ '+fmt(round2(y))}`:`${c('cy',fmt(y))}`;
+    return `y = x${e}<br>x = ${fmt(s.x)}: y = ${par(s.x)}${e} = ${calc}${off(s.x,y)}<br><span class="say">${par2}; ${dom}</span>`}
 });
 document.getElementById('c-pow')._sync();
 
@@ -485,14 +681,14 @@ card('c-quad',{
   draw(g,top,s){const f=x=>s.a*x*x+s.b*x+s.c,x0=-s.b/(2*s.a),D=s.b*s.b-4*s.a*s.c;
     seg(g,x0,YMIN-1,x0,YMAX+1,'as');curve(g,f,'cv');
     if(D>=0){const r=Math.sqrt(D);for(const z of new Set([(-s.b-r)/(2*s.a),(-s.b+r)/(2*s.a)]))dot(top,z,0,'po',5)}
-    dot(top,0,s.c,'pn');dot(top,x0,f(x0),'pm',5.5)},
+    dot(top,0,s.c,'pn',4);dot(top,x0,f(x0),'pm',5.5)},
   rule(s){const f=x=>s.a*x*x+s.b*x+s.c,x0=-s.b/(2*s.a),y0=f(x0),D=s.b*s.b-4*s.a*s.c;
     const form=coef(s.a,'ck','x²')+(s.b?(s.b<0?` ${M} `:' + ')+(Math.abs(s.b)===1?'':fmt(Math.abs(s.b)))+'x':'')+(s.c?sgn(s.c,'cn'):'');
     let zeros;
     if(D>0){const r=Math.sqrt(D),z=[(-s.b-r)/(2*s.a),(-s.b+r)/(2*s.a)].sort((p,q)=>p-q);zeros=`D > 0: два нулі, x ${eqv(z[0])} і x ${eqv(z[1])}`}
     else if(D===0)zeros=`D = 0: один нуль, сама вершина`;else zeros='D < 0: нулів немає, вісь x парабола не перетинає';
     return `y = ${form}<br>x₀ = ${M}b : 2a = ${par(-s.b)} : ${par(2*s.a)} ${exact(x0)?'= '+c('cm',fmt(x0)):'≈ '+c('cm',fmt(round2(x0)))}<br>y₀ ${eqv(y0)}${off(x0,y0)}<br>D = b² ${M} 4ac = ${par(s.b)}² ${M} 4·${par(s.a)}·${par(s.c)} = ${fmt(D)}<br>`+
-      `<span class="say">${s.a>0?'a > 0: гілки вгору':'a < 0: гілки вниз'}; вісь y — у (0; ${c('cn',fmt(s.c))}); ${zeros}</span>`}
+      `<span class="say">${s.a>0?'a > 0: гілки вгору':'a < 0: гілки вниз'}; вісь y — у (0; ${c('cn',fmt(s.c))}); ${zeros}<br>${s.a>0?'спадає':'зростає'} при x ≤ ${fmt(round2(x0))}, ${s.a>0?'зростає':'спадає'} при x ≥ ${fmt(round2(x0))}${exact(x0)?'':' (x₀ округлено)'}</span>`}
 });
 
 /* 8–9 transformations of one base graph; every base passes through (1; 1), and its key point is (0; 0) */
@@ -544,6 +740,8 @@ function powFrac(a,x){const [p,q]=a===.5?[1,2]:[a,1],[t,d]=x>=0?[p**x,q**x]:[q**
 card('c-exp',{
   init(s,root){s.a=2;root._sync=chipGroup(root,'a',A_OPTS,s);toggle(root,s)},
   draw(g,top,s){
+    document.querySelector('#c-exp [data-title]').textContent=s.on?'Показникова й логарифмічна':'Показникова функція';
+    document.querySelector('#c-exp h3 .f').textContent=s.on?'y = aˣ і y = logₐ x':'y = aˣ';
     if(s.on&&s.a!==1){seg(g,-5,-5,5,5,'as');curve(g,x=>x>0?Math.log(x)/Math.log(s.a):NaN,'cv2',{from:0,extra:[.001,.003,.01,.03]});dot(top,1,0,'po',4.5)}
     curve(g,x=>Math.pow(s.a,x),'cv');dot(top,0,1,'po',4.5);probe(g,top,s.x,Math.pow(s.a,s.x))},
   rule(s){const o=A_OPTS.find(o=>o.v===s.a),y=Math.pow(s.a,s.x);
