@@ -569,22 +569,51 @@ footer a{color:inherit}
     const k=clampK(all?Math.min(r.width/bw,h/bh):Math.max(Math.min(r.width/bw,h/bh),0.8));
     // always centred across; down the screen centred when it fits, otherwise from the first grade
     cam.k=k;cam.x=(r.width-bw*k)/2-(B.x1-12)*k;cam.y=top+(bh*k<=h?(h-bh*k)/2:8)-(B.y1-12)*k;apply();}
-  const ptrs=new Map(); let start=null, moved=false, downOn=null;
-  box.addEventListener('pointerdown',e=>{if(e.target.closest('.zoom'))return;try{box.setPointerCapture(e.pointerId);}catch(err){}ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
-    moved=false;downOn=ptrs.size===1?(e.target.closest&&e.target.closest('.stn')):null;
+  /* touch, as in a maps app: one finger pans and keeps gliding after a flick; two fingers pinch; a double tap
+     zooms in; a double tap held and dragged zooms — down in, up out, as in Google Maps; past the map's edge the
+     pull meets resistance and springs back */
+  const EDGE=80;   // this much of the map always stays on screen
+  function limit(c){const r=box.getBoundingClientRect(),B=built.bounds,top=$('controls').offsetHeight;
+    const lo=(a,b,len)=>[Math.min(a,b),Math.max(a,b)];
+    const [xmin,xmax]=lo(EDGE-B.x2*c.k,r.width-EDGE-B.x1*c.k),[ymin,ymax]=lo(top+EDGE-B.y2*c.k,r.height-EDGE-B.y1*c.k);
+    return {k:c.k,x:Math.min(xmax,Math.max(xmin,c.x)),y:Math.min(ymax,Math.max(ymin,c.y))};}
+  const rubber=c=>{const L=limit(c);return {k:c.k,x:L.x+(c.x-L.x)*.35,y:L.y+(c.y-L.y)*.35};};
+  const settle=()=>{const L=limit(cam);if(Math.abs(L.x-cam.x)>.5||Math.abs(L.y-cam.y)>.5)glide(L,220);};
+  const ptrs=new Map(); let start=null, moved=false, downOn=null, track=[], lastTap=null, zoomDrag=null;
+  box.addEventListener('pointerdown',e=>{if(e.target.closest('.zoom'))return;cancelAnimationFrame(anim);try{box.setPointerCapture(e.pointerId);}catch(err){}
+    ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=false;downOn=ptrs.size===1?(e.target.closest&&e.target.closest('.stn')):null;track=[{t:performance.now(),x:e.clientX,y:e.clientY}];
+    // the second press of a double tap: dragging it up or down will zoom
+    const r=box.getBoundingClientRect();zoomDrag=ptrs.size===1&&lastTap&&performance.now()-lastTap.t<300&&Math.hypot(e.clientX-lastTap.x,e.clientY-lastTap.y)<30?{y0:e.clientY,k0:cam.k,px:e.clientX-r.left,py:e.clientY-r.top,cam:{...cam}}:null;
     const p=[...ptrs.values()];start={cam:{...cam},p0:p[0],dist:p.length>1?Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y):0,mid:p.length>1?{x:(p[0].x+p[1].x)/2,y:(p[0].y+p[1].y)/2}:null};});
   box.addEventListener('pointermove',e=>{if(!ptrs.has(e.pointerId)||!start)return;ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});const p=[...ptrs.values()],r=box.getBoundingClientRect();
-    if(p.length===1){const dx=p[0].x-start.p0.x,dy=p[0].y-start.p0.y;if(Math.hypot(dx,dy)>5){moved=true;box.classList.add('drag');}cam.x=start.cam.x+dx;cam.y=start.cam.y+dy;apply();}
-    else if(p.length===2&&start.dist){moved=true;const d=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y),m={x:(p[0].x+p[1].x)/2-r.left,y:(p[0].y+p[1].y)/2-r.top};
+    if(p.length===1&&zoomDrag){const dy=e.clientY-zoomDrag.y0;if(Math.abs(dy)>5)moved=true;
+      const k=clampK(zoomDrag.k0*Math.exp(dy*.008)),c=zoomDrag.cam;cam.k=k;cam.x=zoomDrag.px-(zoomDrag.px-c.x)*k/c.k;cam.y=zoomDrag.py-(zoomDrag.py-c.y)*k/c.k;apply();return;}
+    if(p.length===1){const dx=p[0].x-start.p0.x,dy=p[0].y-start.p0.y;if(Math.hypot(dx,dy)>5){moved=true;box.classList.add('drag');}
+      Object.assign(cam,rubber({k:start.cam.k,x:start.cam.x+dx,y:start.cam.y+dy}));apply();
+      track.push({t:performance.now(),x:e.clientX,y:e.clientY});if(track.length>6)track.shift();}
+    else if(p.length===2&&start.dist){moved=true;track=[];const d=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y),m={x:(p[0].x+p[1].x)/2-r.left,y:(p[0].y+p[1].y)/2-r.top};
       const k=clampK(start.cam.k*d/start.dist),wx=(start.mid.x-r.left-start.cam.x)/start.cam.k,wy=(start.mid.y-r.top-start.cam.y)/start.cam.k;cam.k=k;cam.x=m.x-wx*k;cam.y=m.y-wy*k;apply();}});
-  const up=e=>{if(!ptrs.has(e.pointerId))return;ptrs.delete(e.pointerId);box.classList.remove('drag');
-    if(!moved&&ptrs.size===0){if(downOn)choose(downOn.dataset.h);else if(pick)choose(null);}
-    const p=[...ptrs.values()];start=p.length?{cam:{...cam},p0:p[0],dist:0,mid:null}:null;};
+  // after a flick the map glides on and slows down, unless the system asks for less motion
+  function coast(vx,vy){if(still.matches||Math.hypot(vx,vy)<.05){settle();return;}let t0=performance.now();
+    const step=now=>{const dt=now-t0;t0=now;const f=Math.exp(-dt/325);vx*=f;vy*=f;Object.assign(cam,rubber({k:cam.k,x:cam.x+vx*dt,y:cam.y+vy*dt}));apply();
+      const L=limit(cam),out=Math.abs(L.x-cam.x)>2||Math.abs(L.y-cam.y)>2;if(Math.hypot(vx,vy)>.02&&!out)anim=requestAnimationFrame(step);else settle();};
+    anim=requestAnimationFrame(step);}
+  const up=e=>{if(!ptrs.has(e.pointerId))return;ptrs.delete(e.pointerId);box.classList.remove('drag');const r=box.getBoundingClientRect(),now=performance.now();
+    if(ptrs.size===0){
+      if(zoomDrag){const z=zoomDrag;zoomDrag=null;lastTap=null;
+        // a double tap without dragging: zoom in twice around the finger
+        if(!moved){const k=clampK(cam.k*2);glide({k,x:z.px-(z.px-cam.x)*k/cam.k,y:z.py-(z.py-cam.y)*k/cam.k});}else settle();
+        start=null;return;}
+      if(!moved){lastTap={t:now,x:e.clientX,y:e.clientY};if(downOn)choose(downOn.dataset.h);else if(pick)choose(null);}
+      else{lastTap=null;const a=track[0],b=track[track.length-1];if(a&&b&&b.t-a.t>0&&now-b.t<80)coast((b.x-a.x)/(b.t-a.t),(b.y-a.y)/(b.t-a.t));else settle();}}
+    const p=[...ptrs.values()];start=p.length?{cam:{...cam},p0:p[0],dist:0,mid:null}:null;track=[];};
   box.addEventListener('pointerup',up);box.addEventListener('pointercancel',up);
-  box.addEventListener('wheel',e=>{e.preventDefault();const r=box.getBoundingClientRect();zoomAt(cam.k*(e.deltaY<0?1.15:1/1.15),e.clientX-r.left,e.clientY-r.top);},{passive:false});
-  $('zin').onclick=()=>{const r=box.getBoundingClientRect();zoomAt(cam.k*1.25,r.width/2,r.height/2);};
-  $('zout').onclick=()=>{const r=box.getBoundingClientRect();zoomAt(cam.k/1.25,r.width/2,r.height/2);};
-  $('zfit').onclick=()=>fit(true);
+  box.addEventListener('wheel',e=>{e.preventDefault();cancelAnimationFrame(anim);const r=box.getBoundingClientRect();zoomAt(cam.k*(e.deltaY<0?1.15:1/1.15),e.clientX-r.left,e.clientY-r.top);},{passive:false});
+  // the buttons zoom smoothly around the middle of the screen
+  const zoomBy=f=>{const r=box.getBoundingClientRect(),k=clampK(cam.k*f),px=r.width/2,py=r.height/2;glide(limit({k,x:px-(px-cam.x)*k/cam.k,y:py-(py-cam.y)*k/cam.k}));};
+  $('zin').onclick=()=>zoomBy(1.4);
+  $('zout').onclick=()=>zoomBy(1/1.4);
+  $('zfit').onclick=()=>{const c={...cam};fit(true);const to={...cam};Object.assign(cam,c);apply();glide(to,320);};
 
   /* ---------- switching ---------- */
   async function draw(){
