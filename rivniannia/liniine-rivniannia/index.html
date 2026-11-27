@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Лінійне рівняння з однією змінною</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/lesson.css">
+<script src="/assets/theme.js"></script>
+<style>
+/* marks (docs/internals/colours.md): the unknown x — mark-1; what is done to both sides — mark-2; the root — mark-3 */
+.cx{color:var(--mark-1);font-weight:700}
+.act{color:var(--mark-2);font-weight:700}
+.ax{font:700 30px/1.4 var(--font-mono);margin:10px 0 4px;overflow-x:auto;white-space:nowrap}
+.verdict{font-size:16px;margin:6px 0 0}
+#deriv .ln{font-size:20px}
+.steppers{display:flex;flex-wrap:wrap;gap:10px 18px;margin:8px 0}
+.steppers label{display:flex;align-items:center;gap:8px;font:600 15px var(--font-mono);color:var(--ink-soft)}
+.steppers .stepper output{color:var(--ink)}
+.steppers[hidden]{display:none}
+/* whole equations on the chips: one per row on a phone, so none breaks in two */
+#pick.palette{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+#pick .chip span{font-size:16px;white-space:nowrap}
+/* the wrong and right lines carry fractions and words: let them wrap instead of scrolling */
+.pit .steps{white-space:normal;overflow:visible;line-height:1.9}
+summary::after{content:"  — скільки коренів?";font:400 13px var(--font-body);color:var(--ink-soft)}
+details[open] summary::after{content:""}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+
+<header>
+  <h1>Лінійне рівняння з однією змінною</h1>
+  <p class="sub">Будь-яке таке рівняння кількома кроками зводиться до вигляду ax = b. А з нього одразу видно, скільки коренів: один, жодного чи безліч.</p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <a href="/rivniannia/terezy-obydvi-chastyny/">Терези: роби з обома частинами однакове</a> <a href="/rivniannia/totozhni-peretvorennia/">Тотожні перетворення</a> <i>дії з відʼємними числами, 6 клас</i></p>
+</header>
+
+<section>
+  <h2><span class="num">1</span>Вигляд ax = b</h2>
+  <p><b>Лінійне рівняння з однією змінною</b> — рівняння, яке зводиться до вигляду ax = b, де a і b — числа, а <span class="cx">x</span> — невідоме.</p>
+  <p>Синє на цій сторінці — невідоме <span class="cx">x</span>, фіолетове — дія над обома частинами, зелене — корінь.</p>
+  <p>Скільки коренів, вирішує a. Зміни a і b і подивись:</p>
+  <div class="steppers">
+    <label>a <span class="stepper" id="sa"><button type="button" aria-label="Зменшити a">−</button><output aria-live="polite"></output><button type="button" aria-label="Збільшити a">+</button></span></label>
+    <label>b <span class="stepper" id="sb"><button type="button" aria-label="Зменшити b">−</button><output aria-live="polite"></output><button type="button" aria-label="Збільшити b">+</button></span></label>
+  </div>
+  <div class="ax" id="axEq"></div>
+  <p class="verdict" id="axOut" aria-live="polite"></p>
+  <div id="axBeyond"></div>
+</section>
+
+<section>
+  <h2><span class="num">2</span>Від будь-якого вигляду до ax = b</h2>
+  <p>Обери рівняння й розвʼязуй його по кроку. Кожен рядок рівносильний попередньому: корінь у них той самий.</p>
+  <div id="pick"></div>
+  <div class="steppers" id="own" hidden>
+    <label>a <span class="stepper" id="oa"><button type="button" aria-label="Зменшити a">−</button><output></output><button type="button" aria-label="Збільшити a">+</button></span></label>
+    <label>b <span class="stepper" id="ob"><button type="button" aria-label="Зменшити b">−</button><output></output><button type="button" aria-label="Збільшити b">+</button></span></label>
+    <label>c <span class="stepper" id="oc"><button type="button" aria-label="Зменшити c">−</button><output></output><button type="button" aria-label="Збільшити c">+</button></span></label>
+    <label>d <span class="stepper" id="od"><button type="button" aria-label="Зменшити d">−</button><output></output><button type="button" aria-label="Збільшити d">+</button></span></label>
+  </div>
+  <div class="deriv" id="deriv" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next">Розвʼязати →</button>
+    <button class="btn" type="button" id="reset">Згорнути назад</button>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">3</span>Де помиляються</h2>
+  <p>Перемикай і порівнюй: зліва помилка, справа — як треба.</p>
+  <div id="pit1"></div>
+  <div id="pit2"></div>
+  <div id="pit3"></div>
+  <div class="warn"><b>Звідси правило:</b> переносячи доданок через знак «=», міняй його знак. Розкриваючи дужки, множ на кожен доданок. А ділити можна тільки на число, яке не нуль: якщо після зведення вийшло 0·x, корінь шукають не діленням, а питанням «чи правильна рівність».</div>
+</section>
+
+<section>
+  <h2><span class="num">4</span>Навіщо це: задача стає рівнянням</h2>
+  <p>Брат старший за сестру на 4 роки. Разом їм стільки років:</p>
+  <div class="row"><span class="lbl">разом</span><span class="stepper" id="ss"><button type="button" aria-label="Зменшити суму років">−</button><output aria-live="polite"></output><button type="button" aria-label="Збільшити суму років">+</button></span></div>
+  <p>Нехай сестрі <span class="cx">x</span> років, тоді братові x + 4.</p>
+  <div class="deriv" id="task"></div>
+</section>
+
+<section>
+  <h2><span class="num">5</span>Перевір себе</h2>
+  <p class="muted">Спершу розвʼяжи сам. Потім відкривай.</p>
+  <details><summary>7x − 3 = 4x + 9</summary><div class="ans"><span class="m">7x − 4x = 9 + 3</span>, <span class="m">3x = 12</span>, <span class="m">x = 4</span>. Один корінь. Перевірка: <span class="m">7·4 − 3 = 25</span> і <span class="m">4·4 + 9 = 25</span>.</div></details>
+  <details><summary>5(x + 1) = 5x + 5</summary><div class="ans"><span class="m">5x + 5 = 5x + 5</span>, <span class="m">0·x = 0</span>. Рівність правильна при будь-якому x: коренем є будь-яке число.</div></details>
+  <details><summary>2x + 1 = 2x − 3</summary><div class="ans"><span class="m">2x − 2x = −3 − 1</span>, <span class="m">0·x = −4</span>. Нуль ніколи не дорівнює −4: коренів немає.</div></details>
+  <details><summary>−3x = 12</summary><div class="ans">Ділимо обидві частини на −3: <span class="m">x = −4</span>. Знак кореня відʼємний, бо ділимо додатне на відʼємне.</div></details>
+  <details><summary>0,2x − 1 = 2</summary><div class="ans"><span class="m">0,2x = 3</span>, <span class="m">x = 3 : 0,2 = 15</span>. Один корінь.</div></details>
+</section>
+
+<div class="rule">
+  <b>Коротко:</b><br>
+  Розкрий дужки, перенеси доданки з x вліво, числа вправо (міняючи знак), зведи подібні — вийде <span class="m">ax = b</span>.<br>
+  a ≠ 0 — один корінь: <span class="m">x = b : a</span>.<br>
+  a = 0, b = 0 — коренем є будь-яке число.<br>
+  a = 0, b ≠ 0 — коренів немає.<br>
+  Корінь перевіряй підстановкою в початкове рівняння.<br><br>
+  Звідки правило переносу — <a href="../terezy-obydvi-chastyny/">«Терези»</a>; чому перетворення не губить коренів — <a href="../peretvorennia-rivnian/">«Що саме не має змінитися»</a>.
+</div>
+
+</div>
+<script src="/assets/lesson.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id), M=L.MINUS;
+const fmt=v=>L.fmt(v===0?0:v), par=v=>v<0?`(${fmt(v)})`:fmt(v);
+const X='<span class="cx">x</span>', hl=t=>`<span class="hl">${t}</span>`, res=t=>`<span class="res">${t}</span>`;
+// b / a: a whole number, a reduced fraction, or a short decimal
+function quot(b,a){const q=b/a;if(Number.isInteger(q))return fmt(q);
+  if(Number.isInteger(a)&&Number.isInteger(b)){const g=L.gcd(Math.abs(b),Math.abs(a)),s=(b<0)!==(a<0);return (s?M:'')+L.frac(Math.abs(b)/g,Math.abs(a)/g)}
+  return fmt(q)}
+// "5x − 7", "−x", "3", with every term's sign written out; mark picks the terms to highlight
+function terms(list){let t='';list.forEach(({k,v,mark})=>{if(!k)return;const a=Math.abs(k),body=(v&&a===1?'':fmt(a))+(v?X:'');const w=mark?hl:(s=>s);
+  t+=t?(k<0?` ${M} `:' + ')+w(body):w((k<0?M:'')+body)});return t||'0'}
+const coefX=A=>A===1?X:A===-1?M+X:A===0?'0·'+X:fmt(A)+X;
+const DIV0=L.beyond('У вищій математиці ділення на нуль зазвичай дає нескінченність, а школа з нескінченністю як з числом не працює. Тому рівняння 0·x = b тут розвʼязують не діленням, а перевіркою рівності.','https://en.wikipedia.org/wiki/Division_by_zero','Division by zero, англійською','en');
+
+/* ---------- 1: ax = b ---------- */
+const ax={a:2,b:6};
+function drawAx(){const {a,b}=ax;
+  $('axEq').innerHTML=`${coefX(a)} = ${fmt(b)}`;
+  let t,beyond='';
+  if(a!==0)t=`a ≠ 0: ділимо обидві частини на ${par(a)}, і ${X} = ${fmt(b)} : ${par(a)} = ${res(quot(b,a))}. Корінь один.`;
+  else if(b===0)t=`a = 0, b = 0: нуль, помножений на будь-яке число, дає нуль. Рівність правильна при будь-якому ${X} — коренем є будь-яке число.`;
+  else{t=`a = 0, b ≠ 0: ліворуч завжди 0, а праворуч ${fmt(b)}. Такої рівності не буває ні при якому ${X} — коренів немає. Ділити на нуль, щоб «знайти» x, не можна: немає числа, яке після множення на 0 дало б ${fmt(b)}.`;beyond=DIV0}
+  $('axOut').innerHTML=t;$('axBeyond').innerHTML=beyond}
+L.stepper($('sa'),{min:-5,max:5,get:()=>ax.a,set:v=>{ax.a=v;drawAx()}});
+L.stepper($('sb'),{min:-10,max:10,get:()=>ax.b,set:v=>{ax.b=v;drawAx()}});
+drawAx();
+
+/* ---------- 2: the main derivation ---------- */
+// an equation is k(x + m) = cx + d when br, else kx + m = cx + d
+const EQ=[
+  {sub:'звичайне',k:5,m:-7,c:3,d:1},
+  {sub:'з дужками',br:1,k:3,m:-2,c:1,d:4},
+  {sub:'дробовий коефіцієнт',k:.5,m:3,c:2,d:-3},
+  {sub:'коренів немає',br:1,k:2,m:3,c:2,d:1},
+  {sub:'будь-яке число',br:1,k:4,m:-1,c:4,d:-4},
+  {sub:'своє',own:1,k:2,m:3,c:-1,d:9}
+];
+const own=EQ[5];
+const left=e=>e.br?`${e.k===1?'':e.k===-1?M:fmt(e.k)}(${terms([{k:1,v:1},{k:e.m}])})`:terms([{k:e.k,v:1},{k:e.m}]);
+const right=e=>terms([{k:e.c,v:1},{k:e.d}]);
+const label=e=>`${left(e)} = ${right(e)}`.replace(/<[^>]+>/g,'');
+let ei=0;
+function stages(){
+  const e=EQ[ei],b=e.br?e.k*e.m:e.m,A=e.k-e.c,B=e.d-b,S=[];
+  S.push({lines:[`${left(e)} = ${right(e)}`],text:`Мета — залишити ${X} сам на сам. Кожен крок робить з обома частинами однакове, тому корінь не змінюється.`});
+  if(e.br)S.push({lines:[`${hl(terms([{k:e.k,v:1},{k:b}]))} = ${right(e)}`],text:`Розкриваємо дужки: ${fmt(e.k)} множимо на кожен доданок у дужках — і на ${X}, і на ${fmt(e.m)}.`});
+  const moveL=e.c!==0,moveR=b!==0;
+  if(moveL||moveR)S.push({lines:[`${terms([{k:e.k,v:1},{k:-e.c,v:1,mark:1}])} = ${terms([{k:e.d},{k:-b,mark:1}])}`],
+    text:`Доданки з ${X} — уліво, числа — управо. Перенесений доданок міняє знак: це те саме, що <span class="act">відняти його з обох частин</span>.`});
+  S.push({lines:[`${coefX(A)} = ${fmt(B)}`],text:`Зводимо подібні: ${fmt(e.k)} ${M} ${par(e.c)} = ${fmt(A)} ліворуч і ${fmt(e.d)} ${M} ${par(b)} = ${fmt(B)} праворуч. Вийшло ax = b з a = ${fmt(A)}, b = ${fmt(B)}.`});
+  if(A!==0){
+    const x=B/A,lv=e.br?e.k*(x+e.m):e.k*x+e.m,rv=e.c*x+e.d;
+    S.push({lines:A===1?[res(`${X} = ${fmt(B)}`)]:[`${X} = ${fmt(B)} : ${par(A)}`,res(`${X} = ${quot(B,A)}`)],
+      text:A===1?`Коефіцієнт уже 1 — корінь знайдено.`:`Ділимо <span class="act">обидві частини на ${par(A)}</span> — на число, не нуль, тож це можна.`});
+    S.push({lines:[],text:`Перевірка: при ${X} = ${quot(B,A)} ліва частина дорівнює ${fmt(lv)}, права — ${fmt(rv)}. Рівні, отже корінь знайдено правильно.`});
+  }else if(B===0)S.push({lines:[],text:`a = 0 і b = 0: нуль, помножений на будь-яке число, дає нуль. Рівність правильна при будь-якому ${X} — коренем є <b>будь-яке число</b>. Ліва й права частини початкового рівняння — той самий вираз.`});
+  else S.push({lines:[],text:`a = 0, а b = ${fmt(B)}: ліворуч завжди нуль, праворуч ні. <b>Коренів немає.</b> Ділити на нуль, щоб «знайти» x, не можна: немає числа, яке після множення на 0 дало б ${fmt(B)}.`,beyond:DIV0});
+  return S;
+}
+const D=L.derivation({box:$('deriv'),next:$('next'),reset:$('reset'),stages,first:'Розвʼязати →',more:'Далі →',mark:'⇔'});
+function pick(){L.chips($('pick'),EQ.map((e,i)=>({v:i,sub:e.sub,label:e.own?'ax + b = cx + d':label(e)})),ei,v=>{ei=v;$('own').hidden=!EQ[ei].own;pick();D.toStart()})}
+[['oa','k'],['ob','m'],['oc','c'],['od','d']].forEach(([id,key])=>L.stepper($(id),{min:-9,max:9,get:()=>own[key],set:v=>{own[key]=v;D.toStart()}}));
+pick();D.toStart();
+
+/* ---------- 3: pitfalls ---------- */
+L.contrast($('pit1'),{labelA:'знак не змінили',labelB:'знак змінили',
+  a:{expr:'3x + 5 = 11',steps:`3x = 11 + 5, x = ${L.frac(16,3)}`,why:'Пʼятірку перенесли, а знак лишили. Перевір: 3·16/3 + 5 = 21, а не 11.'},
+  b:{expr:'3x + 5 = 11',steps:`3x = 11 ${M} 5, ${res('x = 2')}`,why:'Від обох частин відняли 5 — праворуч зʼявився мінус. Перевірка: 3·2 + 5 = 11.'}});
+L.contrast($('pit2'),{labelA:'тільки перший доданок',labelB:'кожен доданок',
+  a:{expr:'2(x − 3) = 8',steps:`2x ${M} 3 = 8, x = 5,5`,why:'Двійку помножили тільки на x. Перевір: 2·(5,5 − 3) = 5, а не 8.'},
+  b:{expr:'2(x − 3) = 8',steps:`2x ${M} 6 = 8, ${res('x = 7')}`,why:'Двійка множиться і на x, і на 3. Перевірка: 2·(7 − 3) = 8.'}});
+L.contrast($('pit3'),{labelA:'поділили на 0',labelB:'перевірили рівність',
+  a:{expr:'0·x = 5',steps:'x = 5 : 0 = ?',why:'Ділити на нуль не можна: немає числа, яке після множення на 0 дасть 5.'},
+  b:{expr:'0·x = 5',steps:'0 = 5 — неправда при будь-якому x',why:'Ліворуч нуль при будь-якому x. Коренів немає.'}});
+
+/* ---------- 4: a word problem ---------- */
+const age={s:20};
+function drawTask(){const s=age.s,x=(s-4)/2;
+  $('task').innerHTML=[`x + (x + 4) = ${s}`,`2x + 4 = ${s}`,`2x = ${s} ${M} 4`,`2x = ${s-4}`,res(`x = ${fmt(x)}`)]
+    .map((l,i)=>`<div class="ln"><span class="eqs">${i?'⇔':''}</span><span class="body">${l}</span></div>`).join('')+
+    `<div class="explain">Сестрі ${fmt(x)}, братові ${fmt(x+4)}. Перевірка: ${fmt(x)} + ${fmt(x+4)} = ${s}, і брат старший на 4.</div>`}
+// the sum moves in twos, so the ages stay whole
+(function(){const r=$('ss'),[mi,out,pl]=[r.querySelector('button:first-child'),r.querySelector('output'),r.querySelector('button:last-child')];
+  const draw=()=>{out.textContent=age.s;mi.disabled=age.s<=6;pl.disabled=age.s>=40;drawTask()};
+  mi.onclick=()=>{age.s=Math.max(6,age.s-2);draw()};pl.onclick=()=>{age.s=Math.min(40,age.s+2);draw()};draw()})();
+})();
+</script>
+</body>
+</html>

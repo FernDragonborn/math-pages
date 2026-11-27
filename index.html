@@ -187,6 +187,7 @@ footer a{color:inherit}
     <div class="cards">
       <a class="card" style="--c:var(--t4)" data-class="7" data-area="алгебра" data-kind="урок" href="rivniannia/totozhni-peretvorennia/"><b>Тотожні перетворення</b><span>Переписуємо вираз крок за кроком, а значення при x не змінюється.</span></a>
       <a class="card" style="--c:var(--t4)" data-class="8" data-area="алгебра" data-kind="урок" href="rivniannia/peretvorennia-rivnian/"><b>Що саме не має змінитися</b><span>Тотожні й рівносильні перетворення і де губляться або зʼявляються зайві корені.</span></a>
+      <a class="card" style="--c:var(--t4)" data-class="7" data-area="алгебра" data-kind="урок" href="rivniannia/liniine-rivniannia/"><b>Лінійне рівняння з однією змінною</b><span>Від будь-якого вигляду до ax = b крок за кроком: один корінь, жодного чи будь-яке число.</span></a>
       <a class="card" style="--c:var(--t4)" data-class="7" data-area="алгебра" data-kind="урок" href="rivniannia/terezy-obydvi-chastyny/"><b>Терези: роби з обома частинами однакове</b><span>Кожна дія йде на обидві чаші, корінь лишається той самий.</span></a>
     </div>
   </section>
@@ -229,10 +230,13 @@ footer a{color:inherit}
   const grades=[...new Set(all.flatMap(c=>c.cls))].sort((a,b)=>a-b);
   const KINDS=['урок','шпаргалка','тренажер','зовнішній сайт'];
 
-  let st={view:'cards',group:'topic',sel:[]};
-  try{const s=JSON.parse(localStorage.getItem('menu-view')||'null');if(s&&(s.view==='cards'||s.view==='map'))st={...st,...s};}catch(e){}
+  // the map is the default; the view is remembered only once someone picks it themselves (key menu-pick),
+  // so the old menu-view, which saved «cards» along with any filter, no longer keeps anyone off the map
+  let st={view:'map',group:'topic',sel:[]};
+  try{const s=JSON.parse(localStorage.getItem('menu-view')||'null');if(s)st={...st,group:s.group||st.group,sel:s.sel||[]};
+    const v=localStorage.getItem('menu-pick');if(v==='cards'||v==='map')st.view=v;}catch(e){}
   st.sel=(st.sel||[]).filter(g=>grades.includes(g));
-  const save=()=>{try{localStorage.setItem('menu-view',JSON.stringify({view:st.view,group:st.group,sel:st.sel}));}catch(e){}};
+  const save=()=>{try{localStorage.setItem('menu-view',JSON.stringify({group:st.group,sel:st.sel}));}catch(e){}};
   let query='', pick=null;
 
   const pass=c=>(!st.sel.length||c.cls.some(g=>st.sel.includes(g)))&&(!query||(c.title+' '+c.desc+' '+c.topic).toLowerCase().includes(query));
@@ -460,7 +464,7 @@ footer a{color:inherit}
     if(!built){$('cam').innerHTML='<text x="20" y="40" class="gt">Будую мапу…</text>';await loadNeeds();if(document.fonts)await document.fonts.ready;built=layout();drawMap();fit(false);}
     else{drawMap(); if(!wasMap) fit(false);}
   }
-  document.querySelectorAll('.views button').forEach(b=>b.onclick=()=>{st.view=b.dataset.view;save();draw();});
+  document.querySelectorAll('.views button').forEach(b=>b.onclick=()=>{st.view=b.dataset.view;try{localStorage.setItem('menu-pick',st.view);}catch(e){}save();draw();});
   $('q').addEventListener('input',()=>{query=$('q').value.trim().toLowerCase();draw();});
   list.hidden=true; ['ui','q','grades'].forEach(id=>$(id).hidden=false);
   draw();

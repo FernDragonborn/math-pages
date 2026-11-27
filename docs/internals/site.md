@@ -12,7 +12,7 @@
 | Ступені, корені й логарифми | `stupeni-i-loharyfmy/` | Що таке ступінь (`shcho-take-stupin`), Властивості ступеня (`vlastyvosti-stupenia`), Нульовий і відʼємний показник (`nulovyi-i-vidiemnyi-pokaznyk`), Стандартний вигляд числа (`standartnyi-vyhliad-chysla`), Корінь n-го ступеня (`korin-n-stupenia`), Дробовий показник (`drobovyi-pokaznyk`), шпаргалка (`shpargalka`), Логарифми з нуля (`loharyfmy-z-nulia`) |
 | Корисні сайти | — | зовнішні картки без своєї теми (Quick maths); на мапі не лінія |
 | Дроби | `droby/` | Основна властивість дробу (`osnovna-vlastyvist-drobu`), Множення, ділення й ступінь дробу (`mnozhennia-i-dilennia-drobiv`), Спільний знаменник (`spilnyi-znamennyk`) |
-| Рівняння | `rivniannia/` | Тотожні перетворення (`totozhni-peretvorennia`), Терези: роби з обома частинами однакове (`terezy-obydvi-chastyny`), Що саме не має змінитися (`peretvorennia-rivnian`) |
+| Рівняння | `rivniannia/` | Тотожні перетворення (`totozhni-peretvorennia`), Терези: роби з обома частинами однакове (`terezy-obydvi-chastyny`), Лінійне рівняння з однією змінною (`liniine-rivniannia`), Що саме не має змінитися (`peretvorennia-rivnian`) |
 | Функції й графіки | `funktsii/` | Як працює графік функції (`yak-pratsiuie-hrafik`), Графіки функцій, шпаргалка (`hrafiky`) |
 | Геометрія | `heometriia/` | Кути (`kuty`), Шпаргалка з трапеції (`trapetsiia`); зовнішня картка Розвʼязування трикутників |
 
