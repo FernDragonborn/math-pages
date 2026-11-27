@@ -323,9 +323,6 @@ footer a{color:inherit}
     const allX=[...H.map(h=>P[h].x),...Object.values(EX).map(e=>e.x)], allY=[...H.map(h=>P[h].y),...Object.values(EX).map(e=>e.y)];
     const minX=Math.min(...allX),minY=Math.min(...allY),X0=70,Y0=40;
     H.forEach(h=>{P[h].x+=X0-minX;P[h].y+=Y0-minY;}); Object.values(EX).forEach(e=>{e.x+=X0-minX;e.y+=Y0-minY;});
-    // a line runs only downwards: once the stations stand where they stand, every line takes them top to bottom
-    // (left to right within a row), so it never climbs back up — no loop, and so nothing to run over itself
-    lines.forEach(l=>l.seq.sort((u,v)=>P[u].y-P[v].y||P[u].x-P[v].x));
     const rowYOf=()=>rows.map((g,ri)=>{const ys=mall.filter(c=>rowOf(c)===ri).map(c=>P[c.abs].y);return ys.length?Math.min(...ys):null;});
     const {placed:LB,elbow}=placeLabels(P,EX,lines,onLines,rowYOf,G);
     // everything that is drawn, so the camera can centre the real map and not an estimate of it
