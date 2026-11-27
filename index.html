@@ -343,9 +343,9 @@ footer a{color:inherit}
     const byAbs=Object.fromEntries(mall.map(c=>[c.abs,c]));
     const text=h=>{const c=byAbs[h],L=wrapT(c.title,20);if(c.ext)L[L.length-1]+=' ↗';return L;};
     const over=(a,b)=>a.x1<b.x2+PAD&&b.x1<a.x2+PAD&&a.y1<b.y2+PAD&&b.y1<a.y2+PAD;
-    const tries={},jogs={};let placed={},elbow=[];
-    // a stretch between two stations bends once; it may bend diagonal-first or straight-first, and takes the
-    // one that passes no other station — a line drawn through a station reads as stopping there
+    const tries={},jogs={},pref={},bent={};let placed={},elbow=[];
+    // a stretch between two stations takes the first of its shapes that passes no other station (a line drawn
+    // through a station reads as stopping there) and does not run into the line itself
     const dist=(q,A,B)=>{const vx=B.x-A.x,vy=B.y-A.y,t=Math.max(0,Math.min(1,((q.x-A.x)*vx+(q.y-A.y)*vy)/((vx*vx+vy*vy)||1)));return Math.hypot(A.x+t*vx-q.x,A.y+t*vy-q.y);};
     for(let iter=0;iter<60;iter++){
       Object.values(EX).forEach(e=>{if(e.anchor)e.x=P[e.anchor].x-16;});
@@ -353,8 +353,8 @@ footer a{color:inherit}
       const addSeg=(A,B)=>{const n=Math.max(1,Math.ceil(Math.hypot(B.x-A.x,B.y-A.y)/3));for(let i=0;i<=n;i++)pts.push({x:A.x+(B.x-A.x)*i/n,y:A.y+(B.y-A.y)*i/n});};
       let blocker=null;elbow=lines.map(l=>{const q=l.seq.map(h=>P[h]),modes=[],pcs=[];
         if(q.length===1)addSeg({x:q[0].x,y:q[0].y-24},{x:q[0].x,y:q[0].y+24});
-        const pieces=(i,mode)=>{const A=q[i-1],B=q[i],M=bend(A,B,mode);return [[A,M],[M,B]].filter(([u,v])=>Math.hypot(v.x-u.x,v.y-u.y)>.5);};
-        const hits=(i,mode)=>{const A=q[i-1],B=q[i],M=bend(A,B,mode);return H.filter(h=>h!==l.seq[i-1]&&h!==l.seq[i]&&Math.min(dist(P[h],A,M),dist(P[h],M,B))<R(h)+4);};
+        const pieces=(i,mode)=>piecesOf(route(q[i-1],q[i],mode));
+        const hits=(i,mode)=>{const ps=pieces(i,mode);return H.filter(h=>h!==l.seq[i-1]&&h!==l.seq[i]&&ps.some(([a,b])=>dist(P[h],a,b)<R(h)+4));};
         // a line never runs over, touches or crosses itself: away from its own two stations, no point of the
         // stretch may come near any piece of the line drawn before it
         const selfHit=(i,mode)=>{const S0=q[i-1],S1=q[i],before=pcs.slice(0,i).filter(Boolean).flat();if(!before.length)return false;
@@ -364,8 +364,10 @@ footer a{color:inherit}
               if(before.some(([a,b])=>dist(pt,a,b)<SP))return true;}}
           return false;};
         const bad=(i,mode)=>hits(i,mode).length+(selfHit(i,mode)?1:0);
+        const li=lines.indexOf(l);
         for(let i=1;i<q.length;i++){
-          let mode=['dg','st'].find(m=>!bad(i,m));
+          const want=pref[li+':'+i],order=want?[want,...MODES.filter(m=>m!==want)]:MODES;
+          let mode=order.find(m=>!bad(i,m));
           // both bends run over the stretch before: try that stretch the other way round
           if(!mode&&i>1&&['dg','st'].some(m=>selfHit(i,m))){const alt=modes[i-2]==='dg'?'st':'dg',keep=modes[i-2];
             pcs[i-2]=null;modes[i-2]=alt;pcs[i-2]=pieces(i-1,alt);
@@ -373,7 +375,7 @@ footer a{color:inherit}
           // still no good bend: move a station — the one in the way, or, when the line would turn back on itself,
           // the station it turns at — rather than keep the map's shape
           if(!mode){const hd=hits(i,'dg'),hs=hits(i,'st');mode=hd.length<=hs.length?'dg':'st';
-            if(!blocker)blocker=hd.length&&hs.length?hd[0]:selfHit(i,'dg')&&selfHit(i,'st')?l.seq[i]:null;}
+            if(!blocker)blocker=MODES.every(m=>hits(i,m).length)?hd[0]:MODES.every(m=>selfHit(i,m))?l.seq[i]:null;}
           modes.push(mode);pcs[i-1]=pieces(i,mode);}
         return modes;});
       // no bend misses it: the station in the way — only it — steps right to the next free grid cell; moving
@@ -389,15 +391,36 @@ footer a{color:inherit}
       for(const h of order){
         const L=text(h),w=Math.max(...L.map(measure))+4,ht=L.length*14,{x,y}=P[h],r=R(h),d=r*.75;
         const C=[{x1:x+r+5,y1:y-ht/2},{x1:x+d,y1:y-d-2-ht},{x1:x+d,y1:y+d+2},{x1:x-r-5-w,y1:y-ht/2},{x1:x-d-w,y1:y-d-2-ht},{x1:x-d-w,y1:y+d+2},{x1:x-w/2,y1:y+r+4},{x1:x-w/2,y1:y-r-4-ht}]
-          .map(b=>({...b,x2:b.x1+w,y2:b.y1+ht,L}));
-        const cost=b=>fixed.filter(f=>f.h!==h&&over(b,f)).length+Object.values(placed).filter(o=>over(b,o)).length+pts.filter(q=>q.x>b.x1-PAD&&q.x<b.x2+PAD&&q.y>b.y1-PAD&&q.y<b.y2+PAD).length;
+          .map((b,side)=>({...b,x2:b.x1+w,y2:b.y1+ht,L,side}));
+        // text on text or on a station is never acceptable; a line under a label only as the very last resort
+        const cost=b=>100*(fixed.filter(f=>f.h!==h&&over(b,f)).length+Object.values(placed).filter(o=>over(b,o)).length)+pts.filter(q=>q.x>b.x1-PAD&&q.x<b.x2+PAD&&q.y>b.y1-PAD&&q.y<b.y2+PAD).length;
         const free=C.find(b=>cost(b)===0);
         if(free){placed[h]=free;continue;}
         if((tries[h]=(tries[h]||0)+1)>4){placed[h]=C.reduce((a,b)=>cost(b)<cost(a)?b:a);continue;}
         stuck=h;break;
       }
-      if(!stuck)break;
-      const x0=P[stuck].x;H.forEach(k=>{if(P[k].x>x0)P[k].x+=G;});Object.values(EX).forEach(e=>{if(!e.anchor&&e.x>x0)e.x+=G;});
+      // a label that could not stand to the right of its station, because a line runs there: bend that line
+      // into another shape that leaves the spot free, passes no station and makes no loop — then start over
+      if(!stuck){let changed=false;
+        for(const h of order){const b=placed[h];if(!b||b.side===0)continue;
+          const w=b.x2-b.x1,ht=b.y2-b.y1,r=R(h),{x,y}=P[h],RB={x1:x+r+5,y1:y-ht/2,x2:x+r+5+w,y2:y+ht/2};
+          const inBox=([a,c])=>{const n=Math.max(1,Math.ceil(Math.hypot(c.x-a.x,c.y-a.y)/3));for(let k=0;k<=n;k++){const t={x:a.x+(c.x-a.x)*k/n,y:a.y+(c.y-a.y)*k/n};if(t.x>RB.x1-PAD-4&&t.x<RB.x2+PAD+4&&t.y>RB.y1-PAD-4&&t.y<RB.y2+PAD+4)return true;}return false;};
+          const fixedHit=fixed.some(f=>f.h!==h&&over(RB,f))||Object.entries(placed).some(([k,o])=>k!==h&&over(RB,o));
+          if(fixedHit)continue;
+          lines.forEach((l,li)=>{const q=l.seq.map(k=>P[k]);for(let i=1;i<q.length;i++){const key=li+':'+i,cur=elbow[li][i-1];
+            if(!piecesOf(route(q[i-1],q[i],cur)).some(inBox)||(bent[key]||0)>=3)continue;
+            const others=[];for(let j=1;j<q.length;j++)if(j!==i)others.push(...piecesOf(route(q[j-1],q[j],elbow[li][j-1])));
+            const alt=MODES.filter(m=>m!==cur).find(m=>{const ps=piecesOf(route(q[i-1],q[i],m));
+              if(ps.some(inBox))return false;
+              if(H.some(k=>k!==l.seq[i-1]&&k!==l.seq[i]&&ps.some(([a,c])=>dist(P[k],a,c)<R(k)+4)))return false;
+              return !ps.some(([a,c])=>{const n=Math.max(1,Math.ceil(Math.hypot(c.x-a.x,c.y-a.y)/3));for(let k=0;k<=n;k++){const t={x:a.x+(c.x-a.x)*k/n,y:a.y+(c.y-a.y)*k/n};
+                if(Math.hypot(t.x-q[i-1].x,t.y-q[i-1].y)<12||Math.hypot(t.x-q[i].x,t.y-q[i].y)<12)continue;if(others.some(([u,v])=>dist(t,u,v)<SP))return true;}return false;});});
+            if(alt){pref[key]=alt;bent[key]=(bent[key]||0)+1;changed=true;}}});}
+        if(!changed)break;continue;}
+      // no free side: by turns, open a column to the right of the station, or move the station itself to the
+      // next free cell — a label boxed in from the left or above needs the second
+      if(tries[stuck]%2){const x0=P[stuck].x;H.forEach(k=>{if(P[k].x>x0)P[k].x+=G;});Object.values(EX).forEach(e=>{if(!e.anchor&&e.x>x0)e.x+=G;});}
+      else{const p=P[stuck];let nx=p.x+G;while(H.some(k=>k!==stuck&&Math.abs(P[k].x-nx)<1&&Math.abs(P[k].y-p.y)<G))nx+=G;p.x=nx;}
     }
     return {placed,elbow};
   }
@@ -405,10 +428,18 @@ footer a{color:inherit}
   const upstream=h=>[...(needs[h]||[]),...(built.prev[h]?[built.prev[h]]:[])].filter(n=>built.pos[n]);
   const anc=h=>{const out=new Set(),stack=[h];while(stack.length){const x=stack.pop();upstream(x).forEach(n=>{if(!out.has(n)){out.add(n);stack.push(n);}});}return out;};
   const wrapT=(t,n)=>{const w=t.split(' '),L=[];let cur='';w.forEach(x=>{if((cur+' '+x).trim().length>n&&cur){L.push(cur);cur=x;}else cur=(cur+' '+x).trim();});if(cur)L.push(cur);return L.slice(0,3);};
-  // a metro segment bends once, so it runs only at 0°, 45° and 90°: diagonal first ('dg') or straight first ('st')
-  function bend(A,B,mode){const dx=B.x-A.x,dy=B.y-A.y,m=Math.min(Math.abs(dx),Math.abs(dy));
-    return mode==='st'?{x:B.x-Math.sign(dx)*m,y:B.y-Math.sign(dy)*m}:{x:A.x+Math.sign(dx)*m,y:A.y+Math.sign(dy)*m};}
-  const seg=(A,B,mode='dg')=>{const M=bend(A,B,mode);return `L${M.x} ${M.y} L${B.x} ${B.y}`;};
+  /* a stretch between two stations runs only at 0°, 45° and 90°, in one of four shapes: diagonal then straight
+     ('dg'), straight then diagonal ('st'), straight–diagonal–straight ('sds') or diagonal–straight–diagonal
+     ('dsd'). The two-piece shapes come first; the three-piece ones let a line bend out of a label's way */
+  const MODES=['dg','st','sds','dsd'];
+  function route(A,B,mode){const dx=B.x-A.x,dy=B.y-A.y,sx=Math.sign(dx),sy=Math.sign(dy),m=Math.min(Math.abs(dx),Math.abs(dy)),
+      hz=Math.abs(dx)>=Math.abs(dy),st=(hz?Math.abs(dx):Math.abs(dy))-m,S=k=>hz?{x:sx*k,y:0}:{x:0,y:sy*k},Dg=k=>({x:sx*k,y:sy*k});
+    const walk=steps=>{const out=[A];let p=A;steps.forEach(v=>{if(Math.abs(v.x)+Math.abs(v.y)<.5)return;p={x:p.x+v.x,y:p.y+v.y};out.push(p);});out[out.length-1]=B;return out;};
+    if(mode==='st')return walk([S(st),Dg(m)]);
+    if(mode==='sds')return walk([S(st/2),Dg(m),S(st/2)]);
+    if(mode==='dsd')return walk([Dg(m/2),S(st),Dg(m/2)]);
+    return walk([Dg(m),S(st)]);}
+  const piecesOf=pts=>pts.slice(1).map((p,i)=>[pts[i],p]);
   /* lines that share a corridor run side by side, as on a printed metro map: every straight piece of a line
      that lies on one straight with a piece of another line and overlaps it gets its own lane, SP apart
      (a line is 7 px wide). Corners are where the shifted straights meet; a lane change on a straight run is
@@ -417,8 +448,8 @@ footer a{color:inherit}
   const SP=8;
   function lanes(lines,P,elbow){
     const E=[];
-    lines.forEach((l,li)=>{for(let i=1;i<l.seq.length;i++){const A=P[l.seq[i-1]],B=P[l.seq[i]],M=bend(A,B,elbow[li][i-1]);
-      [[A,M],[M,B]].forEach(([u,v])=>{if(Math.hypot(v.x-u.x,v.y-u.y)<.5)return;
+    lines.forEach((l,li)=>{for(let i=1;i<l.seq.length;i++){const A=P[l.seq[i-1]],B=P[l.seq[i]];
+      piecesOf(route(A,B,elbow[li][i-1])).forEach(([u,v])=>{if(Math.hypot(v.x-u.x,v.y-u.y)<.5)return;
         let cx=Math.sign(v.x-u.x),cy=Math.sign(v.y-u.y);const dx=cx,dy=cy;if(cx<0||(cx===0&&cy<0)){cx=-cx;cy=-cy;}
         const key=cx===0?'v'+Math.round(u.x):cy===0?'h'+Math.round(u.y):cy===cx?'d'+Math.round(u.y-u.x):'a'+Math.round(u.y+u.x);
         const t=p=>cx!==0?p.x:p.y;E.push({li,s:i-1,u,v,dx,dy,cx,cy,key,lo:Math.min(t(u),t(v)),hi:Math.max(t(u),t(v)),o:0});});}});
