@@ -31,7 +31,8 @@ h2 small{display:block;font:400 .95rem var(--font-body);color:var(--ink-soft);ma
 .card{background:var(--card);border:1.5px solid var(--line);border-radius:4px;padding:14px 16px 16px;
   display:flex;flex-direction:column;gap:8px;min-width:0}
 .card svg{width:100%;height:auto;display:block;user-select:none;-webkit-user-select:none}
-.card h3{font:600 1.02rem var(--font-body);margin:0;display:flex;gap:8px;align-items:baseline}
+.card h3{font:600 1.02rem var(--font-body);margin:0;display:flex;flex-wrap:wrap;gap:2px 8px;align-items:baseline}
+.card h3 .f{font:500 .95rem var(--font-mono);color:var(--ink-soft);white-space:nowrap}
 .num{font:700 1.2rem var(--font-hand);color:var(--ink-soft)}
 .rule{font:600 1rem/1.55 var(--font-mono);color:var(--ink);margin:0;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .rule .say{font:500 .95rem var(--font-body);color:var(--ink-soft)}
@@ -103,7 +104,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-lin">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">1</span>Лінійна функція</h3>
+      <h3><span class="num">1</span>Пряма <span class="f">y = kx + b</span></h3>
       <label class="ctl k"><span data-name="k"></span><input type="range" min="-3" max="3" step="0.5" value="1" data-k="k"></label>
       <label class="ctl n"><span data-name="b"></span><input type="range" min="-4" max="4" step="1" value="1" data-k="b"></label>
       <label class="ctl x"><span data-name="x"></span><input type="range" min="-5" max="5" step="0.5" value="2" data-k="x"></label>
@@ -130,7 +131,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-sq">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">3</span>y = x²</h3>
+      <h3><span class="num">3</span>Парабола <span class="f">y = x²</span></h3>
       <label class="ctl x"><span data-name="x"></span><input type="range" min="-2" max="2" step="0.5" value="1.5" data-k="x"></label>
       <p class="rule" aria-live="polite"></p>
       <p class="why">квадрат відʼємного числа додатний: x і −x дають той самий y, тому гілки однакові й графік не опускається під вісь x</p>
@@ -138,7 +139,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-hyp">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">4</span>y = k/x</h3>
+      <h3><span class="num">4</span>Гіпербола <span class="f">y = k/x</span></h3>
       <label class="ctl k"><span data-name="k"></span><input type="range" min="-6" max="6" step="1" value="4" data-k="k"></label>
       <label class="ctl x"><span data-name="x"></span><input type="range" min="-6" max="6" step="0.5" value="2" data-k="x"></label>
       <p class="rule" aria-live="polite"></p>
@@ -148,7 +149,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-root">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">5</span>y = √x</h3>
+      <h3><span class="num">5</span>Вітка параболи <span class="f">y = √x</span></h3>
       <label class="ctl x"><span data-name="x"></span><input type="range" min="-2" max="6" step="0.5" value="4" data-k="x"></label>
       <div class="opts"><button class="chip" type="button" data-toggle aria-pressed="false">показати y = x²</button></div>
       <p class="rule" aria-live="polite"></p>
@@ -158,7 +159,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-pow">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">6</span>y = xⁿ</h3>
+      <h3><span class="num">6</span><span data-title>Ступенева функція</span> <span class="f">y = xⁿ</span></h3>
       <div class="opts" role="group" aria-label="Показник n" data-chips="n"></div>
       <label class="ctl x"><span data-name="x"></span><input type="range" min="-2" max="2" step="0.5" value="-1.5" data-k="x"></label>
       <p class="rule" aria-live="polite"></p>
@@ -174,7 +175,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-quad">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">7</span>Парабола y = ax² + bx + c</h3>
+      <h3><span class="num">7</span>Парабола <span class="f">y = ax² + bx + c</span></h3>
       <label class="ctl k"><span data-name="a"></span><input type="range" min="-2" max="2" step="0.5" value="1" data-k="a"></label>
       <label class="ctl"><span data-name="b"></span><input type="range" min="-4" max="4" step="1" value="-2" data-k="b"></label>
       <label class="ctl n"><span data-name="c"></span><input type="range" min="-4" max="4" step="1" value="-3" data-k="c"></label>
@@ -191,7 +192,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-shift">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">8</span>Зсув: y = f(x − m) + n</h3>
+      <h3><span class="num">8</span>Зсув графіка <span class="f">y = f(x − m) + n</span></h3>
       <div class="opts" role="group" aria-label="Який графік зсуваємо" data-chips="f"></div>
       <label class="ctl m"><span data-name="m"></span><input type="range" min="-4" max="4" step="1" value="2" data-k="m"></label>
       <label class="ctl n"><span data-name="n"></span><input type="range" min="-4" max="4" step="1" value="1" data-k="n"></label>
@@ -201,7 +202,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-scale">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">9</span>Розтяг: y = a·f(x)</h3>
+      <h3><span class="num">9</span>Розтяг графіка <span class="f">y = a·f(x)</span></h3>
       <div class="opts" role="group" aria-label="Який графік розтягуємо" data-chips="f"></div>
       <label class="ctl k"><span data-name="a"></span><input type="range" min="-3" max="3" step="0.5" value="2" data-k="a"></label>
       <p class="rule" aria-live="polite"></p>
@@ -217,7 +218,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-exp">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">10</span>y = aˣ</h3>
+      <h3><span class="num">10</span>Показникова функція <span class="f">y = aˣ</span></h3>
       <div class="opts" role="group" aria-label="Основа a" data-chips="a"></div>
       <label class="ctl x"><span data-name="x"></span><input type="range" min="-3" max="3" step="1" value="-2" data-k="x"></label>
       <div class="opts"><button class="chip" type="button" data-toggle aria-pressed="false">показати логарифм</button></div>
@@ -396,7 +397,7 @@ card('c-root',{
 /* 6 power xⁿ */
 card('c-pow',{
   init(s,root){s.n=3;root._sync=chipGroup(root,'n',[1,2,3,4,5].map(n=>({v:n,label:'n = '+n})),s)},
-  draw(g,top,s){curve(g,x=>Math.pow(x,s.n),'cv');dot(top,1,1,'po',4.5);dot(top,-1,Math.pow(-1,s.n),'po',4.5);probe(g,top,s.x,Math.pow(s.x,s.n))},
+  draw(g,top,s){document.querySelector('#c-pow [data-title]').textContent=['','Пряма','Парабола','Кубічна парабола','Ступенева функція','Ступенева функція'][s.n];curve(g,x=>Math.pow(x,s.n),'cv');dot(top,1,1,'po',4.5);dot(top,-1,Math.pow(-1,s.n),'po',4.5);probe(g,top,s.x,Math.pow(s.x,s.n))},
   rule(s){const y=Math.pow(s.x,s.n);
     const how=s.n===1?'n = 1: це пряма y = x':s.n%2?'непарний n: знак x лишається, графік іде через (−1; −1)':'парний n: знак зникає, графік іде через (−1; 1)';
     return `y = x${s.n===1?'':sup(s.n)}<br>x = ${fmt(s.x)}: y = ${par(s.x)}${s.n===1?'':sup(s.n)} = ${c('cy',fmt(y))}${off(s.x,y)}<br><span class="say">${how}</span>`}
