@@ -118,7 +118,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
       <label class="ctl n"><span data-name="b₂"></span><input type="range" min="-4" max="4" step="1" value="-2" data-k="b"></label>
       <p class="rule" aria-live="polite"></p>
       <p class="why">однакове k — однаковий нахил: прямі йдуть поруч і не зустрічаються</p>
-      <p class="note">Чорна пряма стоїть: y = x + 1. Зелену рухаєш ти.</p>
+      <p class="note">Пряма y = x + 1 стоїть на місці, зелену рухаєш ти.</p>
     </article>
 
   </div>
@@ -474,7 +474,7 @@ card('c-exp',{
   rule(s){const o=A_OPTS.find(o=>o.v===s.a),y=Math.pow(s.a,s.x);
     let r=`x = ${fmt(s.x)}: y = ${o.t}${sup(fmt(s.x).replace(M,'-'))} = ${c('cy',powFrac(s.a,s.x))}${off(s.x,y)}<br>`;
     r+=`<span class="say">${s.a>1?'a > 1: функція зростає':s.a<1?'0 < a < 1: функція спадає':'1 у будь-якому ступені дає 1: графік — пряма y = 1, тому основу 1 не беруть'}`;
-    if(s.on)r+=s.a===1?'; логарифма за основою 1 немає: 1 у жодному ступені не дасть, наприклад, 2':`; чорний графік — y = log${s.a===.5?'₁/₂':s.a===2?'₂':'₃'} x, він проходить через (1; 0)`;
+    if(s.on)r+=s.a===1?'; логарифма за основою 1 немає: 1 у жодному ступені не дасть, наприклад, 2':`; другий графік — y = log${s.a===.5?'₁/₂':s.a===2?'₂':'₃'} x, він проходить через (1; 0)`;
     return r+'</span>'}
 });
 document.getElementById('c-exp')._sync();
