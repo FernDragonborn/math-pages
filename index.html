@@ -322,6 +322,9 @@ footer a{color:inherit}
     const allX=[...H.map(h=>P[h].x),...Object.values(EX).map(e=>e.x)], allY=[...H.map(h=>P[h].y),...Object.values(EX).map(e=>e.y)];
     const minX=Math.min(...allX),minY=Math.min(...allY),X0=70,Y0=40;
     H.forEach(h=>{P[h].x+=X0-minX;P[h].y+=Y0-minY;}); Object.values(EX).forEach(e=>{e.x+=X0-minX;e.y+=Y0-minY;});
+    // a line runs only downwards: once the stations stand where they stand, every line takes them top to bottom
+    // (left to right within a row), so it never climbs back up — no loop, and so nothing to run over itself
+    lines.forEach(l=>l.seq.sort((u,v)=>P[u].y-P[v].y||P[u].x-P[v].x));
     const rowYOf=()=>rows.map((g,ri)=>{const ys=mall.filter(c=>rowOf(c)===ri).map(c=>P[c.abs].y);return ys.length?Math.min(...ys):null;});
     const {placed:LB,elbow}=placeLabels(P,EX,lines,onLines,rowYOf,G);
     // everything that is drawn, so the camera can centre the real map and not an estimate of it
@@ -345,9 +348,6 @@ footer a{color:inherit}
     const tries={},jogs={};let placed={},elbow=[];
     // a stretch between two stations bends once; it may bend diagonal-first or straight-first, and takes the
     // one that passes no other station — a line drawn through a station reads as stopping there
-    // two straight pieces on one straight that share more than a point
-    const overlap=([a,b],[c,d])=>{const cr=(p,q,r)=>(q.x-p.x)*(r.y-p.y)-(q.y-p.y)*(r.x-p.x);if(Math.abs(cr(a,b,c))>1||Math.abs(cr(a,b,d))>1)return false;
-      const hz=Math.abs(b.x-a.x)>=Math.abs(b.y-a.y),t=p=>hz?p.x:p.y;return Math.min(Math.max(t(a),t(b)),Math.max(t(c),t(d)))-Math.max(Math.min(t(a),t(b)),Math.min(t(c),t(d)))>2;};
     const dist=(q,A,B)=>{const vx=B.x-A.x,vy=B.y-A.y,t=Math.max(0,Math.min(1,((q.x-A.x)*vx+(q.y-A.y)*vy)/((vx*vx+vy*vy)||1)));return Math.hypot(A.x+t*vx-q.x,A.y+t*vy-q.y);};
     for(let iter=0;iter<60;iter++){
       Object.values(EX).forEach(e=>{if(e.anchor)e.x=P[e.anchor].x-16;});
@@ -357,8 +357,14 @@ footer a{color:inherit}
         if(q.length===1)addSeg({x:q[0].x,y:q[0].y-24},{x:q[0].x,y:q[0].y+24});
         const pieces=(i,mode)=>{const A=q[i-1],B=q[i],M=bend(A,B,mode);return [[A,M],[M,B]].filter(([u,v])=>Math.hypot(v.x-u.x,v.y-u.y)>.5);};
         const hits=(i,mode)=>{const A=q[i-1],B=q[i],M=bend(A,B,mode);return H.filter(h=>h!==l.seq[i-1]&&h!==l.seq[i]&&Math.min(dist(P[h],A,M),dist(P[h],M,B))<R(h)+4);};
-        // a line never runs back over itself: no piece may lie on a piece of an earlier stretch of the same line
-        const selfHit=(i,mode)=>pieces(i,mode).some(p=>pcs.slice(0,i-1).some(st=>st&&st.some(o=>overlap(p,o))));
+        // a line never runs over, touches or crosses itself: away from its own two stations, no point of the
+        // stretch may come near any piece of the line drawn before it
+        const selfHit=(i,mode)=>{const S0=q[i-1],S1=q[i],before=pcs.slice(0,i).filter(Boolean).flat();if(!before.length)return false;
+          for(const [u,v] of pieces(i,mode)){const n=Math.max(1,Math.ceil(Math.hypot(v.x-u.x,v.y-u.y)/3));
+            for(let k=0;k<=n;k++){const pt={x:u.x+(v.x-u.x)*k/n,y:u.y+(v.y-u.y)*k/n};
+              if(Math.hypot(pt.x-S0.x,pt.y-S0.y)<12||Math.hypot(pt.x-S1.x,pt.y-S1.y)<12)continue;
+              if(before.some(([a,b])=>dist(pt,a,b)<SP))return true;}}
+          return false;};
         const bad=(i,mode)=>hits(i,mode).length+(selfHit(i,mode)?1:0);
         for(let i=1;i<q.length;i++){
           let mode=['dg','st'].find(m=>!bad(i,m));
@@ -366,7 +372,10 @@ footer a{color:inherit}
           if(!mode&&i>1&&['dg','st'].some(m=>selfHit(i,m))){const alt=modes[i-2]==='dg'?'st':'dg',keep=modes[i-2];
             pcs[i-2]=null;modes[i-2]=alt;pcs[i-2]=pieces(i-1,alt);
             if(bad(i-1,alt)||!(mode=['dg','st'].find(m=>!bad(i,m)))){modes[i-2]=keep;pcs[i-2]=pieces(i-1,keep);mode=undefined;}}
-          if(!mode){const hd=hits(i,'dg'),hs=hits(i,'st');mode=hd.length<=hs.length?'dg':'st';if(hd.length&&hs.length&&!blocker)blocker=hd[0];}
+          // still no good bend: move a station — the one in the way, or, when the line would turn back on itself,
+          // the station it turns at — rather than keep the map's shape
+          if(!mode){const hd=hits(i,'dg'),hs=hits(i,'st');mode=hd.length<=hs.length?'dg':'st';
+            if(!blocker)blocker=hd.length&&hs.length?hd[0]:selfHit(i,'dg')&&selfHit(i,'st')?l.seq[i]:null;}
           modes.push(mode);pcs[i-1]=pieces(i,mode);}
         return modes;});
       // no bend misses it: the station in the way — only it — steps right to the next free grid cell; moving
