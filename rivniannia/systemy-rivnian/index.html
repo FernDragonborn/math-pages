@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Системи лінійних рівнянь: підстановка й додавання</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/lesson.css">
+<script src="/assets/theme.js"></script>
+<style>
+/* marks (docs/internals/colours.md): x — mark-1, y — mark-4, what is done to a whole equation — mark-2, the answer — mark-3 */
+.cx{color:var(--mark-1);font-weight:700}
+.cy{color:var(--mark-4);font-weight:700}
+.act{color:var(--mark-2);font-weight:700}
+/* a system: two equations under one brace */
+.sys{display:inline-block;border-left:2.5px solid var(--ink-soft);border-radius:8px 0 0 8px;padding:0 0 0 10px;line-height:1.6;vertical-align:middle}
+.sys > span{display:block;white-space:nowrap}
+#deriv .ln{font-size:19px}
+.ax{font:700 22px/1.5 var(--font-mono);margin:8px 0}
+.checks{font:500 16px/1.8 var(--font-mono);margin:6px 0}
+.ok{color:var(--mark-3);font-weight:700}
+.no{color:var(--alert);font-weight:700}
+.steppers{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px 14px;margin:8px 0}
+.steppers[hidden]{display:none}
+.steppers label{display:flex;align-items:center;gap:8px;font:600 15px var(--font-mono);color:var(--ink-soft)}
+#pick.palette{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+#pick .chip span{font-size:15px;line-height:1.5}
+.pit .steps{white-space:normal;overflow:visible;line-height:1.9}
+.pit .expr{font-size:21px}
+.plot{display:block;width:100%;max-width:400px;height:auto;margin:10px auto 0}
+.plot .gl{stroke:var(--grid);stroke-width:1}
+.plot .ax2{stroke:var(--ink-soft);stroke-width:1.5}
+.plot .ah{fill:var(--ink-soft)}
+.plot .al{font:italic 600 14px var(--font-body);fill:var(--ink-soft);text-anchor:middle;dominant-baseline:central}
+.plot .l1{stroke:var(--ink);stroke-width:2.6;stroke-linecap:round}
+.plot .l2{stroke:var(--ink-soft);stroke-width:2.6;stroke-dasharray:8 5;stroke-linecap:round}
+.plot .pt{fill:var(--mark-3);stroke:var(--card);stroke-width:2.5}
+summary::after{content:"  — розвʼязок?";font:400 13px var(--font-body);color:var(--ink-soft)}
+details[open] summary::after{content:""}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+
+<header>
+  <h1>Системи лінійних рівнянь: підстановка й додавання</h1>
+  <p class="sub">Два рівняння, два невідомі — і треба знайти пару чисел, яка підходить в обидва. Два способи приводять систему до одного рівняння з одним невідомим.</p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <a href="/rivniannia/liniine-rivniannia/">Лінійне рівняння з однією змінною</a> <a href="/rivniannia/totozhni-peretvorennia/">Тотожні перетворення</a> <a href="/funktsii/yak-pratsiuie-hrafik/">Як працює графік функції</a></p>
+</header>
+
+<section>
+  <h2><span class="num">1</span>Розвʼязок — пара, що підходить в обидва</h2>
+  <p>Система — кілька рівнянь, які мають виконуватися <b>одночасно</b>. Тут два невідомі: <span class="cx">x</span> і <span class="cy">y</span>.</p>
+  <p><b>Розвʼязок системи</b> — пара (<span class="cx">x</span>; <span class="cy">y</span>), яка робить правильними обидва рівняння. Одного не досить.</p>
+  <div class="ax"><span class="sys"><span><span class="cx">x</span> + <span class="cy">y</span> = 5</span><span><span class="cx">x</span> − <span class="cy">y</span> = 1</span></span></div>
+  <p>Обери пару й перевір:</p>
+  <div id="pairs"></div>
+  <div class="checks" id="pairOut" aria-live="polite"></div>
+</section>
+
+<section>
+  <h2><span class="num">2</span>Два способи — один розвʼязок</h2>
+  <p>Обери систему й спосіб. Перемкни спосіб — розклад піде інакше, а відповідь та сама.</p>
+  <div id="pick"></div>
+  <div class="steppers" id="own" hidden></div>
+  <div id="method" aria-label="Спосіб"></div>
+  <div class="deriv" id="deriv" aria-live="polite"></div>
+  <div class="row">
+    <button class="btn main" type="button" id="next">Розвʼязати →</button>
+    <button class="btn" type="button" id="reset">Згорнути назад</button>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">3</span>Де помиляються</h2>
+  <div id="pit1"></div>
+  <div id="pit2"></div>
+  <div id="pit3"></div>
+  <div class="warn"><b>Звідси правило:</b> множиш рівняння — множ <b>обидві</b> його частини. Відповідь системи — пара (x; y), першим завжди x. І перевіряй пару в <b>обох</b> рівняннях.</div>
+</section>
+
+<section>
+  <h2><span class="num">4</span>Навіщо це: дві прямі на площині</h2>
+  <p>Кожне рівняння з двома змінними — це пряма: усі пари, що йому підходять. Розвʼязок системи — спільна точка обох прямих. Тут система, яку ти вибрав вище.</p>
+  <svg class="plot" id="plot" aria-hidden="true"></svg>
+  <p class="checks" id="plotOut" aria-live="polite"></p>
+  <p class="muted">Прямі перетинаються — один розвʼязок. Паралельні — жодного. Збігаються — безліч.</p>
+</section>
+
+<section>
+  <h2><span class="num">5</span>Перевір себе</h2>
+  <p class="muted">Спершу розвʼяжи сам. Потім відкривай.</p>
+  <details><summary>x + y = 10, x − y = 4</summary><div class="ans">Додаємо: <span class="m">2x = 14</span>, <span class="m">x = 7</span>; тоді <span class="m">y = 10 − 7 = 3</span>. Відповідь: (7; 3).</div></details>
+  <details><summary>y = 2x, x + y = 9</summary><div class="ans">Підставляємо: <span class="m">x + 2x = 9</span>, <span class="m">x = 3</span>, <span class="m">y = 6</span>. Відповідь: (3; 6).</div></details>
+  <details><summary>3x − y = 5, x + 2y = 4</summary><div class="ans">З першого <span class="m">y = 3x − 5</span>; <span class="m">x + 2(3x − 5) = 4</span>, <span class="m">7x = 14</span>, <span class="m">x = 2</span>, <span class="m">y = 1</span>. Відповідь: (2; 1).</div></details>
+  <details><summary>x − y = 1, 2x − 2y = 5</summary><div class="ans">Множимо перше на −2 і додаємо: <span class="m">0 = 3</span> — неправда. Розвʼязків немає: прямі паралельні.</div></details>
+  <details><summary>2x + 3y = 8, 4x + 6y = 16</summary><div class="ans">Друге — це перше, помножене на 2. Множимо перше на −2 і додаємо: <span class="m">0 = 0</span>. Розвʼязків безліч: прямі збігаються.</div></details>
+</section>
+
+<div class="rule">
+  <b>Коротко:</b><br>
+  Розвʼязок системи — пара (x; y), що підходить в обидва рівняння.<br>
+  <b>Підстановка:</b> вирази одне невідоме з одного рівняння й підстав в інше.<br>
+  <b>Додавання:</b> помнож рівняння так, щоб коефіцієнти при одному невідомому стали протилежними, і додай.<br>
+  Вийшло 0 = 0 — розвʼязків безліч; 0 = число — розвʼязків немає.<br><br>
+  Розвʼязувати рівняння з одним невідомим — <a href="../liniine-rivniannia/">«Лінійне рівняння з однією змінною»</a>; системи на графіку — у <a href="/funktsii/hrafiky/">шпаргалці «Графіки функцій»</a>.
+</div>
+
+</div>
+<script src="/assets/lesson.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id), M=L.MINUS, NS='http://www.w3.org/2000/svg';
+const fmt=v=>L.fmt(v===0?0:v), par=v=>v<0?`(${fmt(v)})`:fmt(v);
+const VAR=['<span class="cx">x</span>','<span class="cy">y</span>'];
+const res=t=>`<span class="res">${t}</span>`, hl=t=>`<span class="hl">${t}</span>`;
+
+/* exact fractions: the answers of a system are often not whole */
+const Q=(n,d=1)=>{if(d<0){n=-n;d=-d}const g=L.gcd(Math.abs(n),d)||1;return {n:n/g,d:d/g}};
+const qadd=(a,b)=>Q(a.n*b.d+b.n*a.d,a.d*b.d), qmul=(a,b)=>Q(a.n*b.n,a.d*b.d), qdiv=(a,b)=>Q(a.n*b.d,a.d*b.n);
+const qv=q=>q.n/q.d;
+const qs=q=>q.d===1?fmt(q.n):(q.n<0?M:'')+L.frac(Math.abs(q.n),q.d);
+const qp=q=>q.n<0?`(${qs(q)})`:qs(q);
+// "2x + 3y", "−y", "7 − 2x": terms [k, var index or null], zero terms dropped
+function terms(list){let t='';list.forEach(([k,v])=>{if(!k)return;const a=Math.abs(k),body=(v!=null&&a===1?'':fmt(a))+(v!=null?VAR[v]:'');
+  t+=t?(k<0?` ${M} `:' + ')+body:(k<0?M:'')+body});return t||'0'}
+const eqs=e=>`${terms([[e[0],0],[e[1],1]])} = ${fmt(e[2])}`;
+const sys=(a,b)=>`<span class="sys"><span>${a}</span><span>${b}</span></span>`;
+const k1=k=>k===1?'':k===-1?M:fmt(k);
+
+/* ---------- 1: checking a pair ---------- */
+const PAIRS=[[3,2],[4,1],[2,3],[5,0]];let pi=0;
+function drawPairs(){
+  L.chips($('pairs'),PAIRS.map((p,i)=>({v:i,label:`(${p[0]}; ${p[1]})`})),pi,v=>{pi=v;drawPairs()});
+  const [x,y]=PAIRS[pi],a=x+y,b=x-y;
+  const line=(t,v,need)=>`${t} = ${v} ${v===need?'<span class="ok">✓</span>':`<span class="no">≠ ${need}</span>`}`;
+  $('pairOut').innerHTML=line(`${x} + ${y}`,a,5)+'<br>'+line(`${x} ${M} ${y}`,b,1)+'<br>'+
+    (a===5&&b===1?'<span class="ok">підходить в обидва — це розвʼязок системи</span>':a===5||b===1?'підходить лише в одне рівняння — це не розвʼязок системи':'не підходить у жодне');
+}
+drawPairs();
+
+/* ---------- 2: the main derivation ---------- */
+const SYS=[
+  {sub:'коефіцієнти ±1',e:[[1,1,5],[1,-1,1]]},
+  {sub:'одне з коефіцієнтом 1',e:[[2,1,7],[3,-2,0]]},
+  {sub:'без одиниць',e:[[3,2,12],[2,3,13]]},
+  {sub:'розвʼязків немає',e:[[1,2,4],[2,4,3]]},
+  {sub:'розвʼязків безліч',e:[[1,-1,2],[3,-3,6]]},
+  {sub:'своя система',own:1,e:[[2,-1,1],[1,1,5]]}
+];
+let si=0,method='sub';
+const E=()=>SYS[si].e;
+
+// what is left once one variable is gone: K·w = R
+function finish(S,K,R,w,back){
+  if(K!==0){const wv=Q(R,K);
+    S.push({lines:K===1?[res(`${VAR[w]} = ${fmt(R)}`)]:[`${VAR[w]} = ${fmt(R)} : ${par(K)}`,res(`${VAR[w]} = ${qs(wv)}`)],text:`Рівняння з одним невідомим: ділимо <span class="act">обидві частини на ${par(K)}</span>.`});
+    back(wv);return}
+  S.push({lines:[],text:R===0?`Вийшло 0 = 0 — правильно при будь-якому ${VAR[w]}. Рівняння системи — по суті одне й те саме: <b>розвʼязків безліч</b>, кожна точка прямої.`:
+    `Вийшло 0 = ${fmt(R)} — неправда при будь-якому ${VAR[w]}. <b>Розвʼязків немає</b>: рівняння суперечать одне одному.`});
+}
+function answer(S,xv,yv){const e=E();
+  const chk=q=>`${fmt(q[0])}·${qp(xv)} ${q[1]<0?M:'+'} ${fmt(Math.abs(q[1]))}·${qp(yv)} = ${qs(qadd(qmul(Q(q[0]),xv),qmul(Q(q[1]),yv)))}`;
+  S.push({lines:[res(`(${VAR[0]}; ${VAR[1]}) = (${qs(xv)}; ${qs(yv)})`)],text:`Перевірка в обох рівняннях: ${chk(e[0])} і ${chk(e[1])} — саме ${fmt(e[0][2])} і ${fmt(e[1][2])}.`});
+}
+function degenerate(S){const e=E();
+  for(const q of e)if(!q[0]&&!q[1]){S.push({lines:[],text:q[2]?`Одне рівняння — 0 = ${fmt(q[2])}: неправда при будь-яких x і y. <b>Розвʼязків немає.</b>`:`Одне рівняння — 0 = 0: правильне завжди, тож лишається тільки друге. <b>Розвʼязків безліч.</b>`});return true}
+  return false}
+
+function substitution(){
+  const e=E(),S=[{lines:[sys(eqs(e[0]),eqs(e[1]))],text:`Спосіб підстановки: з одного рівняння виражаємо одне невідоме й підставляємо в друге. Тоді лишається рівняння з одним невідомим.`}];
+  if(degenerate(S))return S;
+  const c=[];for(let i=0;i<2;i++)for(let v=0;v<2;v++)if(e[i][v])c.push({i,v,a:e[i][v]});
+  c.sort((p,q)=>(Math.abs(p.a)!==1)-(Math.abs(q.a)!==1)||Math.abs(p.a)-Math.abs(q.a)||p.i-q.i||p.v-q.v);
+  const {i,v,a}=c[0],w=1-v,j=1-i,b=e[i][w],cc=e[i][2],a2=e[j][v],b2=e[j][w],c2=e[j][2];
+  let K,R,expr;
+  if(Math.abs(a)===1){const p=cc*a,q=-b*a;expr=terms([[p,null],[q,w]]);
+    S.push({lines:[sys(`${VAR[v]} = ${hl(expr)}`,eqs(e[j]))],text:`З ${i?'другого':'першого'} рівняння виражаємо ${VAR[v]}: решту переносимо вправо${a===-1?' й ділимо на −1':''}.`});
+    if(!a2){K=b2;R=c2;S.push({lines:[`${terms([[b2,w]])} = ${fmt(c2)}`],text:`У другому рівнянні ${VAR[v]} немає — воно вже з одним невідомим.`})}
+    else{K=a2*q+b2;R=c2-a2*p;
+      S.push({lines:[`${k1(a2)}(${hl(expr)})${b2?(b2<0?` ${M} `:' + ')+terms([[Math.abs(b2),w]]):''} = ${fmt(c2)}`,`${terms([[a2*p,null],[a2*q,w],[b2,w]])} = ${fmt(c2)}`,`${terms([[K,w]])} = ${fmt(R)}`],
+        text:`Підставляємо вираз замість ${VAR[v]}, розкриваємо дужки й зводимо подібні — лишилося тільки ${VAR[w]}.`})}
+  }else{const d=Math.abs(a),c0=a>0?cc:-cc,q0=a>0?-b:b;expr=L.frac(terms([[c0,null],[q0,w]]),d);
+    S.push({lines:[sys(`${VAR[v]} = ${expr}`,eqs(e[j]))],text:`Коефіцієнта 1 немає, тож ${VAR[v]} виходить дробом: переносимо решту вправо й ділимо на ${fmt(a)}.`});
+    if(!a2){K=b2;R=c2;S.push({lines:[`${terms([[b2,w]])} = ${fmt(c2)}`],text:`У другому рівнянні ${VAR[v]} немає — воно вже з одним невідомим.`})}
+    else{K=a2*q0+b2*d;R=c2*d-a2*c0;
+      S.push({lines:[`${k1(a2)}·${expr}${b2?(b2<0?` ${M} `:' + ')+terms([[Math.abs(b2),w]]):''} = ${fmt(c2)}`,
+        `${k1(a2)}(${terms([[c0,null],[q0,w]])})${b2?(b2*d<0?` ${M} `:' + ')+terms([[Math.abs(b2*d),w]]):''} = ${fmt(c2*d)}`,`${terms([[a2*c0,null],[a2*q0,w],[b2*d,w]])} = ${fmt(c2*d)}`,`${terms([[K,w]])} = ${fmt(R)}`],
+        text:`Підставляємо дріб, і щоб позбутися знаменника, <span class="act">множимо обидві частини на ${d}</span>. Далі розкриваємо дужки й зводимо подібні.`})}}
+  finish(S,K,R,w,wv=>{const vv=qdiv(qadd(Q(cc),qmul(Q(-b),wv)),Q(a));
+    S.push({lines:[res(`${VAR[v]} = ${qs(vv)}`)],text:`Повертаємось до виразу для ${VAR[v]} і підставляємо ${VAR[w]} = ${qs(wv)}: ${VAR[v]} = (${fmt(cc)} ${M} ${par(b)}·${qp(wv)}) : ${par(a)} = ${qs(vv)}.`});
+    answer(S,v===0?vv:wv,v===0?wv:vv)});
+  return S;
+}
+
+function addition(){
+  const e=E(),S=[{lines:[sys(eqs(e[0]),eqs(e[1]))],text:`Спосіб додавання: робимо коефіцієнти при одному невідомому протилежними й додаємо рівняння — це невідоме зникає.`}];
+  if(degenerate(S))return S;
+  const opts=[0,1].filter(v=>e[0][v]&&e[1][v]).map(v=>{const g=L.gcd(Math.abs(e[0][v]),Math.abs(e[1][v]));let m1=e[1][v]/g,m2=-e[0][v]/g;if(m1<0){m1=-m1;m2=-m2}return {v,m1,m2,cost:Math.abs(m1)+Math.abs(m2)}}).sort((p,q)=>p.cost-q.cost);
+  if(!opts.length){S.push({lines:[],text:`Тут одне рівняння вже має тільки одне невідоме — додавати нічого. Розвʼяжи його й підстав знайдене в друге (перемкни на «підстановку»).`});return S}
+  const {v,m1,m2}=opts[0],w=1-v,n1=e[0].map(t=>t*m1),n2=e[1].map(t=>t*m2);
+  if(!(m1===1&&m2===1))S.push({lines:[sys(eqs(n1),eqs(n2))],text:`Множимо <span class="act">обидві частини</span> першого рівняння на ${par(m1)}, другого — на ${par(m2)}: коефіцієнти при ${VAR[v]} стали ${fmt(n1[v])} і ${fmt(n2[v])}, протилежні.`});
+  const K=n1[w]+n2[w],R=n1[2]+n2[2];
+  S.push({lines:[`${terms([[K,w]])||'0'} = ${fmt(R)}`],text:`Додаємо рівняння почленно: ліву частину до лівої, праву до правої. ${VAR[v]} зникає, бо ${fmt(n1[v])} + ${par(n2[v])} = 0.`});
+  finish(S,K,R,w,wv=>{const i=Math.abs(e[0][v])<=Math.abs(e[1][v])?0:1,q=e[i],vv=qdiv(qadd(Q(q[2]),qmul(Q(-q[w]),wv)),Q(q[v]));
+    S.push({lines:[`${terms([[q[v],v]])}${q[w]?` ${q[w]<0?M:'+'} ${fmt(Math.abs(q[w]))}·${qp(wv)}`:''} = ${fmt(q[2])}`,res(`${VAR[v]} = ${qs(vv)}`)],text:`Підставляємо ${VAR[w]} = ${qs(wv)} у ${i?'друге':'перше'} рівняння й знаходимо ${VAR[v]}.`});
+    answer(S,v===0?vv:wv,v===0?wv:vv)});
+  return S;
+}
+const D=L.derivation({box:$('deriv'),next:$('next'),reset:$('reset'),stages:()=>method==='sub'?substitution():addition(),first:'Розвʼязати →',more:'Далі →',mark:''});
+function redraw(){D.toStart();drawPlot()}
+function pick(){L.chips($('pick'),SYS.map((s,i)=>({v:i,sub:s.sub,label:s.own?'своя: обери коефіцієнти':`${eqs(s.e[0])}<br>${eqs(s.e[1])}`})),si,v=>{si=v;$('own').hidden=!SYS[si].own;pick();redraw()})}
+function methods(){L.chips($('method'),[{v:'sub',label:'підстановка'},{v:'add',label:'додавання'}],method,v=>{method=v;methods();D.toStart()})}
+// own system: six steppers a₁ b₁ c₁ / a₂ b₂ c₂
+const ownE=SYS[5].e;
+$('own').innerHTML=[0,1].flatMap(r=>['a','b','c'].map((n,k)=>`<label>${n}${r?'₂':'₁'} <span class="stepper" id="o${r}${k}"><button type="button" aria-label="Зменшити ${n}${r?'₂':'₁'}">−</button><output></output><button type="button" aria-label="Збільшити ${n}${r?'₂':'₁'}">+</button></span></label>`)).join('');
+[0,1].forEach(r=>[0,1,2].forEach(k=>L.stepper($(`o${r}${k}`),{min:-9,max:9,get:()=>ownE[r][k],set:x=>{ownE[r][k]=x;pick();redraw()}})));
+pick();methods();
+
+/* ---------- 4: the two lines ---------- */
+function drawPlot(){
+  const svg=$('plot'),U=20,MIN=-6,MAX=6,L0=14,T0=18,W=(MAX-MIN)*U,X=x=>L0+(x-MIN)*U,Y=y=>T0+(MAX-y)*U;
+  svg.setAttribute('viewBox',`0 0 ${L0+W+22} ${T0+W+14}`);svg.replaceChildren();
+  const el=(t,a,p=svg)=>{const n=document.createElementNS(NS,t);for(const k in a)n.setAttribute(k,a[k]);p.appendChild(n);return n};
+  const cp=el('clipPath',{id:'cp'},el('defs',{}));el('rect',{x:L0,y:T0,width:W,height:W},cp);
+  for(let i=MIN;i<=MAX;i++){el('line',{x1:X(i),y1:T0,x2:X(i),y2:T0+W,class:'gl'});el('line',{x1:L0,y1:Y(i),x2:L0+W,y2:Y(i),class:'gl'})}
+  el('line',{x1:L0,y1:Y(0),x2:L0+W+4,y2:Y(0),class:'ax2'});el('line',{x1:X(0),y1:T0+W,x2:X(0),y2:T0-4,class:'ax2'});
+  el('path',{d:`M${L0+W+10} ${Y(0)}l-7 -4v8z`,class:'ah'});el('path',{d:`M${X(0)} ${T0-10}l-4 7h8z`,class:'ah'});
+  el('text',{x:L0+W+13,y:Y(0)+12,class:'al'}).textContent='x';el('text',{x:X(0)+11,y:T0-9,class:'al'}).textContent='y';
+  const g=el('g',{'clip-path':'url(#cp)'});
+  const line=(q,cls)=>{if(!q[0]&&!q[1])return;
+    if(q[1])el('line',{x1:X(MIN-1),y1:Y((q[2]-q[0]*(MIN-1))/q[1]),x2:X(MAX+1),y2:Y((q[2]-q[0]*(MAX+1))/q[1]),class:cls},g);
+    else el('line',{x1:X(q[2]/q[0]),y1:T0-5,x2:X(q[2]/q[0]),y2:T0+W+5,class:cls},g)};
+  const e=E();line(e[0],'l1');line(e[1],'l2');
+  const det=e[0][0]*e[1][1]-e[0][1]*e[1][0];let t;
+  if(det){const x=Q(e[0][2]*e[1][1]-e[0][1]*e[1][2],det),y=Q(e[0][0]*e[1][2]-e[0][2]*e[1][0],det),xv=qv(x),yv=qv(y);
+    if(xv>=MIN&&xv<=MAX&&yv>=MIN&&yv<=MAX)el('circle',{cx:X(xv),cy:Y(yv),r:6.5,class:'pt'});
+    t=`прямі перетинаються в точці (${qs(x)}; ${qs(y)}) — це і є розвʼязок`+(xv<MIN||xv>MAX||yv<MIN||yv>MAX?' (точка поза малюнком)':'')}
+  else t='прямі не перетинаються в одній точці: вони паралельні або збігаються';
+  $('plotOut').innerHTML=`суцільна: ${eqs(e[0])}<br>пунктир: ${eqs(e[1])}<br>${t}`;
+}
+redraw();
+
+/* ---------- 3: pitfalls ---------- */
+L.contrast($('pit1'),{labelA:'помножили тільки ліву частину',labelB:'помножили обидві частини',
+  a:{expr:'(x + y = 3) · 2',steps:'2x + 2y = 3',why:'Ліву частину подвоїли, а праву — ні. Рівність зламалася: пара (1; 2) підходила, а тепер 2 + 4 = 6 ≠ 3.'},
+  b:{expr:'(x + y = 3) · 2',steps:`2x + 2y = ${res('6')}`,why:'Обидві частини помножені на 2 — ті самі пари підходять і далі.'}});
+L.contrast($('pit2'),{labelA:'знайшли тільки x',labelB:'знайшли пару',
+  a:{expr:'x + y = 5, x − y = 1',steps:'x = 3',why:'Розвʼязок системи — пара чисел. Одне x — це піввідповіді.'},
+  b:{expr:'x + y = 5, x − y = 1',steps:`x = 3, y = 5 ${M} 3 = 2, ${res('(3; 2)')}`,why:'Знайдене x підставляємо в будь-яке рівняння й знаходимо y.'}});
+L.contrast($('pit3'),{labelA:'(y; x)',labelB:'(x; y)',
+  a:{expr:'x − y = 1',steps:`(2; 3): 2 ${M} 3 = ${M}1 ≠ 1`,why:'Числа ті самі, але переставлені: перше в парі завжди x.'},
+  b:{expr:'x − y = 1',steps:`(3; 2): 3 ${M} 2 = ${res('1')}`,why:'x = 3 першим, y = 2 другим — рівність правильна.'}});
+})();
+</script>
+</body>
+</html>
