@@ -78,6 +78,8 @@ footer{color:var(--ink-soft);font-size:.9rem}
 .sx{stroke:var(--ink-soft);stroke-width:1.6;stroke-linecap:round}
 .ra{fill:var(--mark-2-wash);stroke:var(--mark-2);stroke-width:1.2;opacity:.85}
 .pt{fill:var(--mark-3);stroke:var(--card);stroke-width:2}
+.pr{fill:var(--ink);stroke:var(--card);stroke-width:2}
+.all{fill:var(--mark-3-wash);opacity:.6}
 .pk{fill:var(--mark-2);stroke:var(--card);stroke-width:2}
 .pn{fill:var(--mark-4);stroke:var(--card);stroke-width:2}
 .pm{fill:var(--mark-1);stroke:var(--card);stroke-width:2}
@@ -99,12 +101,12 @@ footer{color:var(--ink-soft);font-size:.9rem}
 </header>
 
 <section>
-  <h2>Пряма<small>7 клас: лінійна функція y = kx + b.</small></h2>
+  <h2>Пряма й лінійні рівняння<small>7 клас: лінійна функція, рівняння з двома змінними, система графічно.</small></h2>
   <div class="grid">
 
     <article class="card" id="c-lin">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">1</span>Пряма <span class="f">y = kx + b</span></h3>
+      <h3><span class="num">1</span><span data-title>Пряма</span> <span class="f">y = kx + b</span></h3>
       <label class="ctl k"><span data-name="k"></span><input type="range" min="-3" max="3" step="0.5" value="1" data-k="k"></label>
       <label class="ctl n"><span data-name="b"></span><input type="range" min="-4" max="4" step="1" value="1" data-k="b"></label>
       <label class="ctl x"><span data-name="x"></span><input type="range" min="-5" max="5" step="0.5" value="2" data-k="x"></label>
@@ -112,14 +114,24 @@ footer{color:var(--ink-soft);font-size:.9rem}
       <p class="why">k — на скільки змінюється y, коли x більшає на 1 (фіолетова сходинка); b — де пряма перетинає вісь y</p>
     </article>
 
+    <article class="card" id="c-lineq">
+      <svg aria-hidden="true"></svg>
+      <h3><span class="num">2</span>Лінійне рівняння з двома змінними <span class="f">ax + by = c</span></h3>
+      <label class="ctl"><span data-name="a"></span><input type="range" min="-3" max="3" step="1" value="2" data-k="a"></label>
+      <label class="ctl"><span data-name="b"></span><input type="range" min="-3" max="3" step="1" value="3" data-k="b"></label>
+      <label class="ctl"><span data-name="c"></span><input type="range" min="-6" max="6" step="1" value="6" data-k="c"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">графік — усі пари (x; y), для яких рівність правильна; поки y є в рівнянні, його можна виразити через x, і виходить пряма</p>
+    </article>
+
     <article class="card" id="c-two">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">2</span>Дві прямі</h3>
+      <h3><span class="num">3</span>Система рівнянь графічно</h3>
       <label class="ctl k"><span data-name="k₂"></span><input type="range" min="-3" max="3" step="0.5" value="2" data-k="k"></label>
       <label class="ctl n"><span data-name="b₂"></span><input type="range" min="-4" max="4" step="1" value="-2" data-k="b"></label>
       <p class="rule" aria-live="polite"></p>
-      <p class="why">однакове k — однаковий нахил: прямі йдуть поруч і не зустрічаються</p>
-      <p class="note">Пряма y = x + 1 стоїть на місці, зелену рухаєш ти.</p>
+      <p class="why">точка перетину лежить на обох прямих, тож її x і y підходять в обидва рівняння; однакове k — однаковий нахил, і прямі не зустрічаються</p>
+      <p class="note">Перше рівняння, y = x + 1, стоїть на місці; пряму другого рухаєш ти.</p>
     </article>
 
   </div>
@@ -131,7 +143,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-sq">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">3</span>Парабола <span class="f">y = x²</span></h3>
+      <h3><span class="num">4</span>Парабола <span class="f">y = x²</span></h3>
       <label class="ctl x"><span data-name="x"></span><input type="range" min="-2" max="2" step="0.5" value="1.5" data-k="x"></label>
       <p class="rule" aria-live="polite"></p>
       <p class="why">квадрат відʼємного числа додатний: x і −x дають той самий y, тому гілки однакові й графік не опускається під вісь x</p>
@@ -139,7 +151,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-hyp">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">4</span>Гіпербола <span class="f">y = k/x</span></h3>
+      <h3><span class="num">5</span>Гіпербола <span class="f">y = k/x</span></h3>
       <label class="ctl k"><span data-name="k"></span><input type="range" min="-6" max="6" step="1" value="4" data-k="k"></label>
       <label class="ctl x"><span data-name="x"></span><input type="range" min="-6" max="6" step="0.5" value="2" data-k="x"></label>
       <p class="rule" aria-live="polite"></p>
@@ -149,7 +161,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-root">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">5</span>Вітка параболи <span class="f">y = √x</span></h3>
+      <h3><span class="num">6</span>Вітка параболи <span class="f">y = √x</span></h3>
       <label class="ctl x"><span data-name="x"></span><input type="range" min="-2" max="6" step="0.5" value="4" data-k="x"></label>
       <div class="opts"><button class="chip" type="button" data-toggle aria-pressed="false">показати y = x²</button></div>
       <p class="rule" aria-live="polite"></p>
@@ -157,9 +169,20 @@ footer{color:var(--ink-soft);font-size:.9rem}
       <aside class="beyond"><b>Поза шкільною програмою.</b> Серед комплексних чисел корінь з відʼємного існує: з числом i, у якого i² = −1, маємо √(−4) = 2i. Але такої точки на площині x, y немає. <a href="https://uk.wikipedia.org/wiki/Уявна_одиниця" target="_blank" rel="noopener noreferrer">Уявна одиниця ↗</a></aside>
     </article>
 
+    <article class="card" id="c-eq">
+      <svg aria-hidden="true"></svg>
+      <h3><span class="num">7</span>Рівняння графічно</h3>
+      <div class="opts" role="group" aria-label="Ліва частина рівняння" data-chips="f"></div>
+      <label class="ctl"><span data-name="k"></span><input type="range" min="-2" max="2" step="0.5" value="1" data-k="k"></label>
+      <label class="ctl"><span data-name="b"></span><input type="range" min="-4" max="4" step="1" value="2" data-k="b"></label>
+      <p class="rule" aria-live="polite"></p>
+      <p class="why">у точці перетину обидва графіки мають той самий y при тому самому x — значить, при цьому x ліва частина дорівнює правій</p>
+      <p class="note">З малюнка корінь часто видно лише приблизно: перевір його підстановкою.</p>
+    </article>
+
     <article class="card" id="c-pow">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">6</span><span data-title>Ступенева функція</span> <span class="f">y = xⁿ</span></h3>
+      <h3><span class="num">8</span><span data-title>Ступенева функція</span> <span class="f">y = xⁿ</span></h3>
       <div class="opts" role="group" aria-label="Показник n" data-chips="n"></div>
       <label class="ctl x"><span data-name="x"></span><input type="range" min="-2" max="2" step="0.5" value="-1.5" data-k="x"></label>
       <p class="rule" aria-live="polite"></p>
@@ -175,7 +198,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-quad">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">7</span>Парабола <span class="f">y = ax² + bx + c</span></h3>
+      <h3><span class="num">9</span>Парабола <span class="f">y = ax² + bx + c</span></h3>
       <label class="ctl k"><span data-name="a"></span><input type="range" min="-2" max="2" step="0.5" value="1" data-k="a"></label>
       <label class="ctl"><span data-name="b"></span><input type="range" min="-4" max="4" step="1" value="-2" data-k="b"></label>
       <label class="ctl n"><span data-name="c"></span><input type="range" min="-4" max="4" step="1" value="-3" data-k="c"></label>
@@ -192,7 +215,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-shift">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">8</span>Зсув графіка <span class="f">y = f(x − m) + n</span></h3>
+      <h3><span class="num">10</span>Зсув графіка <span class="f">y = f(x − m) + n</span></h3>
       <div class="opts" role="group" aria-label="Який графік зсуваємо" data-chips="f"></div>
       <label class="ctl m"><span data-name="m"></span><input type="range" min="-4" max="4" step="1" value="2" data-k="m"></label>
       <label class="ctl n"><span data-name="n"></span><input type="range" min="-4" max="4" step="1" value="1" data-k="n"></label>
@@ -202,7 +225,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-scale">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">9</span>Розтяг графіка <span class="f">y = a·f(x)</span></h3>
+      <h3><span class="num">11</span>Розтяг графіка <span class="f">y = a·f(x)</span></h3>
       <div class="opts" role="group" aria-label="Який графік розтягуємо" data-chips="f"></div>
       <label class="ctl k"><span data-name="a"></span><input type="range" min="-3" max="3" step="0.5" value="2" data-k="a"></label>
       <p class="rule" aria-live="polite"></p>
@@ -218,7 +241,7 @@ footer{color:var(--ink-soft);font-size:.9rem}
 
     <article class="card" id="c-exp">
       <svg aria-hidden="true"></svg>
-      <h3><span class="num">10</span>Показникова функція <span class="f">y = aˣ</span></h3>
+      <h3><span class="num">12</span>Показникова функція <span class="f">y = aˣ</span></h3>
       <div class="opts" role="group" aria-label="Основа a" data-chips="a"></div>
       <label class="ctl x"><span data-name="x"></span><input type="range" min="-3" max="3" step="1" value="-2" data-k="x"></label>
       <div class="opts"><button class="chip" type="button" data-toggle aria-pressed="false">показати логарифм</button></div>
@@ -331,6 +354,7 @@ const skipZero=key=>(s,k,was)=>{if(k===key&&s[key]===0)s[key]=was>0?-(+document.
 /* 1 linear */
 card('c-lin',{
   draw(g,top,s){
+    document.querySelector('#c-lin [data-title]').textContent=s.b===0&&s.k!==0?'Пряма пропорційність':'Пряма';document.querySelector('#c-lin h3 .f').textContent=s.b===0&&s.k!==0?'y = kx':'y = kx + b';
     curve(g,x=>s.k*x+s.b,'cv');
     if(s.k!==0){seg(g,0,s.b,1,s.b,'sx');seg(g,1,s.b,1,s.b+s.k,'sk')}
     dot(top,0,s.b,'pn');probe(g,top,s.x,s.k*s.x+s.b)},
@@ -339,21 +363,45 @@ card('c-lin',{
     const calc=s.k===0?`${c('cy',fmt(y))} <span class="say">— той самий y при будь-якому x</span>`:
       `${c('ck',fmt(s.k))}·${par(s.x)}${s.b?sgn(s.b,'cn'):''} = ${c('cy',fmt(y))}`;
     const how=s.k>0?'k > 0: пряма зростає':s.k<0?'k < 0: пряма спадає':'k = 0: пряма горизонтальна';
-    return `y = ${f}<br>x = ${fmt(s.x)}: y = ${calc}${off(s.x,y)}<br><span class="say">${how}; вісь y перетинає в (0; ${c('cn',fmt(s.b))})</span>`}
+    const prop=s.b===0&&s.k!==0?'<br>b = 0: це пряма пропорційність y = kx, вона завжди проходить через (0; 0)':'';
+    return `y = ${f}<br>x = ${fmt(s.x)}: y = ${calc}${off(s.x,y)}<br><span class="say">${how}; вісь y перетинає в (0; ${c('cn',fmt(s.b))})${prop}</span>`}
 });
 
-/* 2 two lines: y = x + 1 stays, the student moves the other */
+/* 2 linear equation in two variables */
+// a whole-number ratio p/q as text: 2, −3, or a stacked fraction
+function rat(p,q){if(q<0){p=-p;q=-q}const g=L.gcd(Math.abs(p),q)||1;p/=g;q/=g;return q===1?fmt(p):(p<0?M:'')+frac(fmt(Math.abs(p)),fmt(q))}
+// "2x + 3y", "−x", "3y": terms with zero coefficients dropped
+function terms(list){let t='';list.forEach(([k,v])=>{if(!k)return;const a=Math.abs(k),body=(a===1?'':fmt(a))+v;
+  t+=t?(k<0?` ${M} `:' + ')+body:(k<0?M:'')+body});return t||'0'}
+card('c-lineq',{
+  draw(g,top,s){
+    if(s.b)curve(g,x=>(s.c-s.a*x)/s.b,'cv');
+    else if(s.a)seg(g,s.c/s.a,YMIN-1,s.c/s.a,YMAX+1,'cv');
+    else if(!s.c)el('rect',{x:X(XMIN),y:Y(YMAX),width:(XMAX-XMIN)*U,height:(YMAX-YMIN)*U,class:'all'},g)},
+  rule(s){const eq=`${terms([[s.a,'x'],[s.b,'y']])} = ${fmt(s.c)}`;
+    if(!s.a&&!s.b)return `${eq}<br><span class="say">${s.c?'така рівність неправильна при будь-яких x і y: графіка немає, жодної точки':'така рівність правильна при будь-яких x і y: графік — уся площина'}</span>`;
+    if(!s.b)return `${eq}<br>x = ${rat(s.c,s.a)}<br><span class="say">b = 0: y з рівняння зник, тож x завжди той самий, а y будь-який. Пряма вертикальна, і це не графік функції: одному x відповідає безліч y</span>`;
+    // by = c − ax, then y = (−a/b)x + c/b
+    const right=s.a?`${s.c?fmt(s.c)+(s.a>0?` ${M} `:' + '):(s.a>0?M:'')}${Math.abs(s.a)===1?'':fmt(Math.abs(s.a))}x`:fmt(s.c);
+    const kq=-s.a/s.b, kTxt=s.a?(kq===1?'':kq===-1?M:rat(-s.a,s.b))+'x':'';
+    const mTxt=s.c?(kTxt?(s.c/s.b<0?` ${M} `:' + ')+rat(Math.abs(s.c),Math.abs(s.b)):rat(s.c,s.b)):(kTxt?'':'0');
+    const by=s.a?`<br>${s.b===1?'':s.b===-1?M:fmt(s.b)}y = ${right}`:'';
+    return `${eq}${by}<br>y = ${kTxt}${mTxt}<br><span class="say">${s.a?'це лінійна функція, графік — пряма':'a = 0: x з рівняння зник, тож y завжди той самий — горизонтальна пряма'}</span>`}
+});
+
+/* 3 a system read off the graph: y = x + 1 stays, the student moves the other line */
 card('c-two',{
   draw(g,top,s){
     curve(g,x=>x+1,'cv2');curve(g,x=>s.k*x+s.b,'cv');
     if(s.k!==1){const x=(s.b-1)/(1-s.k);dot(top,x,x+1,'po',5.5)}},
   rule(s){
     const f=coef(s.k,'ck')+(s.b?sgn(s.b,'cn'):'');
-    const head=`y = x + 1 і y = ${s.k===0?c('cn',fmt(s.b)):f}`;
-    if(s.k===1&&s.b===1)return `${head}<br><span class="say">однакові і k, і b: це та сама пряма, спільні всі точки</span>`;
-    if(s.k===1)return `${head}<br><span class="say">k однакові, b різні: прямі паралельні, спільних точок немає</span>`;
+    const second=s.k===0?c('cn',fmt(s.b)):f;
+    const head=`<span class="say">система:</span><br>y = x + 1<br>y = ${second}`;
+    if(s.k===1&&s.b===1)return `${head}<br><span class="say">однакові і k, і b: прямі збігаються, і розвʼязків безліч — кожна точка прямої</span>`;
+    if(s.k===1)return `${head}<br><span class="say">k однакові, b різні: прямі паралельні, спільних точок немає — система розвʼязків не має</span>`;
     const x=(s.b-1)/(1-s.k),y=x+1;
-    return `${head}<br>x + 1 = ${s.k===0?c('cn',fmt(s.b)):f}<br>x ${eqv(x)}, y ${eqv(y)}${off(x,y)}<br><span class="say">k різні: прямі перетинаються в одній точці</span>`}
+    return `${head}<br>x + 1 = ${second}<br>x ${eqv(x)}, y ${eqv(y)}${off(x,y)}<br><span class="say">k різні: прямі перетинаються в одній точці, і вона — єдиний розвʼязок системи</span>`}
 });
 
 /* 3 parabola */
@@ -362,8 +410,8 @@ card('c-sq',{
     if(s.x!==0){seg(g,-s.x,s.x*s.x,s.x,s.x*s.x,'pj');dot(top,-s.x,s.x*s.x,'po',5)}
     probe(g,top,s.x,s.x*s.x)},
   rule(s){const y=s.x*s.x;
-    if(s.x===0)return `x = 0: y = 0² = ${c('cy','0')}<br><span class="say">вершина: менше нуля квадрат не буває</span>`;
-    return `x = ${fmt(s.x)}: y = ${par(s.x)}² = ${c('cy',fmt(y))}<br>x = ${fmt(-s.x)}: y = ${par(-s.x)}² = ${c('cy',fmt(y))}<br><span class="say">x і ${M}x дають той самий y</span>`}
+    if(s.x===0)return `x = 0: y = 0² = ${c('cy','0')}<br><span class="say">вершина: менше нуля квадрат не буває<br>область визначення: усі числа; область значень: y ≥ 0</span>`;
+    return `x = ${fmt(s.x)}: y = ${par(s.x)}² = ${c('cy',fmt(y))}<br>x = ${fmt(-s.x)}: y = ${par(-s.x)}² = ${c('cy',fmt(y))}<br><span class="say">x і ${M}x дають той самий y<br>область визначення: усі числа; область значень: y ≥ 0</span>`}
 });
 
 /* 4 hyperbola */
@@ -377,7 +425,7 @@ card('c-hyp',{
   rule(s){
     if(!s.x)return `x = 0: y = ${c('ck',fmt(s.k))} : 0<br><span class="say">немає числа, яке після множення на 0 дало б ${fmt(s.k)}: точки при x = 0 немає, і гілки до осі y тільки наближаються</span>`;
     const y=s.k/s.x;
-    return `x = ${fmt(s.x)}: y = ${c('ck',fmt(s.k))} : ${par(s.x)} ${exact(y)?'= '+c('cy',fmt(y)):'≈ '+c('cy',fmt(round2(y)))}${off(s.x,y)}<br><span class="say">${s.k>0?'k > 0: гілки в I і III чвертях':'k < 0: гілки в II і IV чвертях'}</span>`}
+    return `x = ${fmt(s.x)}: y = ${c('ck',fmt(s.k))} : ${par(s.x)} ${exact(y)?'= '+c('cy',fmt(y)):'≈ '+c('cy',fmt(round2(y)))}${off(s.x,y)}<br><span class="say">${s.k>0?'k > 0: гілки в I і III чвертях':'k < 0: гілки в II і IV чвертях'}<br>область визначення: x ≠ 0; область значень: y ≠ 0</span>`}
 });
 
 /* 5 square root */
@@ -388,11 +436,37 @@ card('c-root',{
     curve(g,x=>x>=0?Math.sqrt(x):NaN,'cv',{from:0,extra:[0,.005,.01,.03]});
     if(s.x>=0)probe(g,top,s.x,Math.sqrt(s.x));else el('circle',{cx:X(s.x),cy:OY,r:20,class:'hit','data-grip':'x'},top)},
   rule(s){
-    if(s.x<0)return `x = ${fmt(s.x)}: √(${fmt(s.x)})<br><span class="say">квадрат будь-якого числа не відʼємний, тож такого кореня серед шкільних чисел немає, і зліва від нуля графіка немає</span>`;
+    if(s.x<0)return `x = ${fmt(s.x)}: √(${fmt(s.x)})<br><span class="say">квадрат будь-якого числа не відʼємний, тож такого кореня серед шкільних чисел немає, і зліва від нуля графіка немає<br>область визначення: x ≥ 0; область значень: y ≥ 0</span>`;
     const y=Math.sqrt(s.x);
-    return exact(y)?`x = ${fmt(s.x)}: y = √${fmt(s.x)} = ${c('cy',fmt(y))}, бо ${par(y)}² = ${fmt(s.x)}`:
-      `x = ${fmt(s.x)}: y = √${fmt(s.x)} ≈ ${c('cy',fmt(round2(y)))}<br><span class="say">точно не добувається: ${fmt(round2(y))}² ≈ ${fmt(s.x)}</span>`}
+    return exact(y)?`x = ${fmt(s.x)}: y = √${fmt(s.x)} = ${c('cy',fmt(y))}, бо ${par(y)}² = ${fmt(s.x)}<br><span class="say">область визначення: x ≥ 0; область значень: y ≥ 0</span>`:
+      `x = ${fmt(s.x)}: y = √${fmt(s.x)} ≈ ${c('cy',fmt(round2(y)))}<br><span class="say">точно не добувається: ${fmt(round2(y))}² ≈ ${fmt(s.x)}<br>область визначення: x ≥ 0; область значень: y ≥ 0</span>`}
 });
+
+/* 7 an equation solved by two graphs: f(x) = kx + b */
+const EQ=[
+  {v:'sq',label:'x²',f:x=>x*x,lhs:'x²',
+   // x² − kx − b = 0
+   roots:(k,b)=>{const D=k*k+4*b;return D<0?[]:D===0?[k/2]:[(k-Math.sqrt(D))/2,(k+Math.sqrt(D))/2]}},
+  {v:'hy',label:'6/x',f:x=>6/x,lhs:frac('6','x'),breaks:[0],
+   // kx² + bx − 6 = 0; x = 0 never solves it, since 6/x has no value there
+   roots:(k,b)=>{if(!k)return b?[6/b]:[];const D=b*b+24*k;return D<0?[]:D===0?[-b/(2*k)]:[(-b-Math.sqrt(D))/(2*k),(-b+Math.sqrt(D))/(2*k)]}},
+  {v:'rt',label:'√x',f:x=>x>=0?Math.sqrt(x):NaN,lhs:'√x',from:0,
+   // with t = √x ≥ 0: kt² − t + b = 0, then x = t²
+   roots:(k,b)=>{let ts;if(!k)ts=[b];else{const D=1-4*k*b;ts=D<0?[]:D===0?[1/(2*k)]:[(1-Math.sqrt(D))/(2*k),(1+Math.sqrt(D))/(2*k)]}
+     return [...new Set(ts.filter(t=>t>=-1e-12).map(t=>Math.round(t*t*1e9)/1e9))]}}
+];
+card('c-eq',{
+  init(s,root){s.f='sq';root._sync=chipGroup(root,'f',EQ,s)},
+  draw(g,top,s){const E=EQ.find(e=>e.v===s.f),rs=E.roots(s.k,s.b).sort((p,q)=>p-q);
+    curve(g,x=>s.k*x+s.b,'cv2');curve(g,E.f,'cv',{breaks:E.breaks||[],from:E.from!==undefined?E.from:XMIN-.5,extra:[0]});
+    rs.forEach(x=>{const y=s.k*x+s.b;if(inPlot(x,y)){seg(g,x,0,x,y,'pj');dot(top,x,y,'po',5.5)}if(Math.abs(y)>1e-9)dot(top,x,0,'pr',5)})},
+  rule(s){const E=EQ.find(e=>e.v===s.f),rs=E.roots(s.k,s.b).sort((p,q)=>p-q);
+    const right=s.k===0?fmt(s.b):coef(s.k,'')+(s.b?sgn(s.b,''):'');
+    const r=rs.map(x=>`x ${eqv(x)}`).join(' і ');
+    const what=rs.length===0?'графіки не перетинаються — коренів немає':rs.length===1?'одна спільна точка — один корінь':'дві спільні точки — два корені';
+    return `${E.lhs} = ${right}${rs.length?'<br>'+r:''}<br><span class="say">${what}${rs.some(x=>!inPlot(x,s.k*x+s.b))?' (точка перетину поза малюнком)':''}</span>`}
+});
+document.getElementById('c-eq')._sync();
 
 /* 6 power xⁿ */
 card('c-pow',{
