@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<title>Ознаки рівності трикутників</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/lesson.css">
+<script src="/assets/theme.js"></script>
+<style>
+/* marks (docs/internals/colours.md): a given side — mark-1; angles α, β, γ — mark-2, mark-4, mark-3 as in «Кути» */
+.k0{color:var(--mark-1);font-weight:700} .k1{color:var(--mark-2);font-weight:700} .k2{color:var(--mark-4);font-weight:700} .k3{color:var(--mark-3);font-weight:700}
+.fig{display:block;width:100%;max-width:460px;height:auto;margin:8px auto 0;user-select:none;-webkit-user-select:none}
+.fig .side{stroke:var(--ink);stroke-width:2.2;stroke-linecap:round}
+.fig .given{stroke:var(--mark-1);stroke-width:4;stroke-linecap:round}
+.fig .ray{stroke:var(--ink-soft);stroke-width:1.4;stroke-dasharray:6 5}
+.fig .circ{fill:none;stroke:var(--ink-soft);stroke-width:1.4;stroke-dasharray:4 4}
+.fig .tri{fill:color-mix(in srgb,var(--mark-3) 9%,transparent);stroke:var(--ink);stroke-width:2.2;stroke-linejoin:round}
+.fig .tri2{fill:color-mix(in srgb,var(--mark-4) 12%,transparent);stroke:var(--ink);stroke-width:2.2;stroke-linejoin:round;stroke-dasharray:7 4}
+.fig .a1{fill:var(--mark-2-wash);stroke:var(--mark-2);stroke-width:2}
+.fig .a2{fill:var(--mark-4-wash);stroke:var(--mark-4);stroke-width:2}
+.fig .a3{fill:var(--mark-3-wash);stroke:var(--mark-3);stroke-width:2}
+.fig .tick{stroke:var(--ink);stroke-width:2}
+.fig .v{font:700 17px var(--font-hand);fill:var(--ink);text-anchor:middle;dominant-baseline:central}
+.fig .t1{font:700 16px var(--font-hand);fill:var(--mark-2);text-anchor:middle;dominant-baseline:central}
+.fig .t2{font:700 16px var(--font-hand);fill:var(--mark-4);text-anchor:middle;dominant-baseline:central}
+.fig .dot{fill:var(--ink)}
+.ctl{display:flex;align-items:center;gap:10px;font:600 15px var(--font-mono);color:var(--ink-soft);margin:6px 0}
+.ctl span{min-width:9ch;white-space:nowrap}
+.ctl input{flex:1;min-width:0;accent-color:var(--pen);height:28px}
+#pick.palette{grid-template-columns:repeat(auto-fill,minmax(96px,1fr))}
+#deriv .ln{font-size:17px;padding:6px 0}
+.verdict{margin:8px 0 0}
+summary::after{content:"  — яка ознака?";font:400 13px var(--font-body);color:var(--ink-soft)}
+details[open] summary::after{content:""}
+</style>
+</head>
+<body>
+<nav class="site-bar" aria-label="Навігація сайту">
+  <a class="site-home" href="/">← Усі теми</a>
+  <button class="site-theme" id="site-theme" type="button" aria-label="Перемкнути тему"></button>
+</nav>
+<div class="wrap">
+
+<header>
+  <h1>Ознаки рівності трикутників</h1>
+  <p class="sub">Щоб довести, що два трикутники рівні, не треба порівнювати всі шість елементів. Досить трьох — але не будь-яких. Тут видно, яких саме і чому.</p>
+  <p class="needs"><b>Щоб зрозуміти цю тему, треба знати:</b> <a href="/heometriia/kuty/">Кути</a> <i>відрізок і його довжина, 7 клас</i></p>
+</header>
+
+<section>
+  <h2><span class="num">1</span>Рівні трикутники</h2>
+  <p>Трикутники <b>рівні</b>, якщо один можна накласти на інший так, що вони збіжуться. Тоді рівні й усі відповідні елементи: три сторони й три кути.</p>
+  <p>Рівні сторони позначають однаковою кількістю рисок, рівні кути — однаковим кольором дуги. Поверни копію — збіг лишається:</p>
+  <label class="ctl"><span id="rotOut">поворот</span><input type="range" id="rot" min="0" max="180" step="5" value="35" aria-label="Поворот копії"></label>
+  <div class="opts"><button class="chip sm" type="button" id="flip" aria-pressed="false">дзеркально</button></div>
+  <svg class="fig" id="fig0" aria-hidden="true"></svg>
+  <p class="muted">Записують △ABC = △A₁B₁C₁, і порядок букв важливий: A відповідає A₁, B — B₁, C — C₁.</p>
+</section>
+
+<section>
+  <h2><span class="num">2</span>Будуємо трикутник за трьома даними</h2>
+  <p>Ознака — це три дані, за якими трикутник будується <b>одним-єдиним</b> способом. Тоді два трикутники з такими самими даними збігаються. Обери, що дано, і будуй по кроку.</p>
+  <div id="pick"></div>
+  <div id="sliders"></div>
+  <svg class="fig" id="fig" aria-hidden="true"></svg>
+  <div class="row">
+    <button class="btn main" type="button" id="next">Будувати →</button>
+    <button class="btn" type="button" id="reset">Згорнути назад</button>
+  </div>
+  <div class="deriv" id="deriv" aria-live="polite"></div>
+</section>
+
+<section>
+  <h2><span class="num">3</span>Де помиляються</h2>
+  <div id="pit1"></div>
+  <div id="pit2"></div>
+  <div class="warn"><b>Звідси правило:</b> у першій ознаці кут має лежати <b>між</b> двома сторонами, у другій сторона — <b>між</b> двома кутами. Дві сторони й кут не між ними, як і три кути, рівності не гарантують.</div>
+</section>
+
+<section>
+  <h2><span class="num">4</span>Навіщо це: рівність трикутників дає рівні елементи</h2>
+  <p>Ознаку зазвичай використовують, щоб довести рівність відрізків чи кутів: знайди два трикутники, доведи їхню рівність за ознакою — і всі відповідні елементи теж рівні.</p>
+  <p>Приклад: у △ABC проведено бісектрису AD, і AB = AC. Тоді △ABD = △ACD за першою ознакою: AB = AC, ∠BAD = ∠CAD, AD — спільна. Отже, BD = DC і ∠B = ∠C.</p>
+</section>
+
+<section>
+  <h2><span class="num">5</span>Перевір себе</h2>
+  <p class="muted">Дано рівності для △ABC і △A₁B₁C₁. Чи рівні трикутники, і за якою ознакою?</p>
+  <details><summary>AB = A₁B₁, ∠A = ∠A₁, AC = A₁C₁</summary><div class="ans">Кут A лежить між сторонами AB і AC. Перша ознака — <b>рівні</b>.</div></details>
+  <details><summary>∠A = ∠A₁, AB = A₁B₁, ∠B = ∠B₁</summary><div class="ans">Сторона AB лежить між кутами A і B. Друга ознака — <b>рівні</b>.</div></details>
+  <details><summary>AB = A₁B₁, BC = B₁C₁, CA = C₁A₁</summary><div class="ans">Три сторони. Третя ознака — <b>рівні</b>.</div></details>
+  <details><summary>AB = A₁B₁, BC = B₁C₁, ∠A = ∠A₁</summary><div class="ans">Кут A не між сторонами AB і BC. Це не ознака: трикутники можуть бути різні. Подивись «ССК» у розділі 2.</div></details>
+  <details><summary>∠A = ∠A₁, ∠B = ∠B₁, ∠C = ∠C₁</summary><div class="ans">Самі кути розміру не задають: трикутник може бути більшим чи меншим. Не ознака.</div></details>
+</section>
+
+<div class="rule">
+  <b>Коротко:</b><br>
+  <b>I ознака (СКС):</b> дві сторони й кут між ними.<br>
+  <b>II ознака (КСК):</b> сторона й два прилеглі до неї кути.<br>
+  <b>III ознака (ССС):</b> три сторони.<br>
+  Не ознаки: дві сторони й кут не між ними; три кути.<br><br>
+  Кути трикутника, суміжні й вертикальні кути — у шпаргалці <a href="../kuty/">«Кути»</a>.
+</div>
+
+</div>
+<script src="/assets/lesson.js"></script>
+<script>
+(function(){
+const $=id=>document.getElementById(id), NS='http://www.w3.org/2000/svg', R=Math.PI/180, fmt=v=>L.fmt(v);
+function el(tag,a,p,txt){const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;p&&p.appendChild(e);return e}
+// maths coordinates in units, y up; the view maps them into the SVG
+function view(svg,{w=330,h=240,S=26,ox=40,oy=205}={}){svg.setAttribute('viewBox',`0 0 ${w} ${h}`);svg.replaceChildren();
+  const cp=el('clipPath',{id:svg.id+'c'},el('defs',{},svg));el('rect',{x:0,y:0,width:w,height:h},cp);
+  const g=el('g',{'clip-path':`url(#${svg.id}c)`},svg),top=el('g',{},svg);
+  const P=p=>({x:ox+p.x*S,y:oy-p.y*S});
+  // everything drawn, in pixels, so a vertex letter can find the emptiest spot around its point
+  const segs=[],circs=[],spots=[];
+  const dseg=(q,a,b)=>{const vx=b.x-a.x,vy=b.y-a.y,t=Math.max(0,Math.min(1,((q.x-a.x)*vx+(q.y-a.y)*vy)/((vx*vx+vy*vy)||1)));return Math.hypot(a.x+t*vx-q.x,a.y+t*vy-q.y)};
+  return {g,top,S,P,
+    seg(a,b,cls,p=g){const A=P(a),B=P(b);segs.push([A,B]);return el('line',{x1:A.x,y1:A.y,x2:B.x,y2:B.y,class:cls},p)},
+    poly(pts,cls){const Q=pts.map(P);Q.forEach((q,i)=>segs.push([q,Q[(i+1)%Q.length]]));return el('polygon',{points:Q.map(t=>t.x+','+t.y).join(' '),class:cls},g)},
+    circle(c,r,cls){const C=P(c);circs.push([C,r*S]);return el('circle',{cx:C.x,cy:C.y,r:r*S,class:cls},g)},
+    dot(c){const C=P(c);el('circle',{cx:C.x,cy:C.y,r:3.5,class:'dot'},top)},
+    // an angle at V from direction d1 to d2 (degrees, counter-clockwise), with its label on the bisector
+    arc(V,d1,d2,cls,r=.85,label,tcls){const C=P(V),a1=-d1*R,a2=-d2*R,rr=r*S,p1={x:C.x+rr*Math.cos(a1),y:C.y+rr*Math.sin(a1)},p2={x:C.x+rr*Math.cos(a2),y:C.y+rr*Math.sin(a2)};
+      const span=((d2-d1)%360+360)%360;el('path',{d:`M${C.x} ${C.y}L${p1.x} ${p1.y}A${rr} ${rr} 0 ${span>180?1:0} 0 ${p2.x} ${p2.y}Z`,class:cls},g);
+      if(label){const m=-(d1+span/2)*R,lr=rr+11;el('text',{x:C.x+lr*Math.cos(m),y:C.y+lr*Math.sin(m),class:tcls},top,label)}},
+    // a vertex letter: of twelve spots around the point, the one farthest from every line, circle and letter,
+    // leaning outward from the triangle's middle when spots are equally free
+    letter(p,mid,t){const A=P(p),M=P(mid),out=Math.atan2(A.y-M.y,A.x-M.x);let best=null;
+      for(let i=0;i<12;i++){
+        const ang=out+(i===0?0:(i%2?1:-1)*Math.ceil(i/2)*Math.PI/6),q={x:A.x+16*Math.cos(ang),y:A.y+16*Math.sin(ang)};
+        const clear=Math.min(...segs.map(([u,v])=>dseg(q,u,v)),...circs.map(([c,r])=>Math.abs(Math.hypot(q.x-c.x,q.y-c.y)-r)),...spots.map(o=>Math.hypot(q.x-o.x,q.y-o.y)-6),99);
+        const score=Math.min(clear,11)-i*.05;if(!best||score>best.s)best={s:score,q}}
+      spots.push(best.q);el('text',{x:best.q.x,y:best.q.y,class:'v'},top,t)},
+    ticks(a,b,n){const A=P(a),B=P(b),mx=(A.x+B.x)/2,my=(A.y+B.y)/2,dx=B.x-A.x,dy=B.y-A.y,d=Math.hypot(dx,dy),ux=dx/d,uy=dy/d;
+      for(let i=0;i<n;i++){const o=(i-(n-1)/2)*5;el('line',{x1:mx+ux*o-uy*6,y1:my+uy*o+ux*6,x2:mx+ux*o+uy*6,y2:my+uy*o-ux*6,class:'tick'},top)}}};
+}
+const dir=(a,b)=>Math.atan2(b.y-a.y,b.x-a.x)/R;
+const mid3=(a,b,c)=>({x:(a.x+b.x+c.x)/3,y:(a.y+b.y+c.y)/3});
+
+/* ---------- 1: a triangle and its copy ---------- */
+(function(){
+  const A={x:0,y:0},B={x:3.6,y:0},C={x:1.1,y:2.6};
+  function draw(){const th=+$('rot').value,fl=$('flip').getAttribute('aria-pressed')==='true';
+    $('rotOut').textContent=`поворот ${th}°`;
+    const V=view($('fig0'),{w:330,h:190,S:34,ox:22,oy:165});
+    const tri=(a,b,c,cls,sub)=>{V.poly([a,b,c],cls);const m=mid3(a,b,c);
+      V.arc(a,dir(a,b),dir(a,c),'a1',.6);V.arc(b,dir(b,c),dir(b,a),'a2',.6);V.arc(c,dir(c,a),dir(c,b),'a3',.6);
+      // a reflected copy turns the other way round, so its arcs are drawn from the other side
+      V.ticks(a,b,1);V.ticks(b,c,2);V.ticks(c,a,3);V.letter(a,m,'A'+sub);V.letter(b,m,'B'+sub);V.letter(c,m,'C'+sub)};
+    tri(A,B,C,'tri','');
+    const o={x:6.9,y:1.9},cx=(A.x+B.x+C.x)/3,cy=(A.y+B.y+C.y)/3,t=th*R;
+    const T=p=>{let x=p.x-cx,y=p.y-cy;if(fl)x=-x;return {x:o.x+x*Math.cos(t)-y*Math.sin(t),y:o.y+x*Math.sin(t)+y*Math.cos(t)}};
+    const a=T(A),b=T(B),c=T(C);
+    V.poly([a,b,c],'tri2');const m=mid3(a,b,c);
+    const arcAt=(v,p,q,cls)=>{let d1=dir(v,p),d2=dir(v,q);if(fl)[d1,d2]=[d2,d1];V.arc(v,d1,d2,cls,.6)};
+    arcAt(a,b,c,'a1');arcAt(b,c,a,'a2');arcAt(c,a,b,'a3');
+    V.ticks(a,b,1);V.ticks(b,c,2);V.ticks(c,a,3);V.letter(a,m,'A₁');V.letter(b,m,'B₁');V.letter(c,m,'C₁');
+  }
+  $('rot').addEventListener('input',draw);
+  $('flip').onclick=()=>{const b=$('flip');b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'));draw()};
+  draw();
+})();
+
+/* ---------- 2: building a triangle from three givens ---------- */
+const SIGNS=[
+  {v:'sks',sub:'I ознака',label:'СКС',sl:[['c','AB',3,7,.5,5],['b','AC',2,6,.5,4],['al','∠A',20,140,5,60]]},
+  {v:'ksk',sub:'II ознака',label:'КСК',sl:[['c','AB',3,7,.5,6],['al','∠A',20,140,5,55],['be','∠B',20,140,5,65]]},
+  {v:'sss',sub:'III ознака',label:'ССС',sl:[['c','AB',3,7,.5,6],['b','AC',2,7,.5,4],['a','BC',2,7,.5,5]]},
+  {v:'ssk',sub:'не ознака',label:'ССК',sl:[['c','AB',3,7,.5,6],['a','BC',2,7,.5,4],['al','∠A',20,80,5,35]]},
+  {v:'kkk',sub:'не ознака',label:'ККК',sl:[['al','∠A',20,120,5,50],['be','∠B',20,120,5,60]]}
+];
+let si=0,stage=1;const val={};
+function sliders(){const S=SIGNS[si];
+  S.sl.forEach(([k,,, , ,d])=>{if(val[si+k]==null)val[si+k]=d});
+  $('sliders').innerHTML=S.sl.map(([k,name,mi,ma,st])=>`<label class="ctl"><span data-k="${k}"></span><input type="range" min="${mi}" max="${ma}" step="${st}" value="${val[si+k]}" data-k="${k}" aria-label="${name}"></label>`).join('');
+  $('sliders').querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{val[si+i.dataset.k]=+i.value;D.render(false);drawFig()}));
+}
+const g=k=>val[si+k];
+const cm=v=>fmt(v)+' см', deg=v=>fmt(v)+'°';
+function labelSliders(){const S=SIGNS[si];S.sl.forEach(([k,name])=>{const sp=$('sliders').querySelector(`span[data-k="${k}"]`);sp.innerHTML=`${k==='al'?'<span class="k1">'+name+'</span>':k==='be'?'<span class="k2">'+name+'</span>':'<span class="k0">'+name+'</span>'} = ${k==='al'||k==='be'?deg(g(k)):cm(g(k))}`})}
+
+// the geometry of each construction, in units; C may be missing (no triangle) or doubled (two triangles)
+function geom(){const v=SIGNS[si].v,A={x:0,y:0};
+  if(v==='sks'){const c=g('c'),b=g('b'),al=g('al');return {A,B:{x:c,y:0},C:[{x:b*Math.cos(al*R),y:b*Math.sin(al*R)}]}}
+  if(v==='ksk'){const c=g('c'),al=g('al'),be=g('be');if(al+be>=180)return {A,B:{x:c,y:0},C:[]};
+    const t=c*Math.sin(be*R)/Math.sin((al+be)*R);return {A,B:{x:c,y:0},C:[{x:t*Math.cos(al*R),y:t*Math.sin(al*R)}]}}
+  if(v==='sss'){const c=g('c'),b=g('b'),a=g('a'),x=(b*b-a*a+c*c)/(2*c),y2=b*b-x*x;return {A,B:{x:c,y:0},C:y2>1e-9?[{x,y:Math.sqrt(y2)}]:[]}}
+  if(v==='ssk'){const c=g('c'),a=g('a'),al=g('al'),dd=a*a-c*c*Math.sin(al*R)**2,ts=dd<0?[]:[c*Math.cos(al*R)-Math.sqrt(dd),c*Math.cos(al*R)+Math.sqrt(dd)].filter(t=>t>1e-6);
+    return {A,B:{x:c,y:0},C:[...new Set(ts.map(t=>t.toFixed(6)))].map(Number).map(t=>({x:t*Math.cos(al*R),y:t*Math.sin(al*R)}))}}
+  const al=g('al'),be=g('be'),c=5.5;if(al+be>=180)return {A,B:{x:c,y:0},C:[]};
+  const t=c*Math.sin(be*R)/Math.sin((al+be)*R);return {A,B:{x:c,y:0},C:[{x:t*Math.cos(al*R),y:t*Math.sin(al*R)}],k:.5};
+}
+function stages(){const v=SIGNS[si].v,G=geom(),one=G.C.length===1,S=[];
+  const head={sks:'Дано дві сторони й кут між ними.',ksk:'Дано сторону й два кути, прилеглі до неї.',sss:'Дано три сторони.',ssk:'Дано дві сторони й кут, що лежить <b>не</b> між ними.',kkk:'Дано три кути (третій — 180° мінус два інші).'}[v];
+  S.push({lines:[],text:`${head} Будуємо так, щоб нічого не вибирати навмання: якщо на кожному кроці вибору немає, трикутник один.`});
+  if(v!=='kkk')S.push({lines:[`<span class="k0">AB</span> = ${cm(g('c'))}`],text:'Відкладаємо відрізок AB. Де саме його покласти — неважливо: інший трикутник з тими самими даними накладемо на цей.'});
+  if(v==='sks'){
+    S.push({lines:[`<span class="k1">∠A</span> = ${deg(g('al'))}`],text:'Від A будуємо кут: виходить промінь, на якому має лежати C.'});
+    S.push({lines:[`<span class="k0">AC</span> = ${cm(g('b'))}`],text:'На промені відкладаємо AC. Точка C на промені на такій відстані від A — одна.'});
+    S.push({lines:['BC — проводимо'],text:'Зʼєднуємо B і C. На жодному кроці не було вибору — <b>трикутник один-єдиний</b>. Тому два трикутники з рівними двома сторонами й кутом між ними рівні.'});
+  }
+  if(v==='ksk'){
+    S.push({lines:[`<span class="k1">∠A</span> = ${deg(g('al'))}`],text:'Від A будуємо кут — промінь, на якому лежить C.'});
+    S.push({lines:[`<span class="k2">∠B</span> = ${deg(g('be'))}`],text:'Від B будуємо другий кут — ще один промінь з C.'});
+    S.push({lines:[one?'C — точка перетину':'промені не перетинаються'],text:one?'Два промені перетинаються в одній точці — це C. <b>Трикутник один-єдиний.</b>':`Кути разом дають ${deg(g('al')+g('be'))} — не менше за 180°, промені не зустрічаються: такого трикутника немає, бо сума кутів трикутника 180°.`});
+  }
+  if(v==='sss'){
+    S.push({lines:[`<span class="k0">AC</span> = ${cm(g('b'))}`],text:'C лежить на відстані AC від A — на колі з центром A.'});
+    S.push({lines:[`<span class="k0">BC</span> = ${cm(g('a'))}`],text:'І на відстані BC від B — на колі з центром B.'});
+    S.push({lines:[one?'C — перетин кіл':'кола не перетинаються'],text:one?'Кола перетинаються над AB в одній точці (друга — дзеркальна під AB, і трикутник там той самий, перевернутий). <b>Трикутник один-єдиний.</b>':'Кола не перетинаються: одна сторона не менша за суму двох інших. Трикутник існує, лише якщо кожна сторона менша за суму двох інших.'});
+  }
+  if(v==='ssk'){
+    S.push({lines:[`<span class="k1">∠A</span> = ${deg(g('al'))}`],text:'Від A будуємо кут — промінь, на якому лежить C.'});
+    S.push({lines:[`<span class="k0">BC</span> = ${cm(g('a'))}`],text:'C на відстані BC від B — на колі з центром B. Шукаємо, де коло перетинає промінь.'});
+    const n=G.C.length;
+    S.push({lines:[n===2?'дві точки: C і C₁':n===1?'одна точка':'жодної точки'],text:n===2?'Коло перетинає промінь <b>двічі</b>. Обидва трикутники, ABC і ABC₁, мають ті самі AB, BC і ∠A, але вони <b>різні</b>. Тому «дві сторони й кут не між ними» — не ознака рівності.':
+      n===1?'Тут коло перетинає промінь один раз. Але зменш BC — і точок стане дві: з тими самими даними бувають різні трикутники, тож це не ознака.':'Коло не дістає до променя: BC закоротка, такого трикутника немає.'});
+  }
+  if(v==='kkk'){
+    S.push({lines:[`<span class="k1">∠A</span> = ${deg(g('al'))}, <span class="k2">∠B</span> = ${deg(g('be'))}`],text:'Будуємо трикутник з такими кутами на якійсь стороні AB.'});
+    S.push({lines:[G.C.length?'ще один, менший':'трикутника немає'],text:G.C.length?'А тепер на коротшій стороні — кути ті самі, а трикутник менший. Кути не задають розміру, тож <b>три кути — не ознака</b>.':'Два кути разом не менші за 180° — такого трикутника немає.'});
+  }
+  return S;
+}
+function drawFig(){
+  const v=SIGNS[si].v,G=geom(),V=view($('fig'),{w:330,h:240,S:v==='sss'?24:26,ox:46,oy:200}),{A,B}=G,k=stage-1;
+  labelSliders();
+  if(v==='kkk'){
+    if(k>=1&&G.C.length){const C=G.C[0];V.poly([A,B,C],'tri');V.arc(A,0,g('al'),'a1',.8,'α','t1');V.arc(B,180-g('be'),180,'a2',.8,'β','t2');
+      const m=mid3(A,B,C);V.letter(A,m,'A');V.letter(B,m,'B');V.letter(C,m,'C')}
+    if(k>=2&&G.C.length){const s=G.k,o={x:7.9,y:0},A1=o,B1={x:o.x+B.x*s,y:0},C1={x:o.x+G.C[0].x*s,y:G.C[0].y*s};
+      V.poly([A1,B1,C1],'tri2');V.arc(A1,0,g('al'),'a1',.6);V.arc(B1,180-g('be'),180,'a2',.6);const m=mid3(A1,B1,C1);V.letter(A1,m,'A₁');V.letter(B1,m,'B₁');V.letter(C1,m,'C₁')}
+    return}
+  const C=G.C,last=stages().length-1,done=k>=last;
+  if(done&&C.length){V.poly([A,B,C[0]],'tri');if(C[1])V.poly([A,B,C[1]],'tri2')}
+  if(k>=1)V.seg(A,B,'given');
+  const ray=(p,d,len=12)=>V.seg(p,{x:p.x+len*Math.cos(d*R),y:p.y+len*Math.sin(d*R)},'ray');
+  const far=(p,q)=>Math.hypot(q.x-p.x,q.y-p.y);
+  if(v==='sks'){if(k>=2){ray(A,g('al'),k>=3?g('b'):12);V.arc(A,0,g('al'),'a1',.8,'α','t1')}if(k>=3){V.seg(A,C[0],'given');V.dot(C[0])}if(k>=4)V.seg(B,C[0],'side')}
+  const got=k>=4&&C.length;
+  if(v==='ksk'){if(k>=2){ray(A,g('al'),got?far(A,C[0]):12);V.arc(A,0,g('al'),'a1',.8,'α','t1')}if(k>=3){ray(B,180-g('be'),got?far(B,C[0]):12);V.arc(B,180-g('be'),180,'a2',.8,'β','t2')}if(k>=4&&C.length)V.dot(C[0])}
+  if(v==='sss'){if(k>=2)V.circle(A,g('b'),'circ');if(k>=3)V.circle(B,g('a'),'circ');if(k>=4&&C.length){V.seg(A,C[0],'given');V.seg(B,C[0],'given');V.dot(C[0])}}
+  if(v==='ssk'){if(k>=2){ray(A,g('al'),got?Math.max(...C.map(c=>far(A,c))):12);V.arc(A,0,g('al'),'a1',.8,'α','t1')}if(k>=3)V.circle(B,g('a'),'circ');if(k>=4){C.forEach(c=>{V.seg(B,c,'given');V.dot(c)})}}
+  // letters last, away from everything drawn: around the first triangle's middle, or above AB when there is none
+  const m=C.length?mid3(A,B,C[0]):{x:B.x/2,y:1.5};
+  if(k>=1){V.letter(A,m,'A');V.letter(B,m,'B')}
+  if(C.length&&((v==='sks'&&k>=3)||(v!=='sks'&&k>=4))){V.letter(C[0],m,'C');if(C[1])V.letter(C[1],{x:C[1].x,y:C[1].y+1},'C₁')}
+}
+const D=L.derivation({box:$('deriv'),next:$('next'),reset:$('reset'),stages,first:'Будувати →',more:'Далі →',mark:''});
+$('next').addEventListener('click',()=>{stage=Math.min(stage+1,stages().length);drawFig()});
+$('reset').addEventListener('click',()=>{stage=1;drawFig()});
+function pick(){L.chips($('pick'),SIGNS.map((s,i)=>({v:i,sub:s.sub,label:s.label})),si,v=>{si=v;stage=1;pick();sliders();D.toStart();drawFig()})}
+pick();sliders();D.toStart();drawFig();
+
+/* ---------- 3: pitfalls ---------- */
+L.contrast($('pit1'),{labelA:'кут не між сторонами',labelB:'кут між сторонами',
+  a:{expr:'AB, BC і ∠A',steps:'ССК — не ознака',why:'Кут A прилягає до AB, але не до BC. Коло радіуса BC може перетнути промінь двічі — і трикутників два.'},
+  b:{expr:'AB, AC і ∠A',steps:'СКС — I ознака',why:'Кут A лежить між AB і AC: обидві сторони виходять з його вершини, і трикутник один.'}});
+L.contrast($('pit2'),{labelA:'три кути',labelB:'два кути й сторона між ними',
+  a:{expr:'∠A, ∠B, ∠C',steps:'ККК — не ознака',why:'Однакові кути мають і великий, і маленький трикутник. Розміру кути не задають.'},
+  b:{expr:'∠A, AB, ∠B',steps:'КСК — II ознака',why:'Сторона AB задає розмір, а кути при її кінцях — напрямки двох інших сторін.'}});
+})();
+</script>
+</body>
+</html>
