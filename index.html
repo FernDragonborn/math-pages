@@ -79,10 +79,9 @@ body.mapmode .zoom{top:auto;bottom:calc(16px + env(safe-area-inset-bottom,0px));
 body.mapmode .legend{position:fixed;left:max(12px,env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:9;max-width:calc(100% - 90px);margin:0;padding:6px 9px;border-radius:8px;background:color-mix(in srgb,var(--paper) 86%,transparent);border:1px solid var(--line)}
 /* the station card is a bottom sheet, as in a maps app: folded it shows the name and «Відкрити», pulled up the
    whole card, swiped down it closes */
-body.mapmode #station:not(:empty){position:fixed;left:0;right:0;bottom:0;z-index:11;max-height:80vh;overflow:auto;padding:0 10px calc(10px + env(safe-area-inset-bottom,0px));background:var(--paper);box-shadow:0 -6px 18px rgba(0,0,0,.12);border-top:1px solid var(--line);border-radius:14px 14px 0 0;transition:transform .22s ease}
+body.mapmode #station:not(:empty){touch-action:none;position:fixed;left:0;right:0;bottom:0;z-index:11;max-height:80vh;overflow:auto;padding:0 10px calc(10px + env(safe-area-inset-bottom,0px));background:var(--paper);box-shadow:0 -6px 18px rgba(0,0,0,.12);border-top:1px solid var(--line);border-radius:14px 14px 0 0;transition:transform .22s ease}
 body.mapmode #station.dragging{transition:none}
 #station .grab{display:none}
-body.mapmode #station .grab,body.mapmode #station .head{touch-action:none}
 body.mapmode #station .grab{display:block;width:100%;height:22px;border:0;background:transparent;cursor:grab;position:relative}
 body.mapmode #station .grab::before{content:"";position:absolute;left:50%;top:8px;width:40px;height:5px;margin-left:-20px;border-radius:3px;background:var(--card-line)}
 body.mapmode #station.peek .more{display:none}
@@ -546,16 +545,33 @@ footer a{color:inherit}
     if(!next){if(pick&&history.state&&history.state.station){history.back();return;}pick=null;drawMap();return;}
     if(!pick)history.pushState({station:1},'');pick=next;drawMap();reveal(next);}
   addEventListener('popstate',()=>{if(pick){pick=null;drawMap();}});
-  // pulling the sheet: up unfolds it, down folds it and then closes it
-  (function(){const sh=$('station');let y0=null,t0=0,dy=0;
-    sh.addEventListener('pointerdown',e=>{if(!e.target.closest('.grab,.head')||e.target.closest('a,.close'))return;y0=e.clientY;t0=performance.now();dy=0;delete sh.dataset.dragged;sh.classList.add('dragging');try{sh.setPointerCapture(e.pointerId);}catch(err){}});
-    sh.addEventListener('pointermove',e=>{if(y0==null)return;dy=e.clientY-y0;if(Math.abs(dy)>6)sh.dataset.dragged=1;sh.style.transform=`translateY(${Math.max(dy,-40)}px)`;});
-    const end=()=>{if(y0==null)return;const v=dy/Math.max(1,performance.now()-t0);sh.classList.remove('dragging');sh.style.transform='';y0=null;
-      if(!sh.dataset.dragged)return;
-      if(dy>70||v>.6){if(sh.classList.contains('peek')||dy>160)choose(null);else sh.classList.add('peek');}
-      else if(dy<-30||v<-.6)sh.classList.remove('peek');
+  /* the sheet follows the finger from anywhere on it, as a native one does. A tap on a link or a button stays a
+     tap; once the finger has moved a few pixels it is a drag, and the link does not open. Folded, a pull up
+     unfolds it at once. Unfolded, it rides down with the finger: let go past a third of its height or with a
+     flick and it folds, further down and it closes, else it springs back. Content too long for the sheet
+     scrolls first and only then does the sheet move */
+  (function(){const sh=$('station');let g=null;
+    sh.addEventListener('pointerdown',e=>{if(!sh.innerHTML||e.target.closest('.close'))return;
+      g={y0:e.clientY,y:e.clientY,t:performance.now(),v:0,s0:sh.scrollTop,id:e.pointerId,drag:false,peek:sh.classList.contains('peek')};delete sh.dataset.dragged;});
+    sh.addEventListener('pointermove',e=>{if(!g||e.pointerId!==g.id)return;const now=performance.now(),dy=e.clientY-g.y0;
+      g.v=(e.clientY-g.y)/Math.max(1,now-g.t);g.y=e.clientY;g.t=now;
+      if(!g.drag){if(Math.abs(dy)<7)return;g.drag=true;sh.dataset.dragged=1;sh.classList.add('dragging');try{sh.setPointerCapture(g.id);}catch(err){}}
+      if(g.peek){if(dy<-12){sh.classList.remove('peek');g.peek=false;g.y0=e.clientY;g.s0=sh.scrollTop;}else sh.style.transform=`translateY(${Math.max(0,dy)}px)`;return;}
+      // unfolded: the content scrolls while it can, the sheet moves with what is left over
+      const want=g.s0-dy,room=sh.scrollHeight-sh.clientHeight;
+      if(want>0&&room>0){sh.scrollTop=Math.min(room,want);sh.style.transform='';}
+      else{sh.scrollTop=0;sh.style.transform=`translateY(${Math.max(0,-want)}px)`;}});
+    const end=e=>{if(!g||(e&&e.pointerId!==g.id))return;const G=g;g=null;sh.classList.remove('dragging');
+      const moved=parseFloat((sh.style.transform.match(/-?[\d.]+/)||[0])[0])||0;sh.style.transform='';
+      if(!G.drag)return;
+      const h=sh.offsetHeight;
+      if(G.peek){if(moved>40||G.v>.5)choose(null);}
+      else if(moved>h*.6||(moved>40&&G.v>1.2))choose(null);
+      else if(moved>h/3||(moved>20&&G.v>.5))sh.classList.add('peek');
       setTimeout(()=>delete sh.dataset.dragged,0);};
-    sh.addEventListener('pointerup',end);sh.addEventListener('pointercancel',end);})();
+    sh.addEventListener('pointerup',end);sh.addEventListener('pointercancel',end);
+    // a drag that started on a link must not open it
+    sh.addEventListener('click',e=>{if(sh.dataset.dragged){e.preventDefault();e.stopPropagation();}},true);})();
 
   // camera: drag to pan, pinch or wheel to zoom, buttons for both
   const box=$('mapbox'), cam={x:0,y:0,k:1};
