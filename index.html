@@ -272,19 +272,22 @@ footer a{color:inherit}
       needs[c.abs]=[...d.querySelectorAll('.needs a')].map(a=>new URL(a.getAttribute('href'),c.abs).href);}catch(e){needs[c.abs]=[];}}));
     return needs;
   }
-  const gOf=c=>Math.min(...c.cls.map(Number));
+  // a cheat sheet sums up its whole topic, so it stands at the end of the line: on its highest grade
+  const gOf=c=>c.kind.includes('шпаргалка')?Math.max(...c.cls.map(Number)):Math.min(...c.cls.map(Number));
   function layout(){
     const byAbs=Object.fromEntries(mall.map(c=>[c.abs,c]));
+    // how deep a station's «треба знати» goes: within one grade, what others stand on comes first down the line
+    const ndep={},nd=h=>{if(h in ndep)return ndep[h];ndep[h]=0;const ns=(needs[h]||[]).filter(n=>byAbs[n]);return ndep[h]=ns.length?1+Math.max(...ns.map(nd)):0;};
     // a line runs through its own stations in the authored order; a station of another topic that one of them
     // stands on («треба знати») joins the line just before it — that shared station is the interchange
     const lines=mtopics.map(t=>{const seq=[];t.cards.filter(c=>!c.ext).forEach(c=>{(needs[c.abs]||[]).forEach(n=>{const o=byAbs[n];if(o&&o.topic!==t.title&&!seq.includes(n))seq.push(n);});if(!seq.includes(c.abs))seq.push(c.abs);});
       // along a line the grade only grows: no branch going back up
-      const at=Object.fromEntries(seq.map((h,i)=>[h,i]));seq.sort((u,v)=>gOf(byAbs[u])-gOf(byAbs[v])||at[u]-at[v]);return {t,seq};});
+      const at=Object.fromEntries(seq.map((h,i)=>[h,i]));seq.sort((u,v)=>gOf(byAbs[u])-gOf(byAbs[v])||nd(u)-nd(v)||at[u]-at[v]);return {t,seq};});
     const onLines={}; lines.forEach((l,i)=>l.seq.forEach(h=>(onLines[h]=onLines[h]||[]).push(i)));
     const rows=[...new Set(mall.map(gOf))].sort((x,y)=>x-y), STACK=56, GAP=50;
     const rowOf=c=>rows.indexOf(gOf(c));
     // stations of one topic and one grade stack down the line, so lines run downwards and labels sit to the right
-    const kIn=c=>mtopics.find(t=>t.title===c.topic).cards.filter(x=>!x.ext&&gOf(x)===gOf(c)).indexOf(c);
+    const kIn=c=>{const own=mtopics.find(t=>t.title===c.topic).cards;return own.filter(x=>!x.ext&&gOf(x)===gOf(c)).sort((a,b)=>nd(a.abs)-nd(b.abs)||own.indexOf(a)-own.indexOf(b)).indexOf(c);};
     const depthRow=rows.map(g=>Math.max(...mtopics.map(t=>t.cards.filter(c=>!c.ext&&gOf(c)===g).length),1));
     const rowTop=rows.map((g,i)=>depthRow.slice(0,i).reduce((a,b)=>a+b*STACK+GAP,0));
     const targetY=c=>rowTop[rowOf(c)]+kIn(c)*STACK;
@@ -320,7 +323,9 @@ footer a{color:inherit}
     const boxes=[...H.map(h=>({x1:P[h].x-14,x2:P[h].x+14,y1:P[h].y-14,y2:P[h].y+14})),...Object.values(LB),...Object.values(EX).map(e=>({x1:e.x,x2:e.x+e.w,y1:e.y-14,y2:e.y+14}))];
     const bounds={x1:Math.min(0,...boxes.map(b=>b.x1)),y1:Math.min(...boxes.map(b=>b.y1))-30,x2:Math.max(...boxes.map(b=>b.x2)),y2:Math.max(...boxes.map(b=>b.y2))};
     const W=bounds.x2+30, Hgt=bounds.y2+30;
-    return {pos:P,lines,onLines,rows,rowY:rowYOf(),W,H:Hgt,EX,LB,bounds};
+    // to ride to a station you pass every station above it on its own line
+    const prev={};lines.forEach(l=>{const own=l.seq.filter(h=>byAbs[h].topic===l.t.title);own.forEach((h,i)=>{if(i)prev[h]=own[i-1];});});
+    return {pos:P,lines,onLines,rows,rowY:rowYOf(),W,H:Hgt,EX,LB,bounds,prev};
   }
   // label width as the browser will draw it (the map is built after the fonts are in)
   const measure=(()=>{const cx=document.createElement('canvas').getContext('2d');cx.font='600 12px Onest, "Segoe UI", system-ui, sans-serif';return t=>cx.measureText(t).width;})();
@@ -361,7 +366,9 @@ footer a{color:inherit}
     }
     return placed;
   }
-  const anc=h=>{const out=new Set(),stack=[h];while(stack.length){const x=stack.pop();(needs[x]||[]).forEach(n=>{if(built.pos[n]&&!out.has(n)){out.add(n);stack.push(n);}});}return out;};
+  // what lies upstream of a station: what it needs, and the station before it on its own line
+  const upstream=h=>[...(needs[h]||[]),...(built.prev[h]?[built.prev[h]]:[])].filter(n=>built.pos[n]);
+  const anc=h=>{const out=new Set(),stack=[h];while(stack.length){const x=stack.pop();upstream(x).forEach(n=>{if(!out.has(n)){out.add(n);stack.push(n);}});}return out;};
   const wrapT=(t,n)=>{const w=t.split(' '),L=[];let cur='';w.forEach(x=>{if((cur+' '+x).trim().length>n&&cur){L.push(cur);cur=x;}else cur=(cur+' '+x).trim();});if(cur)L.push(cur);return L.slice(0,3);};
   // a metro segment: diagonal first, then straight — only 0°, 45° and 90°
   const seg=(A,B)=>{const dx=B.x-A.x,dy=B.y-A.y,m=Math.min(Math.abs(dx),Math.abs(dy));return `L${A.x+Math.sign(dx)*m} ${A.y+Math.sign(dy)*m} L${B.x} ${B.y}`;};
@@ -375,7 +382,11 @@ footer a{color:inherit}
       // lines that share a stretch sit side by side, a few pixels apart, as on a printed map
       const o=(li-(lines.length-1)/2)*3;
       const d=pts.length>1?`M${pts[0].x+o} ${pts[0].y}`+pts.slice(1).map((p,i)=>seg({x:pts[i].x+o,y:pts[i].y},{x:p.x+o,y:p.y})).join(''):`M${pts[0].x} ${pts[0].y-24} L${pts[0].x} ${pts[0].y+24}`;
-      g+=`<path class="ln${on?'':' dim'}" stroke="${l.t.c}" d="${d}"/>`;});
+      // with a route picked, the line stays faint and only the stretches between route stations light up
+      if(!route||l.seq.length===1){g+=`<path class="ln${on?'':' dim'}" stroke="${l.t.c}" d="${d}"/>`;return;}
+      g+=`<path class="ln dim" stroke="${l.t.c}" d="${d}"/>`;
+      for(let i=1;i<pts.length;i++)if(route.has(l.seq[i-1])&&route.has(l.seq[i]))
+        g+=`<path class="ln" stroke="${l.t.c}" d="M${pts[i-1].x+o} ${pts[i-1].y}${seg({x:pts[i-1].x+o,y:pts[i-1].y},{x:pts[i].x+o,y:pts[i].y})}"/>`;});
     exits.forEach(c=>{const e=EX[c.abs];if(!e)return;const a=e.anchor&&pos[e.anchor],on=lit(c.abs);
       if(a)g+=`<path class="xl${on?'':' dim'}" d="M${a.x} ${a.y+12} L${a.x} ${e.y-14}"/>`;
       g+=`<g class="stn exit${c.abs===pick?' sel':''}${on?'':' dim'}" data-h="${c.abs}" tabindex="0" role="button" aria-label="${esc(c.title)} — сторонній сайт">`+
@@ -388,7 +399,7 @@ footer a{color:inherit}
     $('legend').innerHTML=lines.map(l=>`<span style="--c:${l.t.c}"><b></b>${esc(l.t.title)}</span>`).join('')+'<span><i class="hubdot"></i>пересадка</span>'+(exits.length?'<span><i class="exitdot"></i>корисний сайт ↗</span>':'');
     $('cam').querySelectorAll('.stn').forEach(s=>s.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();choose(s.dataset.h);}});
     let card='';
-    if(pick){const c=all.find(x=>x.abs===pick);const depth={};const dp=h=>{if(h in depth)return depth[h];depth[h]=0;const ns=(needs[h]||[]).filter(n=>pos[n]);depth[h]=ns.length?1+Math.max(...ns.map(dp)):0;return depth[h];};
+    if(pick){const c=all.find(x=>x.abs===pick);const depth={};const dp=h=>{if(h in depth)return depth[h];depth[h]=0;const ns=upstream(h);depth[h]=ns.length?1+Math.max(...ns.map(dp)):0;return depth[h];};
       const before=[...anc(pick)].map(h=>all.find(x=>x.abs===h)).sort((a,b)=>dp(a.abs)-dp(b.abs)||gOf(a)-gOf(b));
       const via=c.ext?[]:(onLines[pick]||[]).map(i=>lines[i].t.title);
       card=`<div class="scard" style="--c:${c.c}"><button type="button" class="close" aria-label="Закрити">×</button><b>${esc(c.title)}${c.ext?' ↗':''}</b><span class="desc">${esc(c.desc)}</span>${tags(c)}`+
