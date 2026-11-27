@@ -98,6 +98,8 @@ body.mapmode #station .scard{max-width:720px;margin:0 auto}
 .stn.hub circle{fill:var(--paper);stroke-width:4.5}
 .stn.ext circle{stroke-dasharray:3 2}
 .stn.sel circle{fill:var(--ink)}
+/* the finger needs more than a 9 px ring: an invisible 44 px disc round each station and the label's whole box take the tap */
+.stn .hit,.stn.sel .hit{fill:transparent;stroke:none}
 .stn text{font:600 12px var(--font-body);fill:var(--ink);paint-order:stroke;stroke:var(--paper);stroke-width:4px}
 .dim{opacity:.2}
 .scard{background:var(--sheet);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:6px;padding:12px 14px;display:flex;flex-direction:column;gap:7px}
@@ -494,6 +496,7 @@ footer a{color:inherit}
         `<rect x="${e.x}" y="${e.y-14}" width="${e.w}" height="28" rx="14"/><text x="${e.x+e.w/2}" y="${e.y+4}" text-anchor="middle">↗ ${esc(c.title)}</text></g>`;});
     mall.forEach(c=>{const p=pos[c.abs],b=built.LB[c.abs],hub=(onLines[c.abs]||[]).length>1;
       g+=`<g class="stn${hub?' hub':''}${c.ext?' ext':''}${c.abs===pick?' sel':''}${lit(c.abs)?'':' dim'}" data-h="${c.abs}" tabindex="0" role="button" aria-label="${esc(c.title)}">`+
+        `<circle class="hit" cx="${p.x}" cy="${p.y}" r="22"/>`+(b?`<rect class="hit" x="${b.x1-3}" y="${b.y1-3}" width="${b.x2-b.x1+6}" height="${b.y2-b.y1+6}"/>`:'')+
         `<circle cx="${p.x}" cy="${p.y}" r="${hub?13:9}" stroke="${hub?'var(--ink)':c.c}"/>`+
         `<text x="${b.x1+2}" y="${b.y1+11}">${b.L.map((l,k)=>`<tspan x="${b.x1+2}" dy="${k?14:0}">${esc(l)}</tspan>`).join('')}</text></g>`;});
     $('cam').innerHTML=g;
